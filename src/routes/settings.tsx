@@ -20,8 +20,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCommitPrefs } from "@/lib/commit-prefs";
+import { useWorkspacePrefs } from "@/lib/workspace-prefs";
 import { useGitAccounts } from "@/lib/git-accounts";
 import { useTheme } from "@/lib/use-theme";
 import type { Theme } from "@/lib/theme";
@@ -65,6 +67,16 @@ function Settings() {
 
   const signedInAccounts = accounts.filter((a) => a.signed_in);
   const commitTemplateDirty = commitTemplateDraft !== messageTemplate;
+
+  const ideLaunchCommand = useWorkspacePrefs((s) => s.ideLaunchCommand);
+  const setIdeLaunchCommand = useWorkspacePrefs((s) => s.setIdeLaunchCommand);
+  const [ideDraft, setIdeDraft] = useState(ideLaunchCommand);
+
+  useEffect(() => {
+    setIdeDraft(ideLaunchCommand);
+  }, [ideLaunchCommand]);
+
+  const ideDirty = ideDraft !== ideLaunchCommand;
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-8 space-y-6">
@@ -128,6 +140,45 @@ function Settings() {
               type="button"
               disabled={!commitTemplateDirty}
               onClick={() => setMessageTemplate(commitTemplateDraft)}
+            >
+              Speichern
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>IDE & Workspace</CardTitle>
+          <CardDescription>
+            Befehl zum Öffnen des Repository-Ordners in deiner IDE. Der
+            Repository-Pfad wird automatisch als letztes Argument angehängt.
+            Beispiele:{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">cursor</code>
+            ,{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">code</code>
+            ,{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">
+              open -a Cursor
+            </code>{" "}
+            (macOS).
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Input
+            value={ideDraft}
+            onChange={(e) => setIdeDraft(e.target.value)}
+            placeholder="cursor"
+            className="font-mono text-sm"
+            spellCheck={false}
+            autoCapitalize="off"
+            autoCorrect="off"
+          />
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              disabled={!ideDirty}
+              onClick={() => setIdeLaunchCommand(ideDraft)}
             >
               Speichern
             </Button>

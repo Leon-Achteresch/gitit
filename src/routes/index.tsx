@@ -29,7 +29,7 @@ function Home() {
           {activePath && sidebarTab === "commit" ? (
             <CommitPanel />
           ) : activePath ? (
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
               <RepoDetails />
             </div>
           ) : (

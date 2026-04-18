@@ -9,7 +9,7 @@ export function CommitList({ commits }: { commits: Commit[] }) {
   const { rows, maxLanes } = useMemo(() => buildGraph(commits), [commits]);
 
   return (
-    <ScrollArea className="h-[90vh]">
+    <ScrollArea className="h-full min-h-0">
       <ul>
         {rows.map((row, i) => (
           <li key={row.commit.hash}>

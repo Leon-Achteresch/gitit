@@ -1,0 +1,168 @@
+import { useRepoStore } from "@/lib/repo-store";
+import { useWorkspacePrefs } from "@/lib/workspace-prefs";
+import { invoke } from "@tauri-apps/api/core";
+import {
+  ArrowDownToLine,
+  ArrowUpToLine,
+  CloudDownload,
+  Code2,
+  FolderOpen,
+  Loader2,
+  SquareTerminal,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { ToolbarButton } from "./toolbar-button";
+import { ToolbarDivider } from "./toolbar-divider";
+import { ToolbarGroup } from "./toolbar-group";
+
+type RemoteOp = "fetch" | "pull" | "push";
+
+export function RepoRemoteToolbar({ path }: { path: string }) {
+  const reload = useRepoStore((s) => s.reload);
+  const ideLaunchCommand = useWorkspacePrefs((s) => s.ideLaunchCommand);
+  const [busy, setBusy] = useState<RemoteOp | null>(null);
+  const [hint, setHint] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!hint) return;
+    const t = window.setTimeout(() => setHint(null), 5000);
+    return () => window.clearTimeout(t);
+  }, [hint]);
+
+  async function run(op: RemoteOp) {
+    setBusy(op);
+    setHint(null);
+    const cmd =
+      op === "fetch"
+        ? "git_fetch"
+        : op === "pull"
+          ? "git_pull"
+          : "git_push";
+    try {
+      const out = await invoke<string>(cmd, { path });
+      await reload(path);
+      setHint(out.trim() || "Aktion erfolgreich abgeschlossen.");
+    } catch (e) {
+      setHint(`Fehler: ${String(e)}`);
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  const remoteDisabled = busy !== null;
+  const ideConfigured = ideLaunchCommand.trim().length > 0;
+
+  async function revealFolder() {
+    try {
+      await invoke("reveal_repo_folder", { path });
+    } catch (e) {
+      setHint(`Fehler: ${String(e)}`);
+    }
+  }
+
+  async function openTerminalHere() {
+    try {
+      await invoke("open_repo_terminal", { path });
+    } catch (e) {
+      setHint(`Fehler: ${String(e)}`);
+    }
+  }
+
+  async function openIdeHere() {
+    const ide = ideLaunchCommand.trim();
+    if (!ide) {
+      setHint("Kein IDE-Befehl konfiguriert.");
+      return;
+    }
+    try {
+      await invoke("open_repo_in_ide", { path, ide_launch: ide });
+    } catch (e) {
+      setHint(`Fehler: ${String(e)}`);
+    }
+  }
+
+  return (
+    <div className="flex w-full items-center justify-between pb-2 pt-1">
+      <div className="flex items-center">
+        <ToolbarGroup>
+          <ToolbarButton
+            title="Änderungen abrufen"
+            label="Fetch"
+            disabled={remoteDisabled}
+            isActive={busy === "fetch"}
+            onClick={() => void run("fetch")}
+            icon={
+              busy === "fetch" ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <CloudDownload className="h-3.5 w-3.5" />
+              )
+            }
+          />
+          <ToolbarButton
+            title="Änderungen herunterladen"
+            label="Pull"
+            disabled={remoteDisabled}
+            isActive={busy === "pull"}
+            onClick={() => void run("pull")}
+            icon={
+              busy === "pull" ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <ArrowDownToLine className="h-3.5 w-3.5" />
+              )
+            }
+          />
+          <ToolbarButton
+            title="Änderungen hochladen"
+            label="Push"
+            disabled={remoteDisabled}
+            isActive={busy === "push"}
+            onClick={() => void run("push")}
+            icon={
+              busy === "push" ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <ArrowUpToLine className="h-3.5 w-3.5" />
+              )
+            }
+          />
+        </ToolbarGroup>
+
+        <ToolbarDivider />
+
+        <ToolbarGroup>
+          <ToolbarButton
+            title="Im Dateimanager öffnen"
+            label="Dateien"
+            onClick={() => void revealFolder()}
+            icon={<FolderOpen className="h-3.5 w-3.5" />}
+          />
+          <ToolbarButton
+            title="Terminal hier öffnen"
+            label="Terminal"
+            onClick={() => void openTerminalHere()}
+            icon={<SquareTerminal className="h-3.5 w-3.5" />}
+          />
+          <ToolbarButton
+            title={
+              ideConfigured
+                ? "In der IDE öffnen"
+                : "IDE in den Einstellungen konfigurieren"
+            }
+            label="IDE"
+            disabled={!ideConfigured}
+            onClick={() => void openIdeHere()}
+            icon={<Code2 className="h-3.5 w-3.5" />}
+          />
+        </ToolbarGroup>
+      </div>
+
+      {hint && (
+        <div className="animate-in fade-in slide-in-from-right-4 ml-4 max-w-sm truncate rounded-lg bg-primary/10 px-3 py-1 text-xs font-medium text-primary shadow-sm">
+          {hint}
+        </div>
+      )}
+    </div>
+  );
+}

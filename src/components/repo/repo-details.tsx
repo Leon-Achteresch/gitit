@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRepoStore } from "@/lib/repo-store";
 import { Loader2 } from "lucide-react";
 import { CommitList } from "./commit-list";
+import { RepoRemoteToolbar } from "./repo-remote-toolbar";
 
 export function RepoDetails() {
   const activePath = useRepoStore((s) => s.activePath);
@@ -23,9 +24,12 @@ export function RepoDetails() {
 
   if (repo) {
     return (
-      <>
-        <CommitList commits={repo.commits} />
-      </>
+      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
+        <RepoRemoteToolbar path={repo.path} />
+        <div className="min-h-0 flex-1 overflow-hidden">
+          <CommitList commits={repo.commits} />
+        </div>
+      </div>
     );
   }
 
