@@ -5,7 +5,7 @@ export const SIDEBAR_MIN_WIDTH = 180;
 export const SIDEBAR_MAX_WIDTH = 560;
 export const SIDEBAR_DEFAULT_WIDTH = 256;
 
-export type SidebarTab = "commit" | "history" | "stash";
+export type SidebarTab = "commit" | "history" | "stash" | "pr";
 
 export type CommitFocusRequest = {
   path: string;

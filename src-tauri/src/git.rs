@@ -39,7 +39,7 @@ pub struct UpstreamSyncCounts {
     pub behind: u32,
 }
 
-fn run_git(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
+pub(crate) fn run_git(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
     let output = Command::new("git")
         .arg("-C")
         .arg(repo)
@@ -85,7 +85,7 @@ fn run_git_merged_output_at(cwd: Option<&PathBuf>, args: &[&str]) -> Result<Stri
     Ok(ok.trim().to_string())
 }
 
-fn run_git_merged_output(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
+pub(crate) fn run_git_merged_output(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
     run_git_merged_output_at(Some(repo), args)
 }
 

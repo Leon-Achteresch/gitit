@@ -61,6 +61,28 @@ export type StashEntry = {
   message: string;
 };
 
+export type PrReviewer = {
+  login: string;
+  avatar: string | null;
+};
+
+export type PullRequest = {
+  number: number;
+  title: string;
+  state: string;
+  is_draft: boolean;
+  author: string;
+  author_avatar: string | null;
+  source_branch: string;
+  target_branch: string;
+  html_url: string;
+  created_at: string;
+  updated_at: string;
+  labels: string[];
+  reviewers: PrReviewer[];
+  provider: string;
+};
+
 type RepoState = {
   paths: string[];
   activePath: string | null;
@@ -73,6 +95,9 @@ type RepoState = {
   statusLoading: Record<string, boolean>;
   stashes: Record<string, StashEntry[]>;
   stashesLoading: Record<string, boolean>;
+  prs: Record<string, PullRequest[]>;
+  prsLoading: Record<string, boolean>;
+  loadPRs: (path: string) => Promise<void>;
   addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
   setActive: (path: string) => void;
@@ -147,6 +172,23 @@ export const useRepoStore = create<RepoState>()(
       statusLoading: {},
       stashes: {},
       stashesLoading: {},
+      prs: {},
+      prsLoading: {},
+
+      async loadPRs(path) {
+        set((s) => ({ prsLoading: { ...s.prsLoading, [path]: true } }));
+        try {
+          const list = await invoke<PullRequest[]>("pr_list", { path });
+          set((s) => ({
+            prs: { ...s.prs, [path]: list },
+            prsLoading: { ...s.prsLoading, [path]: false },
+          }));
+        } catch (e) {
+          const msg = String(e);
+          toastError(msg);
+          set((s) => ({ prsLoading: { ...s.prsLoading, [path]: false } }));
+        }
+      },
 
       async addRepo(path) {
         set((s) => ({ loading: { ...s.loading, [path]: true } }));

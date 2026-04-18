@@ -1,6 +1,7 @@
 mod credentials;
 mod favicon;
 mod git;
+mod pr;
 mod providers;
 mod shell;
 
@@ -82,7 +83,17 @@ pub fn run() {
             credentials::git_sign_in_via_credential_manager,
             credentials::git_sign_out,
             credentials::git_credential_helper,
-            providers::list_remote_repos
+            providers::list_remote_repos,
+            pr::pr_list,
+            pr::pr_detail,
+            pr::pr_commits,
+            pr::pr_files,
+            pr::pr_conversation,
+            pr::pr_checks,
+            pr::pr_add_comment,
+            pr::pr_submit_review,
+            pr::pr_merge,
+            pr::pr_checkout
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

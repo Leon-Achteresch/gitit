@@ -1,4 +1,5 @@
 import { CommitHistoryPanel } from "@/components/repo/commit/commit-history-panel";
+import { PullRequestPanel } from "@/components/repo/pr/pull-request-panel";
 import { RepoRemoteToolbar } from "@/components/repo/remote/repo-remote-toolbar";
 import { StashPanel } from "@/components/repo/stash/stash-panel";
 import { useRepoStore } from "@/lib/repo-store";
@@ -20,6 +21,8 @@ export function RepoDetails() {
         <div className="min-h-0 flex-1 overflow-hidden">
           {sidebarTab === "stash" ? (
             <StashPanel path={repo.path} />
+          ) : sidebarTab === "pr" ? (
+            <PullRequestPanel path={repo.path} />
           ) : (
             <CommitHistoryPanel path={repo.path} commits={repo.commits} />
           )}

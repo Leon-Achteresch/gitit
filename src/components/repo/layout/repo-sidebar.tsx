@@ -15,6 +15,7 @@ import {
   Cloud,
   GitBranch,
   GitCommitHorizontal,
+  GitPullRequest,
   History,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -38,6 +39,14 @@ export function RepoSidebar() {
     const p = s.activePath;
     if (!p) return 0;
     return s.stashes[p]?.length ?? 0;
+  });
+  const prCount = useRepoStore((s) => {
+    const p = s.activePath;
+    if (!p) return 0;
+    const list = s.prs[p];
+    if (!list) return 0;
+    return list.filter((pr) => pr.state === "open" || pr.state === "draft")
+      .length;
   });
 
   const asideRef = useRef<HTMLElement | null>(null);
@@ -130,6 +139,25 @@ export function RepoSidebar() {
               <TabsTrigger value="history">
                 <History />
                 History
+              </TabsTrigger>
+              <TabsTrigger
+                value="pr"
+                title={
+                  prCount > 0
+                    ? `${prCount} offene Pull Requests`
+                    : "Pull Requests"
+                }
+              >
+                <GitPullRequest />
+                <span className="min-w-0 flex-1 text-left">PRs</span>
+                {prCount > 0 ? (
+                  <Badge
+                    variant="secondary"
+                    className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
+                  >
+                    {prCount}
+                  </Badge>
+                ) : null}
               </TabsTrigger>
               <TabsTrigger
                 value="stash"
