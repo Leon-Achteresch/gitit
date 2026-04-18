@@ -49,16 +49,35 @@ type RepoState = {
   loading: Record<string, boolean>;
   status: Record<string, StatusEntry[]>;
   statusLoading: Record<string, boolean>;
-  addRepo: (path: string) => Promise<void>;
+  addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
   setActive: (path: string) => void;
   reload: (path: string) => Promise<void>;
   reloadAll: () => Promise<void>;
   deleteBranch: (path: string, name: string, force?: boolean) => Promise<void>;
+  deleteRemoteBranch: (path: string, remoteRef: string) => Promise<string>;
   reloadStatus: (path: string) => Promise<void>;
   stageFiles: (path: string, files: string[]) => Promise<void>;
   unstageFiles: (path: string, files: string[]) => Promise<void>;
   commitChanges: (path: string, message: string) => Promise<void>;
+  cloneRepo: (url: string, dest: string) => Promise<string>;
+  checkoutBranch: (
+    path: string,
+    refName: string,
+    opts?: {
+      create?: boolean;
+      fromRemote?: string;
+      base?: string | null;
+    },
+  ) => Promise<void>;
+  createBranch: (
+    path: string,
+    name: string,
+    base?: string,
+    checkout?: boolean,
+  ) => Promise<void>;
+  mergeBranch: (path: string, branch: string, noFf?: boolean) => Promise<string>;
+  discardFiles: (path: string, files: string[]) => Promise<void>;
 };
 
 async function loadFavicon(path: string): Promise<string | null> {
@@ -100,12 +119,14 @@ export const useRepoStore = create<RepoState>()(
           void loadFavicon(info.path).then((icon) => {
             set((s) => ({ favicons: { ...s.favicons, [info.path]: icon } }));
           });
+          return info.path;
         } catch (e) {
           const msg = String(e);
           toastError(msg);
           set((s) => ({
             loading: { ...s.loading, [path]: false },
           }));
+          return null;
         }
       },
 
@@ -161,6 +182,15 @@ export const useRepoStore = create<RepoState>()(
         await get().reload(path);
       },
 
+      async deleteRemoteBranch(path, remoteRef) {
+        const out = await invoke<string>("delete_remote_branch", {
+          path,
+          remoteRef,
+        });
+        await get().reload(path);
+        return out.trim();
+      },
+
       async reloadStatus(path) {
         set((s) => ({ statusLoading: { ...s.statusLoading, [path]: true } }));
         try {
@@ -191,6 +221,54 @@ export const useRepoStore = create<RepoState>()(
       async commitChanges(path, message) {
         await invoke("commit_changes", { path, message });
         await Promise.all([get().reload(path), get().reloadStatus(path)]);
+      },
+
+      async cloneRepo(url, dest) {
+        const out = await invoke<string>("git_clone", { url, dest });
+        const opened = await get().addRepo(dest);
+        if (!opened) {
+          throw new Error("Geklontes Repository konnte nicht geöffnet werden.");
+        }
+        return out;
+      },
+
+      async checkoutBranch(path, refName, opts) {
+        await invoke("git_checkout", {
+          path,
+          refName,
+          create: opts?.create ?? false,
+          fromRemote: opts?.fromRemote ?? null,
+          base: opts?.base ?? null,
+        });
+        await Promise.all([get().reload(path), get().reloadStatus(path)]);
+      },
+
+      async createBranch(path, name, base, checkout = true) {
+        await invoke("git_create_branch", {
+          path,
+          name,
+          base: base ?? null,
+          checkout,
+        });
+        await Promise.all([get().reload(path), get().reloadStatus(path)]);
+      },
+
+      async mergeBranch(path, branch, noFf = false) {
+        const out = await invoke<string>("git_merge", {
+          path,
+          branch,
+          noFf,
+        });
+        await Promise.all([get().reload(path), get().reloadStatus(path)]);
+        return out;
+      },
+
+      async discardFiles(path, files) {
+        const entries = get().status[path] ?? [];
+        const byPath = new Map(entries.map((e) => [e.path, e.untracked]));
+        const untracked = files.map((f) => byPath.get(f) ?? false);
+        await invoke("git_discard_files", { path, files, untracked });
+        await get().reloadStatus(path);
       },
     }),
     {

@@ -89,6 +89,39 @@ fn git_credential(
     }
 }
 
+pub struct HttpsCredential {
+    pub username: Option<String>,
+    pub password: String,
+}
+
+pub fn read_https_credential(host: &str) -> Result<HttpsCredential, String> {
+    let h = host.trim();
+    if h.is_empty() {
+        return Err("Host darf nicht leer sein".into());
+    }
+    let input = format!("protocol=https\nhost={h}\n\n");
+    let out = git_credential("fill", &input, true, Duration::from_secs(25))?;
+    let mut username = None;
+    let mut password = None;
+    for line in out.lines() {
+        if let Some(u) = line.strip_prefix("username=") {
+            if !u.is_empty() {
+                username = Some(u.to_string());
+            }
+        } else if let Some(p) = line.strip_prefix("password=") {
+            if !p.is_empty() {
+                password = Some(p.to_string());
+            }
+        }
+    }
+    let password = password.ok_or_else(|| {
+        format!(
+            "Keine Zugangsdaten für {h}. Bitte unter Einstellungen bei {h} anmelden."
+        )
+    })?;
+    Ok(HttpsCredential { username, password })
+}
+
 fn credential_lookup(host: &str) -> Option<String> {
     let input = format!("protocol=https\nhost={host}\n\n");
     let out = git_credential("fill", &input, true, Duration::from_secs(25))

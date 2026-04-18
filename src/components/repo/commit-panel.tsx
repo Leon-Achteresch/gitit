@@ -1,3 +1,9 @@
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
@@ -22,6 +28,7 @@ import {
   RefreshCw,
   Send,
   Square,
+  Undo2,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -179,11 +186,13 @@ function FileRow({
   selected,
   onSelect,
   onToggle,
+  onDiscard,
 }: {
   row: ChangeRow;
   selected: boolean;
   onSelect: () => void;
   onToggle: () => void;
+  onDiscard: (path: string) => void;
 }) {
   const state = checkState(row.entry);
   const additions =
@@ -195,7 +204,7 @@ function FileRow({
       ? row.entry.deletions_staged
       : row.entry.deletions_unstaged;
 
-  return (
+  const inner = (
     <div
       onClick={onSelect}
       className={`group flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-1.5 text-sm transition-all duration-200 ${
@@ -239,6 +248,21 @@ function FileRow({
         )}
       </div>
     </div>
+  );
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger asChild>{inner}</ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem
+          variant="destructive"
+          onSelect={() => onDiscard(row.path)}
+        >
+          <Undo2 className="h-3.5 w-3.5" />
+          Änderungen verwerfen
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }
 
@@ -345,6 +369,7 @@ export function CommitPanel() {
   const stageFiles = useRepoStore((s) => s.stageFiles);
   const unstageFiles = useRepoStore((s) => s.unstageFiles);
   const commitChanges = useRepoStore((s) => s.commitChanges);
+  const discardFiles = useRepoStore((s) => s.discardFiles);
 
   const [message, setMessage] = useState("");
   const [committing, setCommitting] = useState(false);
@@ -505,6 +530,24 @@ export function CommitPanel() {
     }
   };
 
+  const discardOne = useCallback(
+    (filePath: string) => {
+      if (!activePath) return;
+      const ok = window.confirm(
+        `Änderungen an „${filePath}“ unwiderruflich verwerfen?`,
+      );
+      if (!ok) return;
+      void (async () => {
+        try {
+          await discardFiles(activePath, [filePath]);
+        } catch (e) {
+          toastError(String(e));
+        }
+      })();
+    },
+    [activePath, discardFiles],
+  );
+
   const onCommit = async () => {
     if (!canCommit || !activePath) return;
     setCommitting(true);
@@ -606,6 +649,7 @@ export function CommitPanel() {
                         selected={row.id === selectedRowId}
                         onSelect={() => setSelectedRowId(row.id)}
                         onToggle={() => void toggleEntry(row.entry)}
+                        onDiscard={discardOne}
                       />
                     ))}
                   </div>
@@ -623,6 +667,7 @@ export function CommitPanel() {
                         selected={row.id === selectedRowId}
                         onSelect={() => setSelectedRowId(row.id)}
                         onToggle={() => void toggleEntry(row.entry)}
+                        onDiscard={discardOne}
                       />
                     ))}
                   </div>

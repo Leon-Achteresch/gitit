@@ -1,6 +1,7 @@
 mod credentials;
 mod favicon;
 mod git;
+mod providers;
 mod shell;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -49,7 +50,13 @@ pub fn run() {
             git::git_fetch,
             git::git_pull,
             git::git_push,
+            git::git_clone,
+            git::git_checkout,
+            git::git_create_branch,
+            git::git_merge,
+            git::git_discard_files,
             git::delete_branch,
+            git::delete_remote_branch,
             git::repo_status,
             git::repo_file_diff,
             git::stage_files,
@@ -60,7 +67,8 @@ pub fn run() {
             credentials::git_sign_in,
             credentials::git_sign_in_via_credential_manager,
             credentials::git_sign_out,
-            credentials::git_credential_helper
+            credentials::git_credential_helper,
+            providers::list_remote_repos
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -13,6 +13,7 @@ import {
 import { Cloud, GitBranch, GitCommitHorizontal, History } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BranchSection } from "./branch-section";
+import { NewBranchDialog } from "./new-branch-dialog";
 
 export function RepoSidebar() {
   const activePath = useRepoStore((s) => s.activePath);
@@ -30,6 +31,7 @@ export function RepoSidebar() {
 
   const asideRef = useRef<HTMLElement | null>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const [newBranchOpen, setNewBranchOpen] = useState(false);
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -125,21 +127,31 @@ export function RepoSidebar() {
         <ScrollArea className="min-h-0 flex-1">
           <div className="p-3">
             <BranchSection
+              path={activePath}
               title="Lokal"
               icon={<GitBranch className="h-4 w-4" />}
               branches={local}
               onDelete={onDelete}
+              showNewBranch
+              onNewBranch={() => setNewBranchOpen(true)}
             />
             {remote.length > 0 && (
               <>
                 <Separator className="my-3" />
                 <BranchSection
+                  path={activePath}
                   title="Remote"
                   icon={<Cloud className="h-4 w-4" />}
                   branches={remote}
                 />
               </>
             )}
+            <NewBranchDialog
+              open={newBranchOpen}
+              onClose={() => setNewBranchOpen(false)}
+              path={activePath}
+              branches={repo.branches}
+            />
           </div>
         </ScrollArea>
       </div>
