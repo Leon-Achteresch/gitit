@@ -114,7 +114,7 @@ export function useGitAccounts() {
   const signIn = useCallback(
     async (host: string, username: string, token: string) => {
       await invoke("git_sign_in", { host, username, token });
-      await refresh({ silent: true });
+      void refresh({ silent: true });
     },
     [refresh],
   );
@@ -122,7 +122,7 @@ export function useGitAccounts() {
   const signInViaCredentialManager = useCallback(
     async (host: string) => {
       await invoke("git_sign_in_via_credential_manager", { host });
-      await refresh({ silent: true });
+      void refresh({ silent: true });
     },
     [refresh],
   );
@@ -130,7 +130,7 @@ export function useGitAccounts() {
   const signOut = useCallback(
     async (host: string, username: string | null) => {
       await invoke("git_sign_out", { host, username });
-      await refresh({ silent: true });
+      void refresh({ silent: true });
     },
     [refresh],
   );

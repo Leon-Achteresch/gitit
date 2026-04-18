@@ -1,7 +1,8 @@
-use std::io::Write;
+use std::io::{Read, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::thread;
+use std::time::{Duration, Instant};
 
 use serde::Serialize;
 
@@ -125,7 +126,12 @@ const BUILTIN_PROVIDERS: &[(&str, &str, &str)] = &[
     ("azure", "Azure DevOps", "dev.azure.com"),
 ];
 
-fn git_credential(action: &str, input: &str, forbid_interactive: bool) -> Result<String, String> {
+fn git_credential(
+    action: &str,
+    input: &str,
+    forbid_interactive: bool,
+    max_wait: Duration,
+) -> Result<String, String> {
     let mut cmd = Command::new("git");
     if forbid_interactive {
         cmd.arg("-c")
@@ -141,29 +147,56 @@ fn git_credential(action: &str, input: &str, forbid_interactive: bool) -> Result
         .spawn()
         .map_err(|e| format!("failed to run git: {e}"))?;
 
-    {
-        let mut stdin = child
-            .stdin
-            .take()
-            .ok_or_else(|| "failed to open git stdin".to_string())?;
+    if let Some(mut stdin) = child.stdin.take() {
         stdin
             .write_all(input.as_bytes())
             .map_err(|e| format!("failed to write credential input: {e}"))?;
     }
 
-    let out = child
-        .wait_with_output()
-        .map_err(|e| format!("failed to wait for git: {e}"))?;
-
-    if !out.status.success() {
-        return Err(String::from_utf8_lossy(&out.stderr).trim().to_string());
+    let deadline = Instant::now() + max_wait;
+    loop {
+        if Instant::now() > deadline {
+            let _ = child.kill();
+            let _ = child.wait();
+            return Err(
+                "Git Credential: Zeitüberschreitung oder Fenster geschlossen bevor die Anmeldung fertig war."
+                    .into(),
+            );
+        }
+        match child
+            .try_wait()
+            .map_err(|e| format!("Git Credential: {e}"))?
+        {
+            Some(status) => {
+                let mut stdout_buf = Vec::new();
+                let mut stderr_buf = Vec::new();
+                if let Some(mut out) = child.stdout.take() {
+                    let _ = out.read_to_end(&mut stdout_buf);
+                }
+                if let Some(mut err) = child.stderr.take() {
+                    let _ = err.read_to_end(&mut stderr_buf);
+                }
+                if !status.success() {
+                    let msg = String::from_utf8_lossy(&stderr_buf).trim().to_string();
+                    if msg.is_empty() {
+                        return Err(
+                            "Git Credential abgebrochen (z. B. Credential-Manager geschlossen)."
+                                .into(),
+                        );
+                    }
+                    return Err(msg);
+                }
+                return Ok(String::from_utf8_lossy(&stdout_buf).to_string());
+            }
+            None => thread::sleep(Duration::from_millis(80)),
+        }
     }
-    Ok(String::from_utf8_lossy(&out.stdout).to_string())
 }
 
 fn credential_lookup(host: &str) -> Option<String> {
     let input = format!("protocol=https\nhost={host}\n\n");
-    let out = git_credential("fill", &input, true).ok()?;
+    let out = git_credential("fill", &input, true, Duration::from_secs(25))
+        .ok()?;
     let mut username = None;
     let mut has_password = false;
     for line in out.lines() {
@@ -239,7 +272,7 @@ fn git_sign_in(host: String, username: String, token: String) -> Result<(), Stri
         return Err("Token darf nicht leer sein".into());
     }
     let input = format!("protocol=https\nhost={host}\nusername={username}\npassword={token}\n\n");
-    git_credential("approve", &input, true)?;
+    git_credential("approve", &input, true, Duration::from_secs(45))?;
     Ok(())
 }
 
@@ -250,7 +283,12 @@ fn git_sign_in_via_credential_manager(host: String) -> Result<(), String> {
         return Err("Host darf nicht leer sein".into());
     }
     let input = format!("protocol=https\nhost={host}\n\n");
-    let filled = git_credential("fill", &input, false)?;
+    let filled = git_credential(
+        "fill",
+        &input,
+        false,
+        Duration::from_secs(180),
+    )?;
     let mut has_password = false;
     for line in filled.lines() {
         if line.starts_with("password=") && line.len() > "password=".len() {
@@ -264,7 +302,7 @@ fn git_sign_in_via_credential_manager(host: String) -> Result<(), String> {
                 .into(),
         );
     }
-    git_credential("approve", &filled, true)?;
+    git_credential("approve", &filled, true, Duration::from_secs(45))?;
     Ok(())
 }
 
@@ -275,7 +313,7 @@ fn git_sign_out(host: String, username: Option<String>) -> Result<(), String> {
         input.push_str(&format!("username={u}\n"));
     }
     input.push('\n');
-    git_credential("reject", &input, true)?;
+    git_credential("reject", &input, true, Duration::from_secs(45))?;
     Ok(())
 }
 
