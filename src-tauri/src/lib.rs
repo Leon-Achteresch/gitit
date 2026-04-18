@@ -1,5 +1,7 @@
+use std::io::Write;
 use std::path::PathBuf;
-use std::process::Command;
+use std::process::{Command, Stdio};
+use std::thread;
 
 use serde::Serialize;
 
@@ -106,6 +108,194 @@ fn open_repo(path: String) -> Result<RepoInfo, String> {
     })
 }
 
+#[derive(Serialize)]
+struct GitAccount {
+    id: String,
+    name: String,
+    host: String,
+    username: Option<String>,
+    signed_in: bool,
+    builtin: bool,
+}
+
+const BUILTIN_PROVIDERS: &[(&str, &str, &str)] = &[
+    ("github", "GitHub", "github.com"),
+    ("gitlab", "GitLab", "gitlab.com"),
+    ("bitbucket", "Bitbucket", "bitbucket.org"),
+    ("azure", "Azure DevOps", "dev.azure.com"),
+];
+
+fn git_credential(action: &str, input: &str, forbid_interactive: bool) -> Result<String, String> {
+    let mut cmd = Command::new("git");
+    if forbid_interactive {
+        cmd.arg("-c")
+            .arg("credential.interactive=false")
+            .env("GCM_INTERACTIVE", "false");
+    }
+    let mut child = cmd
+        .args(["credential", action])
+        .env("GIT_TERMINAL_PROMPT", "0")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|e| format!("failed to run git: {e}"))?;
+
+    {
+        let mut stdin = child
+            .stdin
+            .take()
+            .ok_or_else(|| "failed to open git stdin".to_string())?;
+        stdin
+            .write_all(input.as_bytes())
+            .map_err(|e| format!("failed to write credential input: {e}"))?;
+    }
+
+    let out = child
+        .wait_with_output()
+        .map_err(|e| format!("failed to wait for git: {e}"))?;
+
+    if !out.status.success() {
+        return Err(String::from_utf8_lossy(&out.stderr).trim().to_string());
+    }
+    Ok(String::from_utf8_lossy(&out.stdout).to_string())
+}
+
+fn credential_lookup(host: &str) -> Option<String> {
+    let input = format!("protocol=https\nhost={host}\n\n");
+    let out = git_credential("fill", &input, true).ok()?;
+    let mut username = None;
+    let mut has_password = false;
+    for line in out.lines() {
+        if let Some(u) = line.strip_prefix("username=") {
+            username = Some(u.to_string());
+        } else if line.starts_with("password=") {
+            has_password = true;
+        }
+    }
+    if has_password {
+        Some(username.unwrap_or_default())
+    } else {
+        None
+    }
+}
+
+#[tauri::command]
+fn list_git_accounts() -> Vec<GitAccount> {
+    let handles: Vec<_> = BUILTIN_PROVIDERS
+        .iter()
+        .enumerate()
+        .map(|(i, (id, name, host))| {
+            let id = id.to_string();
+            let name = name.to_string();
+            let host = host.to_string();
+            thread::spawn(move || {
+                let username = credential_lookup(&host);
+                (
+                    i,
+                    GitAccount {
+                        id,
+                        name,
+                        host,
+                        signed_in: username.is_some(),
+                        username,
+                        builtin: true,
+                    },
+                )
+            })
+        })
+        .collect();
+    let mut pairs: Vec<(usize, GitAccount)> = handles
+        .into_iter()
+        .map(|h| h.join().expect("credential lookup thread"))
+        .collect();
+    pairs.sort_by_key(|(i, _)| *i);
+    pairs.into_iter().map(|(_, a)| a).collect()
+}
+
+#[tauri::command]
+fn probe_git_account(id: String, name: String, host: String) -> GitAccount {
+    let username = credential_lookup(&host);
+    GitAccount {
+        id,
+        name,
+        host,
+        signed_in: username.is_some(),
+        username,
+        builtin: false,
+    }
+}
+
+#[tauri::command]
+fn git_sign_in(host: String, username: String, token: String) -> Result<(), String> {
+    let host = host.trim();
+    if host.is_empty() {
+        return Err("Host darf nicht leer sein".into());
+    }
+    if username.trim().is_empty() {
+        return Err("Benutzername darf nicht leer sein".into());
+    }
+    if token.is_empty() {
+        return Err("Token darf nicht leer sein".into());
+    }
+    let input = format!("protocol=https\nhost={host}\nusername={username}\npassword={token}\n\n");
+    git_credential("approve", &input, true)?;
+    Ok(())
+}
+
+#[tauri::command]
+fn git_sign_in_via_credential_manager(host: String) -> Result<(), String> {
+    let host = host.trim();
+    if host.is_empty() {
+        return Err("Host darf nicht leer sein".into());
+    }
+    let input = format!("protocol=https\nhost={host}\n\n");
+    let filled = git_credential("fill", &input, false)?;
+    let mut has_password = false;
+    for line in filled.lines() {
+        if line.starts_with("password=") && line.len() > "password=".len() {
+            has_password = true;
+            break;
+        }
+    }
+    if !has_password {
+        return Err(
+            "Keine Zugangsdaten erhalten. Bitte Anmeldung im Credential Manager abschließen oder abbrechen."
+                .into(),
+        );
+    }
+    git_credential("approve", &filled, true)?;
+    Ok(())
+}
+
+#[tauri::command]
+fn git_sign_out(host: String, username: Option<String>) -> Result<(), String> {
+    let mut input = format!("protocol=https\nhost={host}\n");
+    if let Some(u) = username.filter(|u| !u.is_empty()) {
+        input.push_str(&format!("username={u}\n"));
+    }
+    input.push('\n');
+    git_credential("reject", &input, true)?;
+    Ok(())
+}
+
+#[tauri::command]
+fn git_credential_helper() -> Option<String> {
+    let out = Command::new("git")
+        .args(["config", "--get", "credential.helper"])
+        .output()
+        .ok()?;
+    if !out.status.success() {
+        return None;
+    }
+    let s = String::from_utf8_lossy(&out.stdout).trim().to_string();
+    if s.is_empty() {
+        None
+    } else {
+        Some(s)
+    }
+}
+
 #[tauri::command]
 fn delete_branch(path: String, name: String, force: bool) -> Result<(), String> {
     let repo = PathBuf::from(&path);
@@ -195,7 +385,16 @@ pub fn run() {
                 let _ = app.emit("menu-navigate", path);
             }
         })
-        .invoke_handler(tauri::generate_handler![open_repo, delete_branch])
+        .invoke_handler(tauri::generate_handler![
+            open_repo,
+            delete_branch,
+            list_git_accounts,
+            probe_git_account,
+            git_sign_in,
+            git_sign_in_via_credential_manager,
+            git_sign_out,
+            git_credential_helper
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
