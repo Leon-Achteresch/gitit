@@ -163,6 +163,38 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .setup(|app| {
+            use tauri::menu::{MenuBuilder, SubmenuBuilder};
+
+            let app_menu = SubmenuBuilder::new(app, "gitit")
+                .text("nav-repo", "Repository")
+                .text("nav-about", "About")
+                .text("nav-settings", "Einstellungen");
+
+            #[cfg(target_os = "macos")]
+            let app_menu = app_menu.separator().quit();
+
+            let app_menu = app_menu.build()?;
+
+            let menu = MenuBuilder::new(app).items(&[&app_menu]).build()?;
+
+            app.set_menu(menu)?;
+            Ok(())
+        })
+        .on_menu_event(|app, event| {
+            use tauri::Emitter;
+
+            let path = match event.id().as_ref() {
+                "nav-repo" => Some("/"),
+                "nav-about" => Some("/about"),
+                "nav-settings" => Some("/settings"),
+                _ => None,
+            };
+
+            if let Some(path) = path {
+                let _ = app.emit("menu-navigate", path);
+            }
+        })
         .invoke_handler(tauri::generate_handler![open_repo, delete_branch])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
