@@ -5,16 +5,23 @@ export function CommitAuthorDate({
   author,
   email,
   avatarUrl,
+  avatarFallbackUrl,
   date,
 }: {
   author: string;
   email?: string;
   avatarUrl: string | null | undefined;
+  avatarFallbackUrl?: string | null | undefined;
   date: string;
 }) {
   return (
     <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
-      <CommitAvatar url={avatarUrl} name={author} size="sm" />
+      <CommitAvatar
+        url={avatarUrl}
+        fallbackUrl={avatarFallbackUrl}
+        name={author}
+        size="sm"
+      />
       <span
         className="min-w-0 truncate"
         title={email ? `${author} <${email}>` : author}

@@ -40,7 +40,9 @@ export function CommitRow({
 }) {
   const { commit } = row;
   const gravatarUrl = useGravatarUrl(commit.email);
-  const avatarUrl = commit.author_avatar ?? gravatarUrl;
+  const remoteAvatar = commit.author_avatar?.trim() || undefined;
+  const avatarUrl = remoteAvatar ?? gravatarUrl;
+  const avatarFallbackUrl = remoteAvatar ? (gravatarUrl ?? null) : undefined;
   const revertCommit = useRepoStore((s) => s.revertCommit);
   const branches = useRepoStore((s) => s.repos[path]?.branches ?? []);
   const branchesAtCommit = useMemo(() => {
@@ -89,6 +91,7 @@ export function CommitRow({
           author={commit.author}
           email={commit.email}
           avatarUrl={avatarUrl}
+          avatarFallbackUrl={avatarFallbackUrl}
           date={commit.date}
         />
       </div>
