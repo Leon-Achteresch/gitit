@@ -5,7 +5,13 @@ import type { Commit } from "@/lib/repo-store";
 import { useMemo } from "react";
 import { CommitRow } from "./commit-row";
 
-export function CommitList({ commits }: { commits: Commit[] }) {
+export function CommitList({
+  path,
+  commits,
+}: {
+  path: string;
+  commits: Commit[];
+}) {
   const { rows, maxLanes } = useMemo(() => buildGraph(commits), [commits]);
 
   return (
@@ -14,7 +20,7 @@ export function CommitList({ commits }: { commits: Commit[] }) {
         {rows.map((row, i) => (
           <li key={row.commit.hash}>
             {i > 0 && <Separator />}
-            <CommitRow row={row} maxLanes={maxLanes} />
+            <CommitRow path={path} row={row} maxLanes={maxLanes} />
           </li>
         ))}
       </ul>

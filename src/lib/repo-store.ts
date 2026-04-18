@@ -83,6 +83,11 @@ type RepoState = {
     checkout?: boolean,
   ) => Promise<void>;
   mergeBranch: (path: string, branch: string, noFf?: boolean) => Promise<string>;
+  revertCommit: (
+    path: string,
+    commit: string,
+    isMerge: boolean,
+  ) => Promise<string>;
   discardFiles: (path: string, files: string[]) => Promise<void>;
 };
 
@@ -269,6 +274,16 @@ export const useRepoStore = create<RepoState>()(
           path,
           branch,
           noFf,
+        });
+        await Promise.all([get().reload(path), get().reloadStatus(path)]);
+        return out;
+      },
+
+      async revertCommit(path, commit, isMerge) {
+        const out = await invoke<string>("git_revert_commit", {
+          path,
+          commit,
+          mergeMainline: isMerge ? 1 : null,
         });
         await Promise.all([get().reload(path), get().reloadStatus(path)]);
         return out;

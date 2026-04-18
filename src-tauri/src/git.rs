@@ -278,6 +278,30 @@ pub fn git_merge(path: String, branch: String, no_ff: bool) -> Result<String, St
 }
 
 #[tauri::command]
+pub fn git_revert_commit(
+    path: String,
+    commit: String,
+    merge_mainline: Option<u8>,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let c = commit.trim();
+    if c.is_empty() {
+        return Err("Commit-Hash darf nicht leer sein".into());
+    }
+    let mut parts: Vec<String> = vec!["revert".into(), "--no-edit".into()];
+    if let Some(m) = merge_mainline {
+        if m < 1 {
+            return Err("Mainline-Parent muss mindestens 1 sein".into());
+        }
+        parts.push("-m".into());
+        parts.push(m.to_string());
+    }
+    parts.push(c.to_string());
+    let args: Vec<&str> = parts.iter().map(|s| s.as_str()).collect();
+    run_git_merged_output(&repo, &args)
+}
+
+#[tauri::command]
 pub fn git_discard_files(
     path: String,
     files: Vec<String>,

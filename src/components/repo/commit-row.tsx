@@ -1,117 +1,36 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { toastError } from "@/lib/error-toast";
 import { initials, formatDate } from "@/lib/format";
 import { useGravatarUrl } from "@/lib/gravatar";
-import { laneColor, type GraphRow } from "@/lib/graph";
-
-const LANE_WIDTH = 14;
-const ROW_HEIGHT = 56;
-const DOT_RADIUS = 4;
-
-function GraphCell({ row, maxLanes }: { row: GraphRow; maxLanes: number }) {
-  const width = Math.max(1, maxLanes) * LANE_WIDTH;
-  const midY = ROW_HEIGHT / 2;
-  const laneX = (i: number) => i * LANE_WIDTH + LANE_WIDTH / 2;
-
-  const segments: {
-    d: string;
-    color: string;
-  }[] = [];
-
-  // Top half: lines from previous row's lanes into this row.
-  row.lanesBefore.forEach((hash, i) => {
-    if (hash === null) return;
-    const originColor = laneColor(row.laneOriginsBefore[i]);
-    const x0 = laneX(i);
-    if (i === row.lane && hash === row.commit.hash) {
-      // The commit's own lane continuing from above.
-      segments.push({ d: `M ${x0} 0 L ${x0} ${midY}`, color: originColor });
-    } else if (row.mergedLanes.includes(i)) {
-      // Merge-in: curve from (i, 0) to commit position.
-      const x1 = laneX(row.lane);
-      segments.push({
-        d: `M ${x0} 0 C ${x0} ${midY / 2}, ${x1} ${midY / 2}, ${x1} ${midY}`,
-        color: originColor,
-      });
-    } else {
-      // Passing-through lane.
-      segments.push({ d: `M ${x0} 0 L ${x0} ${midY}`, color: originColor });
-    }
-  });
-
-  // Bottom half: lines from this row into next.
-  row.lanesAfter.forEach((hash, i) => {
-    if (hash === null) return;
-    const originColor = laneColor(row.laneOriginsAfter[i]);
-    const x1 = laneX(i);
-    const before = row.lanesBefore[i];
-    const wasContinuing =
-      before !== undefined && before !== null && before === hash;
-
-    if (i === row.lane) {
-      // First-parent straight line down from commit.
-      segments.push({
-        d: `M ${x1} ${midY} L ${x1} ${ROW_HEIGHT}`,
-        color: originColor,
-      });
-    } else if (wasContinuing) {
-      // Lane continues straight through.
-      segments.push({
-        d: `M ${x1} ${midY} L ${x1} ${ROW_HEIGHT}`,
-        color: originColor,
-      });
-    } else {
-      // New lane branching out from commit (additional parent).
-      const x0 = laneX(row.lane);
-      segments.push({
-        d: `M ${x0} ${midY} C ${x0} ${midY + midY / 2}, ${x1} ${midY + midY / 2}, ${x1} ${ROW_HEIGHT}`,
-        color: originColor,
-      });
-    }
-  });
-
-  const dotX = laneX(row.lane);
-
-  return (
-    <svg
-      width={width}
-      height={ROW_HEIGHT}
-      className="shrink-0"
-      aria-hidden="true"
-    >
-      {segments.map((s, i) => (
-        <path
-          key={i}
-          d={s.d}
-          stroke={s.color}
-          strokeWidth={1.5}
-          fill="none"
-        />
-      ))}
-      <circle
-        cx={dotX}
-        cy={midY}
-        r={DOT_RADIUS}
-        fill="var(--background)"
-        stroke={row.color}
-        strokeWidth={1.5}
-      />
-    </svg>
-  );
-}
+import type { GraphRow } from "@/lib/graph";
+import { useRepoStore } from "@/lib/repo-store";
+import { Undo2 } from "lucide-react";
+import { toast } from "sonner";
+import { CommitGraphCell } from "./commit-graph-cell";
 
 export function CommitRow({
+  path,
   row,
   maxLanes,
 }: {
+  path: string;
   row: GraphRow;
   maxLanes: number;
 }) {
   const { commit } = row;
   const avatarUrl = useGravatarUrl(commit.email);
-  return (
-    <div className="flex items-stretch hover:bg-muted/50">
-      <GraphCell row={row} maxLanes={maxLanes} />
+  const revertCommit = useRepoStore((s) => s.revertCommit);
+
+  const inner = (
+    <div className="flex items-stretch hover:bg-muted/50 cursor-default">
+      <CommitGraphCell row={row} maxLanes={maxLanes} />
       <div className="flex flex-1 items-start gap-3 px-4 py-3 min-w-0">
         <Avatar className="h-8 w-8">
           {avatarUrl && <AvatarImage src={avatarUrl} alt={commit.author} />}
@@ -134,5 +53,32 @@ export function CommitRow({
         </Badge>
       </div>
     </div>
+  );
+
+  return (
+    <ContextMenu>
+      <ContextMenuTrigger asChild>{inner}</ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem
+          onSelect={() => {
+            void (async () => {
+              try {
+                const out = await revertCommit(
+                  path,
+                  commit.hash,
+                  commit.parents.length > 1,
+                );
+                toast.success(out.trim() || "Revert-Commit erstellt.");
+              } catch (e) {
+                toastError(String(e));
+              }
+            })();
+          }}
+        >
+          <Undo2 className="h-3.5 w-3.5" />
+          Commit revertieren
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }
