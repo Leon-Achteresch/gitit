@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   AlertTriangle,
+  ArrowLeft,
   FolderOpen,
   Monitor,
   Moon,
@@ -14,6 +15,7 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { AddGitAccount } from "@/components/repo/git-account/add-git-account";
 import { GitAccountRow } from "@/components/repo/git-account/git-account-row";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardAction,
@@ -23,6 +25,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCommitPrefs } from "@/lib/commit-prefs";
 import { useWorkspacePrefs } from "@/lib/workspace-prefs";
@@ -42,6 +45,7 @@ const THEMES: { value: Theme; label: string; icon: typeof Sun }[] = [
 ];
 
 function Settings() {
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const {
     accounts,
@@ -58,6 +62,12 @@ function Settings() {
   const [addOpen, setAddOpen] = useState(false);
   const messageTemplate = useCommitPrefs((s) => s.messageTemplate);
   const setMessageTemplate = useCommitPrefs((s) => s.setMessageTemplate);
+  const showConventionalCommitIcons = useCommitPrefs(
+    (s) => s.showConventionalCommitIcons,
+  );
+  const setShowConventionalCommitIcons = useCommitPrefs(
+    (s) => s.setShowConventionalCommitIcons,
+  );
   const [commitTemplateDraft, setCommitTemplateDraft] = useState(
     messageTemplate,
   );
@@ -91,7 +101,18 @@ function Settings() {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-8 space-y-6">
-      <h1 className="text-2xl font-semibold">Einstellungen</h1>
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => router.history.back()}
+          aria-label="Zurück"
+        >
+          <ArrowLeft className="size-4" />
+        </Button>
+        <h1 className="text-2xl font-semibold">Einstellungen</h1>
+      </div>
 
       <Card>
         <CardHeader>
@@ -126,6 +147,42 @@ function Settings() {
                 </Button>
               );
             })}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Commit-Historie</CardTitle>
+          <CardDescription>
+            Optionale Kennzeichnung nach Conventional Commits (Typ-Icons,
+            BREAKING CHANGE /{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-[11px]">!</code>{" "}
+            vor dem Doppelpunkt).
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="conventional-commit-icons"
+              checked={showConventionalCommitIcons}
+              onCheckedChange={(v) =>
+                setShowConventionalCommitIcons(v === true)
+              }
+              className="mt-0.5"
+            />
+            <div className="space-y-1">
+              <Label
+                htmlFor="conventional-commit-icons"
+                className="cursor-pointer text-sm font-medium text-foreground"
+              >
+                Conventional-Commit-Symbole anzeigen
+              </Label>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Wenn ausgeschaltet, werden in der Commit-Liste keine Typ- oder
+                Breaking-Hinweise als Symbole gerendert.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

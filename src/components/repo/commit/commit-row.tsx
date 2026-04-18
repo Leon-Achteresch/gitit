@@ -20,6 +20,7 @@ import { Tag, Undo2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CommitBranchBadge } from "./commit-branch-badge";
+import { CommitConventionalIcons } from "./commit-conventional-icons";
 import { CommitGraphCell } from "./commit-graph-cell";
 import { CommitTagDialog } from "./commit-tag-dialog";
 
@@ -67,6 +68,10 @@ export function CommitRow({
         </Avatar>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <CommitConventionalIcons
+              subject={commit.subject}
+              body={commit.body}
+            />
             {branchesAtCommit.map((b) => (
               <CommitBranchBadge
                 key={b.name}

@@ -11,6 +11,7 @@ export type Commit = {
   email: string;
   date: string;
   subject: string;
+  body: string;
   parents: string[];
   tags: string[];
 };

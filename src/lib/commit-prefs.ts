@@ -4,6 +4,8 @@ import { createJSONStorage, persist } from "zustand/middleware";
 type CommitPrefs = {
   messageTemplate: string;
   setMessageTemplate: (value: string) => void;
+  showConventionalCommitIcons: boolean;
+  setShowConventionalCommitIcons: (value: boolean) => void;
 };
 
 export const useCommitPrefs = create<CommitPrefs>()(
@@ -11,6 +13,9 @@ export const useCommitPrefs = create<CommitPrefs>()(
     (set) => ({
       messageTemplate: "",
       setMessageTemplate: (value) => set({ messageTemplate: value }),
+      showConventionalCommitIcons: true,
+      setShowConventionalCommitIcons: (showConventionalCommitIcons) =>
+        set({ showConventionalCommitIcons }),
     }),
     {
       name: "gitit-commit-prefs",

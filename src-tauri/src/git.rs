@@ -12,6 +12,7 @@ pub struct Commit {
     email: String,
     date: String,
     subject: String,
+    body: String,
     parents: Vec<String>,
     tags: Vec<String>,
 }
@@ -141,12 +142,13 @@ pub fn open_repo(path: String) -> Result<RepoInfo, String> {
     let tag_map = tags_by_target(&repo);
 
     let sep = "\x1f";
-    let format = format!("%H{sep}%h{sep}%an{sep}%ae{sep}%cI{sep}%P{sep}%s");
+    let format = format!("%H{sep}%h{sep}%an{sep}%ae{sep}%cI{sep}%P{sep}%s{sep}%b");
 
     let log = run_git(
         &repo,
         &[
             "log",
+            "-z",
             "--max-count=200",
             "--all",
             "--date-order",
@@ -155,9 +157,10 @@ pub fn open_repo(path: String) -> Result<RepoInfo, String> {
     )?;
 
     let commits = log
-        .lines()
-        .filter_map(|line| {
-            let mut parts = line.splitn(7, sep);
+        .split('\0')
+        .filter(|chunk| !chunk.is_empty())
+        .filter_map(|record| {
+            let mut parts = record.splitn(8, sep);
             let hash = parts.next()?.to_string();
             let short_hash = parts.next()?.to_string();
             let author = parts.next()?.to_string();
@@ -165,6 +168,7 @@ pub fn open_repo(path: String) -> Result<RepoInfo, String> {
             let date = parts.next()?.to_string();
             let parents_str = parts.next()?;
             let subject = parts.next()?.to_string();
+            let body = parts.next().unwrap_or_default().to_string();
             let parents = parents_str
                 .split_whitespace()
                 .map(|s| s.to_string())
@@ -177,6 +181,7 @@ pub fn open_repo(path: String) -> Result<RepoInfo, String> {
                 email,
                 date,
                 subject,
+                body,
                 parents,
                 tags,
             })
