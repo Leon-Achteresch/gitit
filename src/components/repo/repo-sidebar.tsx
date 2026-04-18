@@ -1,13 +1,53 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useRepoStore, type Branch } from "@/lib/repo-store";
+import {
+  SIDEBAR_MAX_WIDTH,
+  SIDEBAR_MIN_WIDTH,
+  useUiStore,
+} from "@/lib/ui-store";
 import { Cloud, GitBranch } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BranchSection } from "./branch-section";
 
 export function RepoSidebar() {
   const activePath = useRepoStore((s) => s.activePath);
   const repo = useRepoStore((s) => (activePath ? s.repos[activePath] : null));
   const deleteBranch = useRepoStore((s) => s.deleteBranch);
+  const sidebarWidth = useUiStore((s) => s.sidebarWidth);
+  const setSidebarWidth = useUiStore((s) => s.setSidebarWidth);
+
+  const asideRef = useRef<HTMLElement | null>(null);
+  const [isResizing, setIsResizing] = useState(false);
+
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsResizing(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const onMove = (e: PointerEvent) => {
+      const left = asideRef.current?.getBoundingClientRect().left ?? 0;
+      setSidebarWidth(e.clientX - left);
+    };
+    const onUp = () => setIsResizing(false);
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    const prevCursor = document.body.style.cursor;
+    const prevSelect = document.body.style.userSelect;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      document.body.style.cursor = prevCursor;
+      document.body.style.userSelect = prevSelect;
+    };
+  }, [isResizing, setSidebarWidth]);
 
   if (!repo || !activePath) return null;
 
@@ -31,7 +71,11 @@ export function RepoSidebar() {
   };
 
   return (
-    <aside className="w-64 shrink-0 border-r">
+    <aside
+      ref={asideRef}
+      className="relative shrink-0 border-r"
+      style={{ width: sidebarWidth }}
+    >
       <ScrollArea className="h-[calc(100vh-8rem)]">
         <div className="p-3">
           <BranchSection
@@ -52,6 +96,17 @@ export function RepoSidebar() {
           )}
         </div>
       </ScrollArea>
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-valuemin={SIDEBAR_MIN_WIDTH}
+        aria-valuemax={SIDEBAR_MAX_WIDTH}
+        aria-valuenow={sidebarWidth}
+        onPointerDown={onPointerDown}
+        className={`absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize select-none transition-colors hover:bg-accent ${
+          isResizing ? "bg-accent" : ""
+        }`}
+      />
     </aside>
   );
 }
