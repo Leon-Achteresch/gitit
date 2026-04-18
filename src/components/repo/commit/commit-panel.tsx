@@ -12,12 +12,14 @@ import {
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { StashCreateDialog } from "@/components/repo/stash/stash-create-dialog";
 import { UnifiedDiffBody } from "./unified-diff-body";
 import { getCommitMessageTemplate, useCommitPrefs } from "@/lib/commit-prefs";
 import { toastError } from "@/lib/error-toast";
 import { useRepoStore, type StatusEntry } from "@/lib/repo-store";
 import { invoke } from "@tauri-apps/api/core";
 import {
+  Archive,
   Check,
   CheckSquare,
   FileCode2,
@@ -297,6 +299,7 @@ export function CommitPanel() {
 
   const [message, setMessage] = useState("");
   const [committing, setCommitting] = useState(false);
+  const [stashOpen, setStashOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [diffPayload, setDiffPayload] = useState<FileDiffResponse | null>(null);
   const [diffLoading, setDiffLoading] = useState(false);
@@ -420,6 +423,7 @@ export function CommitPanel() {
   if (!activePath) return null;
 
   const canCommit = totals.stagedFiles > 0 && message.trim().length > 0;
+  const canStash = changeRows.length > 0;
 
   const toggleEntry = async (entry: StatusEntry) => {
     if (!activePath) return;
@@ -654,24 +658,43 @@ export function CommitPanel() {
             rows={2}
             className="resize-none border-0 bg-muted/30 px-4 py-3 text-sm shadow-none focus-visible:border-transparent focus-visible:ring-0 rounded-xl transition-all group-hover:bg-muted/50"
           />
-          <Button
-            size="icon"
-            onClick={onCommit}
-            disabled={!canCommit || committing}
-            className={`absolute bottom-2 right-2 h-8 w-8 rounded-lg transition-all duration-300 ${
-              canCommit
-                ? "bg-primary text-primary-foreground shadow-md hover:scale-105"
-                : "bg-muted text-muted-foreground"
-            }`}
-          >
-            {committing ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-          </Button>
+          <div className="absolute bottom-2 right-2 flex items-center gap-1.5">
+            <Button
+              type="button"
+              size="icon"
+              variant="outline"
+              title="Änderungen stashen"
+              aria-label="Stashen"
+              disabled={!canStash}
+              onClick={() => setStashOpen(true)}
+              className="h-8 w-8 rounded-lg border-border/60 bg-background/80 shadow-sm"
+            >
+              <Archive className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              onClick={onCommit}
+              disabled={!canCommit || committing}
+              className={`h-8 w-8 rounded-lg transition-all duration-300 ${
+                canCommit
+                  ? "bg-primary text-primary-foreground shadow-md hover:scale-105"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {committing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
+      <StashCreateDialog
+        open={stashOpen}
+        onClose={() => setStashOpen(false)}
+        path={activePath}
+      />
     </div>
   );
 }

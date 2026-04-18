@@ -10,7 +10,13 @@ import {
   useUiStore,
   type SidebarTab,
 } from "@/lib/ui-store";
-import { Cloud, GitBranch, GitCommitHorizontal, History } from "lucide-react";
+import {
+  Archive,
+  Cloud,
+  GitBranch,
+  GitCommitHorizontal,
+  History,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BranchSection } from "@/components/repo/branch/branch-section";
 import { NewBranchDialog } from "@/components/repo/branch/new-branch-dialog";
@@ -27,6 +33,11 @@ export function RepoSidebar() {
     const p = s.activePath;
     if (!p) return 0;
     return s.status[p]?.length ?? 0;
+  });
+  const stashCount = useRepoStore((s) => {
+    const p = s.activePath;
+    if (!p) return 0;
+    return s.stashes[p]?.length ?? 0;
   });
 
   const asideRef = useRef<HTMLElement | null>(null);
@@ -119,6 +130,25 @@ export function RepoSidebar() {
               <TabsTrigger value="history">
                 <History />
                 History
+              </TabsTrigger>
+              <TabsTrigger
+                value="stash"
+                title={
+                  stashCount > 0
+                    ? `${stashCount} Stash-Einträge`
+                    : undefined
+                }
+              >
+                <Archive />
+                <span className="min-w-0 flex-1 text-left">Stash</span>
+                {stashCount > 0 ? (
+                  <Badge
+                    variant="secondary"
+                    className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
+                  >
+                    {stashCount}
+                  </Badge>
+                ) : null}
               </TabsTrigger>
             </TabsList>
           </Tabs>

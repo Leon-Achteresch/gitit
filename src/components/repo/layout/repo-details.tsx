@@ -1,7 +1,9 @@
-import { useRepoStore } from "@/lib/repo-store";
-import { Loader2 } from "lucide-react";
 import { CommitHistoryPanel } from "@/components/repo/commit/commit-history-panel";
 import { RepoRemoteToolbar } from "@/components/repo/remote/repo-remote-toolbar";
+import { StashPanel } from "@/components/repo/stash/stash-panel";
+import { useRepoStore } from "@/lib/repo-store";
+import { useUiStore } from "@/lib/ui-store";
+import { Loader2 } from "lucide-react";
 
 export function RepoDetails() {
   const activePath = useRepoStore((s) => s.activePath);
@@ -9,13 +11,18 @@ export function RepoDetails() {
   const loading = useRepoStore((s) =>
     activePath ? !!s.loading[activePath] : false,
   );
+  const sidebarTab = useUiStore((s) => s.sidebarTab);
 
   if (repo) {
     return (
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
         <RepoRemoteToolbar path={repo.path} />
         <div className="min-h-0 flex-1 overflow-hidden">
-          <CommitHistoryPanel path={repo.path} commits={repo.commits} />
+          {sidebarTab === "stash" ? (
+            <StashPanel path={repo.path} />
+          ) : (
+            <CommitHistoryPanel path={repo.path} commits={repo.commits} />
+          )}
         </div>
       </div>
     );

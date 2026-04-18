@@ -48,6 +48,16 @@ export type UpstreamSyncCounts = {
   behind: number;
 };
 
+export type StashEntry = {
+  index: number;
+  refname: string;
+  branch: string;
+  subject: string;
+  date: string;
+  hash: string;
+  message: string;
+};
+
 type RepoState = {
   paths: string[];
   activePath: string | null;
@@ -57,6 +67,8 @@ type RepoState = {
   status: Record<string, StatusEntry[]>;
   upstreamSync: Record<string, UpstreamSyncCounts>;
   statusLoading: Record<string, boolean>;
+  stashes: Record<string, StashEntry[]>;
+  stashesLoading: Record<string, boolean>;
   addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
   setActive: (path: string) => void;
@@ -92,6 +104,16 @@ type RepoState = {
   ) => Promise<string>;
   tagCommit: (path: string, name: string, commit: string) => Promise<void>;
   discardFiles: (path: string, files: string[]) => Promise<void>;
+  reloadStashes: (path: string) => Promise<void>;
+  stashPush: (
+    path: string,
+    message: string | undefined,
+    opts?: { includeUntracked?: boolean; keepIndex?: boolean },
+  ) => Promise<string>;
+  stashPop: (path: string, index: number) => Promise<string>;
+  stashApply: (path: string, index: number) => Promise<string>;
+  stashDrop: (path: string, index: number) => Promise<void>;
+  stashBranch: (path: string, index: number, name: string) => Promise<string>;
 };
 
 async function loadFavicon(path: string): Promise<string | null> {
@@ -114,6 +136,8 @@ export const useRepoStore = create<RepoState>()(
       status: {},
       upstreamSync: {},
       statusLoading: {},
+      stashes: {},
+      stashesLoading: {},
 
       async addRepo(path) {
         set((s) => ({ loading: { ...s.loading, [path]: true } }));
@@ -134,6 +158,7 @@ export const useRepoStore = create<RepoState>()(
           void loadFavicon(info.path).then((icon) => {
             set((s) => ({ favicons: { ...s.favicons, [info.path]: icon } }));
           });
+          await get().reloadStashes(info.path);
           return info.path;
         } catch (e) {
           const msg = String(e);
@@ -151,9 +176,19 @@ export const useRepoStore = create<RepoState>()(
           const { [path]: _r, ...repos } = s.repos;
           const { [path]: _l, ...loading } = s.loading;
           const { [path]: _f, ...favicons } = s.favicons;
+          const { [path]: _st, ...stashes } = s.stashes;
+          const { [path]: _stl, ...stashesLoading } = s.stashesLoading;
           const activePath =
             s.activePath === path ? (paths[0] ?? null) : s.activePath;
-          return { paths, repos, favicons, loading, activePath };
+          return {
+            paths,
+            repos,
+            favicons,
+            loading,
+            activePath,
+            stashes,
+            stashesLoading,
+          };
         });
       },
 
@@ -178,6 +213,7 @@ export const useRepoStore = create<RepoState>()(
               set((s) => ({ favicons: { ...s.favicons, [path]: icon } }));
             });
           }
+          await get().reloadStashes(path);
         } catch (e) {
           const msg = String(e);
           toastError(msg);
@@ -239,7 +275,11 @@ export const useRepoStore = create<RepoState>()(
 
       async commitChanges(path, message) {
         await invoke("commit_changes", { path, message });
-        await Promise.all([get().reload(path), get().reloadStatus(path)]);
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadStashes(path),
+        ]);
       },
 
       async cloneRepo(url, dest) {
@@ -303,6 +343,83 @@ export const useRepoStore = create<RepoState>()(
         const untracked = files.map((f) => byPath.get(f) ?? false);
         await invoke("git_discard_files", { path, files, untracked });
         await get().reloadStatus(path);
+      },
+
+      async reloadStashes(path) {
+        set((s) => ({
+          stashesLoading: { ...s.stashesLoading, [path]: true },
+        }));
+        try {
+          const list = await invoke<StashEntry[]>("list_stashes", { path });
+          set((s) => ({
+            stashes: { ...s.stashes, [path]: list },
+            stashesLoading: { ...s.stashesLoading, [path]: false },
+          }));
+        } catch (e) {
+          const msg = String(e);
+          toastError(msg);
+          set((s) => ({
+            stashesLoading: { ...s.stashesLoading, [path]: false },
+          }));
+        }
+      },
+
+      async stashPush(path, message, opts) {
+        const out = await invoke<string>("git_stash_push", {
+          path,
+          message: message?.trim() ? message.trim() : null,
+          includeUntracked: opts?.includeUntracked ?? false,
+          keepIndex: opts?.keepIndex ?? false,
+        });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadStashes(path),
+        ]);
+        return out.trim();
+      },
+
+      async stashPop(path, index) {
+        const out = await invoke<string>("git_stash_pop", { path, index });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadStashes(path),
+        ]);
+        return out.trim();
+      },
+
+      async stashApply(path, index) {
+        const out = await invoke<string>("git_stash_apply", { path, index });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadStashes(path),
+        ]);
+        return out.trim();
+      },
+
+      async stashDrop(path, index) {
+        await invoke("git_stash_drop", { path, index });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadStashes(path),
+        ]);
+      },
+
+      async stashBranch(path, index, name) {
+        const out = await invoke<string>("git_stash_branch", {
+          path,
+          index,
+          name,
+        });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadStashes(path),
+        ]);
+        return out.trim();
       },
     }),
     {

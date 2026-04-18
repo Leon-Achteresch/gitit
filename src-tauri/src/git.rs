@@ -786,6 +786,245 @@ pub fn repo_commit_file_diff(
     })
 }
 
+#[derive(Serialize)]
+pub struct StashEntry {
+    pub index: u32,
+    pub refname: String,
+    pub branch: String,
+    pub subject: String,
+    pub date: String,
+    pub hash: String,
+    pub message: String,
+}
+
+fn stash_ref(index: u32) -> String {
+    format!("stash@{{{}}}", index)
+}
+
+fn stash_index_from_ref(gd: &str) -> Option<u32> {
+    let s = gd.trim();
+    let open = s.find('{')?;
+    let close = s.rfind('}')?;
+    if close <= open + 1 {
+        return None;
+    }
+    s[open + 1..close].parse().ok()
+}
+
+fn parse_stash_gs(gs: &str) -> (String, String, String) {
+    let full = gs.trim();
+    if let Some(rest) = full.strip_prefix("WIP on ") {
+        if let Some((branch, tail)) = rest.split_once(": ") {
+            return (
+                branch.trim().to_string(),
+                tail.trim().to_string(),
+                full.to_string(),
+            );
+        }
+    }
+    if let Some(rest) = full.strip_prefix("On ") {
+        if let Some((branch, tail)) = rest.split_once(": ") {
+            return (
+                branch.trim().to_string(),
+                tail.trim().to_string(),
+                full.to_string(),
+            );
+        }
+    }
+    (
+        String::new(),
+        full.to_string(),
+        full.to_string(),
+    )
+}
+
+fn stash_changed_files(repo: &PathBuf, index: u32) -> Result<Vec<CommitChangedFile>, String> {
+    let sref = stash_ref(index);
+    let parent = format!("{sref}^1");
+    let numstat = run_git(
+        repo,
+        &[
+            "diff-tree",
+            "-r",
+            "--no-commit-id",
+            "--numstat",
+            "-z",
+            "-M",
+            &parent,
+            &sref,
+        ],
+    )?;
+    let map = parse_numstat(&numstat);
+    let mut files: Vec<CommitChangedFile> = map
+        .into_iter()
+        .map(|(path, (adds, dels, binary))| CommitChangedFile {
+            path,
+            additions: adds,
+            deletions: dels,
+            binary,
+        })
+        .collect();
+    files.sort_by(|a, b| a.path.cmp(&b.path));
+    Ok(files)
+}
+
+#[tauri::command]
+pub fn list_stashes(path: String) -> Result<Vec<StashEntry>, String> {
+    let repo = PathBuf::from(path.trim());
+    let sep = "\x1f";
+    let fmt = format!("%gd{sep}%H{sep}%cI{sep}%gs");
+    let out = run_git(
+        &repo,
+        &["stash", "list", &format!("--format={fmt}")],
+    )
+    .unwrap_or_default();
+    let mut entries = Vec::new();
+    for line in out.lines() {
+        if line.is_empty() {
+            continue;
+        }
+        let mut parts = line.splitn(4, sep);
+        let gd = parts.next().unwrap_or("").trim();
+        let hash = parts.next().unwrap_or("").trim();
+        let date = parts.next().unwrap_or("").trim();
+        let gs = parts.next().unwrap_or("").trim();
+        if gd.is_empty() || hash.is_empty() {
+            continue;
+        }
+        let Some(idx) = stash_index_from_ref(gd) else {
+            continue;
+        };
+        let (branch, subject, message) = parse_stash_gs(gs);
+        entries.push(StashEntry {
+            index: idx,
+            refname: gd.to_string(),
+            branch,
+            subject,
+            date: date.to_string(),
+            hash: hash.to_string(),
+            message,
+        });
+    }
+    Ok(entries)
+}
+
+#[tauri::command]
+pub fn git_stash_push(
+    path: String,
+    message: Option<String>,
+    include_untracked: bool,
+    keep_index: bool,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let mut args: Vec<String> = vec!["stash".into(), "push".into()];
+    if include_untracked {
+        args.push("-u".into());
+    }
+    if keep_index {
+        args.push("--keep-index".into());
+    }
+    if let Some(m) = message {
+        let t = m.trim();
+        if !t.is_empty() {
+            args.push("-m".into());
+            args.push(t.to_string());
+        }
+    }
+    let refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+    run_git_merged_output(&repo, &refs)
+}
+
+#[tauri::command]
+pub fn git_stash_pop(path: String, index: u32) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let sref = stash_ref(index);
+    run_git_merged_output(&repo, &["stash", "pop", "--quiet", &sref])
+}
+
+#[tauri::command]
+pub fn git_stash_apply(path: String, index: u32) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let sref = stash_ref(index);
+    run_git_merged_output(&repo, &["stash", "apply", "--quiet", &sref])
+}
+
+#[tauri::command]
+pub fn git_stash_drop(path: String, index: u32) -> Result<(), String> {
+    let repo = PathBuf::from(path.trim());
+    let sref = stash_ref(index);
+    run_git(&repo, &["stash", "drop", "--quiet", &sref])?;
+    Ok(())
+}
+
+#[derive(Serialize)]
+pub struct StashInspectResponse {
+    pub header: String,
+    pub files: Vec<CommitChangedFile>,
+}
+
+#[tauri::command]
+pub fn git_stash_show(path: String, index: u32) -> Result<StashInspectResponse, String> {
+    let repo = PathBuf::from(path.trim());
+    let sref = stash_ref(index);
+    let header = run_git(
+        &repo,
+        &[
+            "show",
+            "--no-color",
+            "--no-patch",
+            "--stat=200",
+            "--format=fuller",
+            &sref,
+        ],
+    )?;
+    let files = stash_changed_files(&repo, index)?;
+    Ok(StashInspectResponse {
+        header: header.trim().to_string(),
+        files,
+    })
+}
+
+#[tauri::command]
+pub fn git_stash_file_diff(
+    path: String,
+    index: u32,
+    file: String,
+) -> Result<CommitFileDiffResponse, String> {
+    let repo = PathBuf::from(path.trim());
+    let f = file.trim();
+    if f.is_empty() {
+        return Err("Dateipfad fehlt".into());
+    }
+    let sref = stash_ref(index);
+    let diff = run_git(
+        &repo,
+        &["stash", "show", "-p", "--no-color", &sref, "--", f],
+    )
+    .unwrap_or_default();
+    let trimmed = diff.trim();
+    if diff_reports_binary(&diff) {
+        return Ok(CommitFileDiffResponse {
+            diff: None,
+            is_binary: true,
+        });
+    }
+    Ok(CommitFileDiffResponse {
+        diff: (!trimmed.is_empty()).then_some(diff),
+        is_binary: false,
+    })
+}
+
+#[tauri::command]
+pub fn git_stash_branch(path: String, index: u32, name: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let n = name.trim();
+    if n.is_empty() {
+        return Err("Branch-Name darf nicht leer sein".into());
+    }
+    let sref = stash_ref(index);
+    run_git_merged_output(&repo, &["stash", "branch", n, &sref])
+}
+
 fn list_branches(repo: &PathBuf) -> Result<Vec<Branch>, String> {
     let sep = "\x1f";
     let format = format!("%(HEAD){sep}%(refname){sep}%(objectname)");

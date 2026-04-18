@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { RefreshCw, X } from "lucide-react";
 
 export function CommitInspectHeader({
+  title = "Commit-Details",
   onRefresh,
   onClose,
   loading,
 }: {
+  title?: string;
   onRefresh: () => void;
   onClose: () => void;
   loading: boolean;
@@ -13,7 +15,7 @@ export function CommitInspectHeader({
   return (
     <div className="flex items-center justify-between bg-muted/10 px-4 py-3 backdrop-blur-md">
       <span className="text-sm font-semibold tracking-tight text-foreground/80">
-        Commit-Details
+        {title}
       </span>
       <div className="flex items-center gap-1">
         <Button
