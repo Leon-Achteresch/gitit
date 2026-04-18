@@ -12,8 +12,8 @@ import {
 } from "@/lib/ui-store";
 import { Cloud, GitBranch, GitCommitHorizontal, History } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BranchSection } from "./branch-section";
-import { NewBranchDialog } from "./new-branch-dialog";
+import { BranchSection } from "@/components/repo/branch/branch-section";
+import { NewBranchDialog } from "@/components/repo/branch/new-branch-dialog";
 
 export function RepoSidebar() {
   const activePath = useRepoStore((s) => s.activePath);

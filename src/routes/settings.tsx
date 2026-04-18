@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { open } from "@tauri-apps/plugin-dialog";
 
-import { AddGitAccount } from "@/components/repo/add-git-account";
-import { GitAccountRow } from "@/components/repo/git-account-row";
+import { AddGitAccount } from "@/components/repo/git-account/add-git-account";
+import { GitAccountRow } from "@/components/repo/git-account/git-account-row";
 import { Button } from "@/components/ui/button";
 import {
   Card,

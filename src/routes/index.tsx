@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { CommitPanel } from "@/components/repo/commit-panel";
-import { RepoDetails } from "@/components/repo/repo-details";
-import { RepoSidebar } from "@/components/repo/repo-sidebar";
-import { RepoTabBar } from "@/components/repo/repo-tab-bar";
+import { CommitPanel } from "@/components/repo/commit/commit-panel";
+import { RepoDetails } from "@/components/repo/layout/repo-details";
+import { RepoSidebar } from "@/components/repo/layout/repo-sidebar";
+import { RepoTabBar } from "@/components/repo/tabs/repo-tab-bar";
 import { useRepoStore } from "@/lib/repo-store";
 import { useUiStore } from "@/lib/ui-store";
 import { useRepoRehydrate } from "@/lib/use-repo-rehydrate";

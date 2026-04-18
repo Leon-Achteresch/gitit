@@ -1,7 +1,7 @@
 import { useRepoStore } from "@/lib/repo-store";
 import { Loader2 } from "lucide-react";
-import { CommitHistoryPanel } from "./commit-history-panel";
-import { RepoRemoteToolbar } from "./repo-remote-toolbar";
+import { CommitHistoryPanel } from "@/components/repo/commit/commit-history-panel";
+import { RepoRemoteToolbar } from "@/components/repo/remote/repo-remote-toolbar";
 
 export function RepoDetails() {
   const activePath = useRepoStore((s) => s.activePath);

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { UnifiedDiffBody } from "@/components/repo/unified-diff-body";
+import { UnifiedDiffBody } from "./unified-diff-body";
 import { getCommitMessageTemplate, useCommitPrefs } from "@/lib/commit-prefs";
 import { toastError } from "@/lib/error-toast";
 import { useRepoStore, type StatusEntry } from "@/lib/repo-store";
