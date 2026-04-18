@@ -11,6 +11,7 @@ struct Commit {
     email: String,
     date: String,
     subject: String,
+    parents: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -55,13 +56,15 @@ fn open_repo(path: String) -> Result<RepoInfo, String> {
 
     // Use an uncommon separator so commit subjects don't collide.
     let sep = "\x1f";
-    let format = format!("%H{sep}%h{sep}%an{sep}%ae{sep}%cI{sep}%s");
+    let format = format!("%H{sep}%h{sep}%an{sep}%ae{sep}%cI{sep}%P{sep}%s");
 
     let log = run_git(
         &repo,
         &[
             "log",
             "--max-count=200",
+            "--all",
+            "--date-order",
             &format!("--pretty=format:{format}"),
         ],
     )?;
@@ -69,14 +72,26 @@ fn open_repo(path: String) -> Result<RepoInfo, String> {
     let commits = log
         .lines()
         .filter_map(|line| {
-            let mut parts = line.splitn(6, sep);
+            let mut parts = line.splitn(7, sep);
+            let hash = parts.next()?.to_string();
+            let short_hash = parts.next()?.to_string();
+            let author = parts.next()?.to_string();
+            let email = parts.next()?.to_string();
+            let date = parts.next()?.to_string();
+            let parents_str = parts.next()?;
+            let subject = parts.next()?.to_string();
+            let parents = parents_str
+                .split_whitespace()
+                .map(|s| s.to_string())
+                .collect();
             Some(Commit {
-                hash: parts.next()?.to_string(),
-                short_hash: parts.next()?.to_string(),
-                author: parts.next()?.to_string(),
-                email: parts.next()?.to_string(),
-                date: parts.next()?.to_string(),
-                subject: parts.next()?.to_string(),
+                hash,
+                short_hash,
+                author,
+                email,
+                date,
+                subject,
+                parents,
             })
         })
         .collect();

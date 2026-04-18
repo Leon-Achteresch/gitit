@@ -9,6 +9,7 @@ export type Commit = {
   email: string;
   date: string;
   subject: string;
+  parents: string[];
 };
 
 export type Branch = {
