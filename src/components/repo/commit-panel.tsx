@@ -379,10 +379,6 @@ export function CommitPanel() {
     });
   }, []);
 
-  useEffect(() => {
-    if (activePath) void reloadStatus(activePath);
-  }, [activePath, reloadStatus]);
-
   const changeRows = useMemo(() => buildChangeRows(entries), [entries]);
   const stagedRows = useMemo(
     () => changeRows.filter((r) => r.sector === "staged"),

@@ -7,6 +7,7 @@ import { RepoTabBar } from "@/components/repo/repo-tab-bar";
 import { useRepoStore } from "@/lib/repo-store";
 import { useUiStore } from "@/lib/ui-store";
 import { useRepoRehydrate } from "@/lib/use-repo-rehydrate";
+import { useRepoStatusPoll } from "@/lib/use-repo-status-poll";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   useRepoRehydrate();
+  useRepoStatusPoll();
   const hasRepos = useRepoStore((s) => s.paths.length > 0);
   const activePath = useRepoStore((s) => s.activePath);
   const sidebarTab = useUiStore((s) => s.sidebarTab);
