@@ -40,6 +40,12 @@ pub struct UpstreamSyncCounts {
     pub behind: u32,
 }
 
+#[derive(Serialize)]
+pub struct GitRemote {
+    pub name: String,
+    pub url: String,
+}
+
 pub(crate) fn run_git(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
     let output = Command::new("git")
         .arg("-C")
@@ -222,6 +228,55 @@ pub fn git_push(path: String, set_upstream: bool) -> Result<String, String> {
     } else {
         run_git_merged_output(&repo, &["push"])
     }
+}
+
+#[tauri::command]
+pub fn list_git_remotes(path: String) -> Result<Vec<GitRemote>, String> {
+    let repo = PathBuf::from(path.trim());
+    let names_out = run_git(&repo, &["remote"])?;
+    let mut remotes = Vec::new();
+    for name in names_out.lines().map(str::trim).filter(|l| !l.is_empty()) {
+        let Ok(url) = run_git(&repo, &["remote", "get-url", name]) else {
+            continue;
+        };
+        let url = url.trim().to_string();
+        if url.is_empty() {
+            continue;
+        }
+        remotes.push(GitRemote {
+            name: name.to_string(),
+            url,
+        });
+    }
+    Ok(remotes)
+}
+
+#[tauri::command]
+pub fn set_git_remote_url(path: String, name: String, url: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let n = name.trim();
+    let u = url.trim();
+    if n.is_empty() {
+        return Err("Remote-Name darf nicht leer sein".into());
+    }
+    if u.is_empty() {
+        return Err("Remote-URL darf nicht leer sein".into());
+    }
+    run_git_merged_output(&repo, &["remote", "set-url", n, u])
+}
+
+#[tauri::command]
+pub fn add_git_remote(path: String, name: String, url: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let n = name.trim();
+    let u = url.trim();
+    if n.is_empty() {
+        return Err("Remote-Name darf nicht leer sein".into());
+    }
+    if u.is_empty() {
+        return Err("Remote-URL darf nicht leer sein".into());
+    }
+    run_git_merged_output(&repo, &["remote", "add", n, u])
 }
 
 #[tauri::command]
