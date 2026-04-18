@@ -106,6 +106,50 @@ pub struct PrCheck {
     status: String,
     conclusion: Option<String>,
     html_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    details_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    ci_kind: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    key: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    head_sha: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    started_at: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    completed_at: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    created_at: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    updated_at: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    output_title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    output_summary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    output_text: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    app_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    app_slug: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    check_suite_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    check_run_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    external_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    annotations_count: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    status_uuid: Option<String>,
+}
+
+#[derive(Serialize)]
+pub struct RepoCommitChecks {
+    pub head_sha: String,
+    pub checks: Vec<PrCheck>,
 }
 
 #[derive(Serialize)]
@@ -288,6 +332,16 @@ fn str_or_empty(v: &Value) -> String {
 
 fn first_non_empty(a: String, b: String) -> String {
     if a.is_empty() { b } else { a }
+}
+
+fn trunc_chars(s: &str, max: usize) -> String {
+    let n = s.chars().count();
+    if n <= max {
+        s.to_string()
+    } else {
+        let head: String = s.chars().take(max).collect();
+        format!("{head}\n\n… ({n} Zeichen gesamt, gekürzt auf {max})")
+    }
 }
 
 // ---------- GitHub mapping ----------
@@ -524,27 +578,145 @@ async fn gh_conversation(
     Ok(PrConversation { comments, reviews })
 }
 
-async fn gh_checks(
+async fn gh_legacy_commit_statuses(
     client: &reqwest::Client,
     cred: &HttpsCredential,
     h: &RemoteHandle,
     head_sha: &str,
 ) -> Result<Vec<PrCheck>, String> {
     let url = format!(
-        "https://api.github.com/repos/{}/{}/commits/{head_sha}/check-runs?per_page=100",
+        "https://api.github.com/repos/{}/{}/commits/{head_sha}/status",
         h.owner, h.repo
     );
     let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
     let v = github_read_json(res, &h.host).await?;
-    let arr = v["check_runs"].as_array().cloned().unwrap_or_default();
     let mut out = Vec::new();
-    for c in arr {
+    for s in v["statuses"].as_array().cloned().unwrap_or_default() {
+        let ctx = str_or_empty(&s["context"]);
+        if ctx.is_empty() {
+            continue;
+        }
+        let st = str_or_empty(&s["state"]);
+        let target = s["target_url"]
+            .as_str()
+            .filter(|u| !u.is_empty())
+            .map(|u| u.to_string());
+        let ext = s["id"]
+            .as_i64()
+            .map(|n| n.to_string())
+            .or_else(|| s["id"].as_u64().map(|n| n.to_string()));
         out.push(PrCheck {
-            name: str_or_empty(&c["name"]),
-            status: str_or_empty(&c["status"]),
-            conclusion: c["conclusion"].as_str().map(|s| s.to_string()),
-            html_url: c["html_url"].as_str().map(|s| s.to_string()),
+            name: ctx,
+            status: st.clone(),
+            conclusion: Some(st),
+            html_url: target.clone(),
+            details_url: target,
+            ci_kind: Some("github_legacy_status".into()),
+            key: None,
+            head_sha: Some(head_sha.to_string()),
+            started_at: None,
+            completed_at: None,
+            created_at: s["created_at"].as_str().map(|x| x.to_string()),
+            updated_at: s["updated_at"].as_str().map(|x| x.to_string()),
+            description: s["description"].as_str().map(|x| x.to_string()),
+            output_title: None,
+            output_summary: None,
+            output_text: None,
+            app_name: None,
+            app_slug: None,
+            check_suite_id: None,
+            check_run_id: None,
+            external_id: ext,
+            annotations_count: None,
+            status_uuid: None,
         });
+    }
+    Ok(out)
+}
+
+async fn gh_checks(
+    client: &reqwest::Client,
+    cred: &HttpsCredential,
+    h: &RemoteHandle,
+    head_sha: &str,
+) -> Result<Vec<PrCheck>, String> {
+    let mut out = Vec::new();
+    for page in 1..=40u32 {
+        let url = format!(
+            "https://api.github.com/repos/{}/{}/commits/{head_sha}/check-runs?per_page=100&page={page}",
+            h.owner, h.repo
+        );
+        let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
+        let v = github_read_json(res, &h.host).await?;
+        let arr = v["check_runs"].as_array().cloned().unwrap_or_default();
+        let page_len = arr.len();
+        for c in arr {
+            let outv = &c["output"];
+            let text_raw = outv["text"].as_str().unwrap_or("");
+            let output_text = if text_raw.is_empty() {
+                None
+            } else {
+                Some(trunc_chars(text_raw, 80_000))
+            };
+            let ann = outv["annotations_count"].as_u64();
+            let suite_id = c
+                .get("check_suite")
+                .and_then(|cs| cs.get("id"))
+                .and_then(|id| id.as_u64().map(|n| n.to_string()).or_else(|| id.as_i64().map(|n| n.to_string())));
+            let run_id = c["id"]
+                .as_u64()
+                .map(|n| n.to_string())
+                .or_else(|| c["id"].as_i64().map(|n| n.to_string()));
+            out.push(PrCheck {
+                name: str_or_empty(&c["name"]),
+                status: str_or_empty(&c["status"]),
+                conclusion: c["conclusion"].as_str().map(|s| s.to_string()),
+                html_url: c["html_url"].as_str().map(|s| s.to_string()),
+                details_url: c["details_url"]
+                    .as_str()
+                    .filter(|u| !u.is_empty())
+                    .map(|s| s.to_string()),
+                ci_kind: Some("github_check_run".into()),
+                key: None,
+                head_sha: c["head_sha"].as_str().map(|s| s.to_string()),
+                started_at: c["started_at"].as_str().map(|s| s.to_string()),
+                completed_at: c["completed_at"].as_str().map(|s| s.to_string()),
+                created_at: None,
+                updated_at: None,
+                description: None,
+                output_title: outv["title"]
+                    .as_str()
+                    .filter(|t| !t.is_empty())
+                    .map(|s| s.to_string()),
+                output_summary: outv["summary"]
+                    .as_str()
+                    .filter(|t| !t.is_empty())
+                    .map(|s| s.to_string()),
+                output_text,
+                app_name: c["app"]["name"]
+                    .as_str()
+                    .filter(|t| !t.is_empty())
+                    .map(|s| s.to_string()),
+                app_slug: c["app"]["slug"]
+                    .as_str()
+                    .filter(|t| !t.is_empty())
+                    .map(|s| s.to_string()),
+                check_suite_id: suite_id,
+                check_run_id: run_id,
+                external_id: c["external_id"]
+                    .as_str()
+                    .filter(|t| !t.is_empty())
+                    .map(|s| s.to_string()),
+                annotations_count: ann,
+                status_uuid: None,
+            });
+        }
+        if page_len < 100 {
+            break;
+        }
+    }
+    if let Ok(mut legacy) = gh_legacy_commit_statuses(client, cred, h, head_sha).await {
+        out.append(&mut legacy);
     }
     Ok(out)
 }
@@ -792,6 +964,53 @@ async fn bb_conversation(
     })
 }
 
+fn bb_commit_status_to_pr_check(v: &Value) -> PrCheck {
+    let key = str_or_empty(&v["key"]);
+    let nm = str_or_empty(&v["name"]);
+    let display = first_non_empty(nm, key.clone());
+    let st = str_or_empty(&v["state"]);
+    let link = v["url"]
+        .as_str()
+        .filter(|u| !u.is_empty())
+        .map(|s| s.to_string())
+        .or_else(|| {
+            v["links"]["html"]["href"]
+                .as_str()
+                .filter(|u| !u.is_empty())
+                .map(|s| s.to_string())
+        });
+    let commit_hash = v["commit"]["hash"]
+        .as_str()
+        .filter(|u| !u.is_empty())
+        .map(|s| s.to_string());
+    let status_uuid = v.get("uuid").and_then(|u| u.as_str().map(|s| s.to_string()));
+    PrCheck {
+        name: display,
+        status: st.clone(),
+        conclusion: Some(st),
+        html_url: link.clone(),
+        details_url: link,
+        ci_kind: Some("bitbucket_commit_status".into()),
+        key: if key.is_empty() { None } else { Some(key) },
+        head_sha: commit_hash,
+        started_at: None,
+        completed_at: None,
+        created_at: v["created_on"].as_str().map(|s| s.to_string()),
+        updated_at: v["updated_on"].as_str().map(|s| s.to_string()),
+        description: v["description"].as_str().map(|s| s.to_string()),
+        output_title: None,
+        output_summary: None,
+        output_text: None,
+        app_name: None,
+        app_slug: None,
+        check_suite_id: None,
+        check_run_id: None,
+        external_id: None,
+        annotations_count: None,
+        status_uuid,
+    }
+}
+
 async fn bb_checks(
     client: &reqwest::Client,
     cred: &HttpsCredential,
@@ -799,20 +1018,26 @@ async fn bb_checks(
     number: u64,
 ) -> Result<Vec<PrCheck>, String> {
     let url = format!(
-        "https://api.bitbucket.org/2.0/repositories/{}/{}/pullrequests/{number}/statuses?pagelen=50",
+        "https://api.bitbucket.org/2.0/repositories/{}/{}/pullrequests/{number}/statuses?pagelen=100",
         h.owner, h.repo
     );
     let values = bitbucket_collect_paginated_values(client, cred, &url, &h.host).await?;
-    let mut out = Vec::new();
-    for v in values {
-        out.push(PrCheck {
-            name: first_non_empty(str_or_empty(&v["name"]), str_or_empty(&v["key"])),
-            status: str_or_empty(&v["state"]),
-            conclusion: v["state"].as_str().map(|s| s.to_string()),
-            html_url: v["url"].as_str().map(|s| s.to_string()),
-        });
-    }
-    Ok(out)
+    Ok(values.iter().map(|v| bb_commit_status_to_pr_check(v)).collect())
+}
+
+async fn bb_checks_for_commit(
+    client: &reqwest::Client,
+    cred: &HttpsCredential,
+    h: &RemoteHandle,
+    commit_hash: &str,
+) -> Result<Vec<PrCheck>, String> {
+    let enc = encode_uri_component(commit_hash);
+    let url = format!(
+        "https://api.bitbucket.org/2.0/repositories/{}/{}/commit/{enc}/statuses?pagelen=100",
+        h.owner, h.repo
+    );
+    let values = bitbucket_collect_paginated_values(client, cred, &url, &h.host).await?;
+    Ok(values.iter().map(|v| bb_commit_status_to_pr_check(v)).collect())
 }
 
 async fn github_commit_author_avatar_for_sha(
@@ -1205,6 +1430,34 @@ pub async fn pr_checks(path: String, number: u64) -> Result<Vec<PrCheck>, String
         Provider::Bitbucket => bb_checks(&client, &cred, &h, number).await,
         Provider::Unsupported => Err(unsupported_provider_err(&h.host)),
     }
+}
+
+#[tauri::command]
+pub async fn repo_commit_checks(path: String) -> Result<RepoCommitChecks, String> {
+    let p = repo_path(&path);
+    if !p.is_dir() {
+        return Err("Pfad ist kein Verzeichnis.".into());
+    }
+    let h = parse_origin_url(&p)?;
+    let cred = read_https_credential(&h.host)?;
+    let client = http_client()?;
+    let head_sha = run_git_merged_output(&p, &["rev-parse", "HEAD"])?
+        .trim()
+        .to_string();
+    if head_sha.is_empty() {
+        return Err("Kein HEAD-Commit.".into());
+    }
+    let checks = match h.provider {
+        Provider::GitHub => gh_checks(&client, &cred, &h, &head_sha).await?,
+        Provider::Bitbucket => bb_checks_for_commit(&client, &cred, &h, &head_sha).await?,
+        Provider::Unsupported => {
+            return Err(format!(
+                "CI-Checks für den Host {} werden nicht unterstützt (nur github.com / bitbucket.org).",
+                h.host
+            ));
+        }
+    };
+    Ok(RepoCommitChecks { head_sha, checks })
 }
 
 #[tauri::command]

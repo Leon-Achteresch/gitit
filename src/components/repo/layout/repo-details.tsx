@@ -1,4 +1,5 @@
 import { CommitHistoryPanel } from "@/components/repo/commit/commit-history-panel";
+import { RepoCiPanel } from "@/components/repo/ci/repo-ci-panel";
 import { PullRequestPanel } from "@/components/repo/pr/pull-request-panel";
 import { RepoRemoteToolbar } from "@/components/repo/remote/repo-remote-toolbar";
 import { StashPanel } from "@/components/repo/stash/stash-panel";
@@ -23,6 +24,8 @@ export function RepoDetails() {
             <StashPanel path={repo.path} />
           ) : sidebarTab === "pr" ? (
             <PullRequestPanel path={repo.path} />
+          ) : sidebarTab === "ci" ? (
+            <RepoCiPanel path={repo.path} />
           ) : (
             <CommitHistoryPanel path={repo.path} commits={repo.commits} />
           )}

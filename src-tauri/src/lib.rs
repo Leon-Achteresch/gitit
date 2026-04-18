@@ -92,6 +92,7 @@ pub fn run() {
             pr::pr_files,
             pr::pr_conversation,
             pr::pr_checks,
+            pr::repo_commit_checks,
             pr::pr_add_comment,
             pr::pr_submit_review,
             pr::pr_merge,

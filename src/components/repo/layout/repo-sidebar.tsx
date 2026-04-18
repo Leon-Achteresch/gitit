@@ -17,6 +17,7 @@ import {
   GitCommitHorizontal,
   GitPullRequest,
   History,
+  ListChecks,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BranchSection } from "@/components/repo/branch/branch-section";
@@ -158,6 +159,10 @@ export function RepoSidebar() {
                     {prCount}
                   </Badge>
                 ) : null}
+              </TabsTrigger>
+              <TabsTrigger value="ci" title="CI / Pipelines für HEAD">
+                <ListChecks />
+                CI
               </TabsTrigger>
               <TabsTrigger
                 value="stash"
