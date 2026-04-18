@@ -1,7 +1,12 @@
+use std::collections::HashSet;
 use std::path::PathBuf;
+use std::sync::Arc;
 
+use reqwest::StatusCode;
 use serde::Serialize;
 use serde_json::{json, Value};
+use tokio::sync::Semaphore;
+use tokio::task::JoinSet;
 
 use crate::credentials::{read_https_credential, HttpsCredential};
 use crate::git::{run_git, run_git_merged_output};
@@ -49,6 +54,13 @@ pub struct PrCommit {
     email: String,
     date: String,
     subject: String,
+    author_avatar: Option<String>,
+}
+
+#[derive(Serialize)]
+pub struct CommitAvatarEntry {
+    pub hash: String,
+    pub author_avatar: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -403,6 +415,7 @@ async fn gh_commits(
                     .next()
                     .unwrap_or("")
                     .to_string(),
+                author_avatar: c["author"]["avatar_url"].as_str().map(|s| s.to_string()),
             });
         }
         if count < 100 {
@@ -633,6 +646,9 @@ async fn bb_commits(
     for c in values {
         let hash = str_or_empty(&c["hash"]);
         let short_hash = hash.chars().take(7).collect();
+        let author_avatar = c["author"]["user"]["links"]["avatar"]["href"]
+            .as_str()
+            .map(|s| s.to_string());
         out.push(PrCommit {
             short_hash,
             hash,
@@ -649,6 +665,7 @@ async fn bb_commits(
                 .next()
                 .unwrap_or("")
                 .to_string(),
+            author_avatar,
         });
     }
     Ok(out)
@@ -798,10 +815,216 @@ async fn bb_checks(
     Ok(out)
 }
 
+async fn github_commit_author_avatar_for_sha(
+    client: &reqwest::Client,
+    cred: &HttpsCredential,
+    owner: &str,
+    repo: &str,
+    sha: String,
+) -> CommitAvatarEntry {
+    let url = format!(
+        "https://api.github.com/repos/{}/{}/commits/{}",
+        owner, repo, sha
+    );
+    let res = match github_request(client, cred, reqwest::Method::GET, &url, None).await {
+        Ok(r) => r,
+        Err(_) => {
+            return CommitAvatarEntry {
+                hash: sha,
+                author_avatar: None,
+            };
+        }
+    };
+    if res.status() == StatusCode::NOT_FOUND || !res.status().is_success() {
+        return CommitAvatarEntry {
+            hash: sha,
+            author_avatar: None,
+        };
+    }
+    let body = match res.text().await {
+        Ok(t) => t,
+        Err(_) => {
+            return CommitAvatarEntry {
+                hash: sha,
+                author_avatar: None,
+            };
+        }
+    };
+    let v: Value = match serde_json::from_str(&body) {
+        Ok(v) => v,
+        Err(_) => {
+            return CommitAvatarEntry {
+                hash: sha,
+                author_avatar: None,
+            };
+        }
+    };
+    let author_avatar = v["author"]["avatar_url"].as_str().map(|s| s.to_string());
+    CommitAvatarEntry {
+        hash: sha,
+        author_avatar,
+    }
+}
+
+async fn bitbucket_commit_author_avatar_for_sha(
+    client: &reqwest::Client,
+    cred: &HttpsCredential,
+    host: &str,
+    owner: &str,
+    repo: &str,
+    sha: String,
+) -> CommitAvatarEntry {
+    let url = format!(
+        "https://api.bitbucket.org/2.0/repositories/{}/{}/commit/{}",
+        owner, repo, sha
+    );
+    let res = match bitbucket_send_authed(client, &url, cred, host).await {
+        Ok(r) => r,
+        Err(_) => {
+            return CommitAvatarEntry {
+                hash: sha,
+                author_avatar: None,
+            };
+        }
+    };
+    if !res.status().is_success() {
+        return CommitAvatarEntry {
+            hash: sha,
+            author_avatar: None,
+        };
+    }
+    let v: Value = match res.json().await {
+        Ok(v) => v,
+        Err(_) => {
+            return CommitAvatarEntry {
+                hash: sha,
+                author_avatar: None,
+            };
+        }
+    };
+    let author_avatar = v["author"]["user"]["links"]["avatar"]["href"]
+        .as_str()
+        .map(|s| s.to_string());
+    CommitAvatarEntry {
+        hash: sha,
+        author_avatar,
+    }
+}
+
+async fn resolve_unique_commit_avatars_github(
+    client: &reqwest::Client,
+    cred: &HttpsCredential,
+    h: &RemoteHandle,
+    hashes: Vec<String>,
+) -> Vec<CommitAvatarEntry> {
+    let sem = Arc::new(Semaphore::new(14));
+    let mut set = JoinSet::new();
+    for sha in hashes {
+        let sem = sem.clone();
+        let client = client.clone();
+        let cred = HttpsCredential {
+            username: cred.username.clone(),
+            password: cred.password.clone(),
+        };
+        let owner = h.owner.clone();
+        let repo = h.repo.clone();
+        set.spawn(async move {
+            let _permit = sem.acquire().await.ok();
+            github_commit_author_avatar_for_sha(&client, &cred, &owner, &repo, sha).await
+        });
+    }
+    let mut out = Vec::new();
+    while let Some(joined) = set.join_next().await {
+        if let Ok(entry) = joined {
+            out.push(entry);
+        }
+    }
+    out
+}
+
+async fn resolve_unique_commit_avatars_bitbucket(
+    client: &reqwest::Client,
+    cred: &HttpsCredential,
+    h: &RemoteHandle,
+    hashes: Vec<String>,
+) -> Vec<CommitAvatarEntry> {
+    let sem = Arc::new(Semaphore::new(10));
+    let mut set = JoinSet::new();
+    for sha in hashes {
+        let sem = sem.clone();
+        let client = client.clone();
+        let cred = HttpsCredential {
+            username: cred.username.clone(),
+            password: cred.password.clone(),
+        };
+        let host = h.host.clone();
+        let owner = h.owner.clone();
+        let repo = h.repo.clone();
+        set.spawn(async move {
+            let _permit = sem.acquire().await.ok();
+            bitbucket_commit_author_avatar_for_sha(&client, &cred, &host, &owner, &repo, sha).await
+        });
+    }
+    let mut out = Vec::new();
+    while let Some(joined) = set.join_next().await {
+        if let Ok(entry) = joined {
+            out.push(entry);
+        }
+    }
+    out
+}
+
 // ---------- Tauri commands ----------
 
 fn repo_path(path: &str) -> PathBuf {
     PathBuf::from(path)
+}
+
+#[tauri::command]
+pub async fn resolve_repo_commit_avatars(
+    path: String,
+    hashes: Vec<String>,
+) -> Result<Vec<CommitAvatarEntry>, String> {
+    let p = repo_path(&path);
+    if !p.is_dir() {
+        return Err("Pfad ist kein Verzeichnis.".into());
+    }
+    let remote = match parse_origin_url(&p) {
+        Ok(h) => h,
+        Err(_) => return Ok(vec![]),
+    };
+    let cred = match read_https_credential(&remote.host) {
+        Ok(c) => c,
+        Err(_) => return Ok(vec![]),
+    };
+    let client = match http_client() {
+        Ok(c) => c,
+        Err(_) => return Ok(vec![]),
+    };
+    let mut seen = HashSet::new();
+    let mut unique: Vec<String> = Vec::new();
+    for raw in hashes {
+        let t = raw.trim().to_string();
+        if t.is_empty() {
+            continue;
+        }
+        if seen.insert(t.clone()) {
+            unique.push(t);
+        }
+        if unique.len() >= 220 {
+            break;
+        }
+    }
+    let entries = match remote.provider {
+        Provider::GitHub => {
+            resolve_unique_commit_avatars_github(&client, &cred, &remote, unique).await
+        }
+        Provider::Bitbucket => {
+            resolve_unique_commit_avatars_bitbucket(&client, &cred, &remote, unique).await
+        }
+        Provider::Unsupported => vec![],
+    };
+    Ok(entries)
 }
 
 #[tauri::command]

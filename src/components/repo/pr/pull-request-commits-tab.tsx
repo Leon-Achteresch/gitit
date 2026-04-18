@@ -13,6 +13,7 @@ type PrCommit = {
   email: string;
   date: string;
   subject: string;
+  author_avatar: string | null;
 };
 
 export function PullRequestCommitsTab({
@@ -68,7 +69,7 @@ export function PullRequestCommitsTab({
             key={c.hash}
             className="flex min-w-0 items-center gap-3 px-4 py-2.5"
           >
-            <CommitAvatar url={null} name={c.author} size="sm" />
+            <CommitAvatar url={c.author_avatar} name={c.author} size="sm" />
             <div className="flex min-w-0 flex-1 flex-col">
               <span className="truncate text-sm">{c.subject}</span>
               <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">

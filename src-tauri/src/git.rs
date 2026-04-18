@@ -15,6 +15,7 @@ pub struct Commit {
     body: String,
     parents: Vec<String>,
     tags: Vec<String>,
+    author_avatar: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -184,6 +185,7 @@ pub fn open_repo(path: String) -> Result<RepoInfo, String> {
                 body,
                 parents,
                 tags,
+                author_avatar: None,
             })
         })
         .collect();

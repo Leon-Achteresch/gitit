@@ -5,13 +5,13 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { toastError } from "@/lib/error-toast";
-import { useGravatarUrl } from "@/lib/gravatar";
 import {
   compareBranchesDisplay,
   laneColor,
   normalizeGitOid,
   type GraphRow,
 } from "@/lib/graph";
+import { useGravatarUrl } from "@/lib/gravatar";
 import { useRepoStore } from "@/lib/repo-store";
 import { cn } from "@/lib/utils";
 import { Tag, Undo2 } from "lucide-react";
@@ -39,7 +39,8 @@ export function CommitRow({
   onSelect: () => void;
 }) {
   const { commit } = row;
-  const avatarUrl = useGravatarUrl(commit.email);
+  const gravatarUrl = useGravatarUrl(commit.email);
+  const avatarUrl = commit.author_avatar ?? gravatarUrl;
   const revertCommit = useRepoStore((s) => s.revertCommit);
   const branches = useRepoStore((s) => s.repos[path]?.branches ?? []);
   const branchesAtCommit = useMemo(() => {
