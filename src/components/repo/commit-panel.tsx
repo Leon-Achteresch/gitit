@@ -1,11 +1,26 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useRepoStore, type StatusEntry } from "@/lib/repo-store";
 import { invoke } from "@tauri-apps/api/core";
-import { Loader2 } from "lucide-react";
+import {
+  Check,
+  CheckSquare,
+  FileCode2,
+  FileDiff,
+  FileMinus,
+  FilePlus,
+  Loader2,
+  MinusSquare,
+  RefreshCw,
+  Send,
+  Square,
+} from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const EMPTY_STATUS: StatusEntry[] = [];
@@ -58,27 +73,27 @@ function linesFromUntracked(content: string): DiffLine[] {
 function DiffLineRow({ line }: { line: DiffLine }) {
   if (line.kind === "meta" || line.kind === "hunk") {
     return (
-      <div className="whitespace-pre break-all px-2 py-0.5 font-mono text-xs text-muted-foreground">
+      <div className="whitespace-pre break-all px-4 py-0.5 font-mono text-[11px] text-muted-foreground/70 bg-muted/5">
         {line.text}
       </div>
     );
   }
   if (line.kind === "ctx") {
     return (
-      <div className="whitespace-pre break-all px-2 py-0.5 font-mono text-xs text-foreground/90">
+      <div className="whitespace-pre break-all px-4 py-0.5 font-mono text-[11px] text-foreground/80 hover:bg-muted/10 transition-colors">
         {line.text}
       </div>
     );
   }
   if (line.kind === "add") {
     return (
-      <div className="whitespace-pre break-all border-l-2 border-git-added bg-git-added-subtle px-2 py-0.5 font-mono text-xs text-git-added">
+      <div className="whitespace-pre break-all border-l-[3px] border-git-added bg-git-added-subtle/40 px-4 py-0.5 font-mono text-[11px] text-git-added hover:bg-git-added-subtle/60 transition-colors">
         {line.text}
       </div>
     );
   }
   return (
-    <div className="whitespace-pre break-all border-l-2 border-git-removed bg-git-removed-subtle px-2 py-0.5 font-mono text-xs text-git-removed">
+    <div className="whitespace-pre break-all border-l-[3px] border-git-removed bg-git-removed-subtle/40 px-4 py-0.5 font-mono text-[11px] text-git-removed hover:bg-git-removed-subtle/60 transition-colors">
       {line.text}
     </div>
   );
@@ -97,30 +112,31 @@ function rowId(path: string, sector: ChangeSector): string {
   return `${path}\n${sector}`;
 }
 
-function statusLabelForSector(
-  entry: StatusEntry,
-  sector: ChangeSector,
-): { label: string; tone: string } {
+function StatusIcon({
+  entry,
+  sector,
+}: {
+  entry: StatusEntry;
+  sector: ChangeSector;
+}) {
   if (sector === "unstaged" && entry.untracked) {
-    return { label: "Neu", tone: "text-emerald-600" };
+    return <FilePlus className="h-3.5 w-3.5 text-emerald-500" />;
   }
-  const code =
-    sector === "staged" ? entry.index_status : entry.worktree_status;
+  const code = sector === "staged" ? entry.index_status : entry.worktree_status;
   switch (code.trim()) {
     case "M":
-      return { label: "Geändert", tone: "text-amber-600" };
+      return <FileDiff className="h-3.5 w-3.5 text-amber-500" />;
     case "A":
-      return { label: "Hinzugefügt", tone: "text-emerald-600" };
+      return <FilePlus className="h-3.5 w-3.5 text-emerald-500" />;
     case "D":
-      return { label: "Gelöscht", tone: "text-destructive" };
+      return <FileMinus className="h-3.5 w-3.5 text-destructive" />;
     case "R":
-      return { label: "Umbenannt", tone: "text-sky-600" };
     case "C":
-      return { label: "Kopiert", tone: "text-sky-600" };
+      return <FileCode2 className="h-3.5 w-3.5 text-sky-500" />;
     case "U":
-      return { label: "Konflikt", tone: "text-destructive" };
+      return <FileDiff className="h-3.5 w-3.5 text-destructive" />;
     default:
-      return { label: code.trim() || "?", tone: "text-muted-foreground" };
+      return <FileCode2 className="h-3.5 w-3.5 text-muted-foreground" />;
   }
 }
 
@@ -150,9 +166,169 @@ function buildChangeRows(entries: StatusEntry[]): ChangeRow[] {
 type CheckState = "checked" | "unchecked" | "indeterminate";
 
 function checkState(entry: StatusEntry): CheckState {
-  if (entry.staged && (entry.unstaged || entry.untracked)) return "indeterminate";
+  if (entry.staged && (entry.unstaged || entry.untracked))
+    return "indeterminate";
   if (entry.staged) return "checked";
   return "unchecked";
+}
+
+function FileRow({
+  row,
+  selected,
+  onSelect,
+  onToggle,
+}: {
+  row: ChangeRow;
+  selected: boolean;
+  onSelect: () => void;
+  onToggle: () => void;
+}) {
+  const state = checkState(row.entry);
+  const additions =
+    row.sector === "staged"
+      ? row.entry.additions_staged
+      : row.entry.additions_unstaged;
+  const deletions =
+    row.sector === "staged"
+      ? row.entry.deletions_staged
+      : row.entry.deletions_unstaged;
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`group flex cursor-pointer items-center gap-3 rounded-md px-2.5 py-1.5 text-sm transition-all duration-200 ${
+        selected
+          ? "bg-primary/10 text-primary shadow-sm"
+          : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      <div
+        className="flex items-center justify-center"
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggle();
+        }}
+      >
+        {state === "checked" ? (
+          <CheckSquare className="h-4 w-4 text-primary transition-transform group-hover:scale-110" />
+        ) : state === "indeterminate" ? (
+          <MinusSquare className="h-4 w-4 text-primary/70 transition-transform group-hover:scale-110" />
+        ) : (
+          <Square className="h-4 w-4 text-muted-foreground/50 transition-transform group-hover:scale-110 group-hover:text-muted-foreground" />
+        )}
+      </div>
+      <StatusIcon entry={row.entry} sector={row.sector} />
+      <span className="min-w-0 flex-1 truncate font-medium text-[13px]">
+        {row.path.split("/").pop()}
+        <span className="ml-2 text-[10px] font-normal opacity-50 truncate">
+          {row.path.split("/").slice(0, -1).join("/")}
+        </span>
+      </span>
+      <div className="flex items-center gap-2 text-[10px] font-mono opacity-80">
+        {!row.entry.binary && (
+          <>
+            {additions > 0 && (
+              <span className="text-git-added">+{additions}</span>
+            )}
+            {deletions > 0 && (
+              <span className="text-git-removed">-{deletions}</span>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function DiffViewer({
+  selectedRow,
+  diffPayload,
+  loading,
+  error,
+  onReload,
+}: {
+  selectedRow: ChangeRow | null;
+  diffPayload: FileDiffResponse | null;
+  loading: boolean;
+  error: string | null;
+  onReload: () => void;
+}) {
+  const displayedDiffLines = useMemo(() => {
+    if (!diffPayload || diffPayload.is_binary || !selectedRow) return [];
+    if (
+      selectedRow.sector === "unstaged" &&
+      diffPayload.untracked_plain != null
+    ) {
+      return linesFromUntracked(diffPayload.untracked_plain);
+    }
+    if (selectedRow.sector === "staged" && diffPayload.staged?.trim()) {
+      return parseUnifiedDiff(diffPayload.staged);
+    }
+    if (selectedRow.sector === "unstaged" && diffPayload.unstaged?.trim()) {
+      return parseUnifiedDiff(diffPayload.unstaged);
+    }
+    return [];
+  }, [diffPayload, selectedRow]);
+
+  if (!selectedRow) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground/50">
+        <FileDiff className="h-12 w-12 opacity-20" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-full flex-col overflow-hidden bg-background/50">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-muted/20 backdrop-blur-sm">
+        <div className="flex items-center gap-3 min-w-0">
+          <StatusIcon entry={selectedRow.entry} sector={selectedRow.sector} />
+          <span className="truncate font-medium text-sm">
+            {selectedRow.path}
+          </span>
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-wider">
+            {selectedRow.sector === "staged" ? "Gestaged" : "Nicht gestaged"}
+          </span>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 rounded-full hover:bg-muted/50"
+          onClick={onReload}
+        >
+          <RefreshCw className="h-3.5 w-3.5" />
+        </Button>
+      </div>
+
+      <div className="flex-1 overflow-hidden">
+        {loading ? (
+          <div className="flex h-full items-center justify-center">
+            <Loader2 className="h-6 w-6 animate-spin text-primary/50" />
+          </div>
+        ) : error ? (
+          <div className="flex h-full items-center justify-center text-destructive text-sm px-6 text-center">
+            {error}
+          </div>
+        ) : diffPayload?.is_binary ? (
+          <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+            Binärdatei
+          </div>
+        ) : displayedDiffLines.length > 0 ? (
+          <ScrollArea className="h-full">
+            <div className="py-2">
+              {displayedDiffLines.map((line, i) => (
+                <DiffLineRow key={i} line={line} />
+              ))}
+            </div>
+          </ScrollArea>
+        ) : (
+          <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+            Keine Textänderungen
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export function CommitPanel() {
@@ -260,27 +436,13 @@ export function CommitPanel() {
     if (entries.length === 0) return "unchecked";
     const staged = entries.filter((e) => e.staged).length;
     if (staged === 0) return "unchecked";
-    if (staged === entries.length && entries.every((e) => !e.unstaged && !e.untracked))
+    if (
+      staged === entries.length &&
+      entries.every((e) => !e.unstaged && !e.untracked)
+    )
       return "checked";
     return "indeterminate";
   }, [entries]);
-
-  const displayedDiffLines = useMemo(() => {
-    if (!diffPayload || diffPayload.is_binary || !selectedRow) return [];
-    if (
-      selectedRow.sector === "unstaged" &&
-      diffPayload.untracked_plain != null
-    ) {
-      return linesFromUntracked(diffPayload.untracked_plain);
-    }
-    if (selectedRow.sector === "staged" && diffPayload.staged?.trim()) {
-      return parseUnifiedDiff(diffPayload.staged);
-    }
-    if (selectedRow.sector === "unstaged" && diffPayload.unstaged?.trim()) {
-      return parseUnifiedDiff(diffPayload.unstaged);
-    }
-    return [];
-  }, [diffPayload, selectedRow]);
 
   if (!activePath) return null;
 
@@ -333,262 +495,192 @@ export function CommitPanel() {
     }
   };
 
-  const renderDiffScroll = (lines: DiffLine[]) => (
-    <ScrollArea className="h-full min-h-0">
-      <div className="min-h-[12rem] min-w-0 py-1">
-        {lines.length === 0 ? (
-          <p className="px-3 py-4 text-sm text-muted-foreground">Keine Zeilen.</p>
-        ) : (
-          lines.map((line, i) => <DiffLineRow key={i} line={line} />)
-        )}
-      </div>
-    </ScrollArea>
-  );
+  const layoutStorageKey = "gitit.commit-panel.layout.v2";
 
-  const sectorBadge =
-    selectedRow?.sector === "staged" ? (
-      <span className="shrink-0 rounded border border-border bg-muted/80 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        Gestaged
-      </span>
-    ) : selectedRow?.sector === "unstaged" ? (
-      <span className="shrink-0 rounded border border-border bg-muted/80 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        Nicht gestaged
-      </span>
-    ) : null;
-
-  const diffPane = (
-    <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col rounded-md border bg-muted/20">
-      <div className="flex shrink-0 items-center justify-between gap-2 border-b px-3 py-2">
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          <span className="truncate font-mono text-xs text-muted-foreground">
-            {selectedRow?.path ?? "—"}
-          </span>
-          {sectorBadge}
-        </div>
-        {selectedRow && (
-          <Button variant="ghost" size="sm" className="h-7 shrink-0 text-xs" onClick={() => void loadDiff()}>
-            Diff neu laden
-          </Button>
-        )}
-      </div>
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-0">
-        {!selectedRow ? (
-          <p className="p-4 text-sm text-muted-foreground">Datei wählen.</p>
-        ) : diffLoading ? (
-          <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Diff wird geladen …
-          </div>
-        ) : diffError ? (
-          <p className="p-4 text-sm text-destructive">{diffError}</p>
-        ) : !diffPayload ? null : diffPayload.is_binary ? (
-          <p className="p-4 text-sm text-muted-foreground">Binärdatei, keine Textvorschau.</p>
-        ) : displayedDiffLines.length > 0 ? (
-          <div className="flex min-h-0 flex-1 flex-col">
-            {renderDiffScroll(displayedDiffLines)}
-          </div>
-        ) : (
-          <p className="p-4 text-sm text-muted-foreground">Keine Textänderungen in diesem Bereich.</p>
-        )}
-      </div>
-    </div>
-  );
+  const [defaultLayout] = useState(() => {
+    const saved = localStorage.getItem(layoutStorageKey);
+    if (saved) {
+      try {
+        return JSON.parse(saved) as Record<string, number>;
+      } catch {
+        return undefined;
+      }
+    }
+    return undefined;
+  });
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden pb-1">
-      <div className="flex shrink-0 items-center justify-between">
-        <h2 className="text-sm font-semibold">
-          Änderungen
-          <span className="ml-2 text-xs font-normal text-muted-foreground">
-            {changeRows.length}
-          </span>
-        </h2>
+    <div className="flex h-full flex-col gap-4 p-4 bg-background/50">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-sm">
+            <Check className="h-4 w-4" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold tracking-tight">Änderungen</h2>
+            <p className="text-[11px] text-muted-foreground font-medium">
+              {changeRows.length} Dateien
+            </p>
+          </div>
+        </div>
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
+          className="h-8 w-8 rounded-full hover:bg-muted/60 transition-colors"
           onClick={() => void reloadStatus(activePath)}
           disabled={loading}
         >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Aktualisieren"}
+          <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
         </Button>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border bg-muted/15">
-        <div className="flex min-h-0 flex-1 gap-3 p-2">
-          <div className="flex min-h-0 w-[min(100%,22rem)] shrink-0 flex-col overflow-hidden rounded-md border bg-background">
-            <ScrollArea className="min-h-0 flex-1">
-            {changeRows.length === 0 ? (
-              <p className="p-4 text-sm text-muted-foreground">
-                Keine ausstehenden Änderungen.
-              </p>
-            ) : (
-              <>
-                <div className="flex items-center gap-3 border-b bg-muted/40 px-3 py-2 text-xs font-medium text-muted-foreground">
-                  <Checkbox
-                    checked={
-                      allState === "indeterminate" ? "indeterminate" : allState === "checked"
-                    }
-                    onCheckedChange={() => void toggleAll()}
-                    aria-label="Alle auswählen"
-                  />
-                  <span className="flex-1">Datei</span>
-                  <span className="w-20 text-right">Δ</span>
-                </div>
-                <div className="border-b bg-muted/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  Gestaged
-                </div>
-                {stagedRows.length === 0 ? (
-                  <p className="px-3 py-2 text-xs text-muted-foreground">Leer</p>
+      <div className="flex-1 overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border/50">
+        <ResizablePanelGroup
+          orientation="horizontal"
+          id="commit-panel-layout"
+          defaultLayout={defaultLayout}
+          onLayoutChanged={(layout) =>
+            localStorage.setItem(layoutStorageKey, JSON.stringify(layout))
+          }
+        >
+          <ResizablePanel
+            id="files"
+            defaultSize="32%"
+            minSize="16%"
+            maxSize="78%"
+            className="flex flex-col bg-muted/10"
+          >
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-border/50 bg-background/50 backdrop-blur-sm">
+              <div
+                className="flex cursor-pointer items-center justify-center hover:scale-110 transition-transform"
+                onClick={() => void toggleAll()}
+              >
+                {allState === "checked" ? (
+                  <CheckSquare className="h-4 w-4 text-primary" />
+                ) : allState === "indeterminate" ? (
+                  <MinusSquare className="h-4 w-4 text-primary/70" />
                 ) : (
-                  <ul className="divide-y">
-                    {stagedRows.map((row) => {
-                      const { label, tone } = statusLabelForSector(
-                        row.entry,
-                        row.sector,
-                      );
-                      const state = checkState(row.entry);
-                      const additions = row.entry.additions_staged;
-                      const deletions = row.entry.deletions_staged;
-                      const sel = row.id === selectedRowId;
-                      return (
-                        <li
-                          key={row.id}
-                          onClick={() => setSelectedRowId(row.id)}
-                          className={`flex cursor-pointer items-center gap-2 px-2 py-2 text-sm transition-colors hover:bg-muted/50 ${
-                            sel ? "bg-muted/60" : ""
-                          }`}
-                        >
-                          <Checkbox
-                            className="shrink-0"
-                            checked={
-                              state === "indeterminate"
-                                ? "indeterminate"
-                                : state === "checked"
-                            }
-                            onClick={(ev) => ev.stopPropagation()}
-                            onCheckedChange={() => void toggleEntry(row.entry)}
-                            aria-label={`${row.path} stagen`}
-                          />
-                          <span
-                            className={`w-16 shrink-0 text-xs font-medium ${tone}`}
-                          >
-                            {label}
-                          </span>
-                          <span className="min-w-0 flex-1 truncate font-mono text-xs">
-                            {row.path}
-                          </span>
-                          <span className="flex w-20 shrink-0 justify-end gap-1.5 font-mono text-xs">
-                            {row.entry.binary ? (
-                              <span className="text-muted-foreground">bin</span>
-                            ) : (
-                              <>
-                                <span className="text-git-added">+{additions}</span>
-                                <span className="text-git-removed">−{deletions}</span>
-                              </>
-                            )}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <Square className="h-4 w-4 text-muted-foreground/50" />
                 )}
-                <div className="border-b bg-muted/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  Nicht gestaged
-                </div>
-                {unstagedRows.length === 0 ? (
-                  <p className="px-3 py-2 text-xs text-muted-foreground">Leer</p>
-                ) : (
-                  <ul className="divide-y">
-                    {unstagedRows.map((row) => {
-                      const { label, tone } = statusLabelForSector(
-                        row.entry,
-                        row.sector,
-                      );
-                      const state = checkState(row.entry);
-                      const additions = row.entry.additions_unstaged;
-                      const deletions = row.entry.deletions_unstaged;
-                      const sel = row.id === selectedRowId;
-                      return (
-                        <li
-                          key={row.id}
-                          onClick={() => setSelectedRowId(row.id)}
-                          className={`flex cursor-pointer items-center gap-2 px-2 py-2 text-sm transition-colors hover:bg-muted/50 ${
-                            sel ? "bg-muted/60" : ""
-                          }`}
-                        >
-                          <Checkbox
-                            className="shrink-0"
-                            checked={
-                              state === "indeterminate"
-                                ? "indeterminate"
-                                : state === "checked"
-                            }
-                            onClick={(ev) => ev.stopPropagation()}
-                            onCheckedChange={() => void toggleEntry(row.entry)}
-                            aria-label={`${row.path} stagen`}
-                          />
-                          <span
-                            className={`w-16 shrink-0 text-xs font-medium ${tone}`}
-                          >
-                            {label}
-                          </span>
-                          <span className="min-w-0 flex-1 truncate font-mono text-xs">
-                            {row.path}
-                          </span>
-                          <span className="flex w-20 shrink-0 justify-end gap-1.5 font-mono text-xs">
-                            {row.entry.binary ? (
-                              <span className="text-muted-foreground">bin</span>
-                            ) : (
-                              <>
-                                <span className="text-git-added">+{additions}</span>
-                                <span className="text-git-removed">−{deletions}</span>
-                              </>
-                            )}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </>
-            )}
-            </ScrollArea>
-          </div>
+              </div>
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Alle Dateien
+              </span>
+            </div>
 
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-md border bg-background">
-            {diffPane}
+            <ScrollArea className="flex-1">
+              <div className="p-2 space-y-4">
+                {stagedRows.length > 0 && (
+                  <div className="space-y-1">
+                    <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-primary/60">
+                      Gestaged
+                    </div>
+                    {stagedRows.map((row) => (
+                      <FileRow
+                        key={row.id}
+                        row={row}
+                        selected={row.id === selectedRowId}
+                        onSelect={() => setSelectedRowId(row.id)}
+                        onToggle={() => void toggleEntry(row.entry)}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {unstagedRows.length > 0 && (
+                  <div className="space-y-1">
+                    <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                      Nicht gestaged
+                    </div>
+                    {unstagedRows.map((row) => (
+                      <FileRow
+                        key={row.id}
+                        row={row}
+                        selected={row.id === selectedRowId}
+                        onSelect={() => setSelectedRowId(row.id)}
+                        onToggle={() => void toggleEntry(row.entry)}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {changeRows.length === 0 && (
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground/50">
+                    <Check className="h-8 w-8 mb-2 opacity-20" />
+                    <p className="text-sm font-medium">Alles sauber</p>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          </ResizablePanel>
+
+          <ResizableHandle
+            withHandle
+            className="bg-border/50 hover:bg-primary/20 transition-colors"
+          />
+
+          <ResizablePanel
+            id="diff"
+            defaultSize="68%"
+            minSize="22%"
+            className="flex flex-col"
+          >
+            <DiffViewer
+              selectedRow={selectedRow}
+              diffPayload={diffPayload}
+              loading={diffLoading}
+              error={diffError}
+              onReload={() => void loadDiff()}
+            />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+
+      <div className="flex flex-col gap-3 rounded-2xl bg-card p-3 shadow-sm ring-1 ring-border/50">
+        <div className="flex items-center gap-4 px-2">
+          <div className="flex flex-1 items-center gap-2">
+            <div className="flex h-6 items-center rounded-full bg-primary/10 px-2.5 text-[11px] font-semibold text-primary">
+              {totals.stagedFiles}
+            </div>
+            <div className="flex items-center gap-1.5 font-mono text-[11px]">
+              <span className="text-git-added font-medium">
+                +{totals.additionsStaged}
+              </span>
+              <span className="text-git-removed font-medium">
+                -{totals.deletionsStaged}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex shrink-0 items-center justify-between rounded-md border bg-muted/30 px-3 py-2 text-xs">
-        <span className="text-muted-foreground">
-          Gestaged: {totals.stagedFiles} Datei
-          {totals.stagedFiles === 1 ? "" : "en"}
-        </span>
-        <span className="flex gap-3 font-mono">
-          <span className="text-emerald-600">+{totals.additionsStaged}</span>
-          <span className="text-destructive">−{totals.deletionsStaged}</span>
-        </span>
-      </div>
-
-      <Separator className="shrink-0" />
-
-      <div className="flex shrink-0 flex-col gap-2">
-        <Textarea
-          placeholder="Commit-Nachricht …"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          rows={3}
-          className="resize-none"
-        />
-        {error && <p className="text-xs text-destructive">{error}</p>}
-        <div className="flex justify-end">
-          <Button onClick={onCommit} disabled={!canCommit || committing}>
-            {committing && <Loader2 className="h-4 w-4 animate-spin" />}
-            Lokal committen
+        <div className="relative group">
+          <Textarea
+            placeholder="Commit-Nachricht eingeben..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={2}
+            className="resize-none border-0 bg-muted/30 px-4 py-3 text-sm shadow-none focus-visible:ring-1 focus-visible:ring-primary/30 rounded-xl transition-all group-hover:bg-muted/50"
+          />
+          <Button
+            size="icon"
+            onClick={onCommit}
+            disabled={!canCommit || committing}
+            className={`absolute bottom-2 right-2 h-8 w-8 rounded-lg transition-all duration-300 ${
+              canCommit
+                ? "bg-primary text-primary-foreground shadow-md hover:scale-105"
+                : "bg-muted text-muted-foreground"
+            }`}
+          >
+            {committing ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
         </div>
+        {error && (
+          <p className="px-2 text-xs font-medium text-destructive">{error}</p>
+        )}
       </div>
     </div>
   );

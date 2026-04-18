@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "tauri:icon": "bunx tauri icon \"public/icons/ios/AppIcon~ios-marketing.png\""
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
@@ -22,6 +23,7 @@
     "radix-ui": "^1.4.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-resizable-panels": "^4.10.0",
     "shadcn": "^4.3.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
