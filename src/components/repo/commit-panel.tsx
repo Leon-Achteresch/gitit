@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { getCommitMessageTemplate, useCommitPrefs } from "@/lib/commit-prefs";
 import { useRepoStore, type StatusEntry } from "@/lib/repo-store";
 import { invoke } from "@tauri-apps/api/core";
 import {
@@ -352,6 +353,32 @@ export function CommitPanel() {
   const [diffLoading, setDiffLoading] = useState(false);
   const [diffError, setDiffError] = useState<string | null>(null);
 
+  const seedMessageFromTemplate = useCallback(() => {
+    const raw = getCommitMessageTemplate();
+    if (!raw.trim()) return;
+    setMessage((m) => (m.trim() === "" ? raw : m));
+  }, []);
+
+  useEffect(() => {
+    const run = () => seedMessageFromTemplate();
+    if (useCommitPrefs.persist.hasHydrated()) {
+      run();
+      return;
+    }
+    return useCommitPrefs.persist.onFinishHydration(run);
+  }, [activePath, seedMessageFromTemplate]);
+
+  useEffect(() => {
+    let prev = useCommitPrefs.getState().messageTemplate;
+    return useCommitPrefs.subscribe((s) => {
+      if (s.messageTemplate === prev) return;
+      prev = s.messageTemplate;
+      const raw = s.messageTemplate;
+      if (!raw.trim()) return;
+      setMessage((m) => (m.trim() === "" ? raw : m));
+    });
+  }, []);
+
   useEffect(() => {
     if (activePath) void reloadStatus(activePath);
   }, [activePath, reloadStatus]);
@@ -487,7 +514,8 @@ export function CommitPanel() {
     setError(null);
     try {
       await commitChanges(activePath, message.trim());
-      setMessage("");
+      const next = getCommitMessageTemplate();
+      setMessage(next.trim() ? next : "");
     } catch (e) {
       setError(String(e));
     } finally {
