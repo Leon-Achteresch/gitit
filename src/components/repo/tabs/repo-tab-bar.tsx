@@ -12,20 +12,22 @@ export function RepoTabBar() {
   const reload = useRepoStore((s) => s.reload);
 
   return (
-    <div className="flex items-center gap-1 overflow-x-auto border-b">
-      {paths.map((p) => (
-        <RepoTab
-          key={p}
-          path={p}
-          label={repoLabel(p)}
-          active={p === activePath}
-          loading={!!loading[p]}
-          favicon={favicons[p]}
-          onSelect={() => setActive(p)}
-          onClose={() => removeRepo(p)}
-          onReload={() => void reload(p)}
-        />
-      ))}
+    <div className="flex min-h-0 min-w-0 items-center gap-1 border-b">
+      <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
+        {paths.map((p) => (
+          <RepoTab
+            key={p}
+            path={p}
+            label={repoLabel(p)}
+            active={p === activePath}
+            loading={!!loading[p]}
+            favicon={favicons[p]}
+            onSelect={() => setActive(p)}
+            onClose={() => removeRepo(p)}
+            onReload={() => void reload(p)}
+          />
+        ))}
+      </div>
       <AddRepoButton />
     </div>
   );
