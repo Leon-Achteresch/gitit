@@ -1322,7 +1322,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "gitit"
+name = "gitdesk"
 version = "0.1.0"
 dependencies = [
  "base64 0.22.1",
@@ -1333,6 +1333,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-dialog",
  "tauri-plugin-opener",
+ "tokio",
 ]
 
 [[package]]

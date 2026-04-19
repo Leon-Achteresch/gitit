@@ -14,6 +14,7 @@ export type Commit = {
   body: string;
   parents: string[];
   tags: string[];
+  author_avatar?: string | null;
 };
 
 export type Branch = {
@@ -49,6 +50,8 @@ export type UpstreamSyncCounts = {
   behind: number;
 };
 
+export type MergeStrategy = "ff" | "ff-only" | "no-ff" | "squash";
+
 export type StashEntry = {
   index: number;
   refname: string;
@@ -57,6 +60,28 @@ export type StashEntry = {
   date: string;
   hash: string;
   message: string;
+};
+
+export type PrReviewer = {
+  login: string;
+  avatar: string | null;
+};
+
+export type PullRequest = {
+  number: number;
+  title: string;
+  state: string;
+  is_draft: boolean;
+  author: string;
+  author_avatar: string | null;
+  source_branch: string;
+  target_branch: string;
+  html_url: string;
+  created_at: string;
+  updated_at: string;
+  labels: string[];
+  reviewers: PrReviewer[];
+  provider: string;
 };
 
 type RepoState = {
@@ -71,6 +96,9 @@ type RepoState = {
   statusLoading: Record<string, boolean>;
   stashes: Record<string, StashEntry[]>;
   stashesLoading: Record<string, boolean>;
+  prs: Record<string, PullRequest[]>;
+  prsLoading: Record<string, boolean>;
+  loadPRs: (path: string) => Promise<void>;
   addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
   setActive: (path: string) => void;
@@ -79,6 +107,7 @@ type RepoState = {
   deleteBranch: (path: string, name: string, force?: boolean) => Promise<void>;
   deleteRemoteBranch: (path: string, remoteRef: string) => Promise<string>;
   reloadStatus: (path: string) => Promise<void>;
+  reloadLocalStatus: (path: string) => Promise<void>;
   stageFiles: (path: string, files: string[]) => Promise<void>;
   unstageFiles: (path: string, files: string[]) => Promise<void>;
   commitChanges: (path: string, message: string) => Promise<void>;
@@ -98,7 +127,11 @@ type RepoState = {
     base?: string,
     checkout?: boolean,
   ) => Promise<void>;
-  mergeBranch: (path: string, branch: string, noFf?: boolean) => Promise<string>;
+  mergeBranch: (
+    path: string,
+    branch: string,
+    opts?: { strategy?: MergeStrategy; message?: string },
+  ) => Promise<string>;
   revertCommit: (
     path: string,
     commit: string,
@@ -127,6 +160,39 @@ async function loadFavicon(path: string): Promise<string | null> {
   }
 }
 
+type CommitAvatarEntry = { hash: string; author_avatar: string | null };
+
+const commitAvatarGeneration = new Map<string, number>();
+
+function nextCommitAvatarGeneration(repoPath: string): number {
+  const n = (commitAvatarGeneration.get(repoPath) ?? 0) + 1;
+  commitAvatarGeneration.set(repoPath, n);
+  return n;
+}
+
+async function mergeRemoteCommitAvatars(
+  path: string,
+  commits: Commit[],
+): Promise<Commit[]> {
+  if (commits.length === 0) return commits;
+  const hashes = commits.map((c) => c.hash);
+  try {
+    const entries = await invoke<CommitAvatarEntry[]>(
+      "resolve_repo_commit_avatars",
+      { path, hashes },
+    );
+    const map = new Map(
+      entries.map((e) => [e.hash, e.author_avatar ?? null] as const),
+    );
+    return commits.map((c) => ({
+      ...c,
+      author_avatar: map.get(c.hash) ?? c.author_avatar ?? null,
+    }));
+  } catch {
+    return commits;
+  }
+}
+
 export const useRepoStore = create<RepoState>()(
   persist(
     (set, get) => ({
@@ -141,28 +207,46 @@ export const useRepoStore = create<RepoState>()(
       statusLoading: {},
       stashes: {},
       stashesLoading: {},
+      prs: {},
+      prsLoading: {},
+
+      async loadPRs(path) {
+        set((s) => ({ prsLoading: { ...s.prsLoading, [path]: true } }));
+        try {
+          const list = await invoke<PullRequest[]>("pr_list", { path });
+          set((s) => ({
+            prs: { ...s.prs, [path]: list },
+            prsLoading: { ...s.prsLoading, [path]: false },
+          }));
+        } catch (e) {
+          const msg = String(e);
+          toastError(msg);
+          set((s) => ({ prsLoading: { ...s.prsLoading, [path]: false } }));
+        }
+      },
 
       async addRepo(path) {
         set((s) => ({ loading: { ...s.loading, [path]: true } }));
         try {
-          const info = await invoke<RepoInfo>("open_repo", { path });
+          const opened = await invoke<RepoInfo>("open_repo", { path });
           set((s) => {
-            const paths = s.paths.includes(info.path)
+            const paths = s.paths.includes(opened.path)
               ? s.paths
-              : [...s.paths, info.path];
+              : [...s.paths, opened.path];
             const { [path]: __, ...restLoad } = s.loading;
             return {
               paths,
-              activePath: info.path,
-              repos: { ...s.repos, [info.path]: info },
+              activePath: opened.path,
+              repos: { ...s.repos, [opened.path]: opened },
               loading: restLoad,
             };
           });
-          void loadFavicon(info.path).then((icon) => {
-            set((s) => ({ favicons: { ...s.favicons, [info.path]: icon } }));
+          scheduleRemoteCommitAvatars(opened.path, opened.commits);
+          void loadFavicon(opened.path).then((icon) => {
+            set((s) => ({ favicons: { ...s.favicons, [opened.path]: icon } }));
           });
-          await get().reloadStashes(info.path);
-          return info.path;
+          await get().reloadStashes(opened.path);
+          return opened.path;
         } catch (e) {
           const msg = String(e);
           toastError(msg);
@@ -174,6 +258,7 @@ export const useRepoStore = create<RepoState>()(
       },
 
       removeRepo(path) {
+        nextCommitAvatarGeneration(path);
         set((s) => {
           const paths = s.paths.filter((p) => p !== path);
           const { [path]: _r, ...repos } = s.repos;
@@ -205,14 +290,15 @@ export const useRepoStore = create<RepoState>()(
       async reload(path) {
         set((s) => ({ loading: { ...s.loading, [path]: true } }));
         try {
-          const info = await invoke<RepoInfo>("open_repo", { path });
+          const opened = await invoke<RepoInfo>("open_repo", { path });
           set((s) => {
             const { [path]: __, ...restLoad } = s.loading;
             return {
-              repos: { ...s.repos, [path]: info },
+              repos: { ...s.repos, [path]: opened },
               loading: restLoad,
             };
           });
+          scheduleRemoteCommitAvatars(opened.path, opened.commits);
           if (!(path in get().favicons)) {
             void loadFavicon(path).then((icon) => {
               set((s) => ({ favicons: { ...s.favicons, [path]: icon } }));
@@ -259,6 +345,23 @@ export const useRepoStore = create<RepoState>()(
             status: { ...s.status, [path]: entries },
             upstreamSync: { ...s.upstreamSync, [path]: sync },
             hasUpstream: { ...s.hasUpstream, [path]: upstream },
+            statusLoading: { ...s.statusLoading, [path]: false },
+          }));
+        } catch (e) {
+          const msg = String(e);
+          toastError(msg);
+          set((s) => ({
+            statusLoading: { ...s.statusLoading, [path]: false },
+          }));
+        }
+      },
+
+      async reloadLocalStatus(path) {
+        set((s) => ({ statusLoading: { ...s.statusLoading, [path]: true } }));
+        try {
+          const entries = await invoke<StatusEntry[]>("repo_status", { path });
+          set((s) => ({
+            status: { ...s.status, [path]: entries },
             statusLoading: { ...s.statusLoading, [path]: false },
           }));
         } catch (e) {
@@ -319,11 +422,12 @@ export const useRepoStore = create<RepoState>()(
         await Promise.all([get().reload(path), get().reloadStatus(path)]);
       },
 
-      async mergeBranch(path, branch, noFf = false) {
+      async mergeBranch(path, branch, opts) {
         const out = await invoke<string>("git_merge", {
           path,
           branch,
-          noFf,
+          strategy: opts?.strategy ?? "ff",
+          message: opts?.message ?? null,
         });
         await Promise.all([get().reload(path), get().reloadStatus(path)]);
         return out;
@@ -430,7 +534,7 @@ export const useRepoStore = create<RepoState>()(
       },
     }),
     {
-      name: "gitit-repo",
+      name: "gitdesk-repo",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         paths: state.paths,
@@ -439,6 +543,35 @@ export const useRepoStore = create<RepoState>()(
     },
   ),
 );
+
+function scheduleRemoteCommitAvatars(repoPath: string, commits: Commit[]) {
+  if (commits.length === 0) return;
+  const gen = nextCommitAvatarGeneration(repoPath);
+  void mergeRemoteCommitAvatars(repoPath, commits).then((merged) => {
+    useRepoStore.setState((s) => {
+      if (commitAvatarGeneration.get(repoPath) !== gen) return s;
+      const r = s.repos[repoPath];
+      if (!r) return s;
+      const avatarByHash = new Map(
+        merged.map((c) => [c.hash, c.author_avatar ?? null] as const),
+      );
+      return {
+        repos: {
+          ...s.repos,
+          [repoPath]: {
+            ...r,
+            commits: r.commits.map((c) => ({
+              ...c,
+              author_avatar: avatarByHash.has(c.hash)
+                ? (avatarByHash.get(c.hash) ?? c.author_avatar)
+                : c.author_avatar,
+            })),
+          },
+        },
+      };
+    });
+  });
+}
 
 export function repoLabel(path: string): string {
   const parts = path.split(/[\\/]/).filter(Boolean);

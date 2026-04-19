@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { CommitInspectDetail } from "./commit-inspect-detail";
 import { CommitList } from "./commit-list";
 
-const layoutStorageKey = "gitit.history-split.layout.v1";
+const layoutStorageKey = "gitdesk.history-split.layout.v1";
 
 export function CommitHistoryPanel({
   path,

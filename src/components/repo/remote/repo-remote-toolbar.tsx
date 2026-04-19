@@ -8,11 +8,13 @@ import {
   CloudDownload,
   Code2,
   FolderOpen,
+  Link,
   Loader2,
   SquareTerminal,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { EditRemoteDialog } from "./edit-remote-dialog";
 import { PushUpstreamDialog } from "./push-upstream-dialog";
 import { ToolbarButton } from "./toolbar-button";
 import { ToolbarDivider } from "./toolbar-divider";
@@ -33,6 +35,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
   const [busy, setBusy] = useState<RemoteOp | null>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [pushDialogOpen, setPushDialogOpen] = useState(false);
+  const [remoteDialogOpen, setRemoteDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!busy) return;
@@ -42,6 +45,10 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
       setShowSpinner(false);
     };
   }, [busy]);
+
+  useEffect(() => {
+    void reloadStatus(path);
+  }, [path, reloadStatus]);
 
   const run = useCallback(
     async (op: RemoteOp) => {
@@ -161,6 +168,12 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
               )
             }
           />
+          <ToolbarButton
+            title="Remote-URL bearbeiten"
+            label="Remote"
+            onClick={() => setRemoteDialogOpen(true)}
+            icon={<Link className="h-3.5 w-3.5" />}
+          />
         </ToolbarGroup>
 
         <ToolbarDivider />
@@ -197,6 +210,11 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
       onClose={() => setPushDialogOpen(false)}
       path={path}
       branch={branch}
+    />
+    <EditRemoteDialog
+      open={remoteDialogOpen}
+      onClose={() => setRemoteDialogOpen(false)}
+      path={path}
     />
     </>
   );

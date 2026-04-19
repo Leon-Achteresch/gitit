@@ -16,7 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 
 type InspectPayload = { header: string; files: CommitChangedFile[] };
 
-const innerLayoutKey = "gitit.stash-inspect-inner.v1";
+const innerLayoutKey = "gitdesk.stash-inspect-inner.v1";
 
 function readSplitFlexFromStorage(): { files: number; diff: number } {
   const raw = localStorage.getItem(innerLayoutKey);

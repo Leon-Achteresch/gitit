@@ -5,7 +5,7 @@ export const SIDEBAR_MIN_WIDTH = 180;
 export const SIDEBAR_MAX_WIDTH = 560;
 export const SIDEBAR_DEFAULT_WIDTH = 256;
 
-export type SidebarTab = "commit" | "history" | "stash";
+export type SidebarTab = "commit" | "history" | "stash" | "pr" | "ci";
 
 export type CommitFocusRequest = {
   path: string;
@@ -46,7 +46,7 @@ export const useUiStore = create<UiState>()(
       clearCommitFocusRequest: () => set({ commitFocusRequest: null }),
     }),
     {
-      name: "gitit-ui",
+      name: "gitdesk-ui",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({
         sidebarWidth: s.sidebarWidth,

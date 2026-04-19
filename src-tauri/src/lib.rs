@@ -1,6 +1,7 @@
 mod credentials;
 mod favicon;
 mod git;
+mod pr;
 mod providers;
 mod shell;
 
@@ -12,7 +13,7 @@ pub fn run() {
         .setup(|app| {
             use tauri::menu::{MenuBuilder, SubmenuBuilder};
 
-            let app_menu = SubmenuBuilder::new(app, "gitit")
+            let app_menu = SubmenuBuilder::new(app, "gitdesk")
                 .text("nav-repo", "Repository")
                 .text("nav-about", "About")
                 .text("nav-settings", "Einstellungen");
@@ -50,6 +51,9 @@ pub fn run() {
             git::git_fetch,
             git::git_pull,
             git::git_push,
+            git::list_git_remotes,
+            git::set_git_remote_url,
+            git::add_git_remote,
             git::branch_has_upstream,
             git::git_clone,
             git::git_checkout,
@@ -82,7 +86,20 @@ pub fn run() {
             credentials::git_sign_in_via_credential_manager,
             credentials::git_sign_out,
             credentials::git_credential_helper,
-            providers::list_remote_repos
+            providers::list_remote_repos,
+            pr::resolve_repo_commit_avatars,
+            pr::pr_list,
+            pr::pr_create_web_url,
+            pr::pr_detail,
+            pr::pr_commits,
+            pr::pr_files,
+            pr::pr_conversation,
+            pr::pr_checks,
+            pr::repo_commit_checks,
+            pr::pr_add_comment,
+            pr::pr_submit_review,
+            pr::pr_merge,
+            pr::pr_checkout
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

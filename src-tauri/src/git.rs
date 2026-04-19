@@ -15,6 +15,7 @@ pub struct Commit {
     body: String,
     parents: Vec<String>,
     tags: Vec<String>,
+    author_avatar: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -39,7 +40,13 @@ pub struct UpstreamSyncCounts {
     pub behind: u32,
 }
 
-fn run_git(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
+#[derive(Serialize)]
+pub struct GitRemote {
+    pub name: String,
+    pub url: String,
+}
+
+pub(crate) fn run_git(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
     let output = Command::new("git")
         .arg("-C")
         .arg(repo)
@@ -85,7 +92,7 @@ fn run_git_merged_output_at(cwd: Option<&PathBuf>, args: &[&str]) -> Result<Stri
     Ok(ok.trim().to_string())
 }
 
-fn run_git_merged_output(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
+pub(crate) fn run_git_merged_output(repo: &PathBuf, args: &[&str]) -> Result<String, String> {
     run_git_merged_output_at(Some(repo), args)
 }
 
@@ -184,6 +191,7 @@ pub fn open_repo(path: String) -> Result<RepoInfo, String> {
                 body,
                 parents,
                 tags,
+                author_avatar: None,
             })
         })
         .collect();
@@ -220,6 +228,55 @@ pub fn git_push(path: String, set_upstream: bool) -> Result<String, String> {
     } else {
         run_git_merged_output(&repo, &["push"])
     }
+}
+
+#[tauri::command]
+pub fn list_git_remotes(path: String) -> Result<Vec<GitRemote>, String> {
+    let repo = PathBuf::from(path.trim());
+    let names_out = run_git(&repo, &["remote"])?;
+    let mut remotes = Vec::new();
+    for name in names_out.lines().map(str::trim).filter(|l| !l.is_empty()) {
+        let Ok(url) = run_git(&repo, &["remote", "get-url", name]) else {
+            continue;
+        };
+        let url = url.trim().to_string();
+        if url.is_empty() {
+            continue;
+        }
+        remotes.push(GitRemote {
+            name: name.to_string(),
+            url,
+        });
+    }
+    Ok(remotes)
+}
+
+#[tauri::command]
+pub fn set_git_remote_url(path: String, name: String, url: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let n = name.trim();
+    let u = url.trim();
+    if n.is_empty() {
+        return Err("Remote-Name darf nicht leer sein".into());
+    }
+    if u.is_empty() {
+        return Err("Remote-URL darf nicht leer sein".into());
+    }
+    run_git_merged_output(&repo, &["remote", "set-url", n, u])
+}
+
+#[tauri::command]
+pub fn add_git_remote(path: String, name: String, url: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let n = name.trim();
+    let u = url.trim();
+    if n.is_empty() {
+        return Err("Remote-Name darf nicht leer sein".into());
+    }
+    if u.is_empty() {
+        return Err("Remote-URL darf nicht leer sein".into());
+    }
+    run_git_merged_output(&repo, &["remote", "add", n, u])
 }
 
 #[tauri::command]
@@ -337,16 +394,86 @@ pub fn git_create_branch(
 }
 
 #[tauri::command]
-pub fn git_merge(path: String, branch: String, no_ff: bool) -> Result<String, String> {
+pub fn git_merge(
+    path: String,
+    branch: String,
+    strategy: Option<String>,
+    message: Option<String>,
+) -> Result<String, String> {
     let repo = PathBuf::from(path.trim());
     let b = branch.trim();
     if b.is_empty() {
         return Err("Branch-Name darf nicht leer sein".into());
     }
-    if no_ff {
-        run_git_merged_output(&repo, &["merge", "--no-ff", b])
+
+    let strat = strategy
+        .as_deref()
+        .map(|s| s.trim())
+        .unwrap_or("ff")
+        .to_lowercase();
+
+    let trimmed_msg = message
+        .as_deref()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty());
+
+    match strat.as_str() {
+        "ff" => {
+            let mut args: Vec<String> = vec!["merge".into(), "--ff".into()];
+            if let Some(msg) = trimmed_msg.as_ref() {
+                args.push("-m".into());
+                args.push(msg.clone());
+            }
+            args.push(b.to_string());
+            let refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+            run_git_merged_output(&repo, &refs)
+        }
+        "ff-only" => run_git_merged_output(&repo, &["merge", "--ff-only", b]),
+        "no-ff" => {
+            let current = current_branch_name(&repo).unwrap_or_default();
+            let msg = trimmed_msg.unwrap_or_else(|| default_merge_message(b, &current));
+            run_git_merged_output(
+                &repo,
+                &["merge", "--no-ff", "--no-edit", "-m", msg.as_str(), b],
+            )
+        }
+        "squash" => {
+            let current = current_branch_name(&repo).unwrap_or_default();
+            let squash_out = run_git_merged_output(&repo, &["merge", "--squash", b])?;
+            let msg = trimmed_msg.unwrap_or_else(|| default_squash_message(b, &current));
+            let commit_out = run_git_merged_output(&repo, &["commit", "-m", msg.as_str()])?;
+            let combined = match (squash_out.is_empty(), commit_out.is_empty()) {
+                (false, false) => format!("{squash_out}\n{commit_out}"),
+                (false, true) => squash_out,
+                (true, false) => commit_out,
+                (true, true) => String::new(),
+            };
+            Ok(combined)
+        }
+        other => Err(format!("Unbekannte Merge-Strategie: {other}")),
+    }
+}
+
+fn current_branch_name(repo: &PathBuf) -> Option<String> {
+    run_git(repo, &["rev-parse", "--abbrev-ref", "HEAD"])
+        .ok()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty() && s != "HEAD")
+}
+
+fn default_merge_message(source: &str, target: &str) -> String {
+    if target.is_empty() {
+        format!("Merge branch '{source}'")
     } else {
-        run_git_merged_output(&repo, &["merge", b])
+        format!("Merge branch '{source}' into {target}")
+    }
+}
+
+fn default_squash_message(source: &str, target: &str) -> String {
+    if target.is_empty() {
+        format!("Squashed commit from '{source}'")
+    } else {
+        format!("Squashed commit from '{source}' into {target}")
     }
 }
 

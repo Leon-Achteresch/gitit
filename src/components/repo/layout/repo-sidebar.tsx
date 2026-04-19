@@ -1,3 +1,4 @@
+import { MagicPill } from "@/components/motion/magic-pill";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -15,7 +16,9 @@ import {
   Cloud,
   GitBranch,
   GitCommitHorizontal,
+  GitPullRequest,
   History,
+  ListChecks,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BranchSection } from "@/components/repo/branch/branch-section";
@@ -38,6 +41,14 @@ export function RepoSidebar() {
     const p = s.activePath;
     if (!p) return 0;
     return s.stashes[p]?.length ?? 0;
+  });
+  const prCount = useRepoStore((s) => {
+    const p = s.activePath;
+    if (!p) return 0;
+    const list = s.prs[p];
+    if (!list) return 0;
+    return list.filter((pr) => pr.state === "open" || pr.state === "draft")
+      .length;
   });
 
   const asideRef = useRef<HTMLElement | null>(null);
@@ -110,12 +121,19 @@ export function RepoSidebar() {
             <TabsList variant="line" className="w-full">
               <TabsTrigger
                 value="commit"
+                className="after:!opacity-0"
                 title={
                   pendingCommitCount > 0
                     ? `${pendingCommitCount} ausstehende Änderungen`
                     : undefined
                 }
               >
+                {sidebarTab === "commit" && (
+                  <MagicPill
+                    layoutId="sidebar-tab-pill"
+                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
+                  />
+                )}
                 <GitCommitHorizontal />
                 <span className="min-w-0 flex-1 text-left">Commit</span>
                 {pendingCommitCount > 0 ? (
@@ -127,18 +145,71 @@ export function RepoSidebar() {
                   </Badge>
                 ) : null}
               </TabsTrigger>
-              <TabsTrigger value="history">
+              <TabsTrigger value="history" className="after:!opacity-0">
+                {sidebarTab === "history" && (
+                  <MagicPill
+                    layoutId="sidebar-tab-pill"
+                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
+                  />
+                )}
                 <History />
                 History
               </TabsTrigger>
               <TabsTrigger
+                value="pr"
+                className="after:!opacity-0"
+                title={
+                  prCount > 0
+                    ? `${prCount} offene Pull Requests`
+                    : "Pull Requests"
+                }
+              >
+                {sidebarTab === "pr" && (
+                  <MagicPill
+                    layoutId="sidebar-tab-pill"
+                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
+                  />
+                )}
+                <GitPullRequest />
+                <span className="min-w-0 flex-1 text-left">PRs</span>
+                {prCount > 0 ? (
+                  <Badge
+                    variant="secondary"
+                    className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
+                  >
+                    {prCount}
+                  </Badge>
+                ) : null}
+              </TabsTrigger>
+              <TabsTrigger
+                value="ci"
+                className="after:!opacity-0"
+                title="CI / Pipelines für HEAD"
+              >
+                {sidebarTab === "ci" && (
+                  <MagicPill
+                    layoutId="sidebar-tab-pill"
+                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
+                  />
+                )}
+                <ListChecks />
+                CI
+              </TabsTrigger>
+              <TabsTrigger
                 value="stash"
+                className="after:!opacity-0"
                 title={
                   stashCount > 0
                     ? `${stashCount} Stash-Einträge`
                     : undefined
                 }
               >
+                {sidebarTab === "stash" && (
+                  <MagicPill
+                    layoutId="sidebar-tab-pill"
+                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
+                  />
+                )}
                 <Archive />
                 <span className="min-w-0 flex-1 text-left">Stash</span>
                 {stashCount > 0 ? (

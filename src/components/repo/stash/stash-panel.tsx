@@ -10,7 +10,7 @@ import { StashCreateDialog } from "./stash-create-dialog";
 import { StashInspectDetail } from "./stash-inspect-detail";
 import { StashList } from "./stash-list";
 
-const layoutStorageKey = "gitit.stash-split.layout.v1";
+const layoutStorageKey = "gitdesk.stash-split.layout.v1";
 
 const EMPTY_STASHES: StashEntry[] = [];
 

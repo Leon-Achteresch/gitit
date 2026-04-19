@@ -10,9 +10,11 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Check, GitBranch, GitMerge, Trash2 } from "lucide-react";
+import { invoke } from "@tauri-apps/api/core";
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { Check, GitBranch, GitMerge, GitPullRequest, Trash2 } from "lucide-react";
 import { useCallback, useState } from "react";
-import { toast } from "sonner";
+import { MergeDialog } from "./merge-dialog";
 import { RemoteCheckoutDialog } from "./remote-checkout-dialog";
 import { RemoteDeleteConfirmDialog } from "./remote-delete-confirm-dialog";
 
@@ -30,10 +32,10 @@ export function BranchRow({
   onDelete?: (b: Branch, force: boolean) => void;
 }) {
   const checkoutBranch = useRepoStore((s) => s.checkoutBranch);
-  const mergeBranch = useRepoStore((s) => s.mergeBranch);
   const focusCommitFromBranchTip = useUiStore((s) => s.focusCommitFromBranchTip);
   const [checkoutDraft, setCheckoutDraft] = useState<CheckoutDraft | null>(null);
   const [deleteRemoteRef, setDeleteRemoteRef] = useState<string | null>(null);
+  const [mergeOpen, setMergeOpen] = useState(false);
 
   function defaultLocalFromRemote(remoteRef: string) {
     const slash = remoteRef.indexOf("/");
@@ -109,21 +111,40 @@ export function BranchRow({
     window.requestAnimationFrame(() => setDeleteRemoteRef(branch.name));
   }
 
-  if (
-    !path ||
-    (!showRemoteCheckout &&
-      !showRemoteDelete &&
-      !showLocalSwitch &&
-      !(showDelete && onDelete))
-  ) {
+  if (!path) {
     return row;
   }
+
+  const hasLegacyItems =
+    showLocalSwitch ||
+    showRemoteCheckout ||
+    showRemoteDelete ||
+    !!(showDelete && onDelete);
 
   return (
     <>
       <ContextMenu>
         <ContextMenuTrigger asChild>{row}</ContextMenuTrigger>
         <ContextMenuContent>
+          <ContextMenuItem
+            onSelect={() => {
+              void (async () => {
+                try {
+                  const url = await invoke<string>("pr_create_web_url", {
+                    path,
+                    branch: branch.name,
+                  });
+                  await openUrl(url);
+                } catch (e) {
+                  toastError(String(e));
+                }
+              })();
+            }}
+          >
+            <GitPullRequest className="h-3.5 w-3.5" />
+            Pull Request erstellen …
+          </ContextMenuItem>
+          {hasLegacyItems ? <ContextMenuSeparator /> : null}
           {showLocalSwitch ? (
             <>
               <ContextMenuItem
@@ -142,18 +163,11 @@ export function BranchRow({
               </ContextMenuItem>
               <ContextMenuItem
                 onSelect={() => {
-                  void (async () => {
-                    try {
-                      const out = await mergeBranch(path, branch.name);
-                      toast.success(out.trim() || "Merge abgeschlossen.");
-                    } catch (e) {
-                      toastError(String(e));
-                    }
-                  })();
+                  window.requestAnimationFrame(() => setMergeOpen(true));
                 }}
               >
                 <GitMerge className="h-3.5 w-3.5" />
-                In aktuellen Branch mergen
+                In aktuellen Branch mergen …
               </ContextMenuItem>
             </>
           ) : null}
@@ -210,6 +224,12 @@ export function BranchRow({
         onClose={() => setDeleteRemoteRef(null)}
         path={path}
         remoteRef={deleteRemoteRef ?? ""}
+      />
+      <MergeDialog
+        open={mergeOpen}
+        onClose={() => setMergeOpen(false)}
+        path={path}
+        sourceBranch={branch.name}
       />
     </>
   );

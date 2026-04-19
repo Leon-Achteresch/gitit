@@ -1,0 +1,25 @@
+export type RemoteCiCheck = {
+  name: string;
+  status: string;
+  conclusion: string | null;
+  html_url: string | null;
+  details_url?: string | null;
+  ci_kind?: string | null;
+  key?: string | null;
+  head_sha?: string | null;
+  started_at?: string | null;
+  completed_at?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  description?: string | null;
+  output_title?: string | null;
+  output_summary?: string | null;
+  output_text?: string | null;
+  app_name?: string | null;
+  app_slug?: string | null;
+  check_suite_id?: string | null;
+  check_run_id?: string | null;
+  external_id?: string | null;
+  annotations_count?: number | null;
+  status_uuid?: string | null;
+};

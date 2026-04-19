@@ -13,7 +13,7 @@ export const useWorkspacePrefs = create<WorkspacePrefs>()(
       setIdeLaunchCommand: (ideLaunchCommand) => set({ ideLaunchCommand }),
     }),
     {
-      name: "gitit-workspace-prefs",
+      name: "gitdesk-workspace-prefs",
       storage: createJSONStorage(() => localStorage),
     },
   ),

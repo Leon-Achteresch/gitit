@@ -16,7 +16,7 @@ pub struct RemoteRepo {
     pub default_branch: Option<String>,
 }
 
-fn http_client() -> Result<reqwest::Client, String> {
+pub(crate) fn http_client() -> Result<reqwest::Client, String> {
     reqwest::Client::builder()
         .timeout(Duration::from_secs(30))
         .build()
@@ -34,7 +34,7 @@ fn bitbucket_secret_likely_jwt(secret: &str) -> bool {
         })
 }
 
-async fn bitbucket_send_authed(
+pub(crate) async fn bitbucket_send_authed(
     client: &reqwest::Client,
     url: &str,
     cred: &HttpsCredential,
@@ -46,7 +46,7 @@ async fn bitbucket_send_authed(
     let mut res = if let Some(ref b64) = basic_b64 {
         client
             .get(url)
-            .header("User-Agent", "gitit")
+            .header("User-Agent", "gitdesk")
             .header("Authorization", format!("Basic {b64}"))
             .send()
             .await
@@ -54,7 +54,7 @@ async fn bitbucket_send_authed(
     } else if bitbucket_secret_likely_jwt(&cred.password) {
         client
             .get(url)
-            .header("User-Agent", "gitit")
+            .header("User-Agent", "gitdesk")
             .header("Authorization", format!("Bearer {}", cred.password))
             .send()
             .await
@@ -67,7 +67,7 @@ async fn bitbucket_send_authed(
     if res.status() == reqwest::StatusCode::UNAUTHORIZED && basic_b64.is_some() {
         res = client
             .get(url)
-            .header("User-Agent", "gitit")
+            .header("User-Agent", "gitdesk")
             .header("Authorization", format!("Bearer {}", cred.password))
             .send()
             .await
@@ -76,7 +76,7 @@ async fn bitbucket_send_authed(
     Ok(res)
 }
 
-async fn bitbucket_collect_paginated_values(
+pub(crate) async fn bitbucket_collect_paginated_values(
     client: &reqwest::Client,
     cred: &HttpsCredential,
     start_url: &str,
@@ -160,7 +160,7 @@ async fn github_list(host: &str) -> Result<Vec<RemoteRepo>, String> {
     let res = client
         .get(url)
         .header("Accept", "application/vnd.github+json")
-        .header("User-Agent", "gitit")
+        .header("User-Agent", "gitdesk")
         .header(
             "Authorization",
             format!("Bearer {}", cred.password),
@@ -211,7 +211,7 @@ async fn gitlab_list(host: &str) -> Result<Vec<RemoteRepo>, String> {
     );
     let res = client
         .get(&url)
-        .header("User-Agent", "gitit")
+        .header("User-Agent", "gitdesk")
         .header("PRIVATE-TOKEN", cred.password)
         .send()
         .await
