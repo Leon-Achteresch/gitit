@@ -4,6 +4,7 @@ import { PanelSwap } from "@/components/motion/panel-swap";
 import { RepoCiPanel } from "@/components/repo/ci/repo-ci-panel";
 import { CommitPanel } from "@/components/repo/commit/commit-panel";
 import { RepoDetails } from "@/components/repo/layout/repo-details";
+import { EmptyState } from "@/components/repo/layout/empty-state";
 import { RepoSidebar } from "@/components/repo/layout/repo-sidebar";
 import { PullRequestPanel } from "@/components/repo/pr/pull-request-panel";
 import { StashPanel } from "@/components/repo/stash/stash-panel";
@@ -66,11 +67,7 @@ function Home() {
           ) : (
             <RepoDetails />
           )}
-          {!hasRepos && (
-            <p className="mt-6 text-center text-sm text-muted-foreground">
-              Klicke auf + um ein Git-Repository hinzuzufügen.
-            </p>
-          )}
+          {!hasRepos && <EmptyState />}
         </div>
       </div>
     </main>
