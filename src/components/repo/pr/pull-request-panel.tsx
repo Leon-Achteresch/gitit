@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { PullRequestInspectDetail } from "./pull-request-inspect-detail";
 import { PullRequestList } from "./pull-request-list";
 
-const layoutStorageKey = "gitit.pr-split.layout.v1";
+const layoutStorageKey = "gitdesk.pr-split.layout.v1";
 
 export function PullRequestPanel({ path }: { path: string }) {
   const prs = useRepoStore((s) => s.prs[path]);

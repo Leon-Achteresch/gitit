@@ -16,7 +16,7 @@ import { CommitChangedFile } from "./commit-inspect-file-item";
 
 type InspectPayload = { header: string; files: CommitChangedFile[] };
 
-const innerLayoutKey = "gitit.commit-inspect-inner.v3";
+const innerLayoutKey = "gitdesk.commit-inspect-inner.v3";
 
 function readSplitFlexFromStorage(): { files: number; diff: number } {
   const raw = localStorage.getItem(innerLayoutKey);

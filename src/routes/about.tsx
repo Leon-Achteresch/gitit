@@ -18,7 +18,7 @@ function About() {
           <CardTitle>About</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
-          gitit — ein einfacher Git-Frontend-Client, gebaut mit Tauri, React,
+          gitdesk — ein einfacher Git-Frontend-Client, gebaut mit Tauri, React,
           TanStack Router und shadcn/ui.
         </CardContent>
       </Card>

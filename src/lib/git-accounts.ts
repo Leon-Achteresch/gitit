@@ -14,8 +14,8 @@ export type GitAccount = {
 
 type CustomHost = { id: string; name: string; host: string };
 
-const CUSTOM_KEY = "gitit-custom-git-hosts";
-const SESSION_CACHE_KEY = "gitit.git-accounts.v1";
+const CUSTOM_KEY = "gitdesk-custom-git-hosts";
+const SESSION_CACHE_KEY = "gitdesk.git-accounts.v1";
 
 type SessionCache = {
   accounts: GitAccount[];

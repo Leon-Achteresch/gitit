@@ -18,7 +18,7 @@ export const useCommitPrefs = create<CommitPrefs>()(
         set({ showConventionalCommitIcons }),
     }),
     {
-      name: "gitit-commit-prefs",
+      name: "gitdesk-commit-prefs",
       storage: createJSONStorage(() => localStorage),
     },
   ),

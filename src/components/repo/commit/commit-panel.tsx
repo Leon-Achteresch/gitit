@@ -490,7 +490,7 @@ export function CommitPanel() {
     }
   };
 
-  const layoutStorageKey = "gitit.commit-panel.layout.v2";
+  const layoutStorageKey = "gitdesk.commit-panel.layout.v2";
 
   const [defaultLayout] = useState(() => {
     const saved = localStorage.getItem(layoutStorageKey);

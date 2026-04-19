@@ -13,7 +13,7 @@ pub fn run() {
         .setup(|app| {
             use tauri::menu::{MenuBuilder, SubmenuBuilder};
 
-            let app_menu = SubmenuBuilder::new(app, "gitit")
+            let app_menu = SubmenuBuilder::new(app, "gitdesk")
                 .text("nav-repo", "Repository")
                 .text("nav-about", "About")
                 .text("nav-settings", "Einstellungen");

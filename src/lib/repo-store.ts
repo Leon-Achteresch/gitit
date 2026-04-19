@@ -534,7 +534,7 @@ export const useRepoStore = create<RepoState>()(
       },
     }),
     {
-      name: "gitit-repo",
+      name: "gitdesk-repo",
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         paths: state.paths,

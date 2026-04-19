@@ -258,7 +258,7 @@ async fn github_request(
     let mut req = client
         .request(method, url)
         .header("Accept", "application/vnd.github+json")
-        .header("User-Agent", "gitit")
+        .header("User-Agent", "gitdesk")
         .header("Authorization", format!("Bearer {}", cred.password));
     if let Some(b) = body {
         req = req.json(&b);
@@ -311,7 +311,7 @@ async fn bb_post_json(
         });
     let mut req = client
         .post(url)
-        .header("User-Agent", "gitit")
+        .header("User-Agent", "gitdesk")
         .header("Content-Type", "application/json");
     req = if let Some(ref b) = basic_b64 {
         req.header("Authorization", format!("Basic {b}"))

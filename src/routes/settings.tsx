@@ -121,7 +121,7 @@ function Settings() {
           <CardHeader>
             <CardTitle>Darstellung</CardTitle>
             <CardDescription>
-              Wähle, wie gitit aussieht. „System“ folgt deiner OS-Einstellung.
+              Wähle, wie gitdesk aussieht. „System“ folgt deiner OS-Einstellung.
             </CardDescription>
           </CardHeader>
           <CardContent>

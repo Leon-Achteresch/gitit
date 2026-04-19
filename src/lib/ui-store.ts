@@ -46,7 +46,7 @@ export const useUiStore = create<UiState>()(
       clearCommitFocusRequest: () => set({ commitFocusRequest: null }),
     }),
     {
-      name: "gitit-ui",
+      name: "gitdesk-ui",
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({
         sidebarWidth: s.sidebarWidth,
