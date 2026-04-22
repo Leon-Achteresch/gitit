@@ -1,8 +1,7 @@
-import { MagicPill } from "@/components/motion/magic-pill";
-import { Badge } from "@/components/ui/badge";
+import { BranchSection } from "@/components/repo/branch/branch-section";
+import { NewBranchDialog } from "@/components/repo/branch/new-branch-dialog";
+import { SidebarNavItem } from "@/components/repo/layout/sidebar-nav-item";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toastError } from "@/lib/error-toast";
 import { useRepoStore, type Branch } from "@/lib/repo-store";
 import {
@@ -11,6 +10,7 @@ import {
   useUiStore,
   type SidebarTab,
 } from "@/lib/ui-store";
+import { cn } from "@/lib/utils";
 import {
   Archive,
   Cloud,
@@ -21,8 +21,8 @@ import {
   ListChecks,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BranchSection } from "@/components/repo/branch/branch-section";
-import { NewBranchDialog } from "@/components/repo/branch/new-branch-dialog";
+
+const COMPACT_THRESHOLD = 210;
 
 export function RepoSidebar() {
   const activePath = useRepoStore((s) => s.activePath);
@@ -32,6 +32,7 @@ export function RepoSidebar() {
   const setSidebarWidth = useUiStore((s) => s.setSidebarWidth);
   const sidebarTab = useUiStore((s) => s.sidebarTab);
   const setSidebarTab = useUiStore((s) => s.setSidebarTab);
+
   const pendingCommitCount = useRepoStore((s) => {
     const p = s.activePath;
     if (!p) return 0;
@@ -55,10 +56,15 @@ export function RepoSidebar() {
   const [isResizing, setIsResizing] = useState(false);
   const [newBranchOpen, setNewBranchOpen] = useState(false);
 
-  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsResizing(true);
-  }, []);
+  const compact = sidebarWidth < COMPACT_THRESHOLD;
+
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setIsResizing(true);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!isResizing) return;
@@ -105,157 +111,107 @@ export function RepoSidebar() {
     }
   };
 
+  const tabs: Array<{
+    value: SidebarTab;
+    icon: React.ReactNode;
+    label: string;
+    count?: number;
+  }> = [
+    {
+      value: "commit",
+      icon: <GitCommitHorizontal className="h-4 w-4" />,
+      label: "Commit",
+      count: pendingCommitCount > 0 ? pendingCommitCount : undefined,
+    },
+    {
+      value: "history",
+      icon: <History className="h-4 w-4" />,
+      label: "History",
+    },
+    {
+      value: "pr",
+      icon: <GitPullRequest className="h-4 w-4" />,
+      label: "Pull Requests",
+      count: prCount > 0 ? prCount : undefined,
+    },
+    {
+      value: "ci",
+      icon: <ListChecks className="h-4 w-4" />,
+      label: "CI",
+    },
+    {
+      value: "stash",
+      icon: <Archive className="h-4 w-4" />,
+      label: "Stash",
+      count: stashCount > 0 ? stashCount : undefined,
+    },
+  ];
+
   return (
     <aside
       ref={asideRef}
-      className="relative flex min-h-0 shrink-0 flex-col border-r"
+      className="relative flex min-h-0 shrink-0 flex-col bg-sidebar"
       style={{ width: sidebarWidth }}
     >
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="p-3">
-          <Tabs
-            orientation="vertical"
-            value={sidebarTab}
-            onValueChange={(v) => setSidebarTab(v as SidebarTab)}
-          >
-            <TabsList variant="line" className="w-full">
-              <TabsTrigger
-                value="commit"
-                className="after:!opacity-0"
-                title={
-                  pendingCommitCount > 0
-                    ? `${pendingCommitCount} ausstehende Änderungen`
-                    : undefined
-                }
-              >
-                {sidebarTab === "commit" && (
-                  <MagicPill
-                    layoutId="sidebar-tab-pill"
-                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
-                  />
-                )}
-                <GitCommitHorizontal />
-                <span className="min-w-0 flex-1 text-left">Commit</span>
-                {pendingCommitCount > 0 ? (
-                  <Badge
-                    variant="secondary"
-                    className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
-                  >
-                    {pendingCommitCount}
-                  </Badge>
-                ) : null}
-              </TabsTrigger>
-              <TabsTrigger value="history" className="after:!opacity-0">
-                {sidebarTab === "history" && (
-                  <MagicPill
-                    layoutId="sidebar-tab-pill"
-                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
-                  />
-                )}
-                <History />
-                History
-              </TabsTrigger>
-              <TabsTrigger
-                value="pr"
-                className="after:!opacity-0"
-                title={
-                  prCount > 0
-                    ? `${prCount} offene Pull Requests`
-                    : "Pull Requests"
-                }
-              >
-                {sidebarTab === "pr" && (
-                  <MagicPill
-                    layoutId="sidebar-tab-pill"
-                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
-                  />
-                )}
-                <GitPullRequest />
-                <span className="min-w-0 flex-1 text-left">PRs</span>
-                {prCount > 0 ? (
-                  <Badge
-                    variant="secondary"
-                    className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
-                  >
-                    {prCount}
-                  </Badge>
-                ) : null}
-              </TabsTrigger>
-              <TabsTrigger
-                value="ci"
-                className="after:!opacity-0"
-                title="CI / Pipelines für HEAD"
-              >
-                {sidebarTab === "ci" && (
-                  <MagicPill
-                    layoutId="sidebar-tab-pill"
-                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
-                  />
-                )}
-                <ListChecks />
-                CI
-              </TabsTrigger>
-              <TabsTrigger
-                value="stash"
-                className="after:!opacity-0"
-                title={
-                  stashCount > 0
-                    ? `${stashCount} Stash-Einträge`
-                    : undefined
-                }
-              >
-                {sidebarTab === "stash" && (
-                  <MagicPill
-                    layoutId="sidebar-tab-pill"
-                    className="pointer-events-none absolute inset-y-1 -right-1 w-0.5 rounded-full bg-foreground"
-                  />
-                )}
-                <Archive />
-                <span className="min-w-0 flex-1 text-left">Stash</span>
-                {stashCount > 0 ? (
-                  <Badge
-                    variant="secondary"
-                    className="ml-auto h-5 min-w-5 justify-center px-1.5 text-[10px] tabular-nums"
-                  >
-                    {stashCount}
-                  </Badge>
-                ) : null}
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-        <Separator />
-        <ScrollArea className="min-h-0 flex-1">
-          <div className="p-3">
-            <BranchSection
-              path={activePath}
-              title="Lokal"
-              icon={<GitBranch className="h-4 w-4" />}
-              branches={local}
-              onDelete={onDelete}
-              showNewBranch
-              onNewBranch={() => setNewBranchOpen(true)}
-            />
-            {remote.length > 0 && (
-              <>
-                <Separator className="my-3" />
-                <BranchSection
-                  path={activePath}
-                  title="Remote"
-                  icon={<Cloud className="h-4 w-4" />}
-                  branches={remote}
-                />
-              </>
-            )}
-            <NewBranchDialog
-              open={newBranchOpen}
-              onClose={() => setNewBranchOpen(false)}
-              path={activePath}
-              branches={repo.branches}
-            />
+        <nav
+          className="shrink-0 p-2"
+          role="tablist"
+          aria-label="Sidebar Navigation"
+        >
+          <div className="space-y-0.5">
+            {tabs.map((tab) => (
+              <SidebarNavItem
+                key={tab.value}
+                isActive={sidebarTab === tab.value}
+                icon={tab.icon}
+                label={tab.label}
+                count={tab.count}
+                compact={compact}
+                onClick={() => setSidebarTab(tab.value)}
+              />
+            ))}
           </div>
-        </ScrollArea>
+        </nav>
+
+        <div className="mx-3 h-px shrink-0 bg-gradient-to-r from-transparent via-border to-transparent" />
+
+        <div className="relative min-h-0 flex-1">
+          <ScrollArea className="absolute inset-0">
+            <div className="px-2 pb-3 pt-2">
+              <BranchSection
+                path={activePath}
+                title="Lokal"
+                icon={
+                  <GitBranch className="h-4 w-4" style={{ color: "var(--color-git-branch)" }} />
+                }
+                branches={local}
+                onDelete={onDelete}
+                showNewBranch
+                onNewBranch={() => setNewBranchOpen(true)}
+              />
+              {remote.length > 0 && (
+                <>
+                  <div className="mx-1 my-2.5 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+                  <BranchSection
+                    path={activePath}
+                    title="Remote"
+                    icon={<Cloud className="h-4 w-4 text-muted-foreground" />}
+                    branches={remote}
+                  />
+                </>
+              )}
+              <NewBranchDialog
+                open={newBranchOpen}
+                onClose={() => setNewBranchOpen(false)}
+                path={activePath}
+                branches={repo.branches}
+              />
+            </div>
+          </ScrollArea>
+        </div>
       </div>
+
       <div
         role="separator"
         aria-orientation="vertical"
@@ -263,10 +219,15 @@ export function RepoSidebar() {
         aria-valuemax={SIDEBAR_MAX_WIDTH}
         aria-valuenow={sidebarWidth}
         onPointerDown={onPointerDown}
-        className={`absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize select-none transition-colors hover:bg-accent ${
-          isResizing ? "bg-accent" : ""
-        }`}
-      />
+        className="group absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize select-none"
+      >
+        <div
+          className={cn(
+            "absolute inset-y-0 left-1/2 w-px -translate-x-1/2 rounded-full transition-colors duration-150",
+            isResizing ? "bg-primary" : "bg-transparent group-hover:bg-border",
+          )}
+        />
+      </div>
     </aside>
   );
 }

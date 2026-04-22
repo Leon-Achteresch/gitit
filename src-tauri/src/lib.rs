@@ -51,6 +51,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             git::open_repo,
             git::repo_log_page,
+            git::repo_search_commits,
             favicon::read_repo_favicon,
             shell::reveal_repo_folder,
             shell::open_repo_terminal,

@@ -11,11 +11,15 @@ const ROW_ESTIMATE_PX = 56;
 export function CommitList({
   path,
   commits,
+  listMode,
+  matchPathsByHash,
   selectedHash,
   onSelectCommit,
 }: {
   path: string;
   commits: Commit[];
+  listMode: "history" | "search";
+  matchPathsByHash: ReadonlyMap<string, string[]>;
   selectedHash: string | null;
   onSelectCommit: (hash: string) => void;
 }) {
@@ -48,6 +52,7 @@ export function CommitList({
 
   // Trigger an incremental load once we're within ~20 rows of the bottom.
   const loadMoreCommits = useRepoStore((s) => s.loadMoreCommits);
+  const loadMoreSearchCommits = useRepoStore((s) => s.loadMoreSearchCommits);
   const lastLoadedAt = useRef(0);
   const virtualItems = virtualizer.getVirtualItems();
   const lastVirtualIndex = virtualItems.length
@@ -59,8 +64,19 @@ export function CommitList({
     const now = performance.now();
     if (now - lastLoadedAt.current < 250) return;
     lastLoadedAt.current = now;
-    void loadMoreCommits(path, 80);
-  }, [lastVirtualIndex, rows.length, path, loadMoreCommits]);
+    if (listMode === "search") {
+      void loadMoreSearchCommits(path, 80);
+    } else {
+      void loadMoreCommits(path, 80);
+    }
+  }, [
+    lastVirtualIndex,
+    rows.length,
+    path,
+    loadMoreCommits,
+    loadMoreSearchCommits,
+    listMode,
+  ]);
 
   useEffect(() => {
     const req = commitFocusRequest;
@@ -124,6 +140,7 @@ export function CommitList({
                 path={path}
                 row={row}
                 maxLanes={maxLanes}
+                matchedPaths={matchPathsByHash.get(row.commit.hash)}
                 selected={
                   !!selectedHash &&
                   normalizeGitOid(selectedHash) ===

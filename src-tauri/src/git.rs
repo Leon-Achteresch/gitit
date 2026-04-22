@@ -20,6 +20,12 @@ pub struct Commit {
 }
 
 #[derive(Serialize)]
+pub struct CommitSearchResult {
+    pub commit: Commit,
+    pub matched_paths: Vec<String>,
+}
+
+#[derive(Serialize)]
 pub struct Branch {
     name: String,
     is_current: bool,
@@ -205,6 +211,145 @@ fn fetch_commits(
         .collect();
 
     Ok(commits)
+}
+
+fn is_commit_meta_token(s: &str) -> bool {
+    let b = s.as_bytes();
+    if b.len() < 41 {
+        return false;
+    }
+    if b[40] != b'\x1f' {
+        return false;
+    }
+    s[..40].chars().all(|c| c.is_ascii_hexdigit())
+}
+
+fn match_commit_record(
+    needle: &str,
+    author: &str,
+    email: &str,
+    subject: &str,
+    body: &str,
+    paths: &[String],
+) -> Option<Vec<String>> {
+    let mut matched_paths: Vec<String> = Vec::new();
+    let mut matched = author.to_lowercase().contains(needle)
+        || email.to_lowercase().contains(needle)
+        || subject.to_lowercase().contains(needle)
+        || body.to_lowercase().contains(needle);
+    for p in paths {
+        if p.to_lowercase().contains(needle) {
+            matched = true;
+            matched_paths.push(p.clone());
+        }
+    }
+    if !matched {
+        return None;
+    }
+    matched_paths.sort();
+    matched_paths.dedup();
+    const MAX_PATHS: usize = 12;
+    if matched_paths.len() > MAX_PATHS {
+        matched_paths.truncate(MAX_PATHS);
+    }
+    Some(matched_paths)
+}
+
+#[tauri::command]
+pub fn repo_search_commits(
+    path: String,
+    query: String,
+    skip: usize,
+    limit: usize,
+) -> Result<Vec<CommitSearchResult>, String> {
+    let repo = PathBuf::from(&path);
+    run_git(&repo, &["rev-parse", "--is-inside-work-tree"])
+        .map_err(|_| format!("'{path}' is not a git repository"))?;
+    let needle = query.trim().to_lowercase();
+    if needle.is_empty() {
+        return Ok(Vec::new());
+    }
+    let tag_map = tags_by_target(&repo);
+    let sep = "\x1f";
+    let format = format!("%H{sep}%h{sep}%an{sep}%ae{sep}%cI{sep}%P{sep}%s{sep}%b");
+    let pretty = format!("--pretty=format:{format}");
+    let out = run_git(
+        &repo,
+        &[
+            "log",
+            "-z",
+            "--all",
+            "--date-order",
+            "--name-only",
+            pretty.as_str(),
+        ],
+    )?;
+    let tokens: Vec<&str> = out.split('\0').filter(|t| !t.is_empty()).collect();
+    let capped = limit.min(500).max(1);
+    let mut matched_seen = 0usize;
+    let mut out_results: Vec<CommitSearchResult> = Vec::new();
+    let mut i = 0usize;
+    while i < tokens.len() {
+        let meta = tokens[i];
+        if !is_commit_meta_token(meta) {
+            i += 1;
+            continue;
+        }
+        let mut parts = meta.splitn(8, sep);
+        let hash = parts.next().unwrap_or_default().to_string();
+        let short_hash = parts.next().unwrap_or_default().to_string();
+        let author = parts.next().unwrap_or_default().to_string();
+        let email = parts.next().unwrap_or_default().to_string();
+        let date = parts.next().unwrap_or_default().to_string();
+        let parents_str = parts.next().unwrap_or_default();
+        let subject = parts.next().unwrap_or_default().to_string();
+        let body = parts.next().unwrap_or_default().to_string();
+        i += 1;
+        let mut paths: Vec<String> = Vec::new();
+        while i < tokens.len() && !is_commit_meta_token(tokens[i]) {
+            paths.push(tokens[i].to_string());
+            i += 1;
+        }
+        let Some(matched_paths) = match_commit_record(
+            needle.as_str(),
+            author.as_str(),
+            email.as_str(),
+            subject.as_str(),
+            body.as_str(),
+            paths.as_slice(),
+        ) else {
+            continue;
+        };
+        if matched_seen < skip {
+            matched_seen += 1;
+            continue;
+        }
+        if out_results.len() >= capped {
+            break;
+        }
+        let parents = parents_str
+            .split_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let tags = tag_map.get(&hash).cloned().unwrap_or_default();
+        out_results.push(CommitSearchResult {
+            commit: Commit {
+                hash: hash.clone(),
+                short_hash,
+                author,
+                email,
+                date,
+                subject,
+                body,
+                parents,
+                tags,
+                author_avatar: None,
+            },
+            matched_paths,
+        });
+        matched_seen += 1;
+    }
+    Ok(out_results)
 }
 
 #[tauri::command]

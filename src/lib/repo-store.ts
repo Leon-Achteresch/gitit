@@ -12,6 +12,7 @@ const reloadInFlight = new Map<string, Promise<void>>();
 const reloadPending = new Map<string, number>();
 const statusInFlight = new Map<string, Promise<void>>();
 const loadMoreInFlight = new Map<string, boolean>();
+const loadMoreSearchInFlight = new Map<string, boolean>();
 const RELOAD_COALESCE_MS = 150;
 
 export type Commit = {
@@ -25,6 +26,19 @@ export type Commit = {
   parents: string[];
   tags: string[];
   author_avatar?: string | null;
+};
+
+export type CommitSearchHit = {
+  commit: Commit;
+  matched_paths: string[];
+};
+
+export type CommitSearchSlice = {
+  query: string;
+  hits: CommitSearchHit[];
+  loading: boolean;
+  exhausted: boolean;
+  epoch: number;
 };
 
 export type Branch = {
@@ -153,6 +167,10 @@ type RepoState = {
   discardFiles: (path: string, files: string[]) => Promise<void>;
   reloadStashes: (path: string) => Promise<void>;
   loadMoreCommits: (path: string, count?: number) => Promise<number>;
+  commitSearchByPath: Record<string, CommitSearchSlice>;
+  clearCommitSearch: (path: string) => void;
+  searchCommits: (path: string, query: string) => Promise<void>;
+  loadMoreSearchCommits: (path: string, count?: number) => Promise<number>;
   stashPush: (
     path: string,
     message: string | undefined,
@@ -222,6 +240,179 @@ export const useRepoStore = create<RepoState>()(
       stashesLoading: {},
       prs: {},
       prsLoading: {},
+      commitSearchByPath: {},
+
+      clearCommitSearch(path) {
+        set((s) => {
+          const { [path]: _removed, ...rest } = s.commitSearchByPath;
+          return { commitSearchByPath: rest };
+        });
+      },
+
+      async searchCommits(path, query) {
+        const q = query.trim();
+        if (!q) {
+          get().clearCommitSearch(path);
+          return;
+        }
+        let epochForRequest = 0;
+        set((s) => {
+          const prev = s.commitSearchByPath[path];
+          epochForRequest = (prev?.epoch ?? 0) + 1;
+          return {
+            commitSearchByPath: {
+              ...s.commitSearchByPath,
+              [path]: {
+                query: q,
+                hits: [],
+                loading: true,
+                exhausted: false,
+                epoch: epochForRequest,
+              },
+            },
+          };
+        });
+        try {
+          const hits = await invoke<CommitSearchHit[]>("repo_search_commits", {
+            path,
+            query: q,
+            skip: 0,
+            limit: 80,
+          });
+          set((s) => {
+            const cur = s.commitSearchByPath[path];
+            if (!cur || cur.epoch !== epochForRequest) return s;
+            return {
+              commitSearchByPath: {
+                ...s.commitSearchByPath,
+                [path]: {
+                  ...cur,
+                  hits,
+                  loading: false,
+                  exhausted: hits.length < 80,
+                },
+              },
+            };
+          });
+          if (get().commitSearchByPath[path]?.epoch === epochForRequest) {
+            scheduleRemoteCommitAvatars(
+              path,
+              hits.map((h) => h.commit),
+            );
+          }
+        } catch (e) {
+          const msg = String(e);
+          toastError(msg);
+          set((s) => {
+            const cur = s.commitSearchByPath[path];
+            if (!cur || cur.epoch !== epochForRequest) return s;
+            return {
+              commitSearchByPath: {
+                ...s.commitSearchByPath,
+                [path]: {
+                  ...cur,
+                  hits: [],
+                  loading: false,
+                  exhausted: true,
+                },
+              },
+            };
+          });
+        }
+      },
+
+      async loadMoreSearchCommits(path, count = 80) {
+        const slice = get().commitSearchByPath[path];
+        const q = slice?.query?.trim() ?? "";
+        if (!q || slice.loading || slice.exhausted) return 0;
+        if (loadMoreSearchInFlight.get(path)) return 0;
+        loadMoreSearchInFlight.set(path, true);
+        const skip = slice.hits.length;
+        const startEpoch = slice.epoch;
+        set((s) => {
+          const cur = s.commitSearchByPath[path];
+          if (!cur) return s;
+          return {
+            commitSearchByPath: {
+              ...s.commitSearchByPath,
+              [path]: { ...cur, loading: true },
+            },
+          };
+        });
+        try {
+          const more = await invoke<CommitSearchHit[]>("repo_search_commits", {
+            path,
+            query: q,
+            skip,
+            limit: count,
+          });
+          if (more.length === 0) {
+            set((s) => {
+              const cur = s.commitSearchByPath[path];
+              if (!cur || cur.epoch !== startEpoch) return s;
+              return {
+                commitSearchByPath: {
+                  ...s.commitSearchByPath,
+                  [path]: { ...cur, loading: false, exhausted: true },
+                },
+              };
+            });
+            return 0;
+          }
+          let applied = false;
+          set((s) => {
+            const cur = s.commitSearchByPath[path];
+            if (!cur || cur.epoch !== startEpoch) return s;
+            applied = true;
+            const known = new Set(cur.hits.map((h) => h.commit.hash));
+            const appended = more.filter((h) => !known.has(h.commit.hash));
+            const hits = [...cur.hits, ...appended];
+            return {
+              commitSearchByPath: {
+                ...s.commitSearchByPath,
+                [path]: {
+                  ...cur,
+                  hits,
+                  loading: false,
+                  exhausted: more.length < count,
+                },
+              },
+            };
+          });
+          if (
+            applied &&
+            get().commitSearchByPath[path]?.epoch === startEpoch
+          ) {
+            scheduleRemoteCommitAvatars(path, more.map((h) => h.commit));
+          }
+          return applied ? more.length : 0;
+        } catch (e) {
+          toastError(String(e));
+          set((s) => {
+            const cur = s.commitSearchByPath[path];
+            if (!cur || cur.epoch !== startEpoch) return s;
+            return {
+              commitSearchByPath: {
+                ...s.commitSearchByPath,
+                [path]: { ...cur, loading: false, exhausted: true },
+              },
+            };
+          });
+          return 0;
+        } finally {
+          loadMoreSearchInFlight.delete(path);
+          set((s) => {
+            const cur = s.commitSearchByPath[path];
+            if (!cur || cur.epoch !== startEpoch || !cur.loading) return s;
+            return {
+              commitSearchByPath: {
+                ...s.commitSearchByPath,
+                [path]: { ...cur, loading: false },
+              },
+            };
+          });
+        }
+      },
 
       async loadPRs(path) {
         set((s) => ({ prsLoading: { ...s.prsLoading, [path]: true } }));
@@ -280,6 +471,7 @@ export const useRepoStore = create<RepoState>()(
           const { [path]: _st, ...stashes } = s.stashes;
           const { [path]: _stl, ...stashesLoading } = s.stashesLoading;
           const { [path]: _hu, ...hasUpstream } = s.hasUpstream;
+          const { [path]: _cs, ...commitSearchByPath } = s.commitSearchByPath;
           const activePath =
             s.activePath === path ? (paths[0] ?? null) : s.activePath;
           return {
@@ -291,6 +483,7 @@ export const useRepoStore = create<RepoState>()(
             stashes,
             stashesLoading,
             hasUpstream,
+            commitSearchByPath,
           };
         });
       },

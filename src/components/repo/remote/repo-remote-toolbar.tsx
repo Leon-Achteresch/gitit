@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { toastError } from "@/lib/error-toast";
 import { useRepoStore } from "@/lib/repo-store";
 import { useWorkspacePrefs } from "@/lib/workspace-prefs";
@@ -31,11 +32,27 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
   const pushCount = useRepoStore((s) => s.upstreamSync[path]?.ahead ?? 0);
   const lackUpstream = useRepoStore((s) => s.hasUpstream[path] === false);
   const branch = useRepoStore((s) => s.repos[path]?.branch ?? "");
+  const searchCommits = useRepoStore((s) => s.searchCommits);
+  const clearCommitSearch = useRepoStore((s) => s.clearCommitSearch);
+  const searchSlice = useRepoStore((s) => s.commitSearchByPath[path]);
   const ideLaunchCommand = useWorkspacePrefs((s) => s.ideLaunchCommand);
   const [busy, setBusy] = useState<RemoteOp | null>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [pushDialogOpen, setPushDialogOpen] = useState(false);
   const [remoteDialogOpen, setRemoteDialogOpen] = useState(false);
+  const [draftQuery, setDraftQuery] = useState("");
+
+  useEffect(() => {
+    setDraftQuery("");
+    clearCommitSearch(path);
+  }, [path, clearCommitSearch]);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      void searchCommits(path, draftQuery);
+    }, 320);
+    return () => window.clearTimeout(t);
+  }, [draftQuery, path, searchCommits]);
 
   useEffect(() => {
     if (!busy) return;
@@ -113,8 +130,8 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
 
   return (
     <>
-    <div className="flex w-full items-center justify-between pb-2 pt-1">
-      <div className="flex items-center">
+    <div className="flex w-full flex-wrap items-start justify-between gap-x-3 gap-y-2 pb-2 pt-1">
+      <div className="flex min-w-0 flex-1 flex-wrap items-center">
         <ToolbarGroup>
           <ToolbarButton
             title="Änderungen abrufen"
@@ -203,6 +220,30 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
             icon={<Code2 className="h-3.5 w-3.5" />}
           />
         </ToolbarGroup>
+      </div>
+      <div className="flex w-full max-w-sm shrink-0 flex-col gap-1 sm:w-auto sm:min-w-[12rem]">
+        <Input
+          value={draftQuery}
+          onChange={(e) => setDraftQuery(e.target.value)}
+          placeholder="Commits durchsuchen …"
+          spellCheck={false}
+          autoComplete="off"
+          aria-label="Commit-Suche"
+          className="h-8"
+        />
+        {searchSlice?.loading &&
+        searchSlice.query.trim() &&
+        searchSlice.hits.length === 0 ? (
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Loader2 className="h-3 w-3 shrink-0 animate-spin" />
+            Suche …
+          </span>
+        ) : null}
+        {!searchSlice?.loading &&
+        searchSlice?.query?.trim() &&
+        searchSlice.hits.length === 0 ? (
+          <span className="text-xs text-muted-foreground">Keine Treffer.</span>
+        ) : null}
       </div>
     </div>
     <PushUpstreamDialog
