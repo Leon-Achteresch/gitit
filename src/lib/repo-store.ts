@@ -111,6 +111,7 @@ type RepoState = {
   loadPRs: (path: string) => Promise<void>;
   addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
+  reorderRepos: (fromIndex: number, toIndex: number) => void;
   setActive: (path: string) => void;
   reload: (path: string) => Promise<void>;
   reloadAll: () => Promise<void>;
@@ -290,6 +291,24 @@ export const useRepoStore = create<RepoState>()(
             stashesLoading,
             hasUpstream,
           };
+        });
+      },
+
+      reorderRepos(fromIndex, toIndex) {
+        set((s) => {
+          if (
+            fromIndex === toIndex ||
+            fromIndex < 0 ||
+            toIndex < 0 ||
+            fromIndex >= s.paths.length ||
+            toIndex >= s.paths.length
+          ) {
+            return s;
+          }
+          const paths = s.paths.slice();
+          const [moved] = paths.splice(fromIndex, 1);
+          paths.splice(toIndex, 0, moved);
+          return { paths };
         });
       },
 

@@ -6,6 +6,8 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { cn } from "@/lib/utils";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { GitBranch, Loader2, RefreshCw, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -35,21 +37,42 @@ export function RepoTab({
     setIconBroken(false);
   }, [favicon]);
   const showFavicon = !!favicon && !iconBroken;
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: path });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : undefined,
+  };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <button
+          ref={setNodeRef}
+          style={style}
           type="button"
           onClick={onSelect}
           onAuxClick={(e) => {
             if (e.button === 1) onClose();
           }}
           title={path}
+          {...attributes}
+          {...listeners}
           className={cn(
-            "group relative inline-flex h-9 max-w-[200px] items-center gap-2 rounded-t-md px-3 text-sm transition-colors",
+            "group relative inline-flex h-9 max-w-[200px] items-center gap-2 rounded-t-md px-3 text-sm transition-colors touch-none",
             active
               ? "bg-muted text-foreground"
               : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+            isDragging && "z-10 cursor-grabbing",
           )}
         >
           {active && (
@@ -75,6 +98,9 @@ export function RepoTab({
             role="button"
             tabIndex={-1}
             aria-label="Tab schließen"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+            }}
             onClick={(e) => {
               e.stopPropagation();
               onClose();
