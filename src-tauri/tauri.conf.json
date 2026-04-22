@@ -37,7 +37,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcyNzA1NDA1MDBGRQpSV1QrQUFWVWNISUFBRlVGY3J4Vk81cG5xaGVtREVrbExpcDljOUIyWlA1c0VMR0tvV244dXNiUgo=",
       "endpoints": [
-        "https://github.com/Leon-Achteresch/gitit/releases/latest/download/latest.json"
+        "https://github.com/Leon-Achteresch/l8git/releases/latest/download/latest.json"
       ]
     }
   }
