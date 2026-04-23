@@ -19,6 +19,7 @@ pub fn run() {
 
             let app_menu = SubmenuBuilder::new(app, "l8git")
                 .text("nav-repo", "Repository")
+                .text("nav-info", "Info")
                 .text("nav-about", "About")
                 .text("nav-settings", "Einstellungen");
 
@@ -37,6 +38,7 @@ pub fn run() {
 
             let path = match event.id().as_ref() {
                 "nav-repo" => Some("/"),
+                "nav-info" => Some("/info"),
                 "nav-about" => Some("/about"),
                 "nav-settings" => Some("/settings"),
                 _ => None,
@@ -49,6 +51,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             git::open_repo,
             git::repo_log_page,
+            git::repo_search_commits,
             favicon::read_repo_favicon,
             shell::reveal_repo_folder,
             shell::open_repo_terminal,

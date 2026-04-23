@@ -29,12 +29,14 @@ function CommitRowInner({
   path,
   row,
   maxLanes,
+  matchedPaths,
   selected,
   onSelectHash,
 }: {
   path: string;
   row: GraphRow;
   maxLanes: number;
+  matchedPaths?: string[];
   selected: boolean;
   onSelectHash: (hash: string) => void;
 }) {
@@ -94,6 +96,16 @@ function CommitRowInner({
           avatarFallbackUrl={avatarFallbackUrl}
           date={commit.date}
         />
+        {matchedPaths?.length ? (
+          <span
+            className="truncate text-xs text-muted-foreground"
+            title={matchedPaths.join("\n")}
+          >
+            {matchedPaths.length === 1
+              ? matchedPaths[0]
+              : `${matchedPaths[0]} · +${matchedPaths.length - 1}`}
+          </span>
+        ) : null}
       </div>
       <div className="flex shrink-0 items-center pr-4">
         <CommitHashBadge hash={commit.short_hash} />
