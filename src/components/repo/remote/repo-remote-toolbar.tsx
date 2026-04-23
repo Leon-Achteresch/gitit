@@ -36,6 +36,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
   const clearCommitSearch = useRepoStore((s) => s.clearCommitSearch);
   const searchSlice = useRepoStore((s) => s.commitSearchByPath[path]);
   const ideLaunchCommand = useWorkspacePrefs((s) => s.ideLaunchCommand);
+  const repoTerminalKind = useWorkspacePrefs((s) => s.repoTerminalKind);
   const [busy, setBusy] = useState<RemoteOp | null>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [pushDialogOpen, setPushDialogOpen] = useState(false);
@@ -109,7 +110,10 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
 
   async function openTerminalHere() {
     try {
-      await invoke("open_repo_terminal", { path });
+      await invoke("open_repo_terminal", {
+        path,
+        useGitBash: repoTerminalKind === "git_bash",
+      });
     } catch (e) {
       toastError(String(e));
     }

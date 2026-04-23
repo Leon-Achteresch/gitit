@@ -70,8 +70,22 @@ pub fn reveal_repo_folder(path: String) -> Result<(), String> {
     }
 }
 
+#[cfg(target_os = "windows")]
+fn windows_git_bash_path() -> Option<PathBuf> {
+    let from_env = |key: &str| std::env::var(key).ok().map(PathBuf::from);
+    for base in [from_env("ProgramFiles"), from_env("ProgramFiles(x86)")] {
+        if let Some(root) = base {
+            let exe = root.join("Git").join("git-bash.exe");
+            if exe.is_file() {
+                return Some(exe);
+            }
+        }
+    }
+    None
+}
+
 #[tauri::command]
-pub fn open_repo_terminal(path: String) -> Result<(), String> {
+pub fn open_repo_terminal(path: String, use_git_bash: bool) -> Result<(), String> {
     let p = PathBuf::from(path.trim());
     if !p.is_dir() {
         return Err("Pfad ist kein Ordner.".into());
@@ -79,6 +93,7 @@ pub fn open_repo_terminal(path: String) -> Result<(), String> {
 
     #[cfg(target_os = "macos")]
     {
+        let _ = use_git_bash;
         let canon = p.canonicalize().map_err(|e| format!("{e}"))?;
         let ps = canon.to_string_lossy();
         let lit = escape_applescript_string(&ps);
@@ -99,6 +114,18 @@ pub fn open_repo_terminal(path: String) -> Result<(), String> {
 
     #[cfg(target_os = "windows")]
     {
+        if use_git_bash {
+            if let Some(git_bash) = windows_git_bash_path() {
+                Command::new(&git_bash)
+                    .current_dir(&p)
+                    .spawn()
+                    .map_err(|e| format!("Git Bash konnte nicht gestartet werden: {e}"))?;
+                return Ok(());
+            }
+            return Err(
+                "Git Bash nicht gefunden (erwartet unter Programme\\Git, Git for Windows).".into(),
+            );
+        }
         let wd = p.to_string_lossy();
         if Command::new("wt")
             .args(["-d", wd.as_ref()])
@@ -117,6 +144,7 @@ pub fn open_repo_terminal(path: String) -> Result<(), String> {
 
     #[cfg(all(unix, not(target_os = "macos")))]
     {
+        let _ = use_git_bash;
         let wd = p.to_string_lossy().into_owned();
         if Command::new("x-terminal-emulator")
             .current_dir(&p)
@@ -173,6 +201,7 @@ pub fn open_repo_terminal(path: String) -> Result<(), String> {
         all(unix, not(target_os = "macos"))
     )))]
     {
+        let _ = use_git_bash;
         Err("Plattform nicht unterstützt.".into())
     }
 }

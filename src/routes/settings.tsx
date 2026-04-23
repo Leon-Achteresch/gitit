@@ -31,7 +31,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { checkForAppUpdate } from "@/lib/app-updater";
 import { useCommitPrefs } from "@/lib/commit-prefs";
-import { useWorkspacePrefs } from "@/lib/workspace-prefs";
+import {
+  useWorkspacePrefs,
+  type RepoTerminalKind,
+} from "@/lib/workspace-prefs";
 import { useGitAccounts } from "@/lib/git-accounts";
 import { useTheme } from "@/lib/use-theme";
 import type { Theme } from "@/lib/theme";
@@ -45,6 +48,11 @@ const THEMES: { value: Theme; label: string; icon: typeof Sun }[] = [
   { value: "light", label: "Hell", icon: Sun },
   { value: "dark", label: "Dunkel", icon: Moon },
   { value: "system", label: "System", icon: Monitor },
+];
+
+const REPO_TERMINAL_OPTIONS: { value: RepoTerminalKind; label: string }[] = [
+  { value: "default", label: "Standard-Terminal" },
+  { value: "git_bash", label: "Git Bash" },
 ];
 
 function Settings() {
@@ -85,6 +93,10 @@ function Settings() {
 
   const ideLaunchCommand = useWorkspacePrefs((s) => s.ideLaunchCommand);
   const setIdeLaunchCommand = useWorkspacePrefs((s) => s.setIdeLaunchCommand);
+  const repoTerminalKind = useWorkspacePrefs((s) => s.repoTerminalKind);
+  const setRepoTerminalKind = useWorkspacePrefs(
+    (s) => s.setRepoTerminalKind,
+  );
   const [ideDraft, setIdeDraft] = useState(ideLaunchCommand);
 
   useEffect(() => {
@@ -319,6 +331,45 @@ function Settings() {
               >
                 Speichern
               </Button>
+            </div>
+            <div className="space-y-2 border-t border-border pt-3">
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  Terminal im Repository
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Wird von der Schaltfläche „Terminal“ in der
+                  Remote-Ansicht verwendet. Git Bash bezieht sich auf die
+                  Installation von Git for Windows; auf macOS und Linux
+                  bleibt es beim Standard-Terminal.
+                </p>
+              </div>
+              <div
+                role="radiogroup"
+                aria-label="Repository-Terminal"
+                className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+              >
+                {REPO_TERMINAL_OPTIONS.map(({ value, label }) => {
+                  const active = repoTerminalKind === value;
+                  return (
+                    <Button
+                      key={value}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      variant={active ? "default" : "outline"}
+                      onClick={() => setRepoTerminalKind(value)}
+                      className={cn(
+                        "h-auto justify-center py-3",
+                        active &&
+                          "ring-2 ring-ring ring-offset-2 ring-offset-background",
+                      )}
+                    >
+                      <span className="text-sm">{label}</span>
+                    </Button>
+                  );
+                })}
+              </div>
             </div>
           </CardContent>
         </Card>
