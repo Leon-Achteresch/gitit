@@ -1,7 +1,18 @@
+import {
+  ContextMenuCheckboxItem,
+  ContextMenuLabel,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+} from "@/components/ui/context-menu";
 import { Input } from "@/components/ui/input";
 import { toastError } from "@/lib/error-toast";
 import { useRepoStore } from "@/lib/repo-store";
-import { useWorkspacePrefs } from "@/lib/workspace-prefs";
+import {
+  useWorkspacePrefs,
+  type PushForceMode,
+  type PushTagsMode,
+} from "@/lib/workspace-prefs";
 import { invoke } from "@tauri-apps/api/core";
 import {
   ArrowDownToLine,
@@ -37,6 +48,22 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
   const searchSlice = useRepoStore((s) => s.commitSearchByPath[path]);
   const ideLaunchCommand = useWorkspacePrefs((s) => s.ideLaunchCommand);
   const repoTerminalKind = useWorkspacePrefs((s) => s.repoTerminalKind);
+  const fetchPruneBranches = useWorkspacePrefs((s) => s.fetchPruneBranches);
+  const setFetchPruneBranches = useWorkspacePrefs(
+    (s) => s.setFetchPruneBranches,
+  );
+  const fetchPruneTags = useWorkspacePrefs((s) => s.fetchPruneTags);
+  const setFetchPruneTags = useWorkspacePrefs((s) => s.setFetchPruneTags);
+  const pushForceMode = useWorkspacePrefs((s) => s.pushForceMode);
+  const setPushForceMode = useWorkspacePrefs((s) => s.setPushForceMode);
+  const pushTagsMode = useWorkspacePrefs((s) => s.pushTagsMode);
+  const setPushTagsMode = useWorkspacePrefs((s) => s.setPushTagsMode);
+  const pushAtomic = useWorkspacePrefs((s) => s.pushAtomic);
+  const setPushAtomic = useWorkspacePrefs((s) => s.setPushAtomic);
+  const pushNoVerify = useWorkspacePrefs((s) => s.pushNoVerify);
+  const setPushNoVerify = useWorkspacePrefs((s) => s.setPushNoVerify);
+  const pushDryRun = useWorkspacePrefs((s) => s.pushDryRun);
+  const setPushDryRun = useWorkspacePrefs((s) => s.setPushDryRun);
   const [busy, setBusy] = useState<RemoteOp | null>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [pushDialogOpen, setPushDialogOpen] = useState(false);
@@ -74,10 +101,22 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
       try {
         const out =
           op === "fetch"
-            ? await invoke<string>("git_fetch", { path })
+            ? await invoke<string>("git_fetch", {
+                path,
+                pruneBranches: fetchPruneBranches,
+                pruneTags: fetchPruneTags,
+              })
             : op === "pull"
               ? await invoke<string>("git_pull", { path })
-              : await invoke<string>("git_push", { path, setUpstream: false });
+              : await invoke<string>("git_push", {
+                  path,
+                  setUpstream: false,
+                  forceMode: pushForceMode === "none" ? null : pushForceMode,
+                  tagsMode: pushTagsMode === "none" ? null : pushTagsMode,
+                  atomic: pushAtomic,
+                  noVerify: pushNoVerify,
+                  dryRun: pushDryRun,
+                });
         await Promise.all([reload(path), reloadStatus(path)]);
         toast.success(out.trim() || "Aktion erfolgreich abgeschlossen.");
       } catch (e) {
@@ -86,7 +125,18 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
         setBusy(null);
       }
     },
-    [path, reload, reloadStatus],
+    [
+      path,
+      reload,
+      reloadStatus,
+      fetchPruneBranches,
+      fetchPruneTags,
+      pushForceMode,
+      pushTagsMode,
+      pushAtomic,
+      pushNoVerify,
+      pushDryRun,
+    ],
   );
 
   const runPush = useCallback(() => {
@@ -132,13 +182,114 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
     }
   }
 
+  const fetchMenu = (
+    <>
+      <ContextMenuLabel>Beim Fetch löschen</ContextMenuLabel>
+      <ContextMenuSeparator />
+      <ContextMenuCheckboxItem
+        checked={fetchPruneBranches}
+        onCheckedChange={(v) => setFetchPruneBranches(!!v)}
+        onSelect={(e) => e.preventDefault()}
+      >
+        Entfernte Zweige löschen
+      </ContextMenuCheckboxItem>
+      <ContextMenuCheckboxItem
+        checked={fetchPruneTags}
+        onCheckedChange={(v) => setFetchPruneTags(!!v)}
+        onSelect={(e) => e.preventDefault()}
+      >
+        Entfernte Tags löschen
+      </ContextMenuCheckboxItem>
+    </>
+  );
+
+  const pushMenu = (
+    <>
+      <ContextMenuLabel>Force</ContextMenuLabel>
+      <ContextMenuRadioGroup
+        value={pushForceMode}
+        onValueChange={(v) => setPushForceMode(v as PushForceMode)}
+      >
+        <ContextMenuRadioItem value="none" onSelect={(e) => e.preventDefault()}>
+          Kein Force
+        </ContextMenuRadioItem>
+        <ContextMenuRadioItem
+          value="lease"
+          onSelect={(e) => e.preventDefault()}
+        >
+          Mit Lease erzwingen (--force-with-lease)
+        </ContextMenuRadioItem>
+        <ContextMenuRadioItem
+          value="force"
+          onSelect={(e) => e.preventDefault()}
+        >
+          Hart erzwingen (--force)
+        </ContextMenuRadioItem>
+      </ContextMenuRadioGroup>
+      <ContextMenuSeparator />
+      <ContextMenuLabel>Tags</ContextMenuLabel>
+      <ContextMenuRadioGroup
+        value={pushTagsMode}
+        onValueChange={(v) => setPushTagsMode(v as PushTagsMode)}
+      >
+        <ContextMenuRadioItem value="none" onSelect={(e) => e.preventDefault()}>
+          Keine Tags pushen
+        </ContextMenuRadioItem>
+        <ContextMenuRadioItem
+          value="follow"
+          onSelect={(e) => e.preventDefault()}
+        >
+          Erreichbare Tags (--follow-tags)
+        </ContextMenuRadioItem>
+        <ContextMenuRadioItem value="all" onSelect={(e) => e.preventDefault()}>
+          Alle Tags (--tags)
+        </ContextMenuRadioItem>
+      </ContextMenuRadioGroup>
+      <ContextMenuSeparator />
+      <ContextMenuLabel>Optionen</ContextMenuLabel>
+      <ContextMenuCheckboxItem
+        checked={pushAtomic}
+        onCheckedChange={(v) => setPushAtomic(!!v)}
+        onSelect={(e) => e.preventDefault()}
+      >
+        Atomar (--atomic)
+      </ContextMenuCheckboxItem>
+      <ContextMenuCheckboxItem
+        checked={pushNoVerify}
+        onCheckedChange={(v) => setPushNoVerify(!!v)}
+        onSelect={(e) => e.preventDefault()}
+      >
+        Pre-Push-Hooks überspringen (--no-verify)
+      </ContextMenuCheckboxItem>
+      <ContextMenuCheckboxItem
+        checked={pushDryRun}
+        onCheckedChange={(v) => setPushDryRun(!!v)}
+        onSelect={(e) => e.preventDefault()}
+      >
+        Testlauf (--dry-run)
+      </ContextMenuCheckboxItem>
+    </>
+  );
+
+  const pushTitleParts: string[] = [];
+  if (pushCount > 0) pushTitleParts.push(`${pushCount} ausstehend`);
+  if (pushForceMode === "lease") pushTitleParts.push("Force-with-lease");
+  else if (pushForceMode === "force") pushTitleParts.push("Force");
+  if (pushTagsMode === "follow") pushTitleParts.push("follow-tags");
+  else if (pushTagsMode === "all") pushTitleParts.push("--tags");
+  if (pushDryRun) pushTitleParts.push("Dry-Run");
+  const pushTitle =
+    pushTitleParts.length > 0
+      ? `Änderungen hochladen (${pushTitleParts.join(", ")})`
+      : "Änderungen hochladen";
+
   return (
     <>
     <div className="flex w-full flex-wrap items-start justify-between gap-x-3 gap-y-2 pb-2 pt-1">
       <div className="flex min-w-0 flex-1 flex-wrap items-center">
         <ToolbarGroup>
           <ToolbarButton
-            title="Änderungen abrufen"
+            title="Änderungen abrufen (Rechtsklick für Optionen)"
             label="Fetch"
             disabled={remoteDisabled}
             isActive={busy === "fetch"}
@@ -150,6 +301,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
                 <CloudDownload className="h-3.5 w-3.5" />
               )
             }
+            contextMenuContent={fetchMenu}
           />
           <ToolbarButton
             title={
@@ -171,11 +323,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
             }
           />
           <ToolbarButton
-            title={
-              pushCount > 0
-                ? `Änderungen hochladen (${pushCount} ausstehend)`
-                : "Änderungen hochladen"
-            }
+            title={`${pushTitle} (Rechtsklick für Optionen)`}
             label="Push"
             badge={pushCount}
             disabled={remoteDisabled}
@@ -188,6 +336,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
                 <ArrowUpToLine className="h-3.5 w-3.5" />
               )
             }
+            contextMenuContent={pushMenu}
           />
           <ToolbarButton
             title="Remote-URL bearbeiten"

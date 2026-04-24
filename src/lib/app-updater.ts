@@ -1,35 +1,118 @@
 import { isTauri } from "@tauri-apps/api/core";
-import { ask } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { check, type DownloadEvent } from "@tauri-apps/plugin-updater";
-import { toast } from "sonner";
+import { check, type DownloadEvent, type Update } from "@tauri-apps/plugin-updater";
+import { create } from "zustand";
 
-import { toastError } from "@/lib/error-toast";
+type AppUpdatePhase =
+  | "idle"
+  | "available"
+  | "downloading"
+  | "installing"
+  | "installed"
+  | "up-to-date"
+  | "unsupported"
+  | "error";
+
+type AppUpdateStore = {
+  open: boolean;
+  phase: AppUpdatePhase;
+  version: string | null;
+  currentVersion: string | null;
+  notes: string;
+  publishedAt: string | null;
+  errorMessage: string;
+  downloadedBytes: number;
+  totalBytes: number;
+  pendingUpdate: Update | null;
+  setDialogState: (
+    next: Partial<Omit<AppUpdateStore, "setDialogState" | "resetDialog">>,
+  ) => void;
+  resetDialog: () => void;
+};
+
+const initialDialogState = {
+  open: false,
+  phase: "idle" as AppUpdatePhase,
+  version: null,
+  currentVersion: null,
+  notes: "",
+  publishedAt: null,
+  errorMessage: "",
+  downloadedBytes: 0,
+  totalBytes: 0,
+  pendingUpdate: null,
+};
+
+export const useAppUpdateStore = create<AppUpdateStore>()((set) => ({
+  ...initialDialogState,
+  setDialogState: (next) => set(next),
+  resetDialog: () => set(initialDialogState),
+}));
 
 let activeUpdateCheck: Promise<void> | null = null;
 
-function updatePromptMessage(version: string, body?: string) {
-  const notes = body?.trim();
-  if (!notes) {
-    return `Version ${version} ist verfuegbar.\n\nJetzt herunterladen und installieren?`;
+async function releasePendingUpdate(update: Update | null) {
+  if (!update) return;
+  try {
+    await update.close();
+  } catch {
+    return;
   }
-
-  return `Version ${version} ist verfuegbar.\n\n${notes}\n\nJetzt herunterladen und installieren?`;
 }
 
-function progressMessage(version: string, downloadedBytes: number, totalBytes: number) {
-  if (totalBytes <= 0) {
-    return `Update ${version} wird heruntergeladen...`;
+function updateDialogState(
+  next: Partial<Omit<AppUpdateStore, "setDialogState" | "resetDialog">>,
+) {
+  useAppUpdateStore.getState().setDialogState(next);
+}
+
+function setAvailableUpdate(update: Update) {
+  const previous = useAppUpdateStore.getState().pendingUpdate;
+  if (previous && previous !== update) {
+    void releasePendingUpdate(previous);
   }
 
-  const progress = Math.min(100, Math.round((downloadedBytes / totalBytes) * 100));
-  return `Update ${version} wird heruntergeladen... ${progress}%`;
+  updateDialogState({
+    open: true,
+    phase: "available",
+    version: update.version,
+    currentVersion: update.currentVersion,
+    notes: update.body?.trim() ?? "",
+    publishedAt: update.date ?? null,
+    errorMessage: "",
+    downloadedBytes: 0,
+    totalBytes: 0,
+    pendingUpdate: update,
+  });
+}
+
+function setManualStatusDialog(
+  phase: Extract<AppUpdatePhase, "up-to-date" | "unsupported" | "error">,
+  errorMessage = "",
+) {
+  const previous = useAppUpdateStore.getState().pendingUpdate;
+  if (previous) {
+    void releasePendingUpdate(previous);
+  }
+
+  updateDialogState({
+    open: true,
+    phase,
+    version: null,
+    currentVersion: null,
+    notes: "",
+    publishedAt: null,
+    errorMessage,
+    downloadedBytes: 0,
+    totalBytes: 0,
+    pendingUpdate: null,
+  });
 }
 
 async function runUpdateCheck(manual: boolean) {
   if (!isTauri()) {
     if (manual) {
-      toast.message("Updates sind nur in der Desktop-App verfuegbar.");
+      setManualStatusDialog("unsupported");
     }
     return;
   }
@@ -39,46 +122,62 @@ async function runUpdateCheck(manual: boolean) {
 
     if (!update) {
       if (manual) {
-        toast.success("Du nutzt bereits die neueste Version.");
+        setManualStatusDialog("up-to-date");
       }
       return;
     }
 
-    const shouldInstall = await ask(
-      updatePromptMessage(update.version, update.body),
-      {
-        title: "Update verfuegbar",
-        kind: "info",
-        okLabel: "Installieren",
-        cancelLabel: "Spaeter",
-      },
-    );
-
-    if (!shouldInstall) {
-      return;
+    setAvailableUpdate(update);
+  } catch (error) {
+    if (manual) {
+      setManualStatusDialog("error", `Update fehlgeschlagen: ${String(error)}`);
     }
+  }
+}
 
-    let downloadedBytes = 0;
-    let totalBytes = 0;
-    const toastId = toast.loading(`Update ${update.version} wird vorbereitet...`);
+export async function installAppUpdate() {
+  const state = useAppUpdateStore.getState();
+  const update = state.pendingUpdate;
 
+  if (!update) {
+    return;
+  }
+
+  let downloadedBytes = 0;
+  let totalBytes = 0;
+
+  updateDialogState({
+    open: true,
+    phase: "downloading",
+    errorMessage: "",
+    downloadedBytes,
+    totalBytes,
+  });
+
+  try {
     await update.downloadAndInstall((event: DownloadEvent) => {
       switch (event.event) {
         case "Started":
           totalBytes = event.data.contentLength ?? 0;
-          toast.loading(progressMessage(update.version, downloadedBytes, totalBytes), {
-            id: toastId,
+          updateDialogState({
+            phase: "downloading",
+            downloadedBytes,
+            totalBytes,
           });
           break;
         case "Progress":
           downloadedBytes += event.data.chunkLength;
-          toast.loading(progressMessage(update.version, downloadedBytes, totalBytes), {
-            id: toastId,
+          updateDialogState({
+            phase: "downloading",
+            downloadedBytes,
+            totalBytes,
           });
           break;
         case "Finished":
-          toast.loading(`Update ${update.version} wird installiert...`, {
-            id: toastId,
+          updateDialogState({
+            phase: "installing",
+            downloadedBytes,
+            totalBytes,
           });
           break;
         default: {
@@ -88,25 +187,52 @@ async function runUpdateCheck(manual: boolean) {
       }
     });
 
-    toast.success(`Update ${update.version} wurde installiert.`, {
-      id: toastId,
+    await releasePendingUpdate(update);
+
+    updateDialogState({
+      open: true,
+      phase: "installed",
+      pendingUpdate: null,
+      errorMessage: "",
+      downloadedBytes: totalBytes || downloadedBytes,
+      totalBytes,
     });
-
-    const shouldRestart = await ask(
-      "Das Update wurde installiert. Soll l8git jetzt neu starten?",
-      {
-        title: "Neustart erforderlich",
-        kind: "info",
-        okLabel: "Neu starten",
-        cancelLabel: "Spaeter",
-      },
-    );
-
-    if (shouldRestart) {
-      await relaunch();
-    }
   } catch (error) {
-    toastError(`Update fehlgeschlagen: ${String(error)}`);
+    await releasePendingUpdate(update);
+
+    updateDialogState({
+      open: true,
+      phase: "error",
+      pendingUpdate: null,
+      errorMessage: `Update fehlgeschlagen: ${String(error)}`,
+    });
+  }
+}
+
+export function dismissAppUpdateDialog() {
+  const state = useAppUpdateStore.getState();
+
+  if (state.phase === "downloading" || state.phase === "installing") {
+    return;
+  }
+
+  if (state.pendingUpdate) {
+    void releasePendingUpdate(state.pendingUpdate);
+  }
+
+  state.resetDialog();
+}
+
+export async function restartToApplyAppUpdate() {
+  try {
+    await relaunch();
+  } catch (error) {
+    updateDialogState({
+      open: true,
+      phase: "error",
+      pendingUpdate: null,
+      errorMessage: `Neustart fehlgeschlagen: ${String(error)}`,
+    });
   }
 }
 
