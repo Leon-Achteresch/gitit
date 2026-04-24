@@ -1,8 +1,18 @@
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
+import { toastError } from '@/lib/error-toast';
 import type { TagRef } from '@/lib/repo-store';
+import { useRepoStore } from '@/lib/repo-store';
 import { useUiStore } from '@/lib/ui-store';
 import { cn } from '@/lib/utils';
-import { Tag as TagIcon } from 'lucide-react';
-import { memo } from 'react';
+import { Tag as TagIcon, Trash2 } from 'lucide-react';
+import { memo, useState } from 'react';
+import { RemoteTagDeleteDialog } from './remote-tag-delete-dialog';
 
 function TagRowInner({
   path,
@@ -14,8 +24,18 @@ function TagRowInner({
   laneColor: string;
 }) {
   const focusCommitFromBranchTip = useUiStore(s => s.focusCommitFromBranchTip);
+  const deleteTag = useRepoStore(s => s.deleteTag);
+  const [remoteDeleteOpen, setRemoteDeleteOpen] = useState(false);
 
-  return (
+  async function performLocalDelete() {
+    try {
+      await deleteTag(path, tag.name);
+    } catch (e) {
+      toastError(String(e));
+    }
+  }
+
+  const row = (
     <li
       onClick={e => {
         if (e.button !== 0) return;
@@ -45,6 +65,46 @@ function TagRowInner({
         </span>
       </span>
     </li>
+  );
+
+  if (!path) return row;
+
+  return (
+    <>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>{row}</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem
+            variant='destructive'
+            onSelect={() => {
+              const ok = window.confirm(
+                `Tag "${tag.name}" lokal löschen?`
+              );
+              if (ok) void performLocalDelete();
+            }}
+          >
+            <Trash2 className='h-3.5 w-3.5' />
+            Lokal löschen
+          </ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            variant='destructive'
+            onSelect={() => {
+              window.requestAnimationFrame(() => setRemoteDeleteOpen(true));
+            }}
+          >
+            <Trash2 className='h-3.5 w-3.5' />
+            Remote löschen …
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+      <RemoteTagDeleteDialog
+        open={remoteDeleteOpen}
+        onClose={() => setRemoteDeleteOpen(false)}
+        path={path}
+        tagName={tag.name}
+      />
+    </>
   );
 }
 

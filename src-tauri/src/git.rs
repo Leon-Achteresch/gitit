@@ -825,6 +825,33 @@ pub fn delete_remote_branch(path: String, remote_ref: String) -> Result<String, 
     Ok(out)
 }
 
+#[tauri::command]
+pub fn delete_tag(path: String, name: String) -> Result<(), String> {
+    let repo = PathBuf::from(path.trim());
+    let tag = name.trim();
+    if tag.is_empty() {
+        return Err("Tag-Name darf nicht leer sein".into());
+    }
+    run_git(&repo, &["tag", "-d", tag])?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn delete_remote_tag(path: String, name: String, remote: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let tag = name.trim();
+    let r = remote.trim();
+    if tag.is_empty() {
+        return Err("Tag-Name darf nicht leer sein".into());
+    }
+    if r.is_empty() {
+        return Err("Remote darf nicht leer sein".into());
+    }
+    let out = run_git_merged_output(&repo, &["push", r, "--delete", &format!("refs/tags/{tag}")])?;
+    let _ = run_git_merged_output(&repo, &["fetch", r, "--prune", "--prune-tags"]);
+    Ok(out)
+}
+
 #[derive(Serialize)]
 pub struct StatusEntry {
     path: String,

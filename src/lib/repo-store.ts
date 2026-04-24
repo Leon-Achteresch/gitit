@@ -143,6 +143,12 @@ type RepoState = {
   reloadAll: () => Promise<void>;
   deleteBranch: (path: string, name: string, force?: boolean) => Promise<void>;
   deleteRemoteBranch: (path: string, remoteRef: string) => Promise<string>;
+  deleteTag: (path: string, name: string) => Promise<void>;
+  deleteRemoteTag: (
+    path: string,
+    name: string,
+    remote: string,
+  ) => Promise<string>;
   reloadStatus: (path: string) => Promise<void>;
   reloadLocalStatus: (path: string) => Promise<void>;
   stageFiles: (path: string, files: string[]) => Promise<void>;
@@ -584,6 +590,21 @@ export const useRepoStore = create<RepoState>()(
         const out = await invoke<string>("delete_remote_branch", {
           path,
           remoteRef,
+        });
+        await get().reload(path);
+        return out.trim();
+      },
+
+      async deleteTag(path, name) {
+        await invoke("delete_tag", { path, name });
+        await get().reload(path);
+      },
+
+      async deleteRemoteTag(path, name, remote) {
+        const out = await invoke<string>("delete_remote_tag", {
+          path,
+          name,
+          remote,
         });
         await get().reload(path);
         return out.trim();
