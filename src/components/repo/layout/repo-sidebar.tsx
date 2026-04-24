@@ -13,7 +13,6 @@ import {
 import { cn } from "@/lib/utils";
 import {
   Archive,
-  GitBranch,
   GitCommitHorizontal,
   GitPullRequest,
   History,
