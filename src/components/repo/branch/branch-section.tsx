@@ -48,11 +48,6 @@ export function BranchSection({
             : 'grid-cols-[minmax(0,1fr)_auto]'
         )}
       >
-        {icon != null ? (
-          <span className='flex shrink-0 items-center justify-self-start'>
-            {icon}
-          </span>
-        ) : null}
         <h3 className='min-w-0 justify-self-stretch truncate text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground'>
           {title}
         </h3>

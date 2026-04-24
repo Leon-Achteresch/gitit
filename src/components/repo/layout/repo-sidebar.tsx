@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export const REPO_SIDEBAR_ICONS_ENABLED = false;
+export const REPO_SIDEBAR_ICONS_ENABLED = true;
 
 export function RepoSidebar() {
   const activePath = useRepoStore((s) => s.activePath);
@@ -237,14 +237,7 @@ export function RepoSidebar() {
               <BranchSection
                 path={activePath}
                 title="Lokal"
-                icon={
-                  REPO_SIDEBAR_ICONS_ENABLED ? (
-                    <GitBranch
-                      className="h-3.5 w-3.5"
-                      style={{ color: "var(--color-git-branch)" }}
-                    />
-                  ) : undefined
-                }
+                
                 branches={localBranches}
                 emptyLabel={
                   hasQuery
