@@ -359,13 +359,27 @@ export function CommitPanel() {
     [changeRows, selectedRowId],
   );
 
+  const selectedPath = selectedRow?.path ?? null;
+  const selectedSector = selectedRow?.sector ?? null;
+  const selectedBinary = !!selectedRow?.entry.binary;
+  const selectedUntracked = !!selectedRow?.entry.untracked;
+  const selectedSignature = selectedRow
+    ? [
+        selectedRow.entry.index_status,
+        selectedRow.entry.worktree_status,
+        selectedRow.entry.additions_staged,
+        selectedRow.entry.deletions_staged,
+        selectedRow.entry.additions_unstaged,
+        selectedRow.entry.deletions_unstaged,
+      ].join("|")
+    : "";
+
   const loadDiff = useCallback(async () => {
-    if (!activePath || !selectedRow) {
+    if (!activePath || !selectedPath) {
       setDiffPayload(null);
       return;
     }
-    const { path, entry } = selectedRow;
-    if (entry.binary) {
+    if (selectedBinary) {
       setDiffPayload({
         staged: null,
         unstaged: null,
@@ -380,8 +394,8 @@ export function CommitPanel() {
     try {
       const r = await invoke<FileDiffResponse>("repo_file_diff", {
         path: activePath,
-        file: path,
-        untracked: entry.untracked,
+        file: selectedPath,
+        untracked: selectedUntracked,
       });
       setDiffPayload(r);
     } catch (e) {
@@ -391,7 +405,14 @@ export function CommitPanel() {
     } finally {
       setDiffLoading(false);
     }
-  }, [activePath, selectedRow]);
+  }, [
+    activePath,
+    selectedPath,
+    selectedSector,
+    selectedBinary,
+    selectedUntracked,
+    selectedSignature,
+  ]);
 
   useEffect(() => {
     void loadDiff();
@@ -442,9 +463,6 @@ export function CommitPanel() {
     }
   };
 
-  // Stabilise FileRow callbacks so memo()'d rows don't invalidate on every
-  // parent render. The refs track the latest handlers so we don't need to
-  // re-create the stable wrapper when closed-over state changes.
   const toggleEntryRef = useRef(toggleEntry);
   toggleEntryRef.current = toggleEntry;
   const stableOnSelectRow = useCallback((id: string) => {
@@ -542,7 +560,7 @@ export function CommitPanel() {
         </Button>
       </div>
 
-      <div className="flex-1 overflow-hidden rounded-md border border-border/60">
+      <div className="flex-1 overflow-hidden rounded-2xl border border-border/60 shadow-sm">
         <ResizablePanelGroup
           orientation="horizontal"
           id="commit-panel-layout"
@@ -648,7 +666,7 @@ export function CommitPanel() {
         </ResizablePanelGroup>
       </div>
 
-      <div className="flex flex-col gap-2.5 rounded-md border border-border/60 p-3">
+      <div className="flex flex-col gap-2.5 rounded-2xl border border-border/60 p-3 shadow-sm">
         <div className="flex items-center justify-between px-1 text-xs text-muted-foreground">
           <span>
             <span className="tabular-nums font-medium text-foreground">
