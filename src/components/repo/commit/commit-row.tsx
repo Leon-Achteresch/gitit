@@ -14,7 +14,7 @@ import {
 import { useGravatarUrl } from "@/lib/gravatar";
 import { useRepoStore } from "@/lib/repo-store";
 import { cn } from "@/lib/utils";
-import { Tag, Undo2 } from "lucide-react";
+import { GitBranchPlus, Tag, Undo2 } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { CommitAuthorDate } from "./commit-author-date";
@@ -24,6 +24,7 @@ import { CommitGraphCell } from "./commit-graph-cell";
 import { CommitHashBadge } from "./commit-hash-badge";
 import { CommitTagDialog } from "./commit-tag-dialog";
 import { CommitTags } from "./commit-tags";
+import type { CommitSelectMode } from "./commit-history-panel";
 
 function CommitRowInner({
   path,
@@ -31,14 +32,20 @@ function CommitRowInner({
   maxLanes,
   matchedPaths,
   selected,
+  multiSelected,
+  selectedHashes,
   onSelectHash,
+  onCherryPick,
 }: {
   path: string;
   row: GraphRow;
   maxLanes: number;
   matchedPaths?: string[];
   selected: boolean;
-  onSelectHash: (hash: string) => void;
+  multiSelected: boolean;
+  selectedHashes: ReadonlySet<string>;
+  onSelectHash: (hash: string, mode: CommitSelectMode) => void;
+  onCherryPick: (hashes: string[], opts?: { mainline?: number }) => void;
 }) {
   const { commit } = row;
   const gravatarUrl = useGravatarUrl(commit.email);
@@ -55,14 +62,33 @@ function CommitRowInner({
   }, [branches, commit.hash]);
   const [tagOpen, setTagOpen] = useState(false);
 
+  const isMergeCommit = commit.parents.length > 1;
+  const isPartOfMulti = multiSelected && selectedHashes.size > 1;
+  const cherryPickLabel = isPartOfMulti
+    ? `${selectedHashes.size} Commits cherry-picken`
+    : "Commit cherry-picken";
+
+  const cherryPickTargets = (): string[] => {
+    if (isPartOfMulti) return Array.from(selectedHashes);
+    return [commit.hash];
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    const mode: CommitSelectMode =
+      e.shiftKey ? "range" : e.metaKey || e.ctrlKey ? "toggle" : "single";
+    onSelectHash(commit.hash, mode);
+  };
+
   const inner = (
     <div
-      onClick={() => onSelectHash(commit.hash)}
+      onClick={handleClick}
       className={cn(
         "group relative flex cursor-pointer items-stretch border-b border-border/40 outline-none transition-colors focus-visible:outline-none",
         selected
           ? "bg-accent/40 before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-primary"
-          : "hover:bg-muted/30",
+          : multiSelected
+            ? "bg-accent/40"
+            : "hover:bg-muted/30",
       )}
     >
       <div className="flex shrink-0 self-stretch">
@@ -117,7 +143,7 @@ function CommitRowInner({
     <>
       <ContextMenu>
         <ContextMenuTrigger asChild>{inner}</ContextMenuTrigger>
-        <ContextMenuContent className="w-48">
+        <ContextMenuContent className="w-56">
           <ContextMenuItem
             onSelect={() => {
               window.requestAnimationFrame(() => setTagOpen(true));
@@ -129,12 +155,27 @@ function CommitRowInner({
           </ContextMenuItem>
           <ContextMenuItem
             onSelect={() => {
+              const targets = cherryPickTargets();
+              onCherryPick(
+                targets,
+                isMergeCommit && targets.length === 1
+                  ? { mainline: 1 }
+                  : undefined,
+              );
+            }}
+            className="gap-2 cursor-pointer"
+          >
+            <GitBranchPlus className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium">{cherryPickLabel}</span>
+          </ContextMenuItem>
+          <ContextMenuItem
+            onSelect={() => {
               void (async () => {
                 try {
                   const out = await revertCommit(
                     path,
                     commit.hash,
-                    commit.parents.length > 1,
+                    isMergeCommit,
                   );
                   toast.success(out.trim() || "Revert-Commit erstellt.");
                 } catch (e) {

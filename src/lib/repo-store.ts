@@ -87,6 +87,12 @@ export type UpstreamSyncCounts = {
 
 export type MergeStrategy = "ff" | "ff-only" | "no-ff" | "squash";
 
+export type CherryPickState = {
+  in_progress: boolean;
+  head: string | null;
+  conflicted_paths: string[];
+};
+
 export type StashEntry = {
   index: number;
   refname: string;
@@ -133,6 +139,7 @@ type RepoState = {
   stashesLoading: Record<string, boolean>;
   prs: Record<string, PullRequest[]>;
   prsLoading: Record<string, boolean>;
+  cherryPickState: Record<string, CherryPickState>;
   loadPRs: (path: string) => Promise<void>;
   addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
@@ -180,6 +187,15 @@ type RepoState = {
     commit: string,
     isMerge: boolean,
   ) => Promise<string>;
+  cherryPick: (
+    path: string,
+    commits: string[],
+    opts?: { mainline?: number },
+  ) => Promise<string>;
+  cherryPickContinue: (path: string) => Promise<string>;
+  cherryPickSkip: (path: string) => Promise<string>;
+  cherryPickAbort: (path: string) => Promise<string>;
+  reloadCherryPickState: (path: string) => Promise<CherryPickState>;
   tagCommit: (path: string, name: string, commit: string) => Promise<void>;
   discardFiles: (path: string, files: string[]) => Promise<void>;
   reloadStashes: (path: string) => Promise<void>;
@@ -257,6 +273,7 @@ export const useRepoStore = create<RepoState>()(
       stashesLoading: {},
       prs: {},
       prsLoading: {},
+      cherryPickState: {},
       commitSearchByPath: {},
 
       clearCommitSearch(path) {
@@ -761,6 +778,92 @@ export const useRepoStore = create<RepoState>()(
         });
         await Promise.all([get().reload(path), get().reloadStatus(path)]);
         return out;
+      },
+
+      async cherryPick(path, commits, opts) {
+        try {
+          const out = await invoke<string>("git_cherry_pick", {
+            path,
+            commits,
+            mainline: opts?.mainline ?? null,
+          });
+          await Promise.all([
+            get().reload(path),
+            get().reloadStatus(path),
+            get().reloadCherryPickState(path),
+          ]);
+          return out;
+        } catch (err) {
+          await Promise.all([
+            get().reload(path),
+            get().reloadStatus(path),
+            get().reloadCherryPickState(path),
+          ]);
+          throw err;
+        }
+      },
+
+      async cherryPickContinue(path) {
+        const out = await invoke<string>("git_cherry_pick_continue", { path });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadCherryPickState(path),
+        ]);
+        return out;
+      },
+
+      async cherryPickSkip(path) {
+        const out = await invoke<string>("git_cherry_pick_skip", { path });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadCherryPickState(path),
+        ]);
+        return out;
+      },
+
+      async cherryPickAbort(path) {
+        const out = await invoke<string>("git_cherry_pick_abort", { path });
+        await Promise.all([
+          get().reload(path),
+          get().reloadStatus(path),
+          get().reloadCherryPickState(path),
+        ]);
+        return out;
+      },
+
+      async reloadCherryPickState(path) {
+        const apply = (next: CherryPickState): CherryPickState => {
+          const cur = get().cherryPickState[path];
+          if (
+            cur &&
+            cur.in_progress === next.in_progress &&
+            cur.head === next.head &&
+            cur.conflicted_paths.length === next.conflicted_paths.length &&
+            cur.conflicted_paths.every(
+              (p, i) => p === next.conflicted_paths[i],
+            )
+          ) {
+            return cur;
+          }
+          set((s) => ({
+            cherryPickState: { ...s.cherryPickState, [path]: next },
+          }));
+          return next;
+        };
+        try {
+          const next = await invoke<CherryPickState>("cherry_pick_state", {
+            path,
+          });
+          return apply(next);
+        } catch {
+          return apply({
+            in_progress: false,
+            head: null,
+            conflicted_paths: [],
+          });
+        }
       },
 
       async tagCommit(path, name, commit) {

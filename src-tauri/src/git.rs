@@ -746,6 +746,95 @@ pub fn git_revert_commit(
     run_git_merged_output(&repo, &args)
 }
 
+#[derive(Serialize)]
+pub struct CherryPickState {
+    pub in_progress: bool,
+    pub head: Option<String>,
+    pub conflicted_paths: Vec<String>,
+}
+
+#[tauri::command]
+pub fn git_cherry_pick(
+    path: String,
+    commits: Vec<String>,
+    mainline: Option<u8>,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let cleaned: Vec<String> = commits
+        .iter()
+        .map(|c| c.trim().to_string())
+        .filter(|c| !c.is_empty())
+        .collect();
+    if cleaned.is_empty() {
+        return Err("Mindestens ein Commit-Hash ist erforderlich".into());
+    }
+    let mut parts: Vec<String> = vec!["cherry-pick".into()];
+    if let Some(m) = mainline {
+        if m < 1 {
+            return Err("Mainline-Parent muss mindestens 1 sein".into());
+        }
+        parts.push("-m".into());
+        parts.push(m.to_string());
+    }
+    for c in &cleaned {
+        parts.push(c.clone());
+    }
+    let args: Vec<&str> = parts.iter().map(|s| s.as_str()).collect();
+    run_git_merged_output(&repo, &args)
+}
+
+#[tauri::command]
+pub fn git_cherry_pick_continue(path: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    run_git_merged_output(
+        &repo,
+        &["-c", "core.editor=true", "cherry-pick", "--continue"],
+    )
+}
+
+#[tauri::command]
+pub fn git_cherry_pick_skip(path: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    run_git_merged_output(&repo, &["cherry-pick", "--skip"])
+}
+
+#[tauri::command]
+pub fn git_cherry_pick_abort(path: String) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    run_git_merged_output(&repo, &["cherry-pick", "--abort"])
+}
+
+#[tauri::command]
+pub fn cherry_pick_state(path: String) -> Result<CherryPickState, String> {
+    let repo = PathBuf::from(path.trim());
+    let head_path_raw = run_git(&repo, &["rev-parse", "--git-path", "CHERRY_PICK_HEAD"])?;
+    let head_path = head_path_raw.trim();
+    let abs_head = if std::path::Path::new(head_path).is_absolute() {
+        PathBuf::from(head_path)
+    } else {
+        repo.join(head_path)
+    };
+    let head = std::fs::read_to_string(&abs_head)
+        .ok()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty());
+    let in_progress = head.is_some();
+    let conflicted_paths = if in_progress {
+        let out = run_git(&repo, &["diff", "--name-only", "--diff-filter=U"]).unwrap_or_default();
+        out.lines()
+            .map(|l| l.trim().to_string())
+            .filter(|l| !l.is_empty())
+            .collect()
+    } else {
+        Vec::new()
+    };
+    Ok(CherryPickState {
+        in_progress,
+        head,
+        conflicted_paths,
+    })
+}
+
 #[tauri::command]
 pub fn git_tag_commit(path: String, name: String, commit: String) -> Result<(), String> {
     let repo = PathBuf::from(path.trim());

@@ -4,6 +4,7 @@ import { useRepoStore } from "@/lib/repo-store";
 import { useUiStore } from "@/lib/ui-store";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import type { CommitSelectMode } from "./commit-history-panel";
 import { CommitRow } from "./commit-row";
 
 const ROW_ESTIMATE_PX = 56;
@@ -14,14 +15,21 @@ export function CommitList({
   listMode,
   matchPathsByHash,
   selectedHash,
-  onSelectCommit,
+  selectedHashes,
+  onToggleSelect,
+  onCherryPick,
 }: {
   path: string;
   commits: Commit[];
   listMode: "history" | "search";
   matchPathsByHash: ReadonlyMap<string, string[]>;
   selectedHash: string | null;
-  onSelectCommit: (hash: string) => void;
+  selectedHashes: ReadonlySet<string>;
+  onToggleSelect: (hash: string, mode: CommitSelectMode) => void;
+  onCherryPick: (
+    hashes: string[],
+    opts?: { mainline?: number },
+  ) => Promise<void>;
 }) {
   // Graph topology is a pure function of commit IDs + parent links; metadata
   // mutations like avatar merges should not invalidate the memo.
@@ -36,11 +44,12 @@ export function CommitList({
   const commitFocusRequest = useUiStore((s) => s.commitFocusRequest);
   const clearCommitFocusRequest = useUiStore((s) => s.clearCommitFocusRequest);
 
-  const onSelectCommitRef = useRef(onSelectCommit);
-  onSelectCommitRef.current = onSelectCommit;
-  const onSelectHash = useCallback((hash: string) => {
-    onSelectCommitRef.current(hash);
-  }, []);
+  const onCherryPickCb = useCallback(
+    (hashes: string[], opts?: { mainline?: number }) => {
+      void onCherryPick(hashes, opts);
+    },
+    [onCherryPick],
+  );
 
   const virtualizer = useVirtualizer({
     count: rows.length,
@@ -146,7 +155,10 @@ export function CommitList({
                   normalizeGitOid(selectedHash) ===
                     normalizeGitOid(row.commit.hash)
                 }
-                onSelectHash={onSelectHash}
+                multiSelected={selectedHashes.has(row.commit.hash)}
+                selectedHashes={selectedHashes}
+                onSelectHash={onToggleSelect}
+                onCherryPick={onCherryPickCb}
               />
             </li>
           );
