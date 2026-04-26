@@ -13,6 +13,12 @@ export type CommitFocusRequest = {
   id: number;
 };
 
+export type PrCreateRequest = {
+  path: string;
+  head: string;
+  id: number;
+};
+
 type UiState = {
   sidebarWidth: number;
   setSidebarWidth: (width: number) => void;
@@ -21,6 +27,9 @@ type UiState = {
   commitFocusRequest: CommitFocusRequest | null;
   focusCommitFromBranchTip: (path: string, tipHash: string) => void;
   clearCommitFocusRequest: () => void;
+  prCreateRequest: PrCreateRequest | null;
+  requestPrCreate: (path: string, head: string) => void;
+  clearPrCreateRequest: () => void;
 };
 
 const clamp = (v: number) =>
@@ -44,6 +53,17 @@ export const useUiStore = create<UiState>()(
           },
         })),
       clearCommitFocusRequest: () => set({ commitFocusRequest: null }),
+      prCreateRequest: null,
+      requestPrCreate: (path, head) =>
+        set((s) => ({
+          sidebarTab: "pr",
+          prCreateRequest: {
+            path,
+            head,
+            id: (s.prCreateRequest?.id ?? 0) + 1,
+          },
+        })),
+      clearPrCreateRequest: () => set({ prCreateRequest: null }),
     }),
     {
       name: "l8git-ui",

@@ -10,8 +10,6 @@ import type { Branch } from '@/lib/repo-store';
 import { useRepoStore } from '@/lib/repo-store';
 import { useUiStore } from '@/lib/ui-store';
 import { cn } from '@/lib/utils';
-import { invoke } from '@tauri-apps/api/core';
-import { openUrl } from '@tauri-apps/plugin-opener';
 import {
   Check,
   GitBranch,
@@ -45,6 +43,7 @@ function BranchRowInner({
 }) {
   const checkoutBranch = useRepoStore(s => s.checkoutBranch);
   const focusCommitFromBranchTip = useUiStore(s => s.focusCommitFromBranchTip);
+  const requestPrCreate = useUiStore(s => s.requestPrCreate);
   const [checkoutDraft, setCheckoutDraft] = useState<CheckoutDraft | null>(
     null
   );
@@ -169,17 +168,9 @@ function BranchRowInner({
         <ContextMenuContent>
           <ContextMenuItem
             onSelect={() => {
-              void (async () => {
-                try {
-                  const url = await invoke<string>('pr_create_web_url', {
-                    path,
-                    branch: branch.name,
-                  });
-                  await openUrl(url);
-                } catch (e) {
-                  toastError(String(e));
-                }
-              })();
+              window.requestAnimationFrame(() =>
+                requestPrCreate(path, branch.name),
+              );
             }}
           >
             <GitPullRequest className='h-3.5 w-3.5' />
