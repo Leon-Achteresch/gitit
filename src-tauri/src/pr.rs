@@ -234,7 +234,9 @@ fn parse_origin_url(path: &PathBuf) -> Result<RemoteHandle, String> {
     let provider = match host_lc.as_str() {
         "github.com" => Provider::GitHub,
         "bitbucket.org" => Provider::Bitbucket,
-        _ => Provider::Unsupported,
+        "gitlab.com" => Provider::Unsupported,
+        _ if host_lc.contains("gitlab") => Provider::Unsupported,
+        _ => Provider::GitHub,
     };
     let owner = segments[0].to_string();
     let repo = segments[1..].join("/");
@@ -248,7 +250,25 @@ fn parse_origin_url(path: &PathBuf) -> Result<RemoteHandle, String> {
 
 fn unsupported_provider_err(host: &str) -> String {
     format!(
-        "Pull Requests für den Host {host} werden noch nicht unterstützt (nur GitHub und Bitbucket)."
+        "Pull Requests für den Host {host} werden noch nicht unterstützt (GitHub, GitHub Enterprise und Bitbucket)."
+    )
+}
+
+fn github_api_base(host: &str) -> String {
+    if host.eq_ignore_ascii_case("github.com") {
+        "https://api.github.com".to_string()
+    } else {
+        format!("https://{}/api/v3", host.trim_end_matches('/'))
+    }
+}
+
+fn github_repo_api_url(h: &RemoteHandle, suffix: &str) -> String {
+    format!(
+        "{}/repos/{}/{}/{}",
+        github_api_base(&h.host),
+        h.owner,
+        h.repo,
+        suffix.trim_start_matches('/')
     )
 }
 
@@ -403,9 +423,9 @@ async fn gh_list(client: &reqwest::Client, cred: &HttpsCredential, h: &RemoteHan
     // page of PRs) still costs a single round-trip; deep histories finish in
     // ceil(N/3) sequential waits instead of N.
     let fetch = |page: u64| async move {
-        let url = format!(
-            "https://api.github.com/repos/{}/{}/pulls?state=all&per_page=50&page={page}&sort=updated&direction=desc",
-            h.owner, h.repo
+        let url = github_repo_api_url(
+            h,
+            &format!("pulls?state=all&per_page=50&page={page}&sort=updated&direction=desc"),
         );
         let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
         let val = github_read_json(res, &h.host).await?;
@@ -441,10 +461,7 @@ async fn gh_detail(
     h: &RemoteHandle,
     number: u64,
 ) -> Result<PullRequestDetail, String> {
-    let url = format!(
-        "https://api.github.com/repos/{}/{}/pulls/{number}",
-        h.owner, h.repo
-    );
+    let url = github_repo_api_url(h, &format!("pulls/{number}"));
     let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
     let v = github_read_json(res, &h.host).await?;
     let base = gh_map_pr(&v);
@@ -464,9 +481,9 @@ async fn gh_commits(
     number: u64,
 ) -> Result<Vec<PrCommit>, String> {
     let fetch = |page: u64| async move {
-        let url = format!(
-            "https://api.github.com/repos/{}/{}/pulls/{number}/commits?per_page=100&page={page}",
-            h.owner, h.repo
+        let url = github_repo_api_url(
+            h,
+            &format!("pulls/{number}/commits?per_page=100&page={page}"),
         );
         let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
         let v = github_read_json(res, &h.host).await?;
@@ -519,9 +536,9 @@ async fn gh_files(
     number: u64,
 ) -> Result<Vec<PrFile>, String> {
     let fetch = |page: u64| async move {
-        let url = format!(
-            "https://api.github.com/repos/{}/{}/pulls/{number}/files?per_page=100&page={page}",
-            h.owner, h.repo
+        let url = github_repo_api_url(
+            h,
+            &format!("pulls/{number}/files?per_page=100&page={page}"),
         );
         let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
         let v = github_read_json(res, &h.host).await?;
@@ -566,9 +583,9 @@ async fn gh_file_patch(
     target_path: &str,
 ) -> Result<Option<String>, String> {
     for page in 1..=20 {
-        let url = format!(
-            "https://api.github.com/repos/{}/{}/pulls/{number}/files?per_page=100&page={page}",
-            h.owner, h.repo
+        let url = github_repo_api_url(
+            h,
+            &format!("pulls/{number}/files?per_page=100&page={page}"),
         );
         let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
         let v = github_read_json(res, &h.host).await?;
@@ -594,17 +611,17 @@ async fn gh_conversation(
     h: &RemoteHandle,
     number: u64,
 ) -> Result<PrConversation, String> {
-    let issue_url = format!(
-        "https://api.github.com/repos/{}/{}/issues/{number}/comments?per_page=100",
-        h.owner, h.repo
+    let issue_url = github_repo_api_url(
+        h,
+        &format!("issues/{number}/comments?per_page=100"),
     );
-    let review_comments_url = format!(
-        "https://api.github.com/repos/{}/{}/pulls/{number}/comments?per_page=100",
-        h.owner, h.repo
+    let review_comments_url = github_repo_api_url(
+        h,
+        &format!("pulls/{number}/comments?per_page=100"),
     );
-    let reviews_url = format!(
-        "https://api.github.com/repos/{}/{}/pulls/{number}/reviews?per_page=100",
-        h.owner, h.repo
+    let reviews_url = github_repo_api_url(
+        h,
+        &format!("pulls/{number}/reviews?per_page=100"),
     );
 
     let issue_res = github_request(client, cred, reqwest::Method::GET, &issue_url, None).await?;
@@ -661,10 +678,7 @@ async fn gh_legacy_commit_statuses(
     h: &RemoteHandle,
     head_sha: &str,
 ) -> Result<Vec<PrCheck>, String> {
-    let url = format!(
-        "https://api.github.com/repos/{}/{}/commits/{head_sha}/status",
-        h.owner, h.repo
-    );
+    let url = github_repo_api_url(h, &format!("commits/{head_sha}/status"));
     let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
     let v = github_read_json(res, &h.host).await?;
     let mut out = Vec::new();
@@ -719,9 +733,9 @@ async fn gh_checks(
 ) -> Result<Vec<PrCheck>, String> {
     let mut out = Vec::new();
     for page in 1..=40u32 {
-        let url = format!(
-            "https://api.github.com/repos/{}/{}/commits/{head_sha}/check-runs?per_page=100&page={page}",
-            h.owner, h.repo
+        let url = github_repo_api_url(
+            h,
+            &format!("commits/{head_sha}/check-runs?per_page=100&page={page}"),
         );
         let res = github_request(client, cred, reqwest::Method::GET, &url, None).await?;
         let v = github_read_json(res, &h.host).await?;
@@ -1129,13 +1143,13 @@ async fn bb_checks_for_commit(
 async fn github_commit_author_avatar_for_sha(
     client: &reqwest::Client,
     cred: &HttpsCredential,
+    api_base: &str,
     owner: &str,
     repo: &str,
     sha: String,
 ) -> CommitAvatarEntry {
     let url = format!(
-        "https://api.github.com/repos/{}/{}/commits/{}",
-        owner, repo, sha
+        "{api_base}/repos/{owner}/{repo}/commits/{sha}"
     );
     let res = match github_request(client, cred, reqwest::Method::GET, &url, None).await {
         Ok(r) => r,
@@ -1237,11 +1251,12 @@ async fn resolve_unique_commit_avatars_github(
             username: cred.username.clone(),
             password: cred.password.clone(),
         };
+        let api_base = github_api_base(&h.host);
         let owner = h.owner.clone();
         let repo = h.repo.clone();
         set.spawn(async move {
             let _permit = sem.acquire().await.ok();
-            github_commit_author_avatar_for_sha(&client, &cred, &owner, &repo, sha).await
+            github_commit_author_avatar_for_sha(&client, &cred, &api_base, &owner, &repo, sha).await
         });
     }
     let mut out = Vec::new();
@@ -1334,6 +1349,16 @@ fn origin_default_branch(repo: &PathBuf) -> Result<String, String> {
     Ok("main".to_string())
 }
 
+fn current_branch(repo: &PathBuf) -> Result<String, String> {
+    let branch = run_git(repo, &["rev-parse", "--abbrev-ref", "HEAD"])?
+        .trim()
+        .to_string();
+    if branch.is_empty() || branch == "HEAD" {
+        return Err("Aktueller Branch konnte nicht bestimmt werden.".into());
+    }
+    Ok(branch)
+}
+
 fn strip_remote_prefix(repo: &PathBuf, name: &str) -> Result<String, String> {
     let n = name.trim();
     if n.is_empty() {
@@ -1385,6 +1410,94 @@ pub fn pr_create_web_url(path: String, branch: String) -> Result<String, String>
                 encode_uri_component(&source_val),
                 encode_uri_component(&dest_val),
             ))
+        }
+        Provider::Unsupported => Err(unsupported_provider_err(&h.host)),
+    }
+}
+
+#[tauri::command]
+pub async fn pr_create(
+    path: String,
+    title: String,
+    body: String,
+    head: String,
+    base: String,
+    draft: bool,
+) -> Result<PullRequest, String> {
+    let p = repo_path(&path);
+    if !p.is_dir() {
+        return Err("Pfad ist kein Verzeichnis.".into());
+    }
+    let title = title.trim().to_string();
+    if title.is_empty() {
+        return Err("Titel darf nicht leer sein.".into());
+    }
+    let h = parse_origin_url(&p)?;
+    let head_source = if head.trim().is_empty() {
+        current_branch(&p)?
+    } else {
+        head.trim().to_string()
+    };
+    let head = strip_remote_prefix(&p, &head_source)?;
+    if head.is_empty() {
+        return Err("Head-Branch darf nicht leer sein.".into());
+    }
+    let base = if base.trim().is_empty() {
+        origin_default_branch(&p)?
+    } else {
+        strip_remote_prefix(&p, &base)?
+    };
+    if base.is_empty() {
+        return Err("Base-Branch darf nicht leer sein.".into());
+    }
+    if head == base {
+        return Err("Head- und Base-Branch müssen unterschiedlich sein.".into());
+    }
+
+    let cred = read_https_credential(&h.host)?;
+    let client = http_client()?;
+    match h.provider {
+        Provider::GitHub => {
+            let url = github_repo_api_url(&h, "pulls");
+            let res = github_request(
+                &client,
+                &cred,
+                reqwest::Method::POST,
+                &url,
+                Some(json!({
+                    "title": title,
+                    "body": body,
+                    "head": head,
+                    "base": base,
+                    "draft": draft
+                })),
+            )
+            .await?;
+            let v = github_read_json(res, &h.host).await?;
+            Ok(gh_map_pr(&v))
+        }
+        Provider::Bitbucket => {
+            if draft {
+                return Err("Bitbucket unterstützt Draft-Pull-Requests hier nicht.".into());
+            }
+            let url = format!(
+                "https://api.bitbucket.org/2.0/repositories/{}/{}/pullrequests",
+                h.owner, h.repo
+            );
+            let v = bb_post_json(
+                &client,
+                &cred,
+                &url,
+                &h.host,
+                json!({
+                    "title": title,
+                    "description": body,
+                    "source": { "branch": { "name": head } },
+                    "destination": { "branch": { "name": base } }
+                }),
+            )
+            .await?;
+            Ok(bb_map_pr(&v))
         }
         Provider::Unsupported => Err(unsupported_provider_err(&h.host)),
     }
@@ -1651,10 +1764,7 @@ pub async fn pr_add_comment(path: String, number: u64, body: String) -> Result<(
     let client = http_client()?;
     match h.provider {
         Provider::GitHub => {
-            let url = format!(
-                "https://api.github.com/repos/{}/{}/issues/{number}/comments",
-                h.owner, h.repo
-            );
+            let url = github_repo_api_url(&h, &format!("issues/{number}/comments"));
             let res = github_request(
                 &client,
                 &cred,
@@ -1699,10 +1809,7 @@ pub async fn pr_submit_review(
     let ev = event.to_uppercase();
     match h.provider {
         Provider::GitHub => {
-            let url = format!(
-                "https://api.github.com/repos/{}/{}/pulls/{number}/reviews",
-                h.owner, h.repo
-            );
+            let url = github_repo_api_url(&h, &format!("pulls/{number}/reviews"));
             let payload = json!({ "event": ev, "body": body });
             let res = github_request(&client, &cred, reqwest::Method::POST, &url, Some(payload))
                 .await?;
@@ -1774,10 +1881,7 @@ pub async fn pr_merge(
                 "rebase" => "rebase",
                 _ => "merge",
             };
-            let url = format!(
-                "https://api.github.com/repos/{}/{}/pulls/{number}/merge",
-                h.owner, h.repo
-            );
+            let url = github_repo_api_url(&h, &format!("pulls/{number}/merge"));
             let mut body = json!({ "merge_method": gh_strat });
             if let Some(m) = message.filter(|s| !s.trim().is_empty()) {
                 body["commit_message"] = Value::String(m);

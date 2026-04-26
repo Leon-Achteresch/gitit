@@ -4,6 +4,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { useRepoStore } from "@/lib/repo-store";
+import { useUiStore } from "@/lib/ui-store";
 import { useEffect, useState } from "react";
 import { PullRequestInspectDetail } from "./pull-request-inspect-detail";
 import { PullRequestList } from "./pull-request-list";
@@ -15,7 +16,15 @@ export function PullRequestPanel({ path }: { path: string }) {
   const prs = useRepoStore((s) => s.prs[path]);
   const loading = useRepoStore((s) => !!s.prsLoading[path]);
   const loadPRs = useRepoStore((s) => s.loadPRs);
+  const currentBranch = useRepoStore((s) => s.repos[path]?.branch ?? "");
+  const branches = useRepoStore((s) => s.repos[path]?.branches ?? []);
+  const prCreateRequest = useUiStore((s) => s.prCreateRequest);
+  const clearPrCreateRequest = useUiStore((s) => s.clearPrCreateRequest);
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createInitialHead, setCreateInitialHead] = useState<
+    string | undefined
+  >(undefined);
   const [defaultLayout] = useState<Record<string, number> | undefined>(() => {
     const raw = localStorage.getItem(layoutStorageKey);
     if (!raw) return undefined;
@@ -28,10 +37,45 @@ export function PullRequestPanel({ path }: { path: string }) {
 
   useEffect(() => {
     setSelectedNumber(null);
+    setCreateOpen(false);
+    setCreateInitialHead(undefined);
     if (!prs) {
       void loadPRs(path);
     }
   }, [path, prs, loadPRs]);
+
+  useEffect(() => {
+    if (!prCreateRequest) return;
+    if (prCreateRequest.path !== path) return;
+    setCreateInitialHead(prCreateRequest.head);
+    setCreateOpen(true);
+    setSelectedNumber(null);
+    clearPrCreateRequest();
+  }, [prCreateRequest, path, clearPrCreateRequest]);
+
+  const listProps = {
+    path,
+    prs,
+    loading,
+    selectedNumber,
+    branches,
+    currentBranch,
+    createOpen,
+    createInitialHead,
+    onOpenCreate: () => {
+      setCreateInitialHead(undefined);
+      setCreateOpen(true);
+    },
+    onCloseCreate: () => {
+      setCreateOpen(false);
+      setCreateInitialHead(undefined);
+    },
+    onCreated: (pr: { number: number }) => {
+      void loadPRs(path);
+      setSelectedNumber(pr.number);
+    },
+    onReload: () => loadPRs(path),
+  };
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden shadow-sm ring-1 ring-border/50">
@@ -52,13 +96,10 @@ export function PullRequestPanel({ path }: { path: string }) {
             className="min-h-0 flex flex-col"
           >
             <PullRequestList
-              prs={prs}
-              loading={loading}
-              selectedNumber={selectedNumber}
+              {...listProps}
               onSelect={(n) =>
                 setSelectedNumber((cur) => (cur === n ? null : n))
               }
-              onReload={() => loadPRs(path)}
             />
           </ResizablePanel>
           <ResizableHandle
@@ -81,11 +122,8 @@ export function PullRequestPanel({ path }: { path: string }) {
         </ResizablePanelGroup>
       ) : (
         <PullRequestList
-          prs={prs}
-          loading={loading}
-          selectedNumber={selectedNumber}
+          {...listProps}
           onSelect={(n) => setSelectedNumber(n)}
-          onReload={() => loadPRs(path)}
         />
       )}
     </div>

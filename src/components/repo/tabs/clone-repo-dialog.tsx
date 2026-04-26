@@ -32,6 +32,8 @@ const API_HOSTS = {
   bitbucket: "bitbucket.org",
 } as const;
 
+const BUILTIN_API_HOSTS = new Set<string>(Object.values(API_HOSTS));
+
 export function CloneRepoDialog({
   open,
   onClose,
@@ -52,6 +54,10 @@ export function CloneRepoDialog({
   const [pickedRepo, setPickedRepo] = useState<RemoteRepo | null>(null);
   const [busy, setBusy] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
+
+  const customRemoteAccounts = accounts.filter(
+    (a) => a.signed_in && !BUILTIN_API_HOSTS.has(a.host),
+  );
 
   const reset = useCallback(() => {
     setMode("pick");
@@ -249,6 +255,23 @@ export function CloneRepoDialog({
                   </span>
                 ) : null}
               </Button>
+              {customRemoteAccounts.map((account) => (
+                <Button
+                  key={account.host}
+                  type="button"
+                  variant="outline"
+                  className="h-auto justify-start py-2.5"
+                  onClick={() => {
+                    setApiHost(account.host);
+                    setMode("remote");
+                  }}
+                >
+                  <span className="text-left font-medium">{account.name}</span>
+                  <span className="ml-auto truncate text-xs text-muted-foreground">
+                    {account.host}
+                  </span>
+                </Button>
+              ))}
             </div>
           )}
 

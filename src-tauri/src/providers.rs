@@ -23,6 +23,14 @@ pub(crate) fn http_client() -> Result<reqwest::Client, String> {
         .map_err(|e| format!("HTTP-Client: {e}"))
 }
 
+fn github_api_base(host: &str) -> String {
+    if host.eq_ignore_ascii_case("github.com") {
+        "https://api.github.com".to_string()
+    } else {
+        format!("https://{}/api/v3", host.trim_end_matches('/'))
+    }
+}
+
 fn bitbucket_secret_likely_jwt(secret: &str) -> bool {
     let parts: Vec<&str> = secret.split('.').collect();
     parts.len() >= 3
@@ -156,9 +164,9 @@ fn bitbucket_remote_repo_from_value(v: &Value) -> Option<RemoteRepo> {
 async fn github_list(host: &str) -> Result<Vec<RemoteRepo>, String> {
     let cred = read_https_credential(host)?;
     let client = http_client()?;
-    let url = "https://api.github.com/user/repos?per_page=100&sort=updated";
+    let url = format!("{}/user/repos?per_page=100&sort=updated", github_api_base(host));
     let res = client
-        .get(url)
+        .get(&url)
         .header("Accept", "application/vnd.github+json")
         .header("User-Agent", "l8git")
         .header(
@@ -302,6 +310,10 @@ pub async fn list_remote_repos(host: String) -> Result<Vec<RemoteRepo>, String> 
         "dev.azure.com" => Err(
             "Azure DevOps: Repo-Liste wird hier noch nicht unterstützt.".into(),
         ),
-        _ => gitlab_list(h).await,
+        _ if host_lc.contains("github") => github_list(h).await,
+        _ => match github_list(h).await {
+            Ok(repos) => Ok(repos),
+            Err(_) => gitlab_list(h).await,
+        },
     }
 }

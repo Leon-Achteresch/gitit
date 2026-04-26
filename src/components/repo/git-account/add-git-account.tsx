@@ -12,6 +12,7 @@ type Provider = { id: string; name: string; host: string; builtin: boolean };
 
 const PROVIDERS: Provider[] = [
   { id: "github", name: "GitHub", host: "github.com", builtin: true },
+  { id: "github-enterprise", name: "GitHub Enterprise", host: "", builtin: false },
   { id: "gitlab", name: "GitLab", host: "gitlab.com", builtin: true },
   { id: "bitbucket", name: "Bitbucket", host: "bitbucket.org", builtin: true },
   { id: "azure", name: "Azure DevOps", host: "dev.azure.com", builtin: true },
@@ -73,7 +74,7 @@ export function AddGitAccount({
     setBusy(true);
     try {
       if (!provider.builtin) {
-        onAddCustomHost(customName || host, host);
+        onAddCustomHost(customName || (provider.id === "custom" ? host : provider.name), host);
       }
       await onSignIn(host, username.trim(), token);
       finish();
@@ -94,7 +95,7 @@ export function AddGitAccount({
     setBusy(true);
     try {
       if (!provider.builtin) {
-        onAddCustomHost(customName || host, host);
+        onAddCustomHost(customName || (provider.id === "custom" ? host : provider.name), host);
       }
       await onSignInViaCredentialManager(host);
       finish();
@@ -199,7 +200,7 @@ export function AddGitAccount({
                     spellCheck={false}
                     value={customName}
                     onChange={(e) => setCustomName(e.target.value)}
-                    placeholder="Self-hosted GitLab"
+                    placeholder={provider.id === "github-enterprise" ? "GitHub Enterprise" : "Self-hosted Git"}
                   />
                 </div>
                 <div className="grid gap-1">
@@ -227,7 +228,7 @@ export function AddGitAccount({
                 Über Credential Manager anmelden
               </Button>
               <p className="text-[0.7rem] text-muted-foreground">
-                Öffnet den Git Credential Manager (z. B. Browser-Login bei GitLab).
+                Öffnet den Git Credential Manager (z. B. Browser-Login beim Anbieter).
               </p>
             </div>
             <div className="flex items-center gap-2 py-0.5">

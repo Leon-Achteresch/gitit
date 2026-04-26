@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CommitAvatar } from "@/components/repo/commit/commit-avatar";
 import { formatDate, formatRelative } from "@/lib/format";
-import type { PullRequest } from "@/lib/repo-store";
+import type { Branch, PullRequest } from "@/lib/repo-store";
 import {
   Check,
   ChevronDown,
@@ -10,8 +10,13 @@ import {
   Loader2,
   RefreshCw,
 } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { PullRequestStateBadge } from "./pull-request-state-badge";
+import {
+  PullRequestCreatePanel,
+  PullRequestCreateTrigger,
+} from "./pull-request-create-panel";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const STATE_OPTIONS: { value: string; label: string }[] = [
@@ -49,15 +54,31 @@ function toggle(list: string[], value: string): string[] {
 }
 
 export function PullRequestList({
+  path,
   prs,
   loading,
   selectedNumber,
+  branches,
+  currentBranch,
+  createOpen,
+  createInitialHead,
+  onOpenCreate,
+  onCloseCreate,
+  onCreated,
   onSelect,
   onReload,
 }: {
+  path: string;
   prs: PullRequest[] | undefined;
   loading: boolean;
   selectedNumber: number | null;
+  branches: Branch[];
+  currentBranch: string;
+  createOpen: boolean;
+  createInitialHead?: string;
+  onOpenCreate: () => void;
+  onCloseCreate: () => void;
+  onCreated: (pr: PullRequest) => void;
   onSelect: (n: number) => void;
   onReload: () => void;
 }) {
@@ -131,20 +152,25 @@ export function PullRequestList({
             </span>
           ) : null}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onReload}
-          disabled={loading}
-          className="h-7"
-        >
-          {loading ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <RefreshCw className="h-3.5 w-3.5" />
-          )}
-          <span className="ml-1 text-xs">Aktualisieren</span>
-        </Button>
+        <div className="flex items-center gap-1">
+          {!createOpen ? (
+            <PullRequestCreateTrigger onOpen={onOpenCreate} />
+          ) : null}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onReload}
+            disabled={loading}
+            className="h-7"
+          >
+            {loading ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <RefreshCw className="h-3.5 w-3.5" />
+            )}
+            <span className="ml-1 text-xs">Aktualisieren</span>
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 border-b bg-background/60 px-3 py-2 text-xs">
@@ -242,6 +268,20 @@ export function PullRequestList({
           </Button>
         ) : null}
       </div>
+
+      <AnimatePresence initial={false}>
+        {createOpen ? (
+          <PullRequestCreatePanel
+            key={`pr-create-panel-${createInitialHead ?? currentBranch}`}
+            path={path}
+            branches={branches}
+            currentBranch={currentBranch}
+            initialHead={createInitialHead}
+            onClose={onCloseCreate}
+            onCreated={onCreated}
+          />
+        ) : null}
+      </AnimatePresence>
 
       <ScrollArea className="min-h-0 flex-1">
         {loading && !prs ? (
