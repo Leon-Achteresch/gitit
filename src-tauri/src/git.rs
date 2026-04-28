@@ -3125,3 +3125,223 @@ pub fn repo_language_stats(path: String) -> Result<Vec<LanguageStat>, String> {
     stats.sort_by(|a, b| b.bytes.cmp(&a.bytes));
     Ok(stats)
 }
+
+// ── Submodules ──────────────────────────────────────────────────────────────
+
+#[derive(Serialize, Clone)]
+pub struct SubmoduleEntry {
+    pub name: String,
+    pub path: String,
+    pub url: String,
+    pub commit: String,
+    pub status: String,
+    pub description: Option<String>,
+    pub branch: Option<String>,
+}
+
+fn parse_gitmodules(content: &str) -> Vec<(String, String, Option<String>, Option<String>)> {
+    let mut entries: Vec<(String, String, Option<String>, Option<String>)> = Vec::new();
+    let mut current_name: Option<String> = None;
+    let mut current_path: Option<String> = None;
+    let mut current_url: Option<String> = None;
+    let mut current_branch: Option<String> = None;
+
+    let flush = |name: Option<String>,
+                 path: Option<String>,
+                 url: Option<String>,
+                 branch: Option<String>,
+                 entries: &mut Vec<_>| {
+        if let Some(n) = name {
+            entries.push((n, path.unwrap_or_default(), url, branch));
+        }
+    };
+
+    for line in content.lines() {
+        let line = line.trim();
+        if line.starts_with("[submodule") {
+            flush(current_name.take(), current_path.take(), current_url.take(), current_branch.take(), &mut entries);
+            if let (Some(s), Some(e)) = (line.find('"'), line.rfind('"')) {
+                if s < e {
+                    current_name = Some(line[s + 1..e].to_string());
+                }
+            }
+        } else if let Some((k, v)) = line.split_once('=') {
+            match k.trim() {
+                "path" => current_path = Some(v.trim().to_string()),
+                "url" => current_url = Some(v.trim().to_string()),
+                "branch" => current_branch = Some(v.trim().to_string()),
+                _ => {}
+            }
+        }
+    }
+    flush(current_name, current_path, current_url, current_branch, &mut entries);
+    entries
+}
+
+#[tauri::command]
+pub fn list_submodules(path: String) -> Result<Vec<SubmoduleEntry>, String> {
+    let repo = PathBuf::from(path.trim());
+
+    let gitmodules_content = std::fs::read_to_string(repo.join(".gitmodules")).unwrap_or_default();
+    let defs = parse_gitmodules(&gitmodules_content);
+
+    let mut by_path: HashMap<String, (String, Option<String>, Option<String>)> = HashMap::new();
+    for (name, mod_path, url, branch) in &defs {
+        by_path.insert(mod_path.clone(), (name.clone(), url.clone(), branch.clone()));
+    }
+
+    let status_out = run_git(&repo, &["submodule", "status"]).unwrap_or_default();
+
+    let mut entries: Vec<SubmoduleEntry> = Vec::new();
+    for line in status_out.lines() {
+        if line.is_empty() {
+            continue;
+        }
+        let prefix = &line[..1];
+        let rest = &line[1..];
+        let mut parts = rest.splitn(3, ' ');
+        let Some(commit) = parts.next() else { continue };
+        let Some(sub_path) = parts.next() else { continue };
+        let description = parts.next().map(|d| {
+            let d = d.trim();
+            if d.starts_with('(') && d.ends_with(')') {
+                d[1..d.len() - 1].to_string()
+            } else {
+                d.to_string()
+            }
+        });
+
+        let status = match prefix {
+            "+" => "modified",
+            "-" => "uninitialized",
+            "U" => "conflict",
+            _ => "initialized",
+        }
+        .to_string();
+
+        let (name, url, branch) = by_path
+            .get(sub_path)
+            .cloned()
+            .unwrap_or_else(|| (sub_path.to_string(), None, None));
+
+        entries.push(SubmoduleEntry {
+            name,
+            path: sub_path.to_string(),
+            url: url.unwrap_or_default(),
+            commit: commit.to_string(),
+            status,
+            description,
+            branch,
+        });
+    }
+
+    if entries.is_empty() && !defs.is_empty() {
+        for (name, mod_path, url, branch) in defs {
+            entries.push(SubmoduleEntry {
+                name,
+                path: mod_path,
+                url: url.unwrap_or_default(),
+                commit: String::new(),
+                status: "uninitialized".to_string(),
+                description: None,
+                branch,
+            });
+        }
+    }
+
+    Ok(entries)
+}
+
+#[tauri::command]
+pub fn git_submodule_init(path: String, submodule_path: Option<String>) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let mut args = vec!["submodule", "init"];
+    let sub = submodule_path.unwrap_or_default();
+    if !sub.is_empty() {
+        args.push("--");
+        args.push(sub.as_str());
+    }
+    run_git_merged_output(&repo, &args)
+}
+
+#[tauri::command]
+pub fn git_submodule_update(
+    path: String,
+    submodule_path: Option<String>,
+    init: bool,
+    recursive: bool,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let mut args = vec!["submodule", "update"];
+    if init {
+        args.push("--init");
+    }
+    if recursive {
+        args.push("--recursive");
+    }
+    let sub = submodule_path.unwrap_or_default();
+    if !sub.is_empty() {
+        args.push("--");
+        args.push(sub.as_str());
+    }
+    run_git_merged_output(&repo, &args)
+}
+
+#[tauri::command]
+pub fn git_submodule_sync(
+    path: String,
+    submodule_path: Option<String>,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let mut args = vec!["submodule", "sync"];
+    let sub = submodule_path.unwrap_or_default();
+    if !sub.is_empty() {
+        args.push("--");
+        args.push(sub.as_str());
+    }
+    run_git_merged_output(&repo, &args)
+}
+
+#[tauri::command]
+pub fn git_submodule_add(
+    path: String,
+    url: String,
+    subpath: String,
+    name: Option<String>,
+    branch: Option<String>,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let mut args: Vec<String> = vec!["submodule".into(), "add".into()];
+    if let Some(b) = branch {
+        if !b.is_empty() {
+            args.push("-b".into());
+            args.push(b);
+        }
+    }
+    if let Some(n) = name {
+        if !n.is_empty() {
+            args.push("--name".into());
+            args.push(n);
+        }
+    }
+    args.push(url);
+    args.push(subpath);
+    let arg_refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+    run_git_merged_output(&repo, &arg_refs)
+}
+
+#[tauri::command]
+pub fn git_submodule_deinit(
+    path: String,
+    submodule_path: String,
+    force: bool,
+) -> Result<String, String> {
+    let repo = PathBuf::from(path.trim());
+    let mut args = vec!["submodule", "deinit"];
+    if force {
+        args.push("--force");
+    }
+    args.push("--");
+    args.push(submodule_path.as_str());
+    run_git_merged_output(&repo, &args)
+}
