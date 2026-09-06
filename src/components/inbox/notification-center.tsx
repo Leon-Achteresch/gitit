@@ -121,7 +121,7 @@ function TabLabel({ label, count, active }: { label: string; count: number; acti
       <span className="truncate">{label}</span>
       <span
         className={cn(
-          "inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-md px-1 text-[11px] font-medium tabular-nums",
+          "inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-md px-1 text-[0.6875rem] font-medium tabular-nums",
           active ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
         )}
       >
@@ -147,7 +147,8 @@ function NotificationCard({
   const unread = item.unread === true;
   return (
     <StaggerItem index={index}>
-      <article
+      <m.article
+        layout
         role="button"
         tabIndex={0}
         title={item.tooltip}
@@ -167,11 +168,11 @@ function NotificationCard({
         {item.visual}
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex min-w-0 items-start justify-between gap-3">
-            <p className={cn("min-w-0 truncate text-[13px]", unread ? "font-semibold" : "font-medium")}>
+            <p className={cn("min-w-0 truncate text-[0.8125rem]", unread ? "font-semibold" : "font-medium")}>
               {item.title}
             </p>
             <div className="flex shrink-0 items-center gap-2">
-              <span className="whitespace-nowrap text-[11px] tabular-nums text-muted-foreground">
+              <span className="whitespace-nowrap text-[0.6875rem] tabular-nums text-muted-foreground">
                 {item.timestamp}
               </span>
               {item.externalUrl ? (
@@ -201,7 +202,7 @@ function NotificationCard({
                   key={badge.label}
                   title={badge.title}
                   className={cn(
-                    "inline-flex shrink-0 items-center rounded-full px-1.5 py-px text-[10px] font-medium",
+                    "inline-flex shrink-0 items-center rounded-full px-1.5 py-px text-[0.625rem] font-medium",
                     BADGE_TONE[badge.tone ?? "neutral"],
                   )}
                 >
@@ -228,7 +229,7 @@ function NotificationCard({
             </div>
           ) : null}
         </div>
-      </article>
+      </m.article>
     </StaggerItem>
   );
 }
@@ -332,7 +333,7 @@ export function NotificationCenter({
 
       {errorBanner}
 
-      <m.div
+      <m.div layout
         key={activeTab}
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
@@ -360,8 +361,8 @@ export function NotificationCenter({
                   {GroupIcon ? (
                     <GroupIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
                   ) : null}
-                  <h2 className="min-w-0 flex-1 truncate text-[13px] font-medium">{group.title}</h2>
-                  <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-muted px-1.5 text-[11px] font-medium tabular-nums text-muted-foreground">
+                  <h2 className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium">{group.title}</h2>
+                  <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-muted px-1.5 text-[0.6875rem] font-medium tabular-nums text-muted-foreground">
                     {group.count}
                   </span>
                 </header>

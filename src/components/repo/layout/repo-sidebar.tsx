@@ -361,14 +361,14 @@ export function RepoSidebar() {
                   {t("sidebar.moreTabs")}
                 </span>
                 {!showRare && rareCountSum > 0 && (
-                  <span className="flex h-[14px] min-w-[14px] shrink-0 items-center justify-center rounded-full bg-muted px-0.5 text-[9px] font-bold tabular-nums text-muted-foreground ring-1 ring-border">
+                  <span className="flex h-[14px] min-w-[14px] shrink-0 items-center justify-center rounded-full bg-muted px-0.5 text-[0.5625rem] font-bold tabular-nums text-muted-foreground ring-1 ring-border">
                     {rareCountSum > 9 ? "9+" : rareCountSum}
                   </span>
                 )}
               </ListRow>
               <AnimatePresence initial={false}>
                 {showRare && (
-                  <m.div
+                  <m.div layout
                     key="rare-tabs"
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
@@ -406,7 +406,7 @@ export function RepoSidebar() {
                 >
                   <GitBranch className="h-4 w-4" />
                   {totalBranchTagCount > 0 && (
-                    <span className="pointer-events-none absolute right-0.5 top-0.5 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-muted px-0.5 text-[9px] font-bold tabular-nums text-muted-foreground ring-1 ring-border">
+                    <span className="pointer-events-none absolute right-0.5 top-0.5 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-muted px-0.5 text-[0.5625rem] font-bold tabular-nums text-muted-foreground ring-1 ring-border">
                       {totalBranchTagCount > 99 ? "99+" : totalBranchTagCount}
                     </span>
                   )}
@@ -439,7 +439,7 @@ export function RepoSidebar() {
           <>
             <div className="flex shrink-0 items-center gap-1.5 px-3 pb-0.5 pt-2">
               <GitBranch className="h-3.5 w-3.5 shrink-0 text-muted-foreground/70" />
-              <span className="min-w-0 flex-1 truncate text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              <span className="min-w-0 flex-1 truncate text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                 {t("sidebar.branchPopoverTitle")}
               </span>
               {newBranchButton}
@@ -456,12 +456,23 @@ export function RepoSidebar() {
 
       <div
         role="separator"
+        tabIndex={0}
+        aria-label={t('audit.resizeSidebar')}
+        onKeyDown={event => {
+          const width = tabLayout === 'grid' ? gridSidebarWidth : sidebarWidth;
+          const min = tabLayout === 'grid' ? GRID_SIDEBAR_MIN_WIDTH : SIDEBAR_MIN_WIDTH;
+          const max = tabLayout === 'grid' ? GRID_SIDEBAR_MAX_WIDTH : SIDEBAR_MAX_WIDTH;
+          const next = event.key === 'Home' ? min : event.key === 'End' ? max : event.key === 'ArrowLeft' ? width - 16 : event.key === 'ArrowRight' ? width + 16 : null;
+          if (next === null) return;
+          event.preventDefault();
+          (tabLayout === 'grid' ? setGridSidebarWidth : setSidebarWidth)(next);
+        }}
         aria-orientation="vertical"
         aria-valuemin={tabLayout === "grid" ? GRID_SIDEBAR_MIN_WIDTH : SIDEBAR_MIN_WIDTH}
         aria-valuemax={tabLayout === "grid" ? GRID_SIDEBAR_MAX_WIDTH : SIDEBAR_MAX_WIDTH}
         aria-valuenow={tabLayout === "grid" ? gridSidebarWidth : sidebarWidth}
         onPointerDown={onPointerDown}
-        className="group absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize select-none"
+        className="group absolute inset-y-0 -right-1 z-10 w-2 cursor-col-resize select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
       >
         <div
           className={cn(

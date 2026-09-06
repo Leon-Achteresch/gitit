@@ -14,7 +14,7 @@ export function ToolResultAction({
   const reduce = useReducedMotion() ?? false;
 
   return (
-    <m.button
+    <m.button layout
       type="button"
       aria-label={label}
       title={label}

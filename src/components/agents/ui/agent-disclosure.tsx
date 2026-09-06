@@ -22,7 +22,7 @@ export function AgentDisclosure({
   const reduce = useReducedMotion() ?? false;
 
   return (
-    <m.div
+    <m.div layout
       {...props}
       aria-hidden={!open}
       inert={!open}

@@ -118,12 +118,12 @@ export function TodoList({
         className="group flex h-10 w-full items-center gap-2.5 px-3 text-left outline-none transition-colors hover:bg-[var(--ag-hover)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
       >
         <TodoHeaderIcon complete={allComplete} />
-        <h3 className="min-w-0 flex-1 truncate text-[12px] font-medium">
+        <h3 className="min-w-0 flex-1 truncate text-[0.75rem] font-medium">
           {title}
         </h3>
         <span
           className={cn(
-            "shrink-0 text-[11px] font-medium tabular-nums text-[var(--ag-text-2)]",
+            "shrink-0 text-[0.6875rem] font-medium tabular-nums text-[var(--ag-text-2)]",
             allComplete && "text-[var(--git-added)]",
           )}
         >
@@ -138,7 +138,7 @@ export function TodoList({
             <span>{items.length}</span>
           </span>
         </span>
-        <m.span
+        <m.span layout
           aria-hidden="true"
           animate={{ rotate: currentOpen ? 180 : 0 }}
           transition={reduce ? { duration: 0 } : SPRING_SWAP}
@@ -194,7 +194,7 @@ export function TodoList({
                         </span>
                         <span
                           className={cn(
-                            "min-w-0 flex-1 truncate text-[13px] leading-5",
+                            "min-w-0 flex-1 truncate text-[0.8125rem] leading-5",
                             status === "pending" && "text-[var(--ag-text-3)]",
                             status === "in-progress" && "text-[var(--ag-text)]",
                             status === "completed" && "text-[var(--ag-text-3)]",
@@ -203,7 +203,7 @@ export function TodoList({
                         >
                           <span className="relative inline-block max-w-full">
                             {item.title}
-                            <m.span
+                            <m.span layout
                               aria-hidden="true"
                               initial={false}
                               animate={{

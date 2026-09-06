@@ -215,22 +215,22 @@ export function ToolResult({
           {icon ?? <KindIcon kind={kind} />}
         </span>
         <span className="flex min-w-0 flex-1 items-baseline gap-2">
-          <span className="min-w-0 truncate text-[12px] font-medium">
+          <span className="min-w-0 truncate text-[0.75rem] font-medium">
             <ActionSwapRollText value={titleKey}>{title}</ActionSwapRollText>
           </span>
           {meta ? (
-            <span className="text-[var(--ag-text-3)] shrink-0 truncate text-[11px]">
+            <span className="text-[var(--ag-text-3)] shrink-0 truncate text-[0.6875rem]">
               <ActionSwapRollText value={metaKey}>{meta}</ActionSwapRollText>
             </span>
           ) : null}
-          <span className="text-[var(--ag-text-3)] hidden min-w-0 truncate font-mono text-[10px] sm:block">
+          <span className="text-[var(--ag-text-3)] hidden min-w-0 truncate font-mono text-[0.625rem] sm:block">
             <ActionSwapRollText value={toolKey}>{tool}</ActionSwapRollText>
           </span>
         </span>
         <span
           title={statusLabel}
           className={cn(
-            "inline-flex shrink-0 items-center gap-1 text-[11px] font-medium",
+            "inline-flex shrink-0 items-center gap-1 text-[0.6875rem] font-medium",
             getStatusClass(status),
           )}
         >
@@ -241,7 +241,7 @@ export function ToolResult({
             <ActionSwapRollText value={status}>{statusLabel}</ActionSwapRollText>
           )}
         </span>
-        <m.span
+        <m.span layout
           aria-hidden="true"
           animate={{ rotate: currentOpen ? 180 : 0 }}
           transition={reduce ? { duration: 0 } : SPRING_SWAP}
@@ -289,7 +289,7 @@ export function ToolResult({
                   <RotateCcw className="size-3.5" />
                 </ToolResultAction>
               ) : null}
-              <span className="text-[var(--ag-text-3)] ml-auto text-[11px]">
+              <span className="text-[var(--ag-text-3)] ml-auto text-[0.6875rem]">
                 <ActionSwapRollText value={status}>
                   {statusLabel}
                 </ActionSwapRollText>

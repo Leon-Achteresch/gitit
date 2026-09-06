@@ -41,7 +41,7 @@ export interface StreamingResponseProps {
 }
 
 export const AGENT_PROSE_CLASS =
-  "text-sm leading-6 text-[var(--ag-text)] [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded-[5px] [&_code]:bg-[var(--ag-surface-2)] [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.9em] [&_h1]:mt-5 [&_h1]:text-[16px] [&_h1]:font-semibold [&_h2]:mt-5 [&_h2]:text-[15px] [&_h2]:font-semibold [&_h3]:mt-4 [&_h3]:text-[14px] [&_h3]:font-semibold [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5 [&_p+p]:mt-3 [&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-[12px] [&_pre]:border [&_pre]:border-[var(--ag-line)] [&_pre]:bg-[var(--ag-surface-3)] [&_pre]:p-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5";
+  "text-sm leading-6 text-[var(--ag-text)] [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded-[5px] [&_code]:bg-[var(--ag-surface-2)] [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[0.9em] [&_h1]:mt-5 [&_h1]:text-[1rem] [&_h1]:font-semibold [&_h2]:mt-5 [&_h2]:text-[0.9375rem] [&_h2]:font-semibold [&_h3]:mt-4 [&_h3]:text-[0.875rem] [&_h3]:font-semibold [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5 [&_p+p]:mt-3 [&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-[12px] [&_pre]:border [&_pre]:border-[var(--ag-line)] [&_pre]:bg-[var(--ag-surface-3)] [&_pre]:p-3 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5";
 
 export function StreamingResponse({
   children,
@@ -115,7 +115,7 @@ export function StreamingResponse({
 
       <AnimatePresence initial={false}>
         {shouldShowActions ? (
-          <m.div
+          <m.div layout
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -146,14 +146,14 @@ export function StreamingResponse({
                   aria-expanded={currentSourcesOpen}
                   aria-controls={sourcesContentId}
                   onClick={() => setSourcesOpen(!currentSourcesOpen)}
-                  className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 group ml-1 text-[11px]"
+                  className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 group ml-1 text-[0.6875rem]"
                 >
                   <CitationStack citations={sources} />
                   <span className="tabular-nums">
                     {sources.length}{" "}
                     {sources.length === 1 ? "source" : "sources"}
                   </span>
-                  <m.span
+                  <m.span layout
                     aria-hidden="true"
                     animate={{ rotate: currentSourcesOpen ? 180 : 0 }}
                     transition={reduce ? { duration: 0 } : SPRING_SWAP}

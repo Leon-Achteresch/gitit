@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
+import { m } from "motion/react";
 import { toastError } from "@/lib/error-toast";
 import type { GitAccount } from "@/lib/git-accounts";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,7 @@ export function GitAccountRow({ account, onSignOut, onRemoveCustom }: Props) {
   }
 
   return (
-    <div className="rounded-lg border border-border bg-background/40 p-3">
+    <m.div layout className="rounded-lg border border-border bg-background/40 p-3">
       <div className="flex items-center gap-3">
         <div
           className={cn(
@@ -83,6 +84,6 @@ export function GitAccountRow({ account, onSignOut, onRemoveCustom }: Props) {
           )}
         </div>
       </div>
-    </div>
+    </m.div>
   );
 }

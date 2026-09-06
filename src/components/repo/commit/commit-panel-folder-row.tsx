@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/context-menu";
 import { ChevronDown as ChevronDownData, ChevronRight as ChevronRightData } from "lucide";
 import { EyeOff, Folder, Minus, Plus, Undo2 } from "lucide-react";
+import { m } from "motion/react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { MorphIcon } from "@/components/ui/morph-icon";
@@ -40,7 +41,8 @@ function FolderRowInner({
   const { t } = useTranslation();
 
   const inner = (
-    <div
+    <m.div
+      layout
       onClick={onToggleCollapsed}
       style={{ paddingLeft: 16 + depth * 14 }}
       className="group flex h-full cursor-pointer select-none items-center gap-2 pr-4 text-sm text-muted-foreground transition-colors hover:bg-muted/30 hover:text-foreground"
@@ -51,8 +53,8 @@ function FolderRowInner({
       />
       <Folder className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
       <span className="min-w-0 flex-1 truncate font-medium">{name}</span>
-      <span className="shrink-0 font-mono text-[11px] tabular-nums opacity-40">{fileCount}</span>
-    </div>
+      <span className="shrink-0 font-mono text-[0.6875rem] tabular-nums opacity-40">{fileCount}</span>
+    </m.div>
   );
 
   return (

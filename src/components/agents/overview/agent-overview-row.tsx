@@ -47,7 +47,7 @@ export const AgentOverviewRow = memo(function AgentOverviewRow({
     entry.status === "awaitingApproval" || entry.status === "failed";
 
   return (
-    <m.button
+    <m.button layout
       type="button"
       onClick={() => onOpen(entry)}
       data-agent-overview-row=""
@@ -83,18 +83,18 @@ export const AgentOverviewRow = memo(function AgentOverviewRow({
 
       <span className="relative z-[1] min-w-0 flex-1">
         <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:flex-nowrap">
-          <span className="min-w-0 basis-full truncate text-[13px] font-semibold tracking-[-0.015em] text-[var(--ag-text)] sm:basis-auto sm:flex-1">
+          <span className="min-w-0 basis-full truncate text-[0.8125rem] font-semibold tracking-[-0.015em] text-[var(--ag-text)] sm:basis-auto sm:flex-1">
             {entry.title}
           </span>
           <AgentStatusChip tone={STATUS_TONE[entry.status]} className="shrink-0">
             {statusLabel}
           </AgentStatusChip>
-          <time dateTime={new Date(entry.updatedAt * 1000).toISOString()} title={new Date(entry.updatedAt * 1000).toLocaleString()} className="ml-auto shrink-0 text-[10px] tabular-nums text-[var(--ag-text-3)] sm:min-w-20 sm:text-right">
+          <time dateTime={new Date(entry.updatedAt * 1000).toISOString()} title={new Date(entry.updatedAt * 1000).toLocaleString()} className="ml-auto shrink-0 text-xs tabular-nums text-[var(--ag-text-3)] sm:min-w-20 sm:text-right">
             {relativeDate}
           </time>
         </span>
 
-        <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--ag-text-2)]">
+        <span className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-[var(--ag-text-2)]">
           <span className="max-w-40 truncate font-medium">{entry.repoName}</span>
           <span aria-hidden className="size-0.5 rounded-full bg-[var(--ag-text-3)]" />
           <span>{providerMeta.label}</span>
@@ -123,7 +123,7 @@ export const AgentOverviewRow = memo(function AgentOverviewRow({
         </span>
 
         {entry.preview ? (
-          <span className="mt-1 line-clamp-1 text-[12px] leading-5 text-[var(--ag-text-2)]">
+          <span className="mt-1 line-clamp-1 text-[0.75rem] leading-5 text-[var(--ag-text-2)]">
             {entry.preview}
           </span>
         ) : null}

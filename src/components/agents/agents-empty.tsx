@@ -36,7 +36,7 @@ export function AgentsEmpty() {
   return (
     <div className="flex h-full min-h-0 w-full items-center justify-center bg-[var(--ag-canvas)] p-6 text-[var(--ag-text)]">
       <AgentsEnter className="w-full max-w-lg">
-        <m.div
+        <m.div layout
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={SPRING_PANEL}
@@ -61,17 +61,17 @@ export function AgentsEmpty() {
             <h1 className="text-2xl font-semibold tracking-[-0.045em] text-balance">
               {t("agents.noRepos")}
             </h1>
-            <p className="mt-2 max-w-md text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">
+            <p className="mt-2 max-w-md text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">
               {t("agents.noReposHint")}
             </p>
-            <m.button
+            <m.button layout
               type="button"
               disabled={opening}
               aria-busy={opening}
               whileTap={reduce ? undefined : { scale: 0.97 }}
               transition={SPRING_PRESS}
               onClick={() => void openRepo()}
-              className="mt-6 inline-flex h-10 items-center gap-2 rounded-[var(--ag-r-sm)] bg-[var(--ag-solid)] px-4 text-[13px] font-semibold text-[var(--ag-solid-fg)] outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-6 inline-flex h-10 items-center gap-2 rounded-[var(--ag-r-sm)] bg-[var(--ag-solid)] px-4 text-[0.8125rem] font-semibold text-[var(--ag-solid-fg)] outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-ring"
             >
               <FolderGit2 className="size-4 shrink-0" />
               <span className="truncate">{t("addRepo.openLocal")}</span>

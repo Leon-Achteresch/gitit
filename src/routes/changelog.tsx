@@ -78,14 +78,14 @@ function ChangelogPage() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-8">
       {/* Header */}
-      <m.div
+      <m.div layout
         variants={container}
         initial="hidden"
         animate="show"
         className="space-y-6"
       >
         {/* Back + title row */}
-        <m.div variants={item} className="flex items-center gap-4">
+        <m.div layout variants={item} className="flex items-center gap-4">
           <Button variant="ghost" size="icon-sm" asChild>
             <Link to="/" aria-label={t("common.back")}>
               <ArrowLeft className="size-4" />
@@ -106,7 +106,7 @@ function ChangelogPage() {
 
         {/* Version badges + action */}
         {(version || currentVersion) && (
-          <m.div
+          <m.div layout
             variants={item}
             className="flex flex-wrap items-center gap-2"
           >
@@ -166,10 +166,10 @@ function ChangelogPage() {
         )}
 
         {/* Divider */}
-        <m.div variants={item} className="border-t border-border/60" />
+        <m.div layout variants={item} className="border-t border-border/60" />
 
         {/* Release notes */}
-        <m.div variants={item}>
+        <m.div layout variants={item}>
           {releaseNotesMarkdown ? (
             <div className="rounded-xl border border-border/70 bg-card/60 backdrop-blur-sm">
               <div className="border-b border-border/50 px-5 py-3.5">

@@ -43,7 +43,7 @@ export function AgentSidebarActions({
 
   const searchField = (
     <div
-      className="bg-[color-mix(in_oklab,var(--ag-surface-2)_78%,transparent)] transition-[background-color,border-color,box-shadow] duration-200 focus-within:border-[color-mix(in_oklab,var(--git-branch)_34%,var(--ag-line-strong))] focus-within:bg-[var(--ag-surface)] focus-within:ring-3 focus-within:ring-[color-mix(in_oklab,var(--git-branch)_16%,transparent)] flex h-8 min-w-0 cursor-text items-center gap-2 rounded-md border border-[var(--ag-line)] px-2.5 text-[12px]"
+      className="bg-[color-mix(in_oklab,var(--ag-surface-2)_78%,transparent)] transition-[background-color,border-color,box-shadow] duration-200 focus-within:border-[color-mix(in_oklab,var(--git-branch)_34%,var(--ag-line-strong))] focus-within:bg-[var(--ag-surface)] focus-within:ring-3 focus-within:ring-[color-mix(in_oklab,var(--git-branch)_16%,transparent)] flex h-8 min-w-0 cursor-text items-center gap-2 rounded-md border border-[var(--ag-line)] px-2.5 text-[0.75rem]"
       onClick={() => searchRef.current?.focus()}
     >
       <Search className="size-3.5 shrink-0 text-[var(--ag-text-3)]" />
@@ -60,7 +60,7 @@ export function AgentSidebarActions({
         }}
         placeholder={t("agentChat.searchChats")}
         aria-label={t("agentChat.searchChats")}
-        className="min-w-0 flex-1 bg-transparent text-[12px] text-[var(--ag-text)] outline-none placeholder:text-[var(--ag-text-3)]"
+        className="min-w-0 flex-1 bg-transparent text-[0.75rem] text-[var(--ag-text)] outline-none placeholder:text-[var(--ag-text-3)]"
       />
       {query ? (
         <button
@@ -80,7 +80,7 @@ export function AgentSidebarActions({
   );
 
   const newThreadButton = (
-    <m.button
+    <m.button layout
       type="button"
       disabled={creating}
       aria-busy={creating}
@@ -93,7 +93,7 @@ export function AgentSidebarActions({
         "outline-none transition-[transform,filter,box-shadow] duration-200 hover:brightness-110 active:scale-[0.985] focus-visible:ring-2 focus-visible:ring-[color-mix(in_oklab,var(--git-branch)_18%,transparent)]",
         compact
           ? "grid size-8 shrink-0 place-items-center rounded-md border border-[var(--ag-line)] bg-[var(--ag-surface)] text-[var(--ag-text-2)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)]"
-          : "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[var(--ag-r-md)] bg-[var(--ag-solid)] px-3 text-[12px] font-semibold text-[var(--ag-solid-fg)] shadow-[0_8px_18px_-12px_color-mix(in_oklab,var(--ag-solid)_70%,transparent)]",
+          : "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[var(--ag-r-md)] bg-[var(--ag-solid)] px-3 text-[0.75rem] font-semibold text-[var(--ag-solid-fg)] shadow-[0_8px_18px_-12px_color-mix(in_oklab,var(--ag-solid)_70%,transparent)]",
       )}
     >
       {compact ? (
@@ -177,7 +177,7 @@ export function AgentSidebarActions({
             data-active={providerFilter === null}
             aria-pressed={providerFilter === null}
             onClick={() => onProviderFilterChange(null)}
-            className="inline-flex items-center justify-center gap-1 rounded-full font-medium text-[var(--ag-text-3)] outline-none transition-colors duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:bg-[var(--ag-selected)] data-[active=true]:text-[var(--ag-text)] h-6 px-2.5 text-[11px]"
+            className="inline-flex items-center justify-center gap-1 rounded-full font-medium text-[var(--ag-text-3)] outline-none transition-colors duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:bg-[var(--ag-selected)] data-[active=true]:text-[var(--ag-text)] h-6 px-2.5 text-[0.6875rem]"
           >
             {t("agentChat.allProviders")}
           </button>

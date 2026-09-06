@@ -21,14 +21,14 @@ export function PrLabelChip({ label }: { label: string }) {
   const tone = LABEL_TONES[label.toLowerCase()] ?? "secondary";
 
   return (
-    <m.span
+    <m.span layout
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.12 }}
     >
       <Badge
         variant={tone}
-        className="h-5 px-2 text-[10px] font-medium tracking-tight rounded-md border"
+        className="h-5 px-2 text-[0.625rem] font-medium tracking-tight rounded-md border"
       >
         {label}
       </Badge>

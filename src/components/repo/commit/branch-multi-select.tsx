@@ -87,7 +87,7 @@ export function BranchMultiSelect({
           </PopIn>
           {count > 1 && (
             <PopIn key={count}>
-              <span className="flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold tabular-nums text-primary-foreground">
+              <span className="flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-primary px-1 text-[0.5625rem] font-bold tabular-nums text-primary-foreground">
                 {count}
               </span>
             </PopIn>
@@ -123,13 +123,13 @@ export function BranchMultiSelect({
           </span>
           <AnimatePresence initial={false}>
             {count > 0 && (
-              <m.span
+              <m.span layout
                 key="count"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={CHECK_SPRING}
-                className="shrink-0 text-[10px] font-medium tabular-nums text-muted-foreground"
+                className="shrink-0 text-[0.625rem] font-medium tabular-nums text-muted-foreground"
               >
                 {t("toolbar.branchMultiSelected", { count })}
               </m.span>
@@ -139,7 +139,7 @@ export function BranchMultiSelect({
 
         <AnimatePresence initial={false}>
           {count > 0 && (
-            <m.div
+            <m.div layout
               key="chips"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -160,7 +160,7 @@ export function BranchMultiSelect({
                       transition={CHECK_SPRING}
                       onClick={() => toggleBranch(name)}
                       title={t("toolbar.branchMultiRemove", { name })}
-                      className="flex h-6 min-w-0 items-center gap-1 rounded-md bg-primary/10 px-2 text-[11px] font-medium text-primary ring-1 ring-primary/25 transition-colors hover:bg-primary/20"
+                      className="flex h-6 min-w-0 items-center gap-1 rounded-md bg-primary/10 px-2 text-[0.6875rem] font-medium text-primary ring-1 ring-primary/25 transition-colors hover:bg-primary/20"
                     >
                       <GitBranch className="size-2.5 shrink-0 opacity-70" />
                       <span className="max-w-40 truncate">{name}</span>
@@ -207,7 +207,7 @@ export function BranchMultiSelect({
 
         <AnimatePresence initial={false}>
           {count > 0 && (
-            <m.div
+            <m.div layout
               key="footer"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -216,14 +216,14 @@ export function BranchMultiSelect({
               className="overflow-hidden border-t border-border"
             >
               <div className="flex items-center justify-between px-2 py-1.5">
-                <span className="text-[11px] tabular-nums text-muted-foreground">
+                <span className="text-[0.6875rem] tabular-nums text-muted-foreground">
                   {t("toolbar.branchMultiSelected", { count })}
                 </span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="xs"
-                  className="h-6 text-[11px] text-muted-foreground hover:text-destructive"
+                  className="h-6 text-[0.6875rem] text-muted-foreground hover:text-destructive"
                   onClick={clearAll}
                 >
                   <X className="size-3" />
@@ -264,7 +264,7 @@ function BranchCommandItem({
       >
         <AnimatePresence initial={false}>
           {selected && (
-            <m.span
+            <m.span layout
               key="check"
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -284,19 +284,19 @@ function BranchCommandItem({
       )}
       <span className="min-w-0 flex-1 truncate">{branch.name}</span>
       {branch.is_current && (
-        <span className="flex h-[16px] shrink-0 items-center rounded-full bg-git-added-subtle px-1.5 text-[9px] font-semibold uppercase tracking-wide text-git-added">
+        <span className="flex h-[16px] shrink-0 items-center rounded-full bg-git-added-subtle px-1.5 text-[0.5625rem] font-semibold uppercase tracking-wide text-git-added">
           {t("toolbar.currentBranch")}
         </span>
       )}
       {(branch.behind ?? 0) > 0 && (
         <span
           title={t("toolbar.behindCount", { count: branch.behind })}
-          className="shrink-0 text-[10px] font-medium tabular-nums text-git-removed"
+          className="shrink-0 text-[0.625rem] font-medium tabular-nums text-git-removed"
         >
           ↓{branch.behind}
         </span>
       )}
-      <span className="shrink-0 font-mono text-[10px] text-git-hash">
+      <span className="shrink-0 font-mono text-[0.625rem] text-git-hash">
         {branch.tip.slice(0, 7)}
       </span>
     </CommandItem>

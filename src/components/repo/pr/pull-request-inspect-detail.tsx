@@ -151,7 +151,7 @@ export function PullRequestInspectDetail({
             />
           )}
 
-          <span className="font-mono text-[12px] font-semibold text-muted-foreground/80">
+          <span className="font-mono text-[0.75rem] font-semibold text-muted-foreground/80">
             #{number}
           </span>
 
@@ -199,12 +199,12 @@ export function PullRequestInspectDetail({
         </div>
 
         <AnimatePresence mode="wait" initial={false}>
-          <m.h1
+          <m.h1 layout
             key={detail?.title ?? "skeleton"}
             initial={{ opacity: 0, y: 3 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 420, damping: 30 }}
-            className="mt-2.5 text-[16px] font-bold leading-tight tracking-tight text-foreground select-text"
+            className="mt-2.5 text-[1rem] font-bold leading-tight tracking-tight text-foreground select-text"
           >
             {detail?.title ?? (
               <m.span
@@ -217,11 +217,11 @@ export function PullRequestInspectDetail({
         </AnimatePresence>
 
         {detail && (
-          <m.div
+          <m.div layout
             initial={{ opacity: 0, y: 2 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground"
+            className="mt-2 flex flex-wrap items-center gap-2 text-[0.6875rem] text-muted-foreground"
           >
             <PrAuthorPopover
               author={detail.author}
@@ -266,7 +266,7 @@ export function PullRequestInspectDetail({
                   size="sm"
                   onClick={() => setTab(id)}
                   className={[
-                    "relative h-8 items-center gap-1.5 rounded-lg px-3 text-[12px] font-semibold transition-colors",
+                    "relative h-8 items-center gap-1.5 rounded-lg px-3 text-[0.75rem] font-semibold transition-colors",
                     active
                       ? "text-primary hover:text-primary"
                       : "text-muted-foreground hover:text-foreground",
@@ -296,7 +296,7 @@ export function PullRequestInspectDetail({
       </div>
 
       {loading && !detail ? (
-        <m.div
+        <m.div layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="flex flex-1 items-center justify-center"
@@ -345,7 +345,7 @@ export function PullRequestInspectDetail({
           </div>
 
           <AnimatePresence mode="wait" initial={false}>
-            <m.div
+            <m.div layout
               key={tab}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}

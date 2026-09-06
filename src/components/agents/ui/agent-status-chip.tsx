@@ -23,7 +23,7 @@ export function AgentStatusChip({
       layout
       data-tone={tone}
       className={cn(
-        "inline-flex h-[1.375rem] max-w-full items-center gap-1 rounded-full px-2 text-[10px] font-medium tracking-[-0.01em] whitespace-nowrap",
+        "inline-flex h-[1.375rem] max-w-full items-center gap-1 rounded-full px-2 text-[0.625rem] font-medium tracking-[-0.01em] whitespace-nowrap",
         tone === "working" && "bg-[color-mix(in_oklab,var(--git-modified)_16%,transparent)] text-[var(--git-modified)]",
         tone === "ready" && "bg-[color-mix(in_oklab,var(--git-added)_14%,transparent)] text-[var(--git-added)]",
         tone === "error" && "bg-[color-mix(in_oklab,var(--destructive)_14%,transparent)] text-destructive",
@@ -37,7 +37,7 @@ export function AgentStatusChip({
     >
       <AnimatePresence initial={false} mode="popLayout">
         {tone === "working" ? (
-          <m.span
+          <m.span layout
             key="ring"
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}

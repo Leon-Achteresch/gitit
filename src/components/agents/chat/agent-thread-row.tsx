@@ -263,7 +263,7 @@ export const AgentThreadRow = memo(function AgentThreadRow({
   );
 
   const row = (
-    <m.div
+    <m.div layout
       role="button"
       tabIndex={0}
       onClick={open}
@@ -290,10 +290,10 @@ export const AgentThreadRow = memo(function AgentThreadRow({
           title={thread.title}
           editing={renaming}
           onEditingChange={setRenaming}
-          className="min-w-0 flex-1 truncate text-[13px] font-medium leading-[18px] tracking-[-0.01em]"
-          inputClassName="text-[13px]"
+          className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium leading-[18px] tracking-[-0.01em]"
+          inputClassName="text-[0.8125rem]"
         />
-        <span className="ml-auto shrink-0 text-[11px] leading-[14px] tabular-nums text-[var(--ag-text-3)]">
+        <span className="ml-auto shrink-0 text-[0.6875rem] leading-[14px] tabular-nums text-[var(--ag-text-3)]">
           {working && workingSince ? (
             <AgentThreadWorkingTimer since={workingSince} />
           ) : (
@@ -301,7 +301,7 @@ export const AgentThreadRow = memo(function AgentThreadRow({
           )}
         </span>
       </span>
-      <span className="flex w-full min-w-0 items-center gap-1.5 text-[10px] leading-[14px] text-[var(--ag-text-3)]">
+      <span className="flex w-full min-w-0 items-center gap-1.5 text-[0.625rem] leading-[14px] text-[var(--ag-text-3)]">
         <span className="relative grid size-3 shrink-0 place-items-center">
           <ProviderLogo />
           {working ? (
@@ -320,7 +320,7 @@ export const AgentThreadRow = memo(function AgentThreadRow({
         {jiraEnabled ? <AgentThreadJiraBadge links={jiraLinks} /> : null}
         {hasDiff ? (
           <span className="ml-auto flex shrink-0 items-center">
-            <span className="flex items-center gap-1 font-mono text-[10px] tabular-nums">
+            <span className="flex items-center gap-1 font-mono text-[0.625rem] tabular-nums">
               {additions > 0 ? (
                 <span className="text-[var(--git-added)]">+{additions}</span>
               ) : null}
@@ -375,7 +375,7 @@ export const AgentThreadRow = memo(function AgentThreadRow({
             {actions(
               DropdownMenuItem,
               DropdownMenuSeparator,
-              "flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]",
+              "flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]",
             )}
           </DropdownMenuContent>
         </DropdownMenu>

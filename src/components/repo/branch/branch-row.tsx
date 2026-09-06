@@ -21,6 +21,7 @@ import {
   Sparkles,
   Trash2,
 } from 'lucide-react';
+import { m } from 'motion/react';
 import { memo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useExplainSheet } from '@/components/ai/explain-sheet';
@@ -100,7 +101,8 @@ function BranchRowInner({
   const displayName = branch.is_remote ? remoteRest : branch.name;
 
   const row = (
-    <li
+    <m.li
+      layout
       tabIndex={0}
       onFocus={() => focusBranch(path, branch.name)}
       onBlur={() => blurBranch(path, branch.name)}
@@ -115,7 +117,7 @@ function BranchRowInner({
       }}
       title={branch.name}
       className={cn(
-        'group/row relative flex min-w-0 max-w-full cursor-pointer items-center gap-2 rounded-md py-1 pl-2 pr-1.5 text-[13px] transition-all outline-none focus-visible:ring-1 focus-visible:ring-ring',
+        'group/row relative flex min-w-0 max-w-full cursor-pointer items-center gap-2 rounded-md py-1 pl-2 pr-1.5 text-[0.8125rem] transition-all outline-none focus-visible:ring-1 focus-visible:ring-ring',
         branch.is_current
           ? 'bg-sidebar-accent/70 font-medium text-sidebar-accent-foreground shadow-2xs'
           : 'text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground hover:shadow-2xs'
@@ -142,7 +144,7 @@ function BranchRowInner({
       </span>
 
       {branch.behind != null && branch.behind > 0 && (
-        <span className='flex shrink-0 items-center gap-px rounded bg-git-removed/10 px-1 py-0.5 text-[10px] font-semibold text-git-removed dark:bg-git-removed/10 dark:text-git-removed'>
+        <span className='flex shrink-0 items-center gap-px rounded bg-git-removed/10 px-1 py-0.5 text-[0.625rem] font-semibold text-git-removed dark:bg-git-removed/10 dark:text-git-removed'>
           <ArrowDown className='size-3' aria-hidden />
           {branch.behind}
         </span>
@@ -150,20 +152,20 @@ function BranchRowInner({
 
       <span className='flex min-w-0 flex-1 items-baseline gap-1'>
         {branch.is_remote && remotePrefix && (
-          <span className='shrink-0 text-[10px] font-medium uppercase tracking-wide text-muted-foreground/70'>
+          <span className='shrink-0 text-[0.625rem] font-medium uppercase tracking-wide text-muted-foreground/70'>
             {remotePrefix}
           </span>
         )}
         <span
           className={cn(
-            'min-w-0 flex-1 truncate font-mono text-[12px]',
+            'min-w-0 flex-1 truncate font-mono text-[0.75rem]',
             branch.is_current ? 'text-foreground' : 'text-foreground/90'
           )}
         >
           {displayName}
         </span>
       </span>
-    </li>
+    </m.li>
   );
 
   const showRemoteCheckout = branch.is_remote && !branch.is_current;

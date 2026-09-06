@@ -25,7 +25,7 @@ export function AgentProviderMark({
       </span>
       <AnimatePresence>
         {working ? (
-          <m.span
+          <m.span layout
             className="pointer-events-none absolute inset-[-4px] text-[var(--git-modified)]"
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.82 }}
             animate={{ opacity: 1, scale: 1 }}

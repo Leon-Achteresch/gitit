@@ -50,7 +50,7 @@ export function PrReviewActions({
   }
 
   return (
-    <m.div
+    <m.div layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="mt-2.5 flex flex-wrap items-center gap-2"
@@ -58,7 +58,7 @@ export function PrReviewActions({
       <Button
         variant="outline"
         size="sm"
-        className="h-7 text-[11px] rounded-lg border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 hover:text-emerald-300"
+        className="h-7 text-[0.6875rem] rounded-lg border-emerald-500/30 hover:bg-emerald-500/10 text-emerald-400 hover:text-emerald-300"
         disabled={busy !== null}
         onClick={() => void submit("APPROVE")}
       >
@@ -70,7 +70,7 @@ export function PrReviewActions({
         <Button
           variant="outline"
           size="sm"
-          className="h-7 text-[11px] rounded-lg border-rose-500/30 hover:bg-rose-500/10 text-rose-400 hover:text-rose-300"
+          className="h-7 text-[0.6875rem] rounded-lg border-rose-500/30 hover:bg-rose-500/10 text-rose-400 hover:text-rose-300"
           disabled={busy !== null}
           onClick={() => void submit("REQUEST_CHANGES")}
         >
@@ -79,7 +79,7 @@ export function PrReviewActions({
         </Button>
       )}
 
-      <span className="text-[10px] text-muted-foreground/70 ml-auto font-mono">
+      <span className="text-[0.625rem] text-muted-foreground/70 ml-auto font-mono">
         {t("prInspect.providerHint", { label: caps.label, host: caps.host })}
       </span>
     </m.div>

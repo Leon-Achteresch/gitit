@@ -230,7 +230,7 @@ export function PromptInput({
   };
 
   return (
-    <m.form
+    <m.form layout
       data-agent-composer=""
       onSubmit={submit}
       animate={reduce ? undefined : { y: focused ? -1 : 0, scale: focused ? 1.002 : 1 }}
@@ -247,7 +247,7 @@ export function PromptInput({
           aria-label="Commands"
           className="overflow-hidden rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[var(--ag-shadow-pop)] [scrollbar-color:color-mix(in_oklab,var(--foreground)_16%,transparent)_transparent] [scrollbar-width:thin] absolute inset-x-0 bottom-[calc(100%+8px)] z-40 max-h-80 overflow-y-auto p-1.5"
         >
-          <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] px-2 pb-1 pt-1">Commands</p>
+          <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] px-2 pb-1 pt-1">Commands</p>
           {filteredSlashCommands.map((command, index) => (
             <Button
               key={command.value}
@@ -263,14 +263,14 @@ export function PromptInput({
               data-active={index === slashIndex}
               className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 gap-2.5"
             >
-              <span className="w-24 shrink-0 truncate font-mono text-[12px] font-medium text-[var(--git-merge)]">
+              <span className="w-24 shrink-0 truncate font-mono text-[0.75rem] font-medium text-[var(--git-merge)]">
                 /{command.value}
               </span>
-              <span className="min-w-0 flex-1 truncate text-[12px] text-[var(--ag-text)]">
+              <span className="min-w-0 flex-1 truncate text-[0.75rem] text-[var(--ag-text)]">
                 {command.label}
               </span>
               {command.description ? (
-                <span className="text-[var(--ag-text-3)] hidden min-w-0 max-w-[42%] shrink-0 truncate text-[11px] sm:block">
+                <span className="text-[var(--ag-text-3)] hidden min-w-0 max-w-[42%] shrink-0 truncate text-[0.6875rem] sm:block">
                   {command.description}
                 </span>
               ) : null}
@@ -335,7 +335,7 @@ export function PromptInput({
                   aria-label="Add to prompt"
                   className="grid size-7 place-items-center rounded-full text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:-translate-y-px hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-95 focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40 rounded-full"
                 >
-                  <m.span
+                  <m.span layout
                     aria-hidden="true"
                     animate={{ rotate: actionsOpen ? 45 : 0 }}
                     transition={reduce ? { duration: 0 } : SPRING_SWAP}
@@ -372,11 +372,11 @@ export function PromptInput({
                       </span>
                     ) : null}
                     <span className="min-w-0">
-                      <span className="block truncate text-[12px] text-[var(--ag-text)]">
+                      <span className="block truncate text-[0.75rem] text-[var(--ag-text)]">
                         {action.label}
                       </span>
                       {action.description ? (
-                        <span className="text-[var(--ag-text-3)] mt-px block text-[11px] leading-4">
+                        <span className="text-[var(--ag-text-3)] mt-px block text-[0.6875rem] leading-4">
                           {action.description}
                         </span>
                       ) : null}
@@ -394,7 +394,7 @@ export function PromptInput({
                 onValueChange={setModel}
                 disabled={disabled || loading}
               >
-                <SelectTrigger className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-7 w-auto max-w-56 border-0 bg-transparent px-2 py-0 text-[12px] shadow-none focus-visible:ring-0">
+                <SelectTrigger className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-7 w-auto max-w-56 border-0 bg-transparent px-2 py-0 text-[0.75rem] shadow-none focus-visible:ring-0">
                   <span className="flex min-w-0 items-center gap-1.5">
                     {currentModel?.icon ? (
                       <span className="grid size-3.5 shrink-0 place-items-center [&_svg]:size-3.5">
@@ -420,7 +420,7 @@ export function PromptInput({
                             {option.icon}
                           </span>
                         ) : null}
-                        <span className="min-w-0 truncate text-[12px]">{option.label}</span>
+                        <span className="min-w-0 truncate text-[0.75rem]">{option.label}</span>
                       </span>
                     </SelectItem>
                   ))}
@@ -445,7 +445,7 @@ export function PromptInput({
             className="grid size-8 shrink-0 place-items-center rounded-[var(--ag-r-md)] bg-[var(--ag-send)] text-[var(--ag-send-fg)] outline-none transition-[background-color,opacity,transform] duration-200 hover:bg-[var(--ag-send-hover)] active:scale-95 focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40 data-[stop=true]:bg-[var(--ag-solid)] data-[stop=true]:text-[var(--ag-solid-fg)]"
           >
             <AnimatePresence initial={false} mode="popLayout">
-              <m.span
+              <m.span layout
                 key={loading ? "stop" : "send"}
                 initial={reduce ? { opacity: 1 } : { opacity: 0, y: 3, scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
