@@ -60,7 +60,7 @@ export function AppHeader() {
       data-tauri-drag-region
       style={{ WebkitAppRegion: "drag" } as CSSProperties}
       className={cn(
-        "relative z-10 flex h-11 shrink-0 select-none items-stretch gap-1 border-b border-border/50 bg-sidebar",
+        "relative z-10 flex h-11 shrink-0 select-none items-stretch gap-1 overflow-hidden border-b border-border/50 bg-sidebar",
         IS_MAC ? "pl-[86px]" : "pl-2",
       )}
     >
