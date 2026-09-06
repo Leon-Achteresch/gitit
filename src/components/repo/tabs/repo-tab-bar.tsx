@@ -236,7 +236,7 @@ export function RepoTabBar() {
           ref={stripRef}
           data-tauri-drag-region
           style={{ WebkitAppRegion: "drag" } as CSSProperties}
-          className="relative flex min-w-0 flex-1 items-stretch gap-1 self-stretch overflow-x-auto pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="relative flex min-w-0 flex-1 items-stretch gap-1 self-stretch overflow-x-auto overflow-y-hidden pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           <DndContext
             sensors={sensors}
