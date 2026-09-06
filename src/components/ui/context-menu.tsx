@@ -172,11 +172,12 @@ function ContextMenuSubContent({
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.SubContent>) {
   return (
-    <ContextMenuPrimitive.SubContent
-      data-slot="context-menu-sub-content"
-      asChild
-      {...props}
-    >
+    <ContextMenuPortal>
+      <ContextMenuPrimitive.SubContent
+        data-slot="context-menu-sub-content"
+        asChild
+        {...props}
+      >
       <m.div
         className={cn(
           "z-[80] max-w-(--radix-context-menu-content-available-width) min-w-32 overflow-hidden rounded-lg border bg-popover p-1 text-popover-foreground shadow-lg",
@@ -192,7 +193,8 @@ function ContextMenuSubContent({
       >
         {children}
       </m.div>
-    </ContextMenuPrimitive.SubContent>
+      </ContextMenuPrimitive.SubContent>
+    </ContextMenuPortal>
   )
 }
 
