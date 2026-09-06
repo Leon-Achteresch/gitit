@@ -8,6 +8,7 @@ import { CiCheckDetails } from "./ci-check-details";
 import { CiCheckIcon } from "./ci-check-icon";
 import { RemoteCiCheck } from "./ci-types";
 import { SpinIcon } from "@/components/motion/kit";
+import { m } from "motion/react";
 
 const CI_KIND_LABELS: Record<string, string> = {
   github_check_run: "GitHub Actions",
@@ -73,7 +74,7 @@ export function CiCheckRow({
   }
 
   return (
-    <div className="group flex flex-col rounded-xl p-2 transition-all hover:bg-muted/40">
+    <m.div layout className="group flex flex-col rounded-xl p-2 transition-all hover:bg-muted/40">
       <div
         className="flex cursor-pointer items-center gap-4"
         onClick={() => setExpanded(!expanded)}
@@ -143,6 +144,6 @@ export function CiCheckRow({
           <CiCheckDetails check={check} />
         </div>
       )}
-    </div>
+    </m.div>
   );
 }

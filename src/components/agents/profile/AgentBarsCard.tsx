@@ -26,7 +26,7 @@ export function AgentBarsCard({ entries }: { entries: AgentOverviewEntry[] }) {
   const reduce = useReducedMotion();
 
   return (
-    <m.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...easeOutSoft, delay: 0.2 }}>
+    <m.div layout initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...easeOutSoft, delay: 0.2 }}>
       <Card data-testid="agent-bars-card">
         <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3 space-y-0">
           <div>
@@ -61,7 +61,7 @@ export function AgentBarsCard({ entries }: { entries: AgentOverviewEntry[] }) {
               return (
                 <Tooltip key={b.key} delayDuration={150}>
                   <TooltipTrigger asChild>
-                    <m.div
+                    <m.div layout
                       initial={reduce ? false : { scaleY: 0 }}
                       animate={{ scaleY: 1 }}
                       transition={{ ...easeOutSoft, delay: Math.min(i, 31) * 0.015 }}
@@ -81,7 +81,7 @@ export function AgentBarsCard({ entries }: { entries: AgentOverviewEntry[] }) {
               );
             })}
           </div>
-          <div className="mt-2 flex justify-between text-[10px] text-muted-foreground tabular-nums">
+          <div className="mt-2 flex justify-between text-[0.625rem] text-muted-foreground tabular-nums">
             <span>1</span>
             <span>{buckets.length}</span>
           </div>

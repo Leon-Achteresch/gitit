@@ -163,7 +163,7 @@ export function FileDiff({
         className="group flex h-9 w-full items-center gap-2 px-2.5 text-left outline-none transition-colors hover:bg-[var(--ag-hover)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
       >
         <FileCode2 aria-hidden="true" className="text-[var(--ag-text-3)] size-4 shrink-0" />
-        <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-[var(--ag-text-2)]">
+        <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-[var(--ag-text-2)]">
           {file}
         </span>
         <span className="flex shrink-0 items-center gap-2">
@@ -180,7 +180,7 @@ export function FileDiff({
             <Check aria-label="Changes applied" className="size-3.5" />
           )}
         </span>
-        <m.span
+        <m.span layout
           aria-hidden="true"
           animate={{ rotate: currentOpen ? 180 : 0 }}
           transition={reduce ? { duration: 0 } : SPRING_SWAP}
@@ -252,7 +252,7 @@ export function FileDiff({
 
             {canCopy ? (
               <div className="flex justify-end px-2 pb-1.5 pt-1">
-                <m.button
+                <m.button layout
                   type="button"
                   aria-label={copied ? "Copied" : "Copy diff"}
                   title={copied ? "Copied" : "Copy diff"}

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
+import { m, type HTMLMotionProps } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
@@ -42,15 +43,22 @@ function ListRow({
     asChild?: boolean;
     active?: boolean;
   }) {
-  const Comp = asChild ? Slot.Root : "button";
+  const shared = {
+    "data-slot": "list-row",
+    "data-active": active ? "true" : undefined,
+    className: cn(listRowVariants({ variant, size }), className),
+  };
+
+  if (asChild) {
+    return <Slot.Root {...shared} {...props} />;
+  }
 
   return (
-    <Comp
-      data-slot="list-row"
-      data-active={active ? "true" : undefined}
-      type={asChild ? undefined : "button"}
-      className={cn(listRowVariants({ variant, size }), className)}
-      {...props}
+    <m.button
+      layout
+      type="button"
+      {...shared}
+      {...(props as HTMLMotionProps<"button">)}
     />
   );
 }

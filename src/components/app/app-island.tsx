@@ -131,7 +131,7 @@ export function AppIsland() {
         <div className="fixed inset-0 z-[60]" aria-hidden onClick={() => setView(null)} />
       )}
       <div className="pointer-events-none fixed inset-0 z-[70]">
-        <m.div
+        <m.div layout
           ref={islandRef}
           drag={view === null}
           dragMomentum={false}
@@ -187,7 +187,7 @@ export function AppIsland() {
             ISLAND_OVERLAY_CLASS,
           )}
         >
-          <m.div
+          <m.div layout
             style={{ x: magnetX, y: magnetY }}
             onContextMenu={(e) => {
               e.preventDefault();

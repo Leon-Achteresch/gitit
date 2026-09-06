@@ -99,7 +99,7 @@ export function WorktreeDetail({
   };
 
   return (
-    <m.div
+    <m.div layout
       initial={{ x: 20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 380, damping: 32 }}
@@ -119,7 +119,7 @@ export function WorktreeDetail({
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold">{name}</p>
-            <p className="truncate text-[10px] text-muted-foreground/60">
+            <p className="truncate text-[0.625rem] text-muted-foreground/60">
               {parent}
             </p>
           </div>
@@ -139,7 +139,7 @@ export function WorktreeDetail({
       <div className="shrink-0 space-y-3 p-3">
         <InfoRow label={t("worktree.detailPathShort")}>
           <div className="flex min-w-0 items-center gap-1.5">
-            <span className="min-w-0 flex-1 truncate font-mono text-[11px]">
+            <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem]">
               {entry.path}
             </span>
             <Button
@@ -159,7 +159,7 @@ export function WorktreeDetail({
 
         {entry.branch && (
           <InfoRow label={t("worktree.detailBranchShort")}>
-            <span className="flex items-center gap-1 text-[11px] font-medium text-git-branch">
+            <span className="flex items-center gap-1 text-[0.6875rem] font-medium text-git-branch">
               <GitBranch className="h-3 w-3" />
               {entry.branch}
             </span>
@@ -168,14 +168,14 @@ export function WorktreeDetail({
 
         {entry.head && (
           <InfoRow label={t("worktree.detailHeadShort")}>
-            <span className="font-mono text-[11px] text-muted-foreground">
+            <span className="font-mono text-[0.6875rem] text-muted-foreground">
               {entry.head}
             </span>
           </InfoRow>
         )}
 
         {entry.is_locked && (
-          <div className="rounded-lg border border-git-modified/25 bg-git-modified/8 px-2.5 py-2 text-[11px]">
+          <div className="rounded-lg border border-git-modified/25 bg-git-modified/8 px-2.5 py-2 text-[0.6875rem]">
             <p className="font-semibold text-git-modified">
               {t("worktree.detailLockedHeading")}
             </p>
@@ -188,7 +188,7 @@ export function WorktreeDetail({
         )}
 
         {entry.is_prunable && (
-          <div className="flex items-start gap-2 rounded-lg border border-destructive/25 bg-destructive/8 px-2.5 py-2 text-[11px]">
+          <div className="flex items-start gap-2 rounded-lg border border-destructive/25 bg-destructive/8 px-2.5 py-2 text-[0.6875rem]">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-destructive" />
             <div>
               <p className="font-semibold text-destructive">{t("worktree.detailPrunableHeading")}</p>
@@ -202,14 +202,14 @@ export function WorktreeDetail({
         )}
 
         {entry.is_main && (
-          <div className="rounded-lg border border-primary/20 bg-primary/6 px-2.5 py-2 text-[11px] text-primary">
+          <div className="rounded-lg border border-primary/20 bg-primary/6 px-2.5 py-2 text-[0.6875rem] text-primary">
             {t("worktree.detailMainNoRemove")}
           </div>
         )}
       </div>
 
       <div className="shrink-0 space-y-1.5 px-3 pb-3">
-        <p className="mb-2 text-[10.5px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="mb-2 text-[0.65625rem] font-semibold uppercase tracking-wide text-muted-foreground">
           {t("worktree.detailActionsHeading")}
         </p>
 
@@ -320,7 +320,7 @@ function InfoRow({
 }) {
   return (
     <div className="flex items-start gap-2">
-      <span className="w-14 shrink-0 text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground/70">
+      <span className="w-14 shrink-0 text-[0.65625rem] font-medium uppercase tracking-wide text-muted-foreground/70">
         {label}
       </span>
       <div className="min-w-0 flex-1">{children}</div>

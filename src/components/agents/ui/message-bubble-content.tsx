@@ -122,7 +122,7 @@ export function MessageBubbleContent({
         />
       ) : null}
       <MessageBubbleLayoutContext.Provider value={notifyLayout}>
-        <m.div
+        <m.div layout
           initial={
             animateIn
               ? reduce

@@ -211,10 +211,10 @@ export const AgentConversationViewport = memo(
             >
               <ProviderLogo className="size-5" />
             </AgentProviderMark>
-            <p className="mt-4 text-[13px] font-medium tracking-[-0.01em]">
+            <p className="mt-4 text-[0.8125rem] font-medium tracking-[-0.01em]">
               {t("agentChat.connecting", { agent })}
             </p>
-            <p className="text-[var(--ag-text-3)] mt-1 text-[11px] leading-relaxed">
+            <p className="text-[var(--ag-text-3)] mt-1 text-[0.6875rem] leading-relaxed">
               {t("agentChat.connectingHint", { agent })}
             </p>
           </div>
@@ -235,11 +235,11 @@ export const AgentConversationViewport = memo(
             >
               <ProviderLogo className="size-5" />
             </AgentProviderMark>
-            <p className="mt-4 text-[13px] font-medium text-destructive">
+            <p className="mt-4 text-[0.8125rem] font-medium text-destructive">
               {t("agentChat.connectionFailed", { agent })}
             </p>
             {connectionError ? (
-              <p className="text-[var(--ag-text-3)] mt-1.5 max-h-32 overflow-y-auto text-[11px] leading-relaxed">
+              <p className="text-[var(--ag-text-3)] mt-1.5 max-h-32 overflow-y-auto text-[0.6875rem] leading-relaxed">
                 {connectionError}
               </p>
             ) : null}
@@ -247,7 +247,7 @@ export const AgentConversationViewport = memo(
               <button
                 type="button"
                 onClick={() => void connect()}
-                className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-8 px-3"
+                className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-8 px-3"
                 data-active="true"
               >
                 {t("agentChat.retry")}
@@ -271,20 +271,20 @@ export const AgentConversationViewport = memo(
             >
               <ProviderLogo className="size-5" />
             </AgentProviderMark>
-            <p className="mt-4 text-[13px] font-medium tracking-[-0.01em]">
+            <p className="mt-4 text-[0.8125rem] font-medium tracking-[-0.01em]">
               {t("agentChat.signInRequired", { agent })}
             </p>
-            <p className="text-[var(--ag-text-3)] mt-1 text-[11px] leading-relaxed">
+            <p className="text-[var(--ag-text-3)] mt-1 text-[0.6875rem] leading-relaxed">
               {t("agentChat.signInHint", { agent })}
             </p>
             {loginError ? (
-              <p className="mt-2 text-[11px] text-destructive">{loginError}</p>
+              <p className="mt-2 text-[0.6875rem] text-destructive">{loginError}</p>
             ) : null}
             <button
               type="button"
               disabled={loginStatus === "starting" || loginStatus === "waiting"}
               onClick={() => void startLogin()}
-              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring mt-5 h-8 px-4"
+              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring mt-5 h-8 px-4"
               data-active="true"
             >
               {loginStatus === "starting" || loginStatus === "waiting" ? (
@@ -334,7 +334,7 @@ export const AgentConversationViewport = memo(
                   <h2 className="text-xl font-semibold tracking-[-0.035em] text-[var(--ag-text)] text-balance">
                     {t("agentChat.emptyTitle", { agent })}
                   </h2>
-                  <p className="text-[var(--ag-text-3)] mx-auto mt-1.5 max-w-md text-[12px] leading-relaxed text-pretty">
+                  <p className="text-[var(--ag-text-3)] mx-auto mt-1.5 max-w-md text-[0.75rem] leading-relaxed text-pretty">
                     {t("agentChat.emptySubtitle", { agent })}
                   </p>
                 </AgentsEnter>
@@ -350,13 +350,13 @@ export const AgentConversationViewport = memo(
                         STARTER_ICONS[index % STARTER_ICONS.length].color;
                       return (
                         <StaggerItem key={starter} index={index}>
-                          <m.button
+                          <m.button layout
                             type="button"
                             onClick={() => onStarter(starter)}
                             whileTap={
                               reduceMotion ? undefined : { scale: 0.98 }
                             }
-                            className="relative flex min-h-11 w-full min-w-0 items-center justify-start gap-2 rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] px-3 py-2 text-left text-[11px] font-medium leading-4 text-[var(--ag-text-2)] shadow-[var(--ag-shadow-raise)] outline-none transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:-translate-y-px hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:translate-y-0 active:bg-[var(--ag-press)] focus-visible:ring-2 focus-visible:ring-ring"
+                            className="relative flex min-h-11 w-full min-w-0 items-center justify-start gap-2 rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] px-3 py-2 text-left text-[0.6875rem] font-medium leading-4 text-[var(--ag-text-2)] shadow-[var(--ag-shadow-raise)] outline-none transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:-translate-y-px hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:translate-y-0 active:bg-[var(--ag-press)] focus-visible:ring-2 focus-visible:ring-ring"
                           >
                             <StarterIcon
                               className="size-3 shrink-0"
@@ -377,7 +377,7 @@ export const AgentConversationViewport = memo(
                           type="button"
                           onClick={() => onCliCommand(cmd)}
                           title={cmd.description}
-                          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-5 gap-1 rounded-full px-2 text-[10px] font-medium text-[var(--ag-text-3)] hover:text-[var(--ag-text)]"
+                          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-5 gap-1 rounded-full px-2 text-[0.625rem] font-medium text-[var(--ag-text-3)] hover:text-[var(--ag-text)]"
                         >
                           <Command className="size-2.5 shrink-0" />
                           <span>/{cmd.name}</span>
@@ -423,11 +423,11 @@ export const AgentConversationViewport = memo(
             ) : null}
 
             {busy ? (
-              <m.div
+              <m.div layout
                 initial={reduceMotion ? false : { opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={SPRING_PANEL}
-                className="mt-1 flex items-center gap-2 px-1 text-[11px] text-[var(--ag-text-2)]"
+                className="mt-1 flex items-center gap-2 px-1 text-[0.6875rem] text-[var(--ag-text-2)]"
               >
                 <span className="size-2 rounded-full bg-[var(--git-branch)] animate-pulse" />
                 <TextShimmer className="font-medium">
@@ -448,7 +448,7 @@ export const AgentConversationViewport = memo(
             ) : null}
 
             {conversation?.error ? (
-              <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] mt-4 flex items-start gap-2 border-destructive/25 bg-destructive/[0.06] px-3 py-2.5 text-[12px] text-destructive">
+              <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] mt-4 flex items-start gap-2 border-destructive/25 bg-destructive/[0.06] px-3 py-2.5 text-[0.75rem] text-destructive">
                 <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
                 <span className="min-w-0 flex-1">{conversation.error}</span>
                 <button
@@ -473,7 +473,7 @@ export const AgentConversationViewport = memo(
 
         <AnimatePresence>
           {!atBottom && rows.length > 0 ? (
-            <m.button
+            <m.button layout
               type="button"
               onClick={jumpToBottom}
               initial={
@@ -484,7 +484,7 @@ export const AgentConversationViewport = memo(
                 reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.94 }
               }
               transition={SPRING_PANEL}
-              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring absolute bottom-4 left-1/2 z-20 -translate-x-1/2 gap-1.5 shadow-[var(--ag-shadow-pop)]"
+              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring absolute bottom-4 left-1/2 z-20 -translate-x-1/2 gap-1.5 shadow-[var(--ag-shadow-pop)]"
               aria-label={t("agentChat.jumpToLatest")}
             >
               <span className="relative grid size-4 place-items-center">

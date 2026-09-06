@@ -318,7 +318,7 @@ export function ClaudeCapabilityCenter({
       onBack={onBack}
       backLabel={t("agentCapabilities.backToChat")}
       actions={(
-        <Button type="button" variant="ghost" size="sm" className="h-9 gap-1.5 rounded-lg px-2.5 text-[12px]" disabled={loading} onClick={() => void load(true)}>
+        <Button type="button" variant="ghost" size="sm" className="h-9 gap-1.5 rounded-lg px-2.5 text-[0.75rem]" disabled={loading} onClick={() => void load(true)}>
           <SpinIcon icon={RefreshCw} active={loading} className="size-3.5" />
           {t("common.refresh")}
         </Button>
@@ -336,7 +336,7 @@ export function ClaudeCapabilityCenter({
       {section === "sync" || section === "market" ? (
         <Suspense fallback={<div className="grid h-full place-items-center text-xs text-muted-foreground">Capability Studio…</div>}>
           <AnimatePresence mode="wait" initial={false}>
-            <m.div
+            <m.div layout
               key={section}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -361,7 +361,7 @@ export function ClaudeCapabilityCenter({
             resetKey={`${section}:${deferredQuery}:${entries.length}`}
             moreLabel={(count) => `Show ${count} more`}
             renderItem={(entry) => (
-            <m.article
+            <m.article layout
               key={entry.id}
               className="flex min-h-35 min-w-0 flex-col gap-3 rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] px-5 py-[1.15rem] shadow-[var(--ag-shadow-raise)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-px hover:border-[var(--ag-line-strong)] hover:shadow-[var(--ag-shadow-panel)]"
               initial={{ opacity: 0, y: 8 }}
@@ -374,8 +374,8 @@ export function ClaudeCapabilityCenter({
                   {(() => { const Icon = sections.find((item) => item.id === section)?.Icon ?? Blocks; return <Icon className="size-4" />; })()}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="truncate text-[14px] font-semibold tracking-tight">{entry.title}</h3>
-                  <p className="text-[var(--ag-text-2)] mt-1.5 line-clamp-3 text-[12px] leading-5">{entry.description || "No description"}</p>
+                  <h3 className="truncate text-[0.875rem] font-semibold tracking-tight">{entry.title}</h3>
+                  <p className="text-[var(--ag-text-2)] mt-1.5 line-clamp-3 text-[0.75rem] leading-5">{entry.description || "No description"}</p>
                 </div>
                 {entry.filePath || entry.toggle || entry.remove ? (
                   <div className="flex shrink-0 items-center gap-0.5">
@@ -425,7 +425,7 @@ export function ClaudeCapabilityCenter({
                   </div>
                 ) : null}
               </div>
-              {entry.meta ? <p className="text-[var(--ag-text-3)] mt-auto truncate pt-3 font-mono text-[11px]">{entry.meta}</p> : null}
+              {entry.meta ? <p className="text-[var(--ag-text-3)] mt-auto truncate pt-3 font-mono text-[0.6875rem]">{entry.meta}</p> : null}
             </m.article>
             )}
           />
@@ -442,13 +442,13 @@ export function ClaudeCapabilityCenter({
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>{editing?.entry.title}</DialogTitle>
-            <DialogDescription className="truncate font-mono text-[10px]">{editing?.entry.filePath}</DialogDescription>
+            <DialogDescription className="truncate font-mono text-[0.625rem]">{editing?.entry.filePath}</DialogDescription>
           </DialogHeader>
           <Textarea
             value={editing?.text ?? ""}
             onChange={(event) => setEditing((current) => current && { ...current, text: event.target.value })}
             spellCheck={false}
-            className="h-[52vh] resize-none font-mono text-[11px] leading-5"
+            className="h-[52vh] resize-none font-mono text-[0.6875rem] leading-5"
           />
           <DialogFooter>
             <Button variant="ghost" onClick={() => setEditing(null)}>Abbrechen</Button>

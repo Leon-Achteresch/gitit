@@ -37,7 +37,7 @@ function StepRow({ item }: { item: AgentActivityStep }) {
           <Check className="size-4" strokeWidth={1.8} />
         ) : state === "active" ? (
           <span className="relative grid size-3 place-items-center">
-            <m.span
+            <m.span layout
               className="absolute inset-0 rounded-full bg-foreground/10"
               animate={{ opacity: [0.35, 0.8, 0.35] }}
               transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
@@ -149,7 +149,7 @@ function SearchRow({ item }: { item: AgentActivitySearch }) {
       ) : null}
       <AnimatePresence initial>
         {item.moreCount ? (
-          <m.div
+          <m.div layout
             key="more-results"
             initial={enter}
             animate={visible}

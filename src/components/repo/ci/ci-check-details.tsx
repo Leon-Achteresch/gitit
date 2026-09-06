@@ -47,10 +47,10 @@ function AnnotationRow({ ann }: { ann: CheckAnnotation }) {
           {ann.title && (
             <div className="font-semibold text-foreground/90">{ann.title}</div>
           )}
-          <div className="mt-0.5 whitespace-pre-wrap break-words font-mono text-[11px] leading-relaxed text-foreground/80">
+          <div className="mt-0.5 whitespace-pre-wrap break-words font-mono text-[0.6875rem] leading-relaxed text-foreground/80">
             {ann.message}
           </div>
-          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[10px] text-muted-foreground">
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[0.625rem] text-muted-foreground">
             <span className="font-medium text-foreground/60">{ann.path}</span>
             <span className="opacity-50">{lineRange}</span>
             {ann.annotation_level && (
@@ -61,10 +61,10 @@ function AnnotationRow({ ann }: { ann: CheckAnnotation }) {
           </div>
           {ann.raw_details && (
             <details className="mt-1">
-              <summary className="cursor-pointer text-[10px] text-muted-foreground hover:text-foreground">
+              <summary className="cursor-pointer text-[0.625rem] text-muted-foreground hover:text-foreground">
                 Details
               </summary>
-              <pre className="mt-1 overflow-x-auto whitespace-pre-wrap break-words text-[10px] text-foreground/70">
+              <pre className="mt-1 overflow-x-auto whitespace-pre-wrap break-words text-[0.625rem] text-foreground/70">
                 {ann.raw_details}
               </pre>
             </details>
@@ -183,7 +183,7 @@ export function CiCheckDetails({
   }
 
   return (
-    <m.div
+    <m.div layout
       className="mt-2 rounded-xl bg-muted/20 p-4"
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -202,7 +202,7 @@ export function CiCheckDetails({
               <span className="mr-2 hidden font-medium text-muted-foreground sm:inline-block">
                 {p.label}:
               </span>
-              <span className="break-words whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-foreground/90">
+              <span className="break-words whitespace-pre-wrap font-mono text-[0.6875rem] leading-relaxed text-foreground/90">
                 {p.value}
               </span>
             </div>
@@ -233,7 +233,7 @@ export function CiCheckDetails({
 
       {annotations && annotations.length > 0 && (
         <div className="mt-3 flex flex-col gap-2">
-          <div className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">
             {t("ci.annotationsTitle", { count: annotations.length })}
           </div>
           {annotations.map((ann, i) => (

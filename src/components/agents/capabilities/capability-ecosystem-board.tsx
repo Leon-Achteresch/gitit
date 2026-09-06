@@ -53,7 +53,7 @@ export function CapabilityEcosystemBoard({
     selected.some((entry) => targetKey(entry) === targetKey(target));
 
   if (!targets?.length) {
-    return <p className="text-[var(--ag-text-3)] px-1 text-[11px]">{t("agentCapabilities.hub.noTargets")}</p>;
+    return <p className="text-[var(--ag-text-3)] px-1 text-[0.6875rem]">{t("agentCapabilities.hub.noTargets")}</p>;
   }
 
   const ordered = source && onSourceChange
@@ -76,7 +76,7 @@ export function CapabilityEcosystemBoard({
           : null;
 
         return (
-          <m.article
+          <m.article layout
             key={target.cli}
             className={cn(
               "rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] relative flex min-w-0 flex-col gap-3 p-4",
@@ -105,9 +105,9 @@ export function CapabilityEcosystemBoard({
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-1.5">
-                    <span className="truncate text-[12px] font-medium">{target.label}</span>
+                    <span className="truncate text-[0.75rem] font-medium">{target.label}</span>
                   </span>
-                  <span className="text-[var(--ag-text-3)] mt-0.5 block text-[10px] tabular-nums">
+                  <span className="text-[var(--ag-text-3)] mt-0.5 block text-[0.625rem] tabular-nums">
                     {target.installed
                       ? t("agentCapabilities.hub.itemsInSource", { count: total })
                       : t("agentCapabilities.hub.notInstalled")}
@@ -116,7 +116,7 @@ export function CapabilityEcosystemBoard({
               </button>
 
               {isSource ? (
-                <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">{t("agentCapabilities.hub.sourceBadge")}</p>
+                <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">{t("agentCapabilities.hub.sourceBadge")}</p>
               ) : null}
 
               <div className="flex flex-wrap gap-1">
@@ -146,7 +146,7 @@ export function CapabilityEcosystemBoard({
                         onToggleTarget(reference);
                       }}
                       className={cn(
-                        "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-6 gap-1 px-1.5 text-[9px] font-medium",
+                        "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-6 gap-1 px-1.5 text-[0.5625rem] font-medium",
                         active && "bg-[var(--ag-solid)] text-[var(--ag-solid-fg)]",
                         blocked && !isSource && "cursor-not-allowed opacity-40",
                       )}
@@ -163,25 +163,25 @@ export function CapabilityEcosystemBoard({
 
               <ul className="mt-auto space-y-0.5">
                 {CAPABILITY_KINDS.filter((kind) => counts[kind] > 0).map((kind) => (
-                  <li key={kind} className="flex items-center justify-between text-[10px] text-[var(--ag-text-2)]">
+                  <li key={kind} className="flex items-center justify-between text-[0.625rem] text-[var(--ag-text-2)]">
                     <span className="truncate">{t(`agentCapabilities.hub.kinds.${kind}`)}</span>
                     <span className="tabular-nums">{counts[kind]}</span>
                   </li>
                 ))}
                 {total === 0 ? (
-                  <li className="text-[var(--ag-text-3)] text-[10px]">{t("agentCapabilities.hub.emptyCli")}</li>
+                  <li className="text-[var(--ag-text-3)] text-[0.625rem]">{t("agentCapabilities.hub.emptyCli")}</li>
                 ) : null}
               </ul>
 
               {gap && (gap.missing.length || gap.different.length) ? (
                 <div className="space-y-1.5 border-t border-[var(--ag-line)] pt-2">
                   {gap.missing.length ? (
-                    <p className="text-[10px] text-emerald-700 dark:text-emerald-400">
+                    <p className="text-[0.625rem] text-emerald-700 dark:text-emerald-400">
                       {t("agentCapabilities.hub.gapsToward", { count: gap.missing.length })}
                     </p>
                   ) : null}
                   {gap.different.length ? (
-                    <p className="text-[10px] text-amber-700 dark:text-amber-400">
+                    <p className="text-[0.625rem] text-amber-700 dark:text-amber-400">
                       {t("agentCapabilities.hub.differsToward", { count: gap.different.length })}
                     </p>
                   ) : null}
@@ -190,7 +190,7 @@ export function CapabilityEcosystemBoard({
                       type="button"
                       size="sm"
                       variant="outline"
-                      className="h-7 w-full px-2 text-[10px]"
+                      className="h-7 w-full px-2 text-[0.625rem]"
                       disabled={busy}
                       onClick={() => onFillGaps(destination, gap.missing)}
                     >

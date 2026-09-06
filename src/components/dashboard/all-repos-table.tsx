@@ -13,10 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { formatRelativeTime } from "@/lib/dashboard-aggregations";
 import { useRepoStore } from "@/lib/repo-store";
 import { cn } from "@/lib/utils";
-import { SpinIcon } from "@/components/motion/kit";
-import { motionize, staggerEnter } from "@/components/motion/kit";
-
-const MotionTableRow = motionize(TableRow);
+import { SpinIcon, staggerEnter } from "@/components/motion/kit";
 
 type RepoOverview = {
   path: string;
@@ -138,18 +135,18 @@ export function AllReposTable({ paths }: { paths: string[] }) {
           ) : (
             <Table className="min-w-[640px] border-collapse">
               <TableHeader>
-                <TableRow className="text-left text-[10px] uppercase tracking-wide text-muted-foreground hover:bg-transparent">
-                  <TableHead className="h-auto pb-2 pr-3 text-[10px] font-medium text-muted-foreground">{t("dashboard.all.cols.repo")}</TableHead>
-                  <TableHead className="h-auto pb-2 pr-3 text-[10px] font-medium text-muted-foreground">{t("dashboard.all.cols.branch")}</TableHead>
-                  <TableHead className="h-auto pb-2 pr-3 text-right text-[10px] font-medium text-muted-foreground">{t("dashboard.all.cols.sync")}</TableHead>
-                  <TableHead className="h-auto pb-2 pr-3 text-right text-[10px] font-medium text-muted-foreground">{t("dashboard.all.cols.dirty")}</TableHead>
-                  <TableHead className="h-auto pb-2 pr-3 text-[10px] font-medium text-muted-foreground">{t("dashboard.all.cols.last")}</TableHead>
-                  <TableHead className="h-auto pb-2 text-[10px] font-medium text-muted-foreground">{t("dashboard.all.cols.activity")}</TableHead>
+                <TableRow className="text-left text-[0.625rem] uppercase tracking-wide text-muted-foreground hover:bg-transparent">
+                  <TableHead className="h-auto pb-2 pr-3 text-[0.625rem] font-medium text-muted-foreground">{t("dashboard.all.cols.repo")}</TableHead>
+                  <TableHead className="h-auto pb-2 pr-3 text-[0.625rem] font-medium text-muted-foreground">{t("dashboard.all.cols.branch")}</TableHead>
+                  <TableHead className="h-auto pb-2 pr-3 text-right text-[0.625rem] font-medium text-muted-foreground">{t("dashboard.all.cols.sync")}</TableHead>
+                  <TableHead className="h-auto pb-2 pr-3 text-right text-[0.625rem] font-medium text-muted-foreground">{t("dashboard.all.cols.dirty")}</TableHead>
+                  <TableHead className="h-auto pb-2 pr-3 text-[0.625rem] font-medium text-muted-foreground">{t("dashboard.all.cols.last")}</TableHead>
+                  <TableHead className="h-auto pb-2 text-[0.625rem] font-medium text-muted-foreground">{t("dashboard.all.cols.activity")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                   {rows.map((r, i) => (
-                    <MotionTableRow
+                    <TableRow
                       key={r.path}
                       {...staggerEnter(i)}
                       onClick={() => onOpen(r.path)}
@@ -165,7 +162,7 @@ export function AllReposTable({ paths }: { paths: string[] }) {
                     >
                       <TableCell className="py-2.5 pr-3">
                         <div className="font-medium">{r.name || r.path}</div>
-                        <div className="truncate text-[10px] text-muted-foreground">{r.path}</div>
+                        <div className="truncate text-[0.625rem] text-muted-foreground">{r.path}</div>
                       </TableCell>
                       <TableCell className="py-2.5 pr-3 font-mono text-xs text-muted-foreground">
                         {r.branch || "—"}
@@ -197,7 +194,7 @@ export function AllReposTable({ paths }: { paths: string[] }) {
                       <TableCell className="py-2.5">
                         <ActivityStrip data={r.commits_last_30d} />
                       </TableCell>
-                    </MotionTableRow>
+                    </TableRow>
                   ))}
               </TableBody>
             </Table>

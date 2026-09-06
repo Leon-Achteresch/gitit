@@ -32,7 +32,7 @@ export function AgentTokensCard({ entries }: { entries: AgentOverviewEntry[] }) 
   const reduce = useReducedMotion();
 
   return (
-    <m.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...easeOutSoft, delay: 0.25 }}>
+    <m.div layout initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...easeOutSoft, delay: 0.25 }}>
       <Card data-testid="agent-tokens-card">
         <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3 space-y-0">
           <div>
@@ -78,7 +78,7 @@ export function AgentTokensCard({ entries }: { entries: AgentOverviewEntry[] }) 
               </>
             ) : null}
           </svg>
-          <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
+          <div className="mt-1 flex justify-between text-[0.625rem] text-muted-foreground">
             <span>{t("agentProfile.daysAgo", { count: 29 })}</span>
             <span>{t("agentChat.today")}</span>
           </div>

@@ -227,7 +227,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
         {step === 0 ? (
           <section className="flex min-w-0 flex-col gap-4">
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">{t("agentCapabilities.market.stepKindTitle")}</h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepKindHint")}</p>
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepKindHint")}</p>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,16.5rem),1fr))] gap-3">
               {MARKET_KINDS.map((kind) => {
                 const Icon = KIND_ICONS[kind];
@@ -257,7 +257,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                 kind: t(`agentCapabilities.market.kinds.${market.kind}`),
               })}
             </h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepSearchHint")}</p>
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepSearchHint")}</p>
             <div className="flex flex-wrap items-center gap-2">
               <div className="relative min-w-[12rem] flex-1">
                 <Search className="text-[var(--ag-text-3)] pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
@@ -268,7 +268,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                     if (event.key === "Enter") runSearch();
                   }}
                   placeholder={t("agentCapabilities.market.searchPlaceholder")}
-                  className="h-9 rounded-lg border-[var(--ag-line)] bg-[var(--ag-surface-2)] pl-8 text-[12px] shadow-none"
+                  className="h-9 rounded-lg border-[var(--ag-line)] bg-[var(--ag-surface-2)] pl-8 text-[0.75rem] shadow-none"
                 />
               </div>
               <Select
@@ -278,7 +278,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                   void market.search();
                 }}
               >
-                <SelectTrigger className="h-9 w-40 text-[12px]">
+                <SelectTrigger className="h-9 w-40 text-[0.75rem]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -294,10 +294,10 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
               </Button>
             </div>
             {market.result && !market.result.authenticated ? (
-              <p className="text-[var(--ag-text-3)] text-[11px]">{t("agentCapabilities.market.anonymousHint")}</p>
+              <p className="text-[var(--ag-text-3)] text-[0.6875rem]">{t("agentCapabilities.market.anonymousHint")}</p>
             ) : null}
             {market.result?.notes.map((note) => (
-              <p key={note} className="text-[11px] text-amber-600 dark:text-amber-400">
+              <p key={note} className="text-[0.6875rem] text-amber-600 dark:text-amber-400">
                 {note}
               </p>
             ))}
@@ -314,7 +314,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                   renderItem={(repo: MarketRepo) => {
                     const present = repoPresence(repo, market.kind, inventory.items);
                     return (
-                      <m.article className="flex min-h-35 min-w-0 flex-col gap-3 rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] px-5 py-[1.15rem] shadow-[var(--ag-shadow-raise)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-px hover:border-[var(--ag-line-strong)] hover:shadow-[var(--ag-shadow-panel)] gap-3" whileHover={{ y: -1 }} transition={SPRING_PANEL}>
+                      <m.article layout className="flex min-h-35 min-w-0 flex-col gap-3 rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] px-5 py-[1.15rem] shadow-[var(--ag-shadow-raise)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-px hover:border-[var(--ag-line-strong)] hover:shadow-[var(--ag-shadow-panel)] gap-3" whileHover={{ y: -1 }} transition={SPRING_PANEL}>
                         <div className="flex items-start gap-2.5">
                           {repo.avatarUrl ? (
                             <img
@@ -324,24 +324,24 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                               className="mt-0.5 size-8 shrink-0 rounded-lg object-cover"
                             />
                           ) : (
-                            <span className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg text-[11px] font-medium uppercase">
+                            <span className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg text-[0.6875rem] font-medium uppercase">
                               {repo.owner.slice(0, 1)}
                             </span>
                           )}
                           <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-[12px] font-medium">{repo.fullName}</h3>
-                            <p className="text-[var(--ag-text-2)] mt-1 line-clamp-2 text-[11px] leading-4">
+                            <h3 className="truncate text-[0.75rem] font-medium">{repo.fullName}</h3>
+                            <p className="text-[var(--ag-text-2)] mt-1 line-clamp-2 text-[0.6875rem] leading-4">
                               {repo.description || t("agentCapabilities.market.noDescription")}
                             </p>
                           </div>
                           <Badge
                             variant="outline"
-                            className={cn("h-5 shrink-0 rounded px-1.5 text-[9px]", POPULARITY_TONE[repo.popularity])}
+                            className={cn("h-5 shrink-0 rounded px-1.5 text-[0.5625rem]", POPULARITY_TONE[repo.popularity])}
                           >
                             {t(`agentCapabilities.market.popularity.${repo.popularity}`)}
                           </Badge>
                         </div>
-                        <div className="text-[var(--ag-text-3)] flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px]">
+                        <div className="text-[var(--ag-text-3)] flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.625rem]">
                           <span className="inline-flex items-center gap-1">
                             <Star className="size-3" /> {compactNumber(repo.stars)}
                           </span>
@@ -360,7 +360,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                           <Button
                             type="button"
                             size="sm"
-                            className="h-8 px-2.5 text-[11px]"
+                            className="h-8 px-2.5 text-[0.6875rem]"
                             onClick={() => void openRepo(repo)}
                           >
                             {t("agentCapabilities.market.chooseThis")}
@@ -370,7 +370,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                             href={repo.htmlUrl}
                             target="_blank"
                             rel="noreferrer noopener"
-                            className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring inline-flex h-8 items-center gap-1 px-2 text-[11px]"
+                            className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring inline-flex h-8 items-center gap-1 px-2 text-[0.6875rem]"
                           >
                             <ExternalLink className="size-3" />
                             GitHub
@@ -412,21 +412,21 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">
               {detail?.repo.fullName ?? t("agentCapabilities.market.stepInstallTitle")}
             </h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepInstallHint")}</p>
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepInstallHint")}</p>
             {market.inspecting ? (
               <CapabilityLoading label={t("agentCapabilities.market.inspecting")} />
             ) : detail ? (
               <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,20rem)]">
                 <div className="space-y-4">
-                  <div className="flex items-start gap-2 rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2.5 text-[12px] leading-5 text-amber-800 dark:text-amber-200">
+                  <div className="flex items-start gap-2 rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-3 py-2.5 text-[0.75rem] leading-5 text-amber-800 dark:text-amber-200">
                     <ShieldAlert className="mt-0.5 size-4 shrink-0" />
                     <span>{t("agentCapabilities.market.trustWarning")}</span>
                   </div>
                   {detail.readmeExcerpt ? (
-                    <p className="text-[var(--ag-text-2)] whitespace-pre-wrap text-[12px] leading-5">{detail.readmeExcerpt}</p>
+                    <p className="text-[var(--ag-text-2)] whitespace-pre-wrap text-[0.75rem] leading-5">{detail.readmeExcerpt}</p>
                   ) : null}
                   <div>
-                    <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-2">{t("agentCapabilities.market.assets")}</p>
+                    <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-2">{t("agentCapabilities.market.assets")}</p>
                     {detail.assets.length ? (
                       <div className="space-y-1">
                         {detail.assets.map((asset) => {
@@ -452,8 +452,8 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                               <Icon className="text-[var(--ag-text-3)] mt-0.5 size-3.5 shrink-0" />
                               <span className="min-w-0 flex-1">
                                 <span className="flex items-center gap-1.5">
-                                  <span className="truncate text-[12px] font-medium">{asset.name}</span>
-                                  <Badge variant="outline" className="h-4 rounded px-1 text-[8px]">
+                                  <span className="truncate text-[0.75rem] font-medium">{asset.name}</span>
+                                  <Badge variant="outline" className="h-4 rounded px-1 text-[0.5rem]">
                                     {t(`agentCapabilities.market.assetKinds.${asset.kind}`)}
                                   </Badge>
                                   {assetLocalPresence(
@@ -464,20 +464,20 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                                     <CapabilityCliMark key={cli} cli={cli} logoClassName="size-2.5" />
                                   ))}
                                 </span>
-                                <span className="text-[var(--ag-text-3)] block truncate font-mono text-[10px]">{asset.path}</span>
+                                <span className="text-[var(--ag-text-3)] block truncate font-mono text-[0.625rem]">{asset.path}</span>
                               </span>
                             </label>
                           );
                         })}
                       </div>
                     ) : (
-                      <p className="text-[var(--ag-text-3)] text-[12px]">{t("agentCapabilities.market.noAssets")}</p>
+                      <p className="text-[var(--ag-text-3)] text-[0.75rem]">{t("agentCapabilities.market.noAssets")}</p>
                     )}
                   </div>
                   {detail.mcpSuggestion ? (
                     <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-3">
-                      <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1">{t("agentCapabilities.market.mcpSuggestion")}</p>
-                      <p className="text-[var(--ag-text-3)] break-all font-mono text-[11px]">
+                      <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1">{t("agentCapabilities.market.mcpSuggestion")}</p>
+                      <p className="text-[var(--ag-text-3)] break-all font-mono text-[0.6875rem]">
                         {detail.mcpSuggestion.command} {detail.mcpSuggestion.args.join(" ")}
                       </p>
                       <Button
@@ -495,8 +495,8 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                   ) : null}
                 </div>
                 <aside className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] space-y-3 p-4">
-                  <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">{t("agentCapabilities.market.installTargets")}</p>
-                  <p className="text-[var(--ag-text-2)] text-[11px] leading-4">{t("agentCapabilities.market.pickDestinations")}</p>
+                  <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">{t("agentCapabilities.market.installTargets")}</p>
+                  <p className="text-[var(--ag-text-2)] text-[0.6875rem] leading-4">{t("agentCapabilities.market.pickDestinations")}</p>
                   <CapabilityTargetPicker
                     targets={inventory.targets}
                     selected={targets}
@@ -509,7 +509,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                       )
                     }
                   />
-                  <label className="flex items-center gap-2 pt-1 text-[12px]">
+                  <label className="flex items-center gap-2 pt-1 text-[0.75rem]">
                     <Switch checked={overwrite} onCheckedChange={setOverwrite} />
                     {t("agentCapabilities.hub.overwrite")}
                   </label>
@@ -518,7 +518,7 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
                       href={detail.repo.htmlUrl}
                       target="_blank"
                       rel="noreferrer noopener"
-                      className="text-[var(--ag-text-3)] inline-flex items-center gap-1 text-[11px]"
+                      className="text-[var(--ag-text-3)] inline-flex items-center gap-1 text-[0.6875rem]"
                     >
                       <ArrowUpRight className="size-3" /> GitHub
                     </a>
@@ -553,9 +553,9 @@ export function CapabilityMarketplace({ path, query }: { path: string; query: st
         {step === 3 ? (
           <section className="flex min-w-0 flex-col gap-4">
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">{t("agentCapabilities.market.stepDoneTitle")}</h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepDoneHint")}</p>
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.market.stepDoneHint")}</p>
             {results.length ? (
-              <ul className="space-y-1.5 text-[12px]">
+              <ul className="space-y-1.5 text-[0.75rem]">
                 {results.map((entry, index) => (
                   <li key={`${entry.name}:${entry.target}:${index}`} className="flex items-start gap-2">
                     {entry.status === "error" ? (

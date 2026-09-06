@@ -283,19 +283,19 @@ export function AgentCapabilityCenter({
       backLabel={t("agentCapabilities.backToChat")}
       actions={(
         <>
-          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[12px]" onClick={() => setImportOpen(true)}>
+          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[0.75rem]" onClick={() => setImportOpen(true)}>
             <Import className="size-3.5" />
             {t("agentCapabilities.import")}
           </Button>
-          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[12px]" onClick={() => void exportSnapshot().catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))}>
+          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[0.75rem]" onClick={() => void exportSnapshot().catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))}>
             <Download className="size-3.5" />
             {t("agentCapabilities.export")}
           </Button>
-          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[12px]" onClick={() => setConfigOpen(true)}>
+          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[0.75rem]" onClick={() => setConfigOpen(true)}>
             <SlidersHorizontal className="size-3.5" />
             {t("agentCapabilities.config.title")}
           </Button>
-          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[12px]" disabled={loading} onClick={() => void refresh().catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))}>
+          <Button type="button" variant="ghost" size="sm" className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-lg px-2.5 text-[0.75rem]" disabled={loading} onClick={() => void refresh().catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))}>
             <SpinIcon icon={RefreshCw} active={loading} className="size-3.5" />
             {t("common.refresh")}
           </Button>
@@ -316,7 +316,7 @@ export function AgentCapabilityCenter({
     >
       {loading && (!loadedAt || storePath !== path) ? <CapabilityLoading label={t("agentCapabilities.loading")} /> : (
         <AnimatePresence mode="wait" initial={false}>
-          <m.div
+          <m.div layout
             key={section}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -339,20 +339,20 @@ export function AgentCapabilityCenter({
         <DialogContent className="max-h-[min(760px,calc(100vh-2rem))] overflow-y-auto sm:max-w-2xl">
           <DialogHeader><DialogTitle>{configEditorPath ? t("agentCapabilities.config.rawEditor") : t("agentCapabilities.config.title")}</DialogTitle><DialogDescription>{configEditorPath || t("agentCapabilities.config.description")}</DialogDescription></DialogHeader>
           {configEditorPath ? (
-            configEditorLoading ? <div className="flex min-h-80 items-center justify-center"><SpinIcon icon={LoaderCircle} className="size-4" /></div> : <Textarea value={configEditorText} onChange={(event) => setConfigEditorText(event.target.value)} spellCheck={false} className="min-h-[30rem] resize-y font-mono text-[11px] leading-5" />
+            configEditorLoading ? <div className="flex min-h-80 items-center justify-center"><SpinIcon icon={LoaderCircle} className="size-4" /></div> : <Textarea value={configEditorText} onChange={(event) => setConfigEditorText(event.target.value)} spellCheck={false} className="min-h-[30rem] resize-y font-mono text-[0.6875rem] leading-5" />
           ) : (
             <div className="space-y-4">
               <div className="grid gap-2 sm:grid-cols-2">
-                {config?.userConfigPath ? <Button type="button" variant="ghost" onClick={() => void openConfigFile(config.userConfigPath ?? "", "# Personal Codex settings\n")} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] h-auto items-start justify-start p-4 text-left hover:bg-[var(--ag-hover)]"><span><FileCode2 className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.config.user")}</p><p className="mt-1 line-clamp-2 break-all font-mono text-[9px] leading-4 text-muted-foreground">{config.userConfigPath}</p></span></Button> : null}
-                {config?.projectConfigPath ? <Button type="button" variant="ghost" onClick={() => void openConfigFile(config.projectConfigPath, "# Repository-scoped Codex settings\n")} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] h-auto items-start justify-start p-4 text-left hover:bg-[var(--ag-hover)]"><span><FileCode2 className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.config.project")}</p><p className="mt-1 line-clamp-2 break-all font-mono text-[9px] leading-4 text-muted-foreground">{config.projectConfigPath}</p></span></Button> : null}
+                {config?.userConfigPath ? <Button type="button" variant="ghost" onClick={() => void openConfigFile(config.userConfigPath ?? "", "# Personal Codex settings\n")} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] h-auto items-start justify-start p-4 text-left hover:bg-[var(--ag-hover)]"><span><FileCode2 className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.config.user")}</p><p className="mt-1 line-clamp-2 break-all font-mono text-[0.5625rem] leading-4 text-muted-foreground">{config.userConfigPath}</p></span></Button> : null}
+                {config?.projectConfigPath ? <Button type="button" variant="ghost" onClick={() => void openConfigFile(config.projectConfigPath, "# Repository-scoped Codex settings\n")} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] h-auto items-start justify-start p-4 text-left hover:bg-[var(--ag-hover)]"><span><FileCode2 className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.config.project")}</p><p className="mt-1 line-clamp-2 break-all font-mono text-[0.5625rem] leading-4 text-muted-foreground">{config.projectConfigPath}</p></span></Button> : null}
               </div>
               <section>
-                <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-2">{t("agentCapabilities.config.layers")}</p>
+                <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-2">{t("agentCapabilities.config.layers")}</p>
                 <div className="space-y-1.5">
                   {(config?.layers ?? []).map((layer, index) => (
                     <div key={`${layer.name.type}:${layer.version}:${index}`} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-start gap-3 px-3 py-2.5">
                       <AgDot className="mt-1.5 shrink-0" state={layer.disabledReason ? "working" : "ready"} />
-                      <div className="min-w-0 flex-1"><p className="text-[11px] font-medium">{layer.name.name || layer.name.type}</p><p className="mt-0.5 break-all font-mono text-[9px] leading-4 text-muted-foreground">{layer.name.file || layer.name.dotCodexFolder || layer.name.id || layer.version}</p>{layer.disabledReason ? <p className="mt-1 text-[9px] text-amber-600 dark:text-amber-400">{layer.disabledReason}</p> : null}</div>
+                      <div className="min-w-0 flex-1"><p className="text-[0.6875rem] font-medium">{layer.name.name || layer.name.type}</p><p className="mt-0.5 break-all font-mono text-[0.5625rem] leading-4 text-muted-foreground">{layer.name.file || layer.name.dotCodexFolder || layer.name.id || layer.version}</p>{layer.disabledReason ? <p className="mt-1 text-[0.5625rem] text-amber-600 dark:text-amber-400">{layer.disabledReason}</p> : null}</div>
                     </div>
                   ))}
                 </div>

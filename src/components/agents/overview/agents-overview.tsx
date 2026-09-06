@@ -243,20 +243,20 @@ export function AgentsOverview({
 
           <div className="flex items-center gap-1.5">
             {onNewSession ? (
-              <m.button
+              <m.button layout
                 type="button"
                 onClick={() => void newSession()}
                 disabled={creating}
                 aria-busy={creating}
                 whileTap={reduce ? undefined : { scale: 0.97 }}
                 transition={SPRING_PRESS}
-                className="inline-flex h-9 items-center gap-2 rounded-[var(--ag-r-sm)] bg-[var(--ag-solid)] px-3.5 text-[12px] font-semibold text-[var(--ag-solid-fg)] outline-none transition-[filter,transform] duration-200 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-60"
+                className="inline-flex h-9 items-center gap-2 rounded-[var(--ag-r-sm)] bg-[var(--ag-solid)] px-3.5 text-[0.75rem] font-semibold text-[var(--ag-solid-fg)] outline-none transition-[filter,transform] duration-200 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-60"
               >
                 {creating ? <LoaderCircle className="size-3.5 motion-safe:animate-spin" /> : <Plus className="size-3.5" />}
                 {t("agentWorkspace.newSession")}
               </m.button>
             ) : null}
-            <m.button
+            <m.button layout
               type="button"
               onClick={() => void refresh()}
               disabled={refreshing || loading}
@@ -322,7 +322,7 @@ export function AgentsOverview({
 
       <ScrollArea className="min-h-0 flex-1" key={paginationKey}>
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 pb-6 sm:px-6" aria-busy={loading || refreshing || query !== deferredQuery}>
-          <div className="flex min-h-5 items-center justify-between gap-3 text-[11px] text-[var(--ag-text-3)]">
+          <div className="flex min-h-5 items-center justify-between gap-3 text-[0.6875rem] text-[var(--ag-text-3)]">
             <p role="status" className="tabular-nums">{loading || refreshing ? t("agentChat.loadingConversations") : t("agentOverview.showing", { shown: visible.length, total: matches.length })}</p>
             {hasFilters ? <button type="button" onClick={resetFilters} className="shrink-0 rounded-sm font-medium text-[var(--ag-text-2)] outline-none hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring">{t("agentOverview.resetFilters")}</button> : null}
           </div>
@@ -346,7 +346,7 @@ export function AgentsOverview({
                   type="button"
                   onClick={() => void newSession()}
                   disabled={creating}
-                  className="mt-4 inline-flex h-8 items-center gap-1.5 rounded-[var(--ag-r-sm)] bg-[var(--ag-solid)] px-3 text-[12px] font-semibold text-[var(--ag-solid-fg)] outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-ring"
+                  className="mt-4 inline-flex h-8 items-center gap-1.5 rounded-[var(--ag-r-sm)] bg-[var(--ag-solid)] px-3 text-[0.75rem] font-semibold text-[var(--ag-solid-fg)] outline-none hover:brightness-110 focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <Plus className="size-3.5" />
                   {t("agentWorkspace.newSession")}

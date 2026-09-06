@@ -21,7 +21,7 @@ export function AgentStatTiles({ tiles }: { tiles: StatTile[] }) {
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4" data-testid="agent-stat-tiles">
       {tiles.map((tile, i) => (
-        <m.div
+        <m.div layout
           key={tile.label}
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

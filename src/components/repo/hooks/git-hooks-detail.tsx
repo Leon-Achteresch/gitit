@@ -132,7 +132,7 @@ export function GitHooksDetail({
   };
 
   return (
-    <m.div
+    <m.div layout
       initial={{ x: 20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 380, damping: 32 }}
@@ -145,10 +145,10 @@ export function GitHooksDetail({
             <Webhook className="h-3.5 w-3.5 text-muted-foreground" />
           </div>
           <div className="min-w-0">
-            <p className="font-mono text-[12px] font-semibold leading-none">
+            <p className="font-mono text-[0.75rem] font-semibold leading-none">
               {entry.name}
             </p>
-            <p className="mt-0.5 truncate text-[10px] text-muted-foreground/60">
+            <p className="mt-0.5 truncate text-[0.625rem] text-muted-foreground/60">
               {t(`hooks.kindDesc.${entry.name}`, { defaultValue: t("hooks.kindFallback") })}
             </p>
           </div>
@@ -172,7 +172,7 @@ export function GitHooksDetail({
       <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-border/60 px-3 py-2">
         <GitHookStatusBadge entry={entry} isServer={isServer} />
         {canAbort && (
-          <span className="inline-flex items-center rounded-md bg-destructive/10 px-1.5 py-0.5 text-[10px] font-semibold text-destructive">
+          <span className="inline-flex items-center rounded-md bg-destructive/10 px-1.5 py-0.5 text-[0.625rem] font-semibold text-destructive">
             {t("hooks.canAbort")}
           </span>
         )}
@@ -181,7 +181,7 @@ export function GitHooksDetail({
           <Button
             variant="outline"
             size="sm"
-            className="h-6 gap-1 px-2 text-[11px]"
+            className="h-6 gap-1 px-2 text-[0.6875rem]"
             disabled={running}
             onClick={() => void handleRun()}
           >
@@ -195,7 +195,7 @@ export function GitHooksDetail({
           <Button
             variant="outline"
             size="sm"
-            className="h-6 gap-1 px-2 text-[11px]"
+            className="h-6 gap-1 px-2 text-[0.6875rem]"
             disabled={toggling}
             onClick={() => void handleToggle()}
           >
@@ -220,7 +220,7 @@ export function GitHooksDetail({
         <div className="shrink-0 border-b border-border/60 bg-muted/20">
           <div className="flex items-center gap-2 px-3 py-1.5">
             <span
-              className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${
+              className={`rounded-md px-1.5 py-0.5 text-[0.625rem] font-semibold ${
                 runResult.exit_code === 0
                   ? "bg-emerald-500/10 text-emerald-600"
                   : "bg-destructive/10 text-destructive"
@@ -238,7 +238,7 @@ export function GitHooksDetail({
             </Button>
           </div>
           {runResult.output && (
-            <pre className="max-h-40 overflow-auto whitespace-pre-wrap px-3 pb-2 font-mono text-[11px] leading-relaxed text-muted-foreground">
+            <pre className="max-h-40 overflow-auto whitespace-pre-wrap px-3 pb-2 font-mono text-[0.6875rem] leading-relaxed text-muted-foreground">
               {runResult.output}
             </pre>
           )}
@@ -269,7 +269,7 @@ export function GitHooksDetail({
             <Button
               variant="outline"
               size="sm"
-              className="h-7 gap-1.5 border-destructive/30 px-2.5 text-[11px] text-destructive hover:bg-destructive/10"
+              className="h-7 gap-1.5 border-destructive/30 px-2.5 text-[0.6875rem] text-destructive hover:bg-destructive/10"
               disabled={deleting}
               onClick={() => void handleDelete()}
             >
@@ -279,7 +279,7 @@ export function GitHooksDetail({
           )}
           <Button
             size="sm"
-            className="ml-auto h-7 gap-1.5 px-2.5 text-[11px]"
+            className="ml-auto h-7 gap-1.5 px-2.5 text-[0.6875rem]"
             disabled={saving}
             onClick={() => void handleSave()}
           >

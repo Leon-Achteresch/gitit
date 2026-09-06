@@ -115,12 +115,12 @@ export function CodeBlock({
             {filename}
           </span>
         ) : null}
-        <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground/55">
+        <span className="text-[0.625rem] font-medium uppercase tracking-wide text-muted-foreground/55">
           {language}
         </span>
         <span
           className={cn(
-            "ml-auto inline-flex shrink-0 items-center gap-1 text-[10px] font-medium",
+            "ml-auto inline-flex shrink-0 items-center gap-1 text-[0.625rem] font-medium",
             streaming
               ? "text-blue-600 dark:text-blue-400"
               : "text-emerald-600 dark:text-emerald-400",
@@ -134,7 +134,7 @@ export function CodeBlock({
           {streaming ? "Writing" : "Ready"}
         </span>
         {copyable || onCopy ? (
-          <m.button
+          <m.button layout
             type="button"
             aria-label={copied ? "Copied" : "Copy code"}
             title={copied ? "Copied" : "Copy code"}

@@ -188,7 +188,7 @@ export function AppUpdateDialog() {
   return (
     <AnimatePresence>
       {visible && (
-        <m.div
+        <m.div layout
           role="region"
           aria-label={dialogTitle}
           initial={{ opacity: 0, scale: 0.94, y: 16 }}
@@ -230,7 +230,7 @@ export function AppUpdateDialog() {
                   {dialogTitle}
                 </h2>
                 {phase === "available" && (
-                  <span className="rounded-full border border-indigo-500/25 bg-indigo-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
+                  <span className="rounded-full border border-indigo-500/25 bg-indigo-500/15 px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-wider text-indigo-500 dark:text-indigo-400">
                     NEW
                   </span>
                 )}
@@ -264,7 +264,7 @@ export function AppUpdateDialog() {
                     v{currentVersion}
                   </span>
                 )}
-                <span className="text-[11px] text-muted-foreground">
+                <span className="text-[0.6875rem] text-muted-foreground">
                   {publishedLabel ? `• ${publishedLabel}` : `• ${t("updates.readyToInstall")}`}
                 </span>
               </div>
@@ -294,7 +294,7 @@ export function AppUpdateDialog() {
                     />
                   )}
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                <div className="flex items-center justify-between text-[0.6875rem] text-muted-foreground">
                   <span>{phase === "downloading" ? t("updates.releaseDownloading") : t("updates.filesApplying")}</span>
                   {totalBytes > 0 && (
                     <span>{formatBytes(downloadedBytes)} / {formatBytes(totalBytes)}</span>

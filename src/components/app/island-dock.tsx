@@ -73,7 +73,7 @@ export function IslandDock({
   const spread = pad + (horizontal ? size.width : size.height) + padEnd;
 
   return (
-    <m.div
+    <m.div layout
       data-island-slot={id}
       aria-hidden
       initial={false}
@@ -111,7 +111,7 @@ export function IslandDock({
       >
         <AnimatePresence>
           {dragging && open && (
-            <m.span
+            <m.span layout
               initial={{ opacity: 0, scale: 0.82 }}
               animate={{
                 opacity: 1,

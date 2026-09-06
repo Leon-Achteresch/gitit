@@ -38,6 +38,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { SpinIcon } from "@/components/motion/kit";
+import { m } from "motion/react";
 import { Pause as PauseData, Play as PlayData } from "lucide";
 import { MorphIcon } from "@/components/ui/morph-icon";
 
@@ -55,7 +56,7 @@ function CommandRow({ entry }: { entry: GitCommandEntry }) {
   }
 
   return (
-    <div className='flex items-center gap-2 rounded-lg border border-border/50 bg-card/40 px-2.5 py-1.5 transition-colors hover:border-border hover:bg-card/70'>
+    <m.div layout className='flex items-center gap-2 rounded-lg border border-border/50 bg-card/40 px-2.5 py-1.5 transition-colors hover:border-border hover:bg-card/70'>
       <span
         className={cn(
           'flex size-5 shrink-0 items-center justify-center rounded-md',
@@ -68,7 +69,7 @@ function CommandRow({ entry }: { entry: GitCommandEntry }) {
         {entry.exitOk ? <Check className='size-3' /> : <X className='size-3' />}
       </span>
       <span
-        className='w-28 shrink-0 truncate text-[11px] text-muted-foreground'
+        className='w-28 shrink-0 truncate text-[0.6875rem] text-muted-foreground'
         title={entry.repoPath || t('cmdLog.noRepo')}
       >
         {entry.repoPath ? repoLabel(entry.repoPath) : t('cmdLog.noRepo')}
@@ -77,7 +78,7 @@ function CommandRow({ entry }: { entry: GitCommandEntry }) {
         {command}
       </code>
       <span
-        className='shrink-0 text-[11px] tabular-nums text-muted-foreground'
+        className='shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground'
         title={formatDate(entry.startedAt)}
       >
         {formatDurationMs(entry.durationMs)}
@@ -93,7 +94,7 @@ function CommandRow({ entry }: { entry: GitCommandEntry }) {
       >
         <Copy className='size-3.5' />
       </Button>
-    </div>
+    </m.div>
   );
 }
 
@@ -144,7 +145,7 @@ export function GitCommandLogPage({ onClose }: { onClose: () => void }) {
             <h2 className='truncate text-sm font-semibold tracking-tight'>
               {t('cmdLog.title')}
             </h2>
-            <p className='truncate text-[11px] text-muted-foreground'>
+            <p className='truncate text-[0.6875rem] text-muted-foreground'>
               {t('cmdLog.subtitle', { count: entries.length })}
             </p>
           </div>

@@ -136,7 +136,7 @@ export function PullRequestConversationTab({
               <SpinIcon icon={Loader2} className="h-6 w-6 text-primary" />
             </div>
           ) : entries.length === 0 ? (
-            <m.div
+            <m.div layout
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               className="flex flex-col items-center justify-center py-12 text-center text-sm text-muted-foreground gap-2"
@@ -151,7 +151,7 @@ export function PullRequestConversationTab({
                 const isChangesRequested = e.data.state === "CHANGES_REQUESTED";
 
                 return (
-                  <m.div
+                  <m.div layout
                     key={`r-${e.data.id}-${i}`}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -172,7 +172,7 @@ export function PullRequestConversationTab({
                       />
                       <span className="font-semibold text-foreground">{e.data.author}</span>
                       <span
-                        className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${
+                        className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[0.625rem] font-semibold ${
                           isApproved
                             ? "bg-emerald-500/15 text-emerald-400"
                             : isChangesRequested
@@ -184,12 +184,12 @@ export function PullRequestConversationTab({
                         {isChangesRequested && <ThumbsDown className="h-3 w-3" />}
                         {reviewLabel(e.data.state)}
                       </span>
-                      <span className="ml-auto font-mono text-[10px] text-muted-foreground tabular-nums">
+                      <span className="ml-auto font-mono text-[0.625rem] text-muted-foreground tabular-nums">
                         {formatRelative(e.data.submitted_at)}
                       </span>
                     </div>
                     {e.data.body.trim() ? (
-                      <div className="mt-2 text-[13px] leading-relaxed text-foreground [&_a]:text-primary [&_a]:underline [&_code]:rounded [&_code]:bg-muted/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[0.85em]">
+                      <div className="mt-2 text-[0.8125rem] leading-relaxed text-foreground [&_a]:text-primary [&_a]:underline [&_code]:rounded [&_code]:bg-muted/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[0.85em]">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                           {e.data.body}
                         </ReactMarkdown>
@@ -200,7 +200,7 @@ export function PullRequestConversationTab({
               }
               const c = e.data;
               return (
-                <m.div
+                <m.div layout
                   key={`c-${c.id}-${i}`}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -216,7 +216,7 @@ export function PullRequestConversationTab({
                     <span className="font-semibold text-foreground">{c.author}</span>
                     {c.file_path ? (
                       <span
-                        className="inline-flex items-center gap-1 truncate rounded-md bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                        className="inline-flex items-center gap-1 truncate rounded-md bg-muted/60 px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground"
                         title={`${c.file_path}${c.line ? `:${c.line}` : ""}`}
                       >
                         <FileCode2 className="h-2.5 w-2.5" />
@@ -224,11 +224,11 @@ export function PullRequestConversationTab({
                         {c.line ? <span className="text-primary font-bold">:{c.line}</span> : ""}
                       </span>
                     ) : null}
-                    <span className="ml-auto font-mono text-[10px] text-muted-foreground tabular-nums">
+                    <span className="ml-auto font-mono text-[0.625rem] text-muted-foreground tabular-nums">
                       {formatRelative(c.created_at)}
                     </span>
                   </div>
-                  <div className="mt-2 text-[13px] leading-relaxed text-foreground [&_a]:text-primary [&_a]:underline [&_code]:rounded [&_code]:bg-muted/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[0.85em]">
+                  <div className="mt-2 text-[0.8125rem] leading-relaxed text-foreground [&_a]:text-primary [&_a]:underline [&_code]:rounded [&_code]:bg-muted/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[0.85em]">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {c.body}
                     </ReactMarkdown>
@@ -255,14 +255,14 @@ export function PullRequestConversationTab({
             className="min-h-[70px] border-0 bg-transparent text-sm focus-visible:ring-0 shadow-none resize-none"
           />
           <div className="flex items-center justify-between pt-1 border-t border-border/40">
-            <span className="text-[10px] text-muted-foreground/70 font-mono">
+            <span className="text-[0.625rem] text-muted-foreground/70 font-mono">
               Press ⌘+Enter to submit
             </span>
             <Button
               size="sm"
               onClick={send}
               disabled={sending || !body.trim()}
-              className="h-7 text-[11px] rounded-lg shadow-xs"
+              className="h-7 text-[0.6875rem] rounded-lg shadow-xs"
             >
               {sending ? (
                 <SpinIcon icon={Loader2} className="mr-1.5 h-3.5 w-3.5" />

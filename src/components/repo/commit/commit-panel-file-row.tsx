@@ -13,6 +13,7 @@ import {
   Square,
   Undo2,
 } from "lucide-react";
+import { m } from "motion/react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StatusIcon } from "./commit-panel-status-icon";
@@ -57,7 +58,8 @@ function FileRowInner({
         : "text-muted-foreground hover:bg-muted/30 hover:text-foreground");
 
   const inner = (
-    <div
+    <m.div
+      layout
       onClick={(e) => {
         if (e.shiftKey) e.preventDefault();
         onSelect(row.id, e.shiftKey);
@@ -84,17 +86,17 @@ function FileRowInner({
       <span className="min-w-0 flex-1 truncate text-sm">
         <span className="font-medium">{row.path.split("/").pop()?.replace(/\/$/, "")}</span>
         {row.entry.embedded_repo && (
-          <span className="ml-2 rounded bg-git-merge/15 px-1 py-0.5 text-[10px] font-medium text-git-merge">
+          <span className="ml-2 rounded bg-git-merge/15 px-1 py-0.5 text-[0.625rem] font-medium text-git-merge">
             {t("commitPanel.embeddedRepo")}
           </span>
         )}
         {depth === undefined && (
-          <span className="ml-2 truncate text-[11px] opacity-50">
+          <span className="ml-2 truncate text-[0.6875rem] opacity-50">
             {row.path.split("/").slice(0, -1).join("/")}
           </span>
         )}
       </span>
-      <div className="flex shrink-0 items-center gap-2 font-mono text-[11px] tabular-nums">
+      <div className="flex shrink-0 items-center gap-2 font-mono text-[0.6875rem] tabular-nums">
         {!row.entry.binary && (
           <>
             {additions > 0 && <span className="text-git-added">+{additions}</span>}
@@ -102,7 +104,7 @@ function FileRowInner({
           </>
         )}
       </div>
-    </div>
+    </m.div>
   );
 
   const canBlame = !row.entry.untracked && row.entry.index_status !== "A";

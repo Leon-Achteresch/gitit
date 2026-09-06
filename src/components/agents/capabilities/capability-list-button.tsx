@@ -51,7 +51,7 @@ export function CapabilityListButton({
 
   return (
     <ItemContextMenu entries={entries}>
-      <m.button
+      <m.button layout
         type="button"
         onClick={onClick}
         aria-pressed={selected}
@@ -76,11 +76,11 @@ export function CapabilityListButton({
         </span>
         <span className="min-w-0 flex-1">
           <span className="flex min-w-0 items-center gap-2">
-            <span className="truncate text-[13px] font-semibold tracking-tight text-[var(--ag-text)]">{title}</span>
+            <span className="truncate text-[0.8125rem] font-semibold tracking-tight text-[var(--ag-text)]">{title}</span>
             {meta}
           </span>
           {description ? (
-            <span className="mt-1 line-clamp-2 block text-[12px] leading-5 text-[var(--ag-text-2)]">
+            <span className="mt-1 line-clamp-2 block text-[0.75rem] leading-5 text-[var(--ag-text-2)]">
               {description}
             </span>
           ) : null}

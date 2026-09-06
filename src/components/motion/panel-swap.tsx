@@ -12,7 +12,7 @@ export function PanelSwap({
 }) {
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <m.div
+      <m.div layout
         key={panelKey}
         className={className}
         initial={{ opacity: 0, x: 14 }}
