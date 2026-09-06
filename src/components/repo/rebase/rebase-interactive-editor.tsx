@@ -44,6 +44,7 @@ import {
   X,
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { describeRebaseError, isLocalChangesBlock } from './rebase-errors';
 import { notifyRebaseResult } from './rebase-feedback';
@@ -176,7 +177,7 @@ function EntryRow({
         {attached ? (
           <CornerDownRight className='h-3.5 w-3.5 shrink-0 text-git-modified' />
         ) : null}
-        <span className='shrink-0 font-mono text-[11px] text-muted-foreground'>
+        <span className='shrink-0 font-mono text-[0.6875rem] text-muted-foreground'>
           {entry.shortHash}
         </span>
         <span
@@ -497,7 +498,7 @@ export function RebaseInteractiveEditor({
         ? t('rebase.errors.allDropped')
         : null;
 
-  return (
+  return createPortal(
     <div
       role='dialog'
       aria-modal='true'
@@ -547,7 +548,7 @@ export function RebaseInteractiveEditor({
               disabled={busy}
               className='font-mono text-xs'
             />
-            <p className='text-[11px] text-muted-foreground'>
+            <p className='text-[0.6875rem] text-muted-foreground'>
               {t('rebaseEditor.baseHint')}
             </p>
           </div>
@@ -623,10 +624,10 @@ export function RebaseInteractiveEditor({
         </div>
 
         <footer className='grid gap-2 border-t border-border/60 px-4 py-3'>
-          <p className='text-[11px] text-muted-foreground'>
+          <p className='text-[0.6875rem] text-muted-foreground'>
             {t('rebaseEditor.shortcuts')}
           </p>
-          <div className='flex flex-wrap items-center gap-1.5 text-[11px]'>
+          <div className='flex flex-wrap items-center gap-1.5 text-[0.6875rem]'>
             <span className='text-muted-foreground'>
               {t('rebaseEditor.summaryLabel')}
             </span>
@@ -707,6 +708,7 @@ export function RebaseInteractiveEditor({
           </div>
         </footer>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
