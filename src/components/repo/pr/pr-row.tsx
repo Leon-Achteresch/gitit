@@ -68,28 +68,28 @@ export const PrRow = memo(function PrRow({
 
         <div className="min-w-0 flex-1 ml-1">
           <div className="flex min-w-0 items-center gap-1.5">
-            <span className="min-w-0 flex-1 truncate text-[13px] font-semibold leading-tight text-foreground group-hover:text-primary transition-colors">
+            <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-semibold leading-tight text-foreground group-hover:text-primary transition-colors">
               {pr.title}
             </span>
             {pr.labels.slice(0, 2).map((l) => (
               <PrLabelChip key={l} label={l} />
             ))}
             {pr.labels.length > 2 && (
-              <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
+              <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground">
                 +{pr.labels.length - 2}
               </span>
             )}
           </div>
 
-          <div className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[11px] text-muted-foreground">
-            <span className="font-mono text-[10px] font-semibold text-muted-foreground/70">
+          <div className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
+            <span className="font-mono text-[0.625rem] font-semibold text-muted-foreground/70">
               #{pr.number}
             </span>
             <span className="opacity-30">·</span>
             <CommitAvatar url={pr.author_avatar} name={pr.author} size="sm" />
             <span className="truncate max-w-[90px]">{pr.author}</span>
             <span className="opacity-30">·</span>
-            <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[10px]">
+            <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[0.625rem]">
               <span className="rounded bg-muted/80 px-1.5 py-0 text-foreground/80">
                 {pr.source_branch}
               </span>

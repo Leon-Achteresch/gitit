@@ -71,7 +71,10 @@
     "search": "Rechercher",
     "yes": "Oui",
     "no": "Non",
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "retry": "Retry",
+    "clear": "Clear",
+    "reset": "Reset"
   },
   "crash": {
     "title": "Cette vue a planté",
@@ -401,7 +404,8 @@
       "total": "Total",
       "saved": "Économisé par le cache",
       "disclaimer": "Estimation au tarif public de {{input}} $/M en entrée et {{output}} $/M en sortie. Votre offre peut être facturée différemment.",
-      "noPrice": "Aucun tarif public enregistré pour {{model}} — ajoutez-le dans token-cost.ts."
+      "noPrice": "Aucun tarif public enregistré pour {{model}} — ajoutez-le dans token-cost.ts.",
+      "rates": "Token rates"
     },
     "switchRepo": "Changer de dépôt",
     "today": "Aujourd'hui",
@@ -684,7 +688,8 @@
     },
     "activityFeed": {
       "title": "Activité récente",
-      "empty": "Rien à afficher pour l'instant."
+      "empty": "Rien à afficher pour l'instant.",
+      "loading": "Loading activity…"
     },
     "health": {
       "title": "Santé du dépôt",
@@ -1170,7 +1175,7 @@
   },
   "animations": {
     "title": "Mouvement et animations",
-    "desc": "Transitions subtiles — Magic Pill, Tape Reveal et Pop Bloom. Elles ne vous bloquent jamais : vous pouvez continuer à cliquer pendant que les éléments s'animent. Respecte automatiquement le réglage système « Réduire les animations ».",
+    "desc": "Adjust transitions and motion to your preference.",
     "enableLabel": "Activer les animations",
     "enableHint": "Désactivé, tout le contenu apparaît instantanément, sans effet de transition."
   },
@@ -1485,7 +1490,20 @@
     "folderStage": "Indexer le dossier",
     "folderUnstage": "Désindexer le dossier",
     "folderDiscard": "Abandonner les modifications du dossier",
-    "folderIgnore": "Ajouter le dossier au .gitignore"
+    "folderIgnore": "Ajouter le dossier au .gitignore",
+    "messageLabel": "Commit message",
+    "bodyLabel": "Description (optional)",
+    "commitDisabledHint": "Stage changes and enter a commit message first.",
+    "commitOptions": "Commit options",
+    "noFileSelectedTitle": "Select a file",
+    "noFileSelectedBody": "Choose a changed file to inspect its diff.",
+    "reloadDiff": "Reload diff",
+    "toggleAll": "Select all files",
+    "resolveConflicts": "Resolve conflicts",
+    "reloadChanges": "Reload changes",
+    "cleanTitle": "Working tree clean",
+    "noMatchesTitle": "No matching files",
+    "noMatchesBody": "Change or clear the filter to see more files."
   },
   "commitSplit": {
     "menuEntry": "Découper les modifications avec l'IA",
@@ -1869,7 +1887,12 @@
     "mergeRunningShort": "Fusion…",
     "checkoutAlertLocalized": "Basculé sur la branche locale « {{branch}} ».",
     "mergeConfirmNow": "Fusionner la PR #{{number}} maintenant avec {{strategy}} ?",
-    "createSubmitBusy": "…"
+    "createSubmitBusy": "…",
+    "checkoutLocalButton": "Check out locally",
+    "reviewApprove": "Approve",
+    "reviewRequestChanges": "Request changes",
+    "reviewCommentOnly": "Comment",
+    "mergeBusy": "Merging…"
   },
   "ci": {
     "emptyProviderHint": "Les exécutions de workflow nécessitent un compte Git connecté avec accès à la CI.",
@@ -2516,7 +2539,11 @@
     "layoutInline": "En ligne",
     "layoutInlineTitle": "Afficher les modifications les unes en dessous des autres",
     "layoutSideBySide": "Côte à côte",
-    "layoutSideBySideTitle": "Afficher l'ancienne et la nouvelle version l'une à côté de l'autre"
+    "layoutSideBySideTitle": "Afficher l'ancienne et la nouvelle version l'une à côté de l'autre",
+    "loading": "Loading diff…",
+    "loadFailedTitle": "Could not load diff",
+    "binaryHint": "Binary file — no text preview available.",
+    "noChangesTitle": "No changes"
   },
   "media": {
     "modeSideBySide": "Côte à côte",
@@ -3390,7 +3417,8 @@
     "sidebarSubmodules": "Barre latérale : Sous-modules",
     "sidebarWorktrees": "Barre latérale : Worktrees",
     "sidebarHooks": "Barre latérale : Hooks",
-    "sidebarTools": "Barre latérale : Outils"
+    "sidebarTools": "Barre latérale : Outils",
+    "subtitle": "Keyboard shortcuts for your workspace."
   },
   "reflog": {
     "title": "Reflog",
@@ -3554,5 +3582,71 @@
     "linkedToast": "{{key}} lié à cette conversation.",
     "panelHint": "Les tickets se lient par conversation : clic droit sur un chat dans la barre latérale → « Lier un ticket Jira ». La clé et le statut apparaissent ensuite dans la ligne du chat.",
     "sessionNote": "Un ticket lié prend effet immédiatement, même dans un chat déjà en cours. Les interrupteurs ci-dessus ne s'appliquent qu'aux chats démarrés ensuite : la CLI ne demande la liste des outils qu'une fois, à la connexion."
+  },
+  "audit": {
+    "welcome": "Your next change starts here.",
+    "welcomeHint": "Open a repository to review changes, create commits and work with your agents. Your Git workspace stays on this device.",
+    "dropHint": "You can also drop a repository folder into this window.",
+    "recentRepos": "Recent repositories",
+    "filters": "History filters",
+    "savedFilter": "Saved filter",
+    "query": "Commit message",
+    "author": "Author",
+    "file": "File or directory",
+    "since": "From date",
+    "until": "Until date",
+    "noResults": "No matching results.",
+    "filteredHistory": "{{count}} commits loaded",
+    "loadMore": "Load more",
+    "contextTitle": "Review AI context",
+    "contextHint": "This is the content sent to {{provider}}. Remove files or details you do not want to share before continuing. Shortened excerpts are marked.",
+    "contextSize": "{{count}} characters",
+    "system": "Instructions and context",
+    "prompt": "Request",
+    "sendContext": "Send to provider",
+    "portability": "Workspace data",
+    "portabilityHint": "Transfer layout, shortcuts, repository groups and prompts. API keys and executable commands are excluded. Prompts and repository paths remain in the export.",
+    "export": "Export settings",
+    "import": "Import settings",
+    "diagnostics": "Export diagnostics",
+    "undoImport": "Undo import",
+    "invalidImport": "Use a valid JSON export smaller than 2 MB.",
+    "importHint": "Review the settings below. Applying replaces these preferences; repositories and files are not modified. You can undo this import here.",
+    "applyImport": "Apply settings",
+    "layout": "Layout and reading",
+    "density": "Interface density",
+    "comfortable": "Comfortable",
+    "compact": "Compact",
+    "navLabels": "Show navigation labels on wide windows",
+    "previewAi": "Review context before sending to AI",
+    "settingsSearch": "Search settings",
+    "resizeSidebar": "Resize repository sidebar",
+    "stashChanged": "The stash list changed. Refresh it and select the stash again. If changes were already applied, the stash was retained.",
+    "recovery": "Recovery",
+    "recoveryHint": "Undo restores supported Git operations. Uncommitted files discarded by Git are not recoverable through Undo. Use the reflog to inspect earlier commits.",
+    "reflog": "Open reflog",
+    "commands": "Command log",
+    "prScope": "All open requests and loaded history. Load more to search older completed requests.",
+    "showHistory": "Include closed requests",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "reset": "Reset",
+    "activity": "Activity & recovery",
+    "activityHint": "Running operations and recent results for this session.",
+    "noActivity": "No operations in this session yet.",
+    "status_success": "Completed",
+    "status_failed": "Failed",
+    "status_canceled": "Canceled",
+    "excludeFile": "Remove",
+    "untracked": "Untracked",
+    "invalidRepoPath": "The repository path is invalid.",
+    "invalidTargetPath": "The target path is invalid.",
+    "pathOutsideRepo": "The target must be inside the repository.",
+    "invalidToolsConfig": "The repository tools configuration is not valid JSON.",
+    "contextFiles": "Files in the diff",
+    "excludeHint": "Remove file patches before sending. You can also edit the full context below.",
+    "excludeFileNamed": "Remove {{path}} from context",
+    "nextRetry": "Next automatic refresh: {{time}}. Refreshes are spaced out after errors.",
+    "providerRateLimit": "Provider rate limit reached. Requests can resume at {{time}}."
   }
 }

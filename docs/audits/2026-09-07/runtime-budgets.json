@@ -1,0 +1,40 @@
+{
+  "scope": "Production-built Chromium renderer with IPC fixtures; 1000 changed files, 10000 commits, five warmed settings round trips. Timings are renderer readiness; heap is JavaScript after GC, excluding native processes.",
+  "samples": [
+    {
+      "homeReadyMs": 1573,
+      "repositoryReadyMs": 861,
+      "heapBytes": 24275484,
+      "retainedGrowthBytes": 3184944,
+      "domNodes": 858
+    },
+    {
+      "homeReadyMs": 1036,
+      "repositoryReadyMs": 483,
+      "heapBytes": 23822140,
+      "retainedGrowthBytes": 2905008,
+      "domNodes": 858
+    },
+    {
+      "homeReadyMs": 959,
+      "repositoryReadyMs": 508,
+      "heapBytes": 23867708,
+      "retainedGrowthBytes": 2801920,
+      "domNodes": 858
+    }
+  ],
+  "metrics": {
+    "homeReadyMs": 1036,
+    "repositoryReadyMs": 508,
+    "heapBytes": 23867708,
+    "retainedGrowthBytes": 2905008,
+    "domNodes": 858
+  },
+  "limits": {
+    "homeReadyMs": 10000,
+    "repositoryReadyMs": 10000,
+    "heapBytes": 201326592,
+    "retainedGrowthBytes": 33554432,
+    "domNodes": 5000
+  }
+}

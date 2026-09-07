@@ -92,10 +92,10 @@ export default function RepoStashScreen() {
     (index: number) => {
       router.push({
         pathname: '/repos/[hostId]/[repo]/stash/[stashIndex]',
-        params: { hostId, repo: repoPath, stashIndex: String(index) },
+        params: { hostId, repo: repoPath, stashIndex: String(index), hash: entries.find(entry => entry.index === index)?.hash },
       });
     },
-    [hostId, repoPath, router]
+    [hostId, repoPath, router, entries]
   );
 
   if (!scope.online) {

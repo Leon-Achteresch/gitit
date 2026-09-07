@@ -12,9 +12,6 @@ export function isAiConfigured(): boolean {
   if (aiProviderType === "compatible") {
     return aiProviderBaseUrl.trim().length > 0 && aiProviderApiKey.trim().length > 0;
   }
-  if (aiProviderType === "openrouter" && import.meta.env.VITE_OPENROUTER_API_KEY) {
-    return true;
-  }
   return aiProviderApiKey.trim().length > 0;
 }
 

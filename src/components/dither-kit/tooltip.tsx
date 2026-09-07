@@ -73,7 +73,7 @@ export function Tooltip({
           )}
         >
           {heading && (
-            <div className="mb-0.5 font-mono text-[10px] text-muted-foreground">
+            <div className="mb-0.5 font-mono text-[0.625rem] text-muted-foreground">
               {heading}
             </div>
           )}
@@ -81,7 +81,7 @@ export function Tooltip({
             {items.map((item) => (
               <div
                 key={item.name}
-                className="flex items-center gap-1.5 font-mono text-[11px] text-popover-foreground tabular-nums"
+                className="flex items-center gap-1.5 font-mono text-[0.6875rem] text-popover-foreground tabular-nums"
                 style={{ opacity: item.dimmed ? 0.4 : 1 }}
               >
                 <span

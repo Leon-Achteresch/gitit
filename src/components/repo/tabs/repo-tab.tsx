@@ -158,7 +158,7 @@ export const RepoTab = memo(function RepoTab({
   const content = (
     <>
       <span
-        className="relative flex size-[18px] shrink-0 items-center justify-center rounded font-mono text-[9px] font-bold text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.18)]"
+        className="relative flex size-[18px] shrink-0 items-center justify-center rounded font-mono text-[0.5625rem] font-bold text-white shadow-[inset_0_-1px_0_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.18)]"
         style={showFavicon ? undefined : { backgroundColor: avatarBg }}
       >
         {loading ? (
@@ -190,7 +190,7 @@ export const RepoTab = memo(function RepoTab({
       )}
 
       {!compact && showSyncMini && (
-        <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[10px] text-muted-foreground">
+        <span className="inline-flex shrink-0 items-center gap-1 font-mono text-[0.625rem] text-muted-foreground">
           {showConflictBadge ? (
             <span className="inline-flex items-center gap-0.5 font-semibold text-git-modified">
               <AlertTriangle className="size-3" aria-hidden />

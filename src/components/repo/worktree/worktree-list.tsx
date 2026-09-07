@@ -84,7 +84,7 @@ export function WorktreeList({
             <h2 className="truncate text-sm font-semibold tracking-tight">
               {t("worktree.introTitle")}
             </h2>
-            <p className="text-[11px] text-muted-foreground">{summarySub}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{summarySub}</p>
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1">
@@ -153,7 +153,7 @@ export function WorktreeList({
         )}
       </ListRow>
       {hintOpen && (
-        <div className="shrink-0 border-b border-border/40 bg-muted/20 px-3 py-2.5 text-[11px] leading-relaxed text-muted-foreground">
+        <div className="shrink-0 border-b border-border/40 bg-muted/20 px-3 py-2.5 text-[0.6875rem] leading-relaxed text-muted-foreground">
           <p className="mb-1.5">{t("worktree.helpP1")}</p>
           <ul className="ml-3 list-disc space-y-1">
             <li>{t("worktree.helpLine1")}</li>

@@ -94,7 +94,7 @@ function SectionNavigation({
             <Icon className="relative size-3.5 shrink-0" />
             <span className="relative">{label}</span>
             {id === "threads" && runningCount > 0 ? (
-              <Badge variant="success" className="relative ml-0.5 h-4 px-1.5 py-0 text-[10px]">
+              <Badge variant="success" className="relative ml-0.5 h-4 px-1.5 py-0 text-[0.625rem]">
                 {runningCount}
               </Badge>
             ) : null}
@@ -219,7 +219,7 @@ export function AgentProfileShell({
               onClose?.();
               onOpenSettings();
             }}
-            className="flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[11px] font-medium text-[var(--ag-text-3)] outline-none transition-colors hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[0.6875rem] font-medium text-[var(--ag-text-3)] outline-none transition-colors hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Settings className="size-3.5 shrink-0" />
             <span className="truncate">{t("agentWorkspace.settings")}</span>
@@ -358,11 +358,11 @@ export function AgentProfileShell({
           />
 
           <div className="flex shrink-0 items-center gap-1">
-            <div className="hidden items-center gap-1.5 rounded-md px-2 py-1 text-[10px] text-[var(--ag-text-2)] xl:flex">
+            <div className="hidden items-center gap-1.5 rounded-md px-2 py-1 text-[0.625rem] text-[var(--ag-text-2)] xl:flex">
               <span>{meta.label}</span>
             </div>
             {runningCount > 0 ? (
-              <Badge variant="success" className="hidden h-6 rounded-md px-1.5 text-[10px] sm:inline-flex">
+              <Badge variant="success" className="hidden h-6 rounded-md px-1.5 text-[0.625rem] sm:inline-flex">
                 {runningCount} {t("agentWorkspace.working").toLocaleLowerCase()}
               </Badge>
             ) : null}

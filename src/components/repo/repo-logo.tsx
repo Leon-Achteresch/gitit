@@ -27,7 +27,7 @@ export function RepoLogo({
   return (
     <span
       className={cn(
-        "flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded font-mono text-[9px] font-bold text-white",
+        "flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded font-mono text-[0.5625rem] font-bold text-white",
         className,
       )}
       style={showFavicon ? undefined : { backgroundColor: repoAvatarBackground(label) }}

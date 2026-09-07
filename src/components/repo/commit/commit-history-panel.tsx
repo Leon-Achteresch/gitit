@@ -1,3 +1,6 @@
+import { useHistoryQuery, EMPTY_HISTORY_FILTER } from '@/lib/use-history-query';
+import { HistoryFilters } from './history-filters';
+import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +18,7 @@ import {
 } from '@/components/ui/resizable';
 import { NewBranchDialog } from '@/components/repo/branch/new-branch-dialog';
 import { toastError } from '@/lib/error-toast';
-import { computeReachableHashes, normalizeGitOid } from '@/lib/graph';
+import { normalizeGitOid } from '@/lib/graph';
 import type { Branch, Commit } from '@/lib/repo-store';
 import { useRepoStore } from '@/lib/repo-store';
 import { useHistoryHotkeys } from '@/lib/use-history-hotkeys';
@@ -108,15 +111,12 @@ export function CommitHistoryPanel({
     setCursorHash(null);
   }, [path]);
 
-  const filteredCommits = useMemo(() => {
-    if (selectedBranchNames.size === 0) return commits;
-    const tipHashes = branches
-      .filter(b => selectedBranchNames.has(b.name))
-      .map(b => b.tip);
-    if (tipHashes.length === 0) return commits;
-    const reachable = computeReachableHashes(commits, tipHashes);
-    return commits.filter(c => reachable.has(normalizeGitOid(c.hash)));
-  }, [commits, branches, selectedBranchNames]);
+  const [historyFilter, setHistoryFilter] = useState(EMPTY_HISTORY_FILTER);
+  const branchRefs = [...selectedBranchNames].map(name => branches.find(b => b.name === name)?.tip ?? name).sort();
+  const queryFilter = { ...historyFilter, refs: branchRefs };
+  const filtered = branchRefs.length > 0 || Object.entries(historyFilter).some(([k, v]) => k !== 'refs' && v !== '');
+  const history = useHistoryQuery(path, queryFilter, filtered, commits[0]?.hash ?? '');
+  const filteredCommits = filtered ? history.commits : commits;
 
   const isSearch = !!searchSlice?.query?.trim();
   const matchPathsByHash = useMemo(() => {
@@ -343,7 +343,8 @@ export function CommitHistoryPanel({
       path={path}
       commits={filteredCommits}
       matchPathsByHash={matchPathsByHash}
-      searchActive={isSearch}
+      onLoadMore={filtered ? history.loadMore : undefined}
+      searchActive={isSearch && !filtered}
       searchHitsExhausted={searchSlice?.exhausted ?? true}
       searchEpoch={searchSlice?.epoch ?? 0}
       selectedHash={selectedHash}
@@ -355,6 +356,12 @@ export function CommitHistoryPanel({
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg bg-white shadow-sm dark:bg-zinc-950">
+      <HistoryFilters value={{ ...historyFilter, refs: [...selectedBranchNames] }} onChange={value => { setHistoryFilter(value); useUiStore.getState().setBranchFilter(path, new Set(value.refs)); }} />
+      {filtered && <div className="flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground" role="status">
+        {history.loading ? t('common.loading') : history.error || (history.commits.length === 0 ? t('audit.noResults') : t('audit.filteredHistory', { count: history.commits.length }))}
+        {history.error && <Button size="sm" variant="outline" onClick={history.retry}>{t('common.retry')}</Button>}
+        {!history.loading && !history.exhausted && !history.error && <Button size="sm" variant="ghost" onClick={history.loadMore}>{t('audit.loadMore')}</Button>}
+      </div>}
       <BisectStatusBanner path={path} />
       <CherryPickStatusBanner path={path} />
       <MergeStatusBanner path={path} />

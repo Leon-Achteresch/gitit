@@ -18,7 +18,7 @@ export function CapabilitySectionTitle({
       <header className="flex min-w-0 flex-wrap items-start gap-4 border-b border-[var(--ag-line)] bg-[var(--ag-surface)] px-6 py-6 max-sm:px-4 max-sm:py-5">
         <div className="min-w-0 flex-1">
           {eyebrow ? (
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ag-text-3)]">
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-[var(--ag-text-3)]">
               {eyebrow}
             </p>
           ) : null}
@@ -26,7 +26,7 @@ export function CapabilitySectionTitle({
             {title}
           </h2>
           {description ? (
-            <p className="mt-1.5 text-[13px] leading-6 text-[var(--ag-text-2)]">
+            <p className="mt-1.5 text-[0.8125rem] leading-6 text-[var(--ag-text-2)]">
               {description}
             </p>
           ) : null}

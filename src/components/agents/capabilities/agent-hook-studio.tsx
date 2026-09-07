@@ -337,7 +337,7 @@ export function AgentHookStudio({ query }: { query: string }) {
         list={(
           <div className="p-3.5">
             <div className="mb-2 flex items-center justify-between px-1">
-              <p className="text-[10px] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
+              <p className="text-[0.625rem] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
               <Button type="button" variant="ghost" size="icon-xs" className="rounded-md" onClick={() => setCreateOpen(true)} title={t("agentCapabilities.hooks.create")}><Plus className="size-3.5" /></Button>
             </div>
             {error ? <CapabilityError message={error} /> : null}
@@ -390,8 +390,8 @@ export function AgentHookStudio({ query }: { query: string }) {
               <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_18rem]">
                 <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
                   <div className="flex items-center gap-2"><TerminalSquare className="size-3.5 text-muted-foreground" /><h3 className="text-xs font-semibold">{t("agentCapabilities.hooks.handler")}</h3></div>
-                  <code className="mt-3 block whitespace-pre-wrap break-words rounded-xl bg-background/70 p-3 text-[10px] leading-5 ring-1 ring-border/35">{selected.command || selected.handlerType}</code>
-                  <dl className="mt-4 grid gap-3 text-[10px] sm:grid-cols-2">
+                  <code className="mt-3 block whitespace-pre-wrap break-words rounded-xl bg-background/70 p-3 text-[0.625rem] leading-5 ring-1 ring-border/35">{selected.command || selected.handlerType}</code>
+                  <dl className="mt-4 grid gap-3 text-[0.625rem] sm:grid-cols-2">
                     <div><dt className="text-muted-foreground">Matcher</dt><dd className="mt-1 font-mono">{selected.matcher || "*"}</dd></div>
                     <div><dt className="text-muted-foreground">Context limit</dt><dd className="mt-1 font-mono">{selected.additionalContextLimit ?? "default"}</dd></div>
                   </dl>
@@ -399,14 +399,14 @@ export function AgentHookStudio({ query }: { query: string }) {
                 <div className={`rounded-2xl p-4 ring-1 ${selected.trustStatus === "trusted" || selected.trustStatus === "managed" ? "bg-emerald-500/[0.05] ring-emerald-500/20" : "bg-amber-500/[0.06] ring-amber-500/25"}`}>
                   <MorphIcon icon={selected.trustStatus === "trusted" || selected.trustStatus === "managed" ? ShieldCheckData : ShieldAlertData} className={cn("size-4", selected.trustStatus === "trusted" || selected.trustStatus === "managed" ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400")} />
                   <p className="mt-3 text-xs font-medium">{t(`agentCapabilities.hooks.trust_${selected.trustStatus}`, { defaultValue: selected.trustStatus })}</p>
-                  <p className="mt-1 text-[10px] leading-4 text-muted-foreground">{selected.isManaged ? t("agentCapabilities.hooks.managedHint") : t("agentCapabilities.hooks.trustHint")}</p>
+                  <p className="mt-1 text-[0.625rem] leading-4 text-muted-foreground">{selected.isManaged ? t("agentCapabilities.hooks.managedHint") : t("agentCapabilities.hooks.trustHint")}</p>
                 </div>
               </section>
 
               <section className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
-                <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-muted-foreground">{t("agentCapabilities.hooks.sourcePath")}</p>
-                <p className="mt-2 break-all font-mono text-[10px] leading-5">{selected.sourcePath}</p>
-                <p className="mt-2 break-all font-mono text-[9px] text-muted-foreground">SHA {selected.currentHash}</p>
+                <p className="text-[0.5625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">{t("agentCapabilities.hooks.sourcePath")}</p>
+                <p className="mt-2 break-all font-mono text-[0.625rem] leading-5">{selected.sourcePath}</p>
+                <p className="mt-2 break-all font-mono text-[0.5625rem] text-muted-foreground">SHA {selected.currentHash}</p>
               </section>
             </div>
           </div>
@@ -419,8 +419,8 @@ export function AgentHookStudio({ query }: { query: string }) {
         <DialogContent>
           <DialogHeader><DialogTitle>{t("agentCapabilities.hooks.create")}</DialogTitle><DialogDescription>{t("agentCapabilities.hooks.createScopeHint")}</DialogDescription></DialogHeader>
           <div className="grid gap-2 sm:grid-cols-2">
-            <Button type="button" variant="outline" onClick={() => void createInScope("repo")} className="h-auto items-start justify-start rounded-xl bg-foreground/[0.035] p-4 text-left hover:bg-foreground/[0.06]"><span><FileCode2 className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.scopeRepo")}</p><p className="mt-1 text-[10px] leading-4 text-muted-foreground">.codex/hooks.json</p></span></Button>
-            <Button type="button" variant="outline" onClick={() => void createInScope("user")} className="h-auto items-start justify-start rounded-xl bg-foreground/[0.035] p-4 text-left hover:bg-foreground/[0.06]"><span><ShieldCheck className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.scopeUser")}</p><p className="mt-1 text-[10px] leading-4 text-muted-foreground">~/.codex/hooks.json</p></span></Button>
+            <Button type="button" variant="outline" onClick={() => void createInScope("repo")} className="h-auto items-start justify-start rounded-xl bg-foreground/[0.035] p-4 text-left hover:bg-foreground/[0.06]"><span><FileCode2 className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.scopeRepo")}</p><p className="mt-1 text-[0.625rem] leading-4 text-muted-foreground">.codex/hooks.json</p></span></Button>
+            <Button type="button" variant="outline" onClick={() => void createInScope("user")} className="h-auto items-start justify-start rounded-xl bg-foreground/[0.035] p-4 text-left hover:bg-foreground/[0.06]"><span><ShieldCheck className="size-4" /><p className="mt-3 text-xs font-medium">{t("agentCapabilities.scopeUser")}</p><p className="mt-1 text-[0.625rem] leading-4 text-muted-foreground">~/.codex/hooks.json</p></span></Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -442,7 +442,7 @@ export function AgentHookStudio({ query }: { query: string }) {
               </Select>
             </div>
             <div className="space-y-1.5"><Label htmlFor="hook-matcher">Matcher</Label><Input id="hook-matcher" value={draft.matcher} onChange={(event) => setDraft({ ...draft, matcher: event.target.value })} placeholder="Bash|apply_patch" className="font-mono text-xs" /></div>
-            <div className="space-y-1.5 sm:col-span-2"><Label htmlFor="hook-command">{t("agentCapabilities.hooks.command")}</Label><Textarea id="hook-command" value={draft.command} onChange={(event) => setDraft({ ...draft, command: event.target.value })} className="min-h-24 font-mono text-[11px] leading-5" /></div>
+            <div className="space-y-1.5 sm:col-span-2"><Label htmlFor="hook-command">{t("agentCapabilities.hooks.command")}</Label><Textarea id="hook-command" value={draft.command} onChange={(event) => setDraft({ ...draft, command: event.target.value })} className="min-h-24 font-mono text-[0.6875rem] leading-5" /></div>
             <div className="space-y-1.5"><Label htmlFor="hook-timeout">{t("agentCapabilities.hooks.timeout")}</Label><Input id="hook-timeout" type="number" min={1} value={draft.timeout} onChange={(event) => setDraft({ ...draft, timeout: Number(event.target.value) || 1 })} /></div>
             <div className="space-y-1.5"><Label htmlFor="hook-context">Context limit</Label><Input id="hook-context" type="number" min={0} value={draft.additionalContextLimit ?? ""} onChange={(event) => setDraft({ ...draft, additionalContextLimit: event.target.value ? Number(event.target.value) : null })} /></div>
             <div className="space-y-1.5 sm:col-span-2"><Label htmlFor="hook-status">Status message</Label><Input id="hook-status" value={draft.statusMessage} onChange={(event) => setDraft({ ...draft, statusMessage: event.target.value })} /></div>
@@ -454,7 +454,7 @@ export function AgentHookStudio({ query }: { query: string }) {
       <Dialog open={rawOpen} onOpenChange={setRawOpen}>
         <DialogContent className="sm:max-w-3xl">
           <DialogHeader><DialogTitle>{t("agentCapabilities.hooks.source")}</DialogTitle><DialogDescription>{sourcePath}</DialogDescription></DialogHeader>
-          {sourceLoading ? <div className="flex min-h-80 items-center justify-center"><SpinIcon icon={LoaderCircle} className="size-4" /></div> : <Textarea value={sourceText} onChange={(event) => setSourceText(event.target.value)} spellCheck={false} className="min-h-[28rem] resize-y font-mono text-[11px] leading-5" />}
+          {sourceLoading ? <div className="flex min-h-80 items-center justify-center"><SpinIcon icon={LoaderCircle} className="size-4" /></div> : <Textarea value={sourceText} onChange={(event) => setSourceText(event.target.value)} spellCheck={false} className="min-h-[28rem] resize-y font-mono text-[0.6875rem] leading-5" />}
           <DialogFooter><Button type="button" variant="outline" onClick={() => setRawOpen(false)}>{t("common.cancel")}</Button><Button type="button" disabled={sourceLoading || Boolean(busyKey?.startsWith("file:"))} onClick={() => void saveRaw()}><Save className="size-3.5" />{t("common.save")}</Button></DialogFooter>
         </DialogContent>
       </Dialog>

@@ -71,7 +71,10 @@
     "search": "Search",
     "yes": "Yes",
     "no": "No",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "clear": "Clear",
+    "reset": "Reset"
   },
   "crash": {
     "title": "This view crashed",
@@ -401,7 +404,8 @@
       "total": "Total",
       "saved": "Saved by cache",
       "disclaimer": "List-price estimate at ${{input}}/M input and ${{output}}/M output. Your plan may bill differently.",
-      "noPrice": "No list price on file for {{model}} — add it in token-cost.ts."
+      "noPrice": "No list price on file for {{model}} — add it in token-cost.ts.",
+      "rates": "Token rates"
     },
     "switchRepo": "Switch repository",
     "today": "Today",
@@ -684,7 +688,8 @@
     },
     "activityFeed": {
       "title": "Recent activity",
-      "empty": "Nothing to show yet."
+      "empty": "Nothing to show yet.",
+      "loading": "Loading activity…"
     },
     "health": {
       "title": "Repo health",
@@ -799,7 +804,7 @@
     "titleAfter": "workflow.",
     "titleTagline": "Simple. Local. Fast.",
     "subtitleLine1": "l8git gives you the tools to work efficiently –",
-    "subtitleLine2": "without distraction, without cloud, without compromise.",
+    "subtitleLine2": "Local Git, with optional connected services.",
     "hint": "Click the plus button above to get started",
     "ctaOpen": "Open folder",
     "ctaClone": "Clone repo",
@@ -1170,7 +1175,7 @@
   },
   "animations": {
     "title": "Motion & animations",
-    "desc": "Subtle transitions — Magic Pill, Tape Reveal, and Pop Bloom. They never block you: you can keep clicking while elements are still animating. Automatically respects the system \"Reduce motion\" setting.",
+    "desc": "Adjust transitions and motion to your preference.",
     "enableLabel": "Enable motion",
     "enableHint": "When off, all content appears instantly without transition effects."
   },
@@ -1485,7 +1490,20 @@
     "folderStage": "Stage folder",
     "folderUnstage": "Unstage folder",
     "folderDiscard": "Discard folder changes",
-    "folderIgnore": "Add folder to .gitignore"
+    "folderIgnore": "Add folder to .gitignore",
+    "messageLabel": "Commit message",
+    "bodyLabel": "Description (optional)",
+    "commitDisabledHint": "Stage changes and enter a commit message first.",
+    "commitOptions": "Commit options",
+    "noFileSelectedTitle": "Select a file",
+    "noFileSelectedBody": "Choose a changed file to inspect its diff.",
+    "reloadDiff": "Reload diff",
+    "toggleAll": "Select all files",
+    "resolveConflicts": "Resolve conflicts",
+    "reloadChanges": "Reload changes",
+    "cleanTitle": "Working tree clean",
+    "noMatchesTitle": "No matching files",
+    "noMatchesBody": "Change or clear the filter to see more files."
   },
   "commitSplit": {
     "menuEntry": "Split changes with AI",
@@ -1869,7 +1887,12 @@
     "mergeRunningShort": "Merging…",
     "checkoutAlertLocalized": "Checked out local branch '{{branch}}'.",
     "mergeConfirmNow": "Merge PR #{{number}} now using {{strategy}}?",
-    "createSubmitBusy": "…"
+    "createSubmitBusy": "…",
+    "checkoutLocalButton": "Check out locally",
+    "reviewApprove": "Approve",
+    "reviewRequestChanges": "Request changes",
+    "reviewCommentOnly": "Comment",
+    "mergeBusy": "Merging…"
   },
   "ci": {
     "emptyProviderHint": "Workflow runs need a connected Git account with CI access.",
@@ -2516,7 +2539,11 @@
     "layoutInline": "Inline",
     "layoutInlineTitle": "Show changes one below the other",
     "layoutSideBySide": "Side by side",
-    "layoutSideBySideTitle": "Show old and new version next to each other"
+    "layoutSideBySideTitle": "Show old and new version next to each other",
+    "loading": "Loading diff…",
+    "loadFailedTitle": "Could not load diff",
+    "binaryHint": "Binary file — no text preview available.",
+    "noChangesTitle": "No changes"
   },
   "media": {
     "modeSideBySide": "Side by side",
@@ -3390,7 +3417,8 @@
     "sidebarSubmodules": "Sidebar: Submodules",
     "sidebarWorktrees": "Sidebar: Worktrees",
     "sidebarHooks": "Sidebar: Hooks",
-    "sidebarTools": "Sidebar: Tools"
+    "sidebarTools": "Sidebar: Tools",
+    "subtitle": "Keyboard shortcuts for your workspace."
   },
   "reflog": {
     "title": "Reflog",
@@ -3554,5 +3582,71 @@
     "linkedToast": "{{key}} linked to this conversation.",
     "panelHint": "Tickets are linked per conversation: right-click a chat in the sidebar → “Link Jira ticket”. Key and status then show in the chat row.",
     "sessionNote": "A linked ticket takes effect immediately, even in a chat that is already running. The switches above only apply to chats started afterwards — the CLI asks for the tool list once, when it connects."
+  },
+  "audit": {
+    "welcome": "Your next change starts here.",
+    "welcomeHint": "Open a repository to review changes, create commits and work with your agents. Your Git workspace stays on this device.",
+    "dropHint": "You can also drop a repository folder into this window.",
+    "recentRepos": "Recent repositories",
+    "filters": "History filters",
+    "savedFilter": "Saved filter",
+    "query": "Commit message",
+    "author": "Author",
+    "file": "File or directory",
+    "since": "From date",
+    "until": "Until date",
+    "noResults": "No matching results.",
+    "filteredHistory": "{{count}} commits loaded",
+    "loadMore": "Load more",
+    "contextTitle": "Review AI context",
+    "contextHint": "This is the content sent to {{provider}}. Remove files or details you do not want to share before continuing. Shortened excerpts are marked.",
+    "contextSize": "{{count}} characters",
+    "system": "Instructions and context",
+    "prompt": "Request",
+    "sendContext": "Send to provider",
+    "portability": "Workspace data",
+    "portabilityHint": "Transfer layout, shortcuts, repository groups and prompts. API keys and executable commands are excluded. Prompts and repository paths remain in the export.",
+    "export": "Export settings",
+    "import": "Import settings",
+    "diagnostics": "Export diagnostics",
+    "undoImport": "Undo import",
+    "invalidImport": "Use a valid JSON export smaller than 2 MB.",
+    "importHint": "Review the settings below. Applying replaces these preferences; repositories and files are not modified. You can undo this import here.",
+    "applyImport": "Apply settings",
+    "layout": "Layout and reading",
+    "density": "Interface density",
+    "comfortable": "Comfortable",
+    "compact": "Compact",
+    "navLabels": "Show navigation labels on wide windows",
+    "previewAi": "Review context before sending to AI",
+    "settingsSearch": "Search settings",
+    "resizeSidebar": "Resize repository sidebar",
+    "stashChanged": "The stash list changed. Refresh it and select the stash again. If changes were already applied, the stash was retained.",
+    "recovery": "Recovery",
+    "recoveryHint": "Undo restores supported Git operations. Uncommitted files discarded by Git are not recoverable through Undo. Use the reflog to inspect earlier commits.",
+    "reflog": "Open reflog",
+    "commands": "Command log",
+    "prScope": "All open requests and loaded history. Load more to search older completed requests.",
+    "showHistory": "Include closed requests",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "reset": "Reset",
+    "activity": "Activity & recovery",
+    "activityHint": "Running operations and recent results for this session.",
+    "noActivity": "No operations in this session yet.",
+    "status_success": "Completed",
+    "status_failed": "Failed",
+    "status_canceled": "Canceled",
+    "excludeFile": "Remove",
+    "untracked": "Untracked",
+    "invalidRepoPath": "The repository path is invalid.",
+    "invalidTargetPath": "The target path is invalid.",
+    "pathOutsideRepo": "The target must be inside the repository.",
+    "invalidToolsConfig": "The repository tools configuration is not valid JSON.",
+    "contextFiles": "Files in the diff",
+    "excludeHint": "Remove file patches before sending. You can also edit the full context below.",
+    "excludeFileNamed": "Remove {{path}} from context",
+    "nextRetry": "Next automatic refresh: {{time}}. Refreshes are spaced out after errors.",
+    "providerRateLimit": "Provider rate limit reached. Requests can resume at {{time}}."
   }
 }

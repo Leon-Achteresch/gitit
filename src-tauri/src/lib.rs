@@ -1,3 +1,4 @@
+mod exports;
 mod agent_addons;
 mod agent_review;
 pub mod agent_transport;
@@ -20,6 +21,7 @@ mod media;
 pub mod pathsafe;
 pub mod pr;
 mod providers;
+mod provider_rate_limit;
 pub mod pty;
 mod rebase;
 mod remote;
@@ -72,6 +74,8 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notification::init())
         .invoke_handler(tauri::generate_handler![
+            exports::save_user_export,
+            exports::runtime_diagnostics,
             remote::remote_status,
             remote::remote_set_config,
             remote::remote_start,
@@ -126,6 +130,7 @@ pub fn run() {
             git::open_repo,
             git::git_init_repo,
             git::repo_log_page,
+            git::repo_history_page,
             git::repo_search_commits,
             favicon::read_repo_favicon,
             favicon::read_image_data_url,
@@ -199,6 +204,7 @@ pub fn run() {
             providers::create_remote_repo,
             pr::resolve_repo_commit_avatars,
             pr::pr_list,
+            pr::pr_list_page,
             pr::pr_create_web_url,
             pr::pr_create,
             pr::pr_detail,

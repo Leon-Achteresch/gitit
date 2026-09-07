@@ -97,7 +97,7 @@ export function RepoTabPicker({
         >
           <ChevronsUpDown className="size-3.5" />
           {(overflowing || paths.length > 6) && (
-            <span className="font-mono text-[10px] font-semibold tabular-nums">
+            <span className="font-mono text-[0.625rem] font-semibold tabular-nums">
               {paths.length}
             </span>
           )}
@@ -143,13 +143,13 @@ export function RepoTabPicker({
                       className="flex min-w-0 flex-1 items-center gap-2 px-2 py-1.5 text-left hover:bg-foreground/[0.04]"
                     >
                       <span
-                        className="flex size-[18px] shrink-0 items-center justify-center rounded font-mono text-[9px] font-bold text-white"
+                        className="flex size-[18px] shrink-0 items-center justify-center rounded font-mono text-[0.5625rem] font-bold text-white"
                         style={{ backgroundColor: `hsl(${hue} 42% 36%)` }}
                         aria-hidden
                       >
                         {repoInitialChar(label)}
                       </span>
-                      <span className="min-w-0 flex-1 truncate text-[13px] font-medium">
+                      <span className="min-w-0 flex-1 truncate text-[0.8125rem] font-medium">
                         {label}
                       </span>
                     </button>
@@ -189,7 +189,7 @@ export function RepoTabPicker({
                           className="flex items-center gap-2 rounded-md px-2 py-1 text-left text-xs hover:bg-foreground/10"
                         >
                           <span
-                            className="flex size-4 shrink-0 items-center justify-center rounded-[4px] text-[9px] font-bold text-white"
+                            className="flex size-4 shrink-0 items-center justify-center rounded-[4px] text-[0.5625rem] font-bold text-white"
                             style={{
                               backgroundColor: `hsl(${repoAvatarHue(ws.name)} 52% 40%)`,
                             }}

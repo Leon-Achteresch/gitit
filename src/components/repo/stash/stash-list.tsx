@@ -37,7 +37,7 @@ export function StashList({
             <h2 className="truncate text-sm font-semibold tracking-tight">
               {t("stash.listTitle")}
             </h2>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[0.6875rem] text-muted-foreground">
               {t("stash.entries", { count: stashes.length })}
             </p>
           </div>

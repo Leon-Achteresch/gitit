@@ -29,8 +29,8 @@ export function PrAuthorPopover({
         <div className="flex items-center gap-3">
           <CommitAvatar url={authorAvatar} name={author} size="md" />
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[13px] font-semibold text-foreground">{author}</div>
-            <div className="text-[11px] text-muted-foreground">
+            <div className="truncate text-[0.8125rem] font-semibold text-foreground">{author}</div>
+            <div className="text-[0.6875rem] text-muted-foreground">
               {t("prInspect.openedPR")} {formatRelative(createdAt)}
             </div>
           </div>

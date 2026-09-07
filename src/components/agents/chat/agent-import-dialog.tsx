@@ -200,7 +200,7 @@ export function AgentImportDialog({
         </DialogHeader>
 
         <div className="flex items-center justify-between gap-3 px-5">
-          <div className="min-w-0 text-[11px] text-muted-foreground">
+          <div className="min-w-0 text-[0.6875rem] text-muted-foreground">
             <span className="font-medium text-foreground">Home + current repository</span>
             <span className="mx-1.5">·</span>
             Up to 50 chats from 30 days
@@ -209,7 +209,7 @@ export function AgentImportDialog({
             type="button"
             variant="ghost"
             size="sm"
-            className="h-7 shrink-0 rounded-lg px-2 text-[11px]"
+            className="h-7 shrink-0 rounded-lg px-2 text-[0.6875rem]"
             onClick={() => void refresh()}
             disabled={loading || importing}
           >
@@ -271,14 +271,14 @@ export function AgentImportDialog({
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-2">
                         <span className="text-xs font-medium text-foreground">{ITEM_LABELS[item.itemType]}</span>
-                        <Badge variant="secondary" className="h-4 px-1.5 text-[9px]">{itemCount(item)}</Badge>
-                        <Badge variant="outline" className="ml-auto h-4 max-w-48 px-1.5 text-[9px] font-normal">
+                        <Badge variant="secondary" className="h-4 px-1.5 text-[0.5625rem]">{itemCount(item)}</Badge>
+                        <Badge variant="outline" className="ml-auto h-4 max-w-48 px-1.5 text-[0.5625rem] font-normal">
                           <span className="truncate">{item.cwd ? item.cwd.split(/[\\/]/u).pop() : "User setup"}</span>
                         </Badge>
                       </span>
-                      <span className="mt-1 block text-[11px] leading-4 text-muted-foreground">{item.description}</span>
+                      <span className="mt-1 block text-[0.6875rem] leading-4 text-muted-foreground">{item.description}</span>
                       {names.length ? (
-                        <span className="mt-1.5 flex items-center gap-1 text-[10px] text-muted-foreground/80">
+                        <span className="mt-1.5 flex items-center gap-1 text-[0.625rem] text-muted-foreground/80">
                           <ChevronRight className="size-3 shrink-0" />
                           <span className="truncate">
                             {names.slice(0, 4).join(", ")}{names.length > 4 ? `, +${names.length - 4} more` : ""}
@@ -297,7 +297,7 @@ export function AgentImportDialog({
                   <SpinIcon icon={LoaderCircle} className="size-3.5" />
                   Importing {selectedCount} items…
                 </div>
-                <p className="mt-1 pl-5 text-[10px] text-muted-foreground">
+                <p className="mt-1 pl-5 text-[0.625rem] text-muted-foreground">
                   {progress.length ? `${progress.length} categories completed` : "Preparing local migration"}
                 </p>
               </div>
@@ -313,7 +313,7 @@ export function AgentImportDialog({
                   {totals.successes} imported · {totals.failures} failed
                 </div>
                 {completed.flatMap((result) => result.failures).map((failure, index) => (
-                  <p key={`${failure.itemType}:${index}`} className="mt-1.5 pl-5 text-[10px] leading-4 text-muted-foreground">
+                  <p key={`${failure.itemType}:${index}`} className="mt-1.5 pl-5 text-[0.625rem] leading-4 text-muted-foreground">
                     {ITEM_LABELS[failure.itemType]}: {failure.message}
                   </p>
                 ))}
@@ -329,7 +329,7 @@ export function AgentImportDialog({
         </ScrollArea>
 
         {lastImport ? (
-          <p className="px-5 text-[10px] text-muted-foreground">
+          <p className="px-5 text-[0.625rem] text-muted-foreground">
             Last import {new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(lastImport.completedAtMs)}
             {` · ${lastImport.successes.length} imported`}
             {lastImport.failures.length ? ` · ${lastImport.failures.length} failed` : ""}

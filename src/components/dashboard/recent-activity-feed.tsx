@@ -47,12 +47,12 @@ export function RecentActivityFeed({
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-2">
                 <span className="truncate font-medium" title={item.title}>{item.title}</span>
-                <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                <span className="shrink-0 text-[0.625rem] tabular-nums text-muted-foreground">
                   {formatRelativeTime(item.date, i18n.resolvedLanguage)}
                 </span>
               </div>
               {item.subtitle ? (
-                <p className="truncate text-[11px] text-muted-foreground" title={item.subtitle}>{item.subtitle}</p>
+                <p className="truncate text-[0.6875rem] text-muted-foreground" title={item.subtitle}>{item.subtitle}</p>
               ) : null}
             </div>
           </li>

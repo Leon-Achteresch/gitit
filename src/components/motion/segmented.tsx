@@ -123,7 +123,7 @@ export function Segment({
         title={title}
         onClick={() => setValue(value)}
         className={cn(
-          "relative z-10 flex min-w-0 items-center justify-center gap-1.5 overflow-hidden rounded-[calc(var(--ag-r-sm)-2px)] bg-transparent px-2 py-1 text-[11px] font-medium outline-none transition-colors",
+          "relative z-10 flex min-w-0 items-center justify-center gap-1.5 overflow-hidden rounded-[calc(var(--ag-r-sm)-2px)] bg-transparent px-2 py-1 text-[0.6875rem] font-medium outline-none transition-colors",
           active && "w-full",
           active ? "text-[var(--ag-text)]" : "text-[var(--ag-text-3)] hover:text-[var(--ag-text-2)]",
           className,

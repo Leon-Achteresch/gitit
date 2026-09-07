@@ -46,15 +46,15 @@ export function StashRow({
       <Archive className="mt-0.5 opacity-70" />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="font-mono text-[11px] opacity-60">
+          <span className="font-mono text-[0.6875rem] opacity-60">
             {`stash@{${entry.index}}`}
           </span>
-          <Badge variant="outline" className="max-w-[140px] truncate text-[10px]">
+          <Badge variant="outline" className="max-w-[140px] truncate text-[0.625rem]">
             {branchLabel}
           </Badge>
         </div>
         <p className="mt-0.5 truncate font-medium text-foreground/90">{title}</p>
-        <p className="mt-0.5 text-[10px] opacity-60">{formatDate(entry.date)}</p>
+        <p className="mt-0.5 text-[0.625rem] opacity-60">{formatDate(entry.date)}</p>
       </div>
     </ListRow>
   );
@@ -67,7 +67,7 @@ export function StashRow({
           onSelect={() => {
             void (async () => {
               try {
-                const out = await stashApply(path, entry.index);
+                const out = await stashApply(path, entry.index, entry.hash);
                 toast.success(out || t("stash.toastApplyFallback"));
               } catch (e) {
                 toastError(String(e));
@@ -84,7 +84,7 @@ export function StashRow({
             if (!ok) return;
             void (async () => {
               try {
-                const out = await stashPop(path, entry.index);
+                const out = await stashPop(path, entry.index, entry.hash);
                 toast.success(out || t("stash.toastPopFallback"));
               } catch (e) {
                 toastError(String(e));
@@ -107,7 +107,7 @@ export function StashRow({
             if (!ok) return;
             void (async () => {
               try {
-                await stashDrop(path, entry.index);
+                await stashDrop(path, entry.index, entry.hash);
                 toast.success(t("stash.toastDropSuccess"));
               } catch (e) {
                 toastError(String(e));

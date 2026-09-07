@@ -48,7 +48,7 @@ export const AgentBarcode = memo(function AgentBarcode({
   return (
     <section className="my-3 flex min-w-0 max-w-full flex-col rounded-[12px] border border-[var(--ag-line)] bg-[var(--ag-surface)] p-3">
       {spec.title ? (
-        <h4 className="mb-2 text-[12px] font-semibold text-[var(--ag-text)]">
+        <h4 className="mb-2 text-[0.75rem] font-semibold text-[var(--ag-text)]">
           {spec.title}
         </h4>
       ) : null}
@@ -77,7 +77,7 @@ export const MarkdownBarcode = memo(function MarkdownBarcode({
   if (spec) return <AgentBarcode spec={spec} />;
   if (looksLikeBarcodeJson(source)) {
     return (
-      <div className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] my-3 flex h-24 items-center justify-center gap-2 rounded-[12px] border border-[var(--ag-line)] text-[12px] text-[var(--ag-text-3)]">
+      <div className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] my-3 flex h-24 items-center justify-center gap-2 rounded-[12px] border border-[var(--ag-line)] text-[0.75rem] text-[var(--ag-text-3)]">
         <SpinIcon icon={LoaderCircle} className="size-3.5" />
         {t("agentChat.barcodeLoading")}
       </div>

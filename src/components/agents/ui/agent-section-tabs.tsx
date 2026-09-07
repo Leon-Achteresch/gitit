@@ -40,7 +40,7 @@ export function AgentSectionTabs({
             aria-pressed={active}
             onClick={() => onChange(item.id)}
             className={cn(
-              "relative inline-flex h-8 shrink-0 items-center rounded-lg px-2.5 text-[11px] font-medium outline-none transition-colors hover:bg-[var(--ag-hover)]",
+              "relative inline-flex h-8 shrink-0 items-center rounded-lg px-2.5 text-[0.6875rem] font-medium outline-none transition-colors hover:bg-[var(--ag-hover)]",
               "focus-visible:shadow-[0_0_0_2px_var(--ring)]",
               active ? "text-[var(--ag-text)]" : "text-[var(--ag-text-2)] hover:text-[var(--ag-text)]",
             )}
@@ -56,7 +56,7 @@ export function AgentSectionTabs({
               {item.icon}
               {item.label}
               {item.count === undefined ? null : (
-                <span className="text-[var(--ag-text-3)] text-[10px] tabular-nums">{item.count}</span>
+                <span className="text-[var(--ag-text-3)] text-[0.625rem] tabular-nums">{item.count}</span>
               )}
             </span>
           </button>

@@ -35,7 +35,7 @@ function RemoteOpCard({ op }: { op: RemoteOpEntry }) {
           {op.repoPath ? ` · ${repoLabel(op.repoPath)}` : ''}
         </span>
         {percent != null && (
-          <span className='shrink-0 text-[11px] tabular-nums text-muted-foreground'>
+          <span className='shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground'>
             {Math.round(percent)}%
           </span>
         )}
@@ -52,7 +52,7 @@ function RemoteOpCard({ op }: { op: RemoteOpEntry }) {
           {op.canceling ? <SpinIcon icon={Loader2} className='size-3.5' /> : <X className='size-3.5' />}
         </Button>
       </div>
-      <p className='mt-1 truncate text-[11px] text-muted-foreground' title={phaseText}>
+      <p className='mt-1 truncate text-[0.6875rem] text-muted-foreground' title={phaseText}>
         {phaseText}
       </p>
       <Progress

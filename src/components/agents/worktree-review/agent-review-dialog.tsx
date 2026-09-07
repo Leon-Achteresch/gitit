@@ -152,12 +152,12 @@ export function AgentReviewDialog({
               {t("agentReview.description")}
             </DialogDescription>
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-6 gap-1 px-2 text-[11px]">
+              <span className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-6 gap-1 px-2 text-[0.6875rem]">
                 <GitBranch className="size-3" />
                 {summary?.sessionBranch ?? session.branch ?? "—"}
               </span>
               <GitMerge className="size-3 text-muted-foreground" />
-              <span className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-6 gap-1 px-2 text-[11px]">
+              <span className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-6 gap-1 px-2 text-[0.6875rem]">
                 <GitBranch className="size-3" />
                 {summary?.baseBranch ?? "—"}
               </span>
@@ -191,7 +191,7 @@ export function AgentReviewDialog({
           </DialogHeader>
 
           {busy ? (
-            <div className="flex shrink-0 items-start gap-2 border-b border-git-modified/25 bg-git-modified/8 px-4 py-2 text-[11px]">
+            <div className="flex shrink-0 items-start gap-2 border-b border-git-modified/25 bg-git-modified/8 px-4 py-2 text-[0.6875rem]">
               <AgentStatusChip tone="waiting">{t("agentReview.agentBusy")}</AgentStatusChip>
             </div>
           ) : null}

@@ -13,11 +13,13 @@ export function StashBranchDialog({
   onClose,
   path,
   stashIndex,
+  expectedHash,
 }: {
   open: boolean;
   onClose: () => void;
   path: string;
   stashIndex: number;
+  expectedHash: string;
 }) {
   const { t } = useTranslation();
   const stashBranch = useRepoStore((s) => s.stashBranch);
@@ -45,7 +47,7 @@ export function StashBranchDialog({
     }
     setBusy(true);
     try {
-      const out = await stashBranch(path, stashIndex, n);
+      const out = await stashBranch(path, stashIndex, n, expectedHash);
       toast.success(out || t("stash.toastBranchCreatedFallback"));
       onClose();
     } catch (err) {

@@ -14,7 +14,7 @@ export function GitHookStatusBadge({
     return (
       <span
         className={cn(
-          "inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground",
+          "inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[0.625rem] font-semibold text-muted-foreground",
           className,
         )}
       >
@@ -26,7 +26,7 @@ export function GitHookStatusBadge({
     return (
       <span
         className={cn(
-          "inline-flex items-center rounded-md bg-muted/50 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground/60",
+          "inline-flex items-center rounded-md bg-muted/50 px-1.5 py-0.5 text-[0.625rem] font-medium text-muted-foreground/60",
           className,
         )}
       >
@@ -38,7 +38,7 @@ export function GitHookStatusBadge({
     return (
       <span
         className={cn(
-          "inline-flex items-center rounded-md bg-git-added/15 px-1.5 py-0.5 text-[10px] font-semibold text-git-added",
+          "inline-flex items-center rounded-md bg-git-added/15 px-1.5 py-0.5 text-[0.625rem] font-semibold text-git-added",
           className,
         )}
       >
@@ -49,7 +49,7 @@ export function GitHookStatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md bg-git-modified/15 px-1.5 py-0.5 text-[10px] font-semibold text-git-modified",
+        "inline-flex items-center rounded-md bg-git-modified/15 px-1.5 py-0.5 text-[0.625rem] font-semibold text-git-modified",
         className,
       )}
     >

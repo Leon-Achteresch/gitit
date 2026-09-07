@@ -54,12 +54,12 @@ export function BranchSection({
           )}
         >
           {icon ? <span className="justify-self-start text-muted-foreground">{icon}</span> : null}
-          <h3 className="min-w-0 justify-self-stretch truncate text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+          <h3 className="min-w-0 justify-self-stretch truncate text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             {title}
           </h3>
           <span className="flex shrink-0 items-center justify-end gap-0.5">
             <span
-              className="flex h-[18px] min-w-[20px] items-center justify-center rounded-md bg-muted/60 px-1.5 text-[10px] font-medium tabular-nums text-muted-foreground"
+              className="flex h-[18px] min-w-[20px] items-center justify-center rounded-md bg-muted/60 px-1.5 text-[0.625rem] font-medium tabular-nums text-muted-foreground"
               aria-label={t("branch.countAria", { count: branches.length })}
             >
               {branches.length}
@@ -82,7 +82,7 @@ export function BranchSection({
       )}
 
       {isEmpty ? (
-        <p className={cn("px-2 pb-1 text-[11px] text-muted-foreground/70", hideHeader && "pt-1")}>
+        <p className={cn("px-2 pb-1 text-[0.6875rem] text-muted-foreground/70", hideHeader && "pt-1")}>
           {emptyLabel ?? t("branch.defaultEmpty")}
         </p>
       ) : (
@@ -110,11 +110,11 @@ export function BranchSection({
             >
               {grouping.groups.map((g) => (
                 <AccordionItem key={g.id} value={g.id} className="min-w-0 border-0">
-                  <AccordionTrigger className="group/trigger my-px flex w-full min-w-0 max-w-full items-center justify-start gap-1 rounded-md py-1 pl-2 pr-1.5 text-left text-[11px] font-medium tracking-wide text-muted-foreground transition-colors hover:bg-sidebar-accent/30 hover:text-foreground hover:no-underline data-[state=open]:text-foreground [&>svg]:shrink-0 [&>svg]:text-muted-foreground/80">
+                  <AccordionTrigger className="group/trigger my-px flex w-full min-w-0 max-w-full items-center justify-start gap-1 rounded-md py-1 pl-2 pr-1.5 text-left text-[0.6875rem] font-medium tracking-wide text-muted-foreground transition-colors hover:bg-sidebar-accent/30 hover:text-foreground hover:no-underline data-[state=open]:text-foreground [&>svg]:shrink-0 [&>svg]:text-muted-foreground/80">
                     <span className="min-w-0 flex-1 truncate">{g.label}</span>
                     <span
                       className={cn(
-                        "flex h-4 min-w-4 shrink-0 items-center justify-center justify-self-end rounded-sm px-1 text-[9px] font-medium tabular-nums transition-colors",
+                        "flex h-4 min-w-4 shrink-0 items-center justify-center justify-self-end rounded-sm px-1 text-[0.5625rem] font-medium tabular-nums transition-colors",
                         "bg-muted/60 text-muted-foreground group-data-[state=open]/trigger:bg-muted group-data-[state=open]/trigger:text-foreground",
                       )}
                     >

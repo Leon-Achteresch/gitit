@@ -71,7 +71,10 @@
     "search": "Suchen",
     "yes": "Ja",
     "no": "Nein",
-    "refresh": "Aktualisieren"
+    "refresh": "Aktualisieren",
+    "retry": "Erneut versuchen",
+    "clear": "Leeren",
+    "reset": "Zurücksetzen"
   },
   "crash": {
     "title": "Diese Ansicht ist abgestürzt",
@@ -401,7 +404,8 @@
       "total": "Gesamt",
       "saved": "Durch Cache gespart",
       "disclaimer": "Schätzung zu Listenpreisen: ${{input}}/M Input, ${{output}}/M Output. Dein Tarif kann abweichen.",
-      "noPrice": "Kein Listenpreis für {{model}} hinterlegt — in token-cost.ts ergänzen."
+      "noPrice": "Kein Listenpreis für {{model}} hinterlegt — in token-cost.ts ergänzen.",
+      "rates": "Token-Preise"
     },
     "switchRepo": "Repository wechseln",
     "today": "Heute",
@@ -684,7 +688,8 @@
     },
     "activityFeed": {
       "title": "Letzte Aktivität",
-      "empty": "Noch nichts zu sehen."
+      "empty": "Noch nichts zu sehen.",
+      "loading": "Aktivität wird geladen …"
     },
     "health": {
       "title": "Repo-Gesundheit",
@@ -799,7 +804,7 @@
     "titleAfter": "Workflow.",
     "titleTagline": "Einfach. Lokal. Schnell.",
     "subtitleLine1": "l8git gibt dir alle Werkzeuge, um effizient zu arbeiten –",
-    "subtitleLine2": "ohne Ablenkung, ohne Cloud, ohne Kompromisse.",
+    "subtitleLine2": "Lokales Git, optional mit verbundenen Diensten.",
     "hint": "Klicke oben auf das Plus, um zu starten",
     "ctaOpen": "Ordner öffnen",
     "ctaClone": "Repo klonen",
@@ -1170,7 +1175,7 @@
   },
   "animations": {
     "title": "Bewegung & Animationen",
-    "desc": "Dezent choreografierte Übergänge – Magic-Pill, Tape-Reveal und Pop-Bloom. Unterbrechen dich nie: du kannst jederzeit weiterklicken, während Elemente noch animieren. Respektiert automatisch die System-Einstellung „Reduzierte Bewegung“.",
+    "desc": "Passe Übergänge und Bewegungen an deine Vorlieben an.",
     "enableLabel": "Bewegungen aktivieren",
     "enableHint": "Wenn ausgeschaltet, erscheinen alle Inhalte sofort ohne Übergangseffekte."
   },
@@ -1485,7 +1490,20 @@
     "folderStage": "Ordner stagen",
     "folderUnstage": "Ordner unstagen",
     "folderDiscard": "Ordneränderungen verwerfen",
-    "folderIgnore": "Ordner zu .gitignore hinzufügen"
+    "folderIgnore": "Ordner zu .gitignore hinzufügen",
+    "messageLabel": "Commit-Nachricht",
+    "bodyLabel": "Beschreibung (optional)",
+    "commitDisabledHint": "Stage Änderungen und gib eine Commit-Nachricht ein.",
+    "commitOptions": "Commit-Optionen",
+    "noFileSelectedTitle": "Datei auswählen",
+    "noFileSelectedBody": "Wähle eine geänderte Datei aus, um ihren Diff zu sehen.",
+    "reloadDiff": "Diff neu laden",
+    "toggleAll": "Alle Dateien auswählen",
+    "resolveConflicts": "Konflikte lösen",
+    "reloadChanges": "Änderungen neu laden",
+    "cleanTitle": "Arbeitsverzeichnis sauber",
+    "noMatchesTitle": "Keine passenden Dateien",
+    "noMatchesBody": "Ändere oder leere den Filter, um weitere Dateien zu sehen."
   },
   "commitSplit": {
     "menuEntry": "Änderungen per AI aufteilen",
@@ -1869,7 +1887,12 @@
     "mergeRunningShort": "Merge läuft …",
     "checkoutAlertLocalized": "Auf lokalen Branch '{{branch}}' ausgecheckt.",
     "mergeConfirmNow": "PR #{{number}} jetzt mergen ({{strategy}})?",
-    "createSubmitBusy": "…"
+    "createSubmitBusy": "…",
+    "checkoutLocalButton": "Lokal auschecken",
+    "reviewApprove": "Genehmigen",
+    "reviewRequestChanges": "Änderungen anfordern",
+    "reviewCommentOnly": "Kommentieren",
+    "mergeBusy": "Wird zusammengeführt …"
   },
   "ci": {
     "emptyProviderHint": "Workflow-Runs brauchen ein verbundenes Git-Konto mit CI-Zugriff.",
@@ -2516,7 +2539,11 @@
     "layoutInline": "Inline",
     "layoutInlineTitle": "Änderungen untereinander anzeigen",
     "layoutSideBySide": "Nebeneinander",
-    "layoutSideBySideTitle": "Alte und neue Version nebeneinander anzeigen"
+    "layoutSideBySideTitle": "Alte und neue Version nebeneinander anzeigen",
+    "loading": "Diff wird geladen …",
+    "loadFailedTitle": "Diff konnte nicht geladen werden",
+    "binaryHint": "Binärdatei – keine Textvorschau verfügbar.",
+    "noChangesTitle": "Keine Änderungen"
   },
   "media": {
     "modeSideBySide": "Nebeneinander",
@@ -3390,7 +3417,8 @@
     "sidebarSubmodules": "Sidebar: Submodules",
     "sidebarWorktrees": "Sidebar: Worktrees",
     "sidebarHooks": "Sidebar: Hooks",
-    "sidebarTools": "Sidebar: Tools"
+    "sidebarTools": "Sidebar: Tools",
+    "subtitle": "Tastenkürzel für deinen Workspace."
   },
   "reflog": {
     "title": "Reflog",
@@ -3554,5 +3582,71 @@
     "linkedToast": "{{key}} mit dieser Unterhaltung verknüpft.",
     "panelHint": "Tickets werden pro Unterhaltung verknüpft: Rechtsklick auf einen Chat in der Seitenleiste → „Jira-Ticket verknüpfen“. Schlüssel und Status stehen danach in der Chat-Zeile.",
     "sessionNote": "Ein verknüpftes Ticket wirkt sofort, auch in einem schon laufenden Chat. Die Schalter oben wirken erst in Chats, die danach gestartet werden — die CLI fragt die Toolliste nur einmal beim Verbinden ab."
+  },
+  "audit": {
+    "welcome": "Hier beginnt deine nächste Änderung.",
+    "welcomeHint": "Öffne ein Repository, prüfe Änderungen, erstelle Commits und arbeite mit deinen Agents. Dein Git-Arbeitsbereich bleibt auf diesem Gerät.",
+    "dropHint": "Du kannst auch einen Repository-Ordner in dieses Fenster ziehen.",
+    "recentRepos": "Zuletzt geöffnet",
+    "filters": "Verlauf filtern",
+    "savedFilter": "Gespeicherter Filter",
+    "query": "Commit-Nachricht",
+    "author": "Autor",
+    "file": "Datei oder Verzeichnis",
+    "since": "Ab Datum",
+    "until": "Bis Datum",
+    "noResults": "Keine passenden Ergebnisse.",
+    "filteredHistory": "{{count}} Commits geladen",
+    "loadMore": "Mehr laden",
+    "contextTitle": "AI-Kontext prüfen",
+    "contextHint": "Dieser Inhalt wird an {{provider}} gesendet. Entferne Dateien oder Details, die du nicht teilen möchtest. Gekürzte Ausschnitte sind markiert.",
+    "contextSize": "{{count}} Zeichen",
+    "system": "Anweisungen und Kontext",
+    "prompt": "Anfrage",
+    "sendContext": "An Provider senden",
+    "portability": "Workspace-Daten",
+    "portabilityHint": "Layout, Tastenkürzel, Repo-Gruppen und Prompts übertragen. API-Schlüssel und ausführbare Befehle sind ausgeschlossen. Prompts und Repository-Pfade bleiben im Export enthalten.",
+    "export": "Einstellungen exportieren",
+    "import": "Einstellungen importieren",
+    "diagnostics": "Diagnose exportieren",
+    "undoImport": "Import rückgängig",
+    "invalidImport": "Verwende einen gültigen JSON-Export unter 2 MB.",
+    "importHint": "Prüfe die Einstellungen unten. Übernehmen ersetzt diese Einstellungen; Repositories und Dateien bleiben unverändert. Du kannst den Import hier rückgängig machen.",
+    "applyImport": "Übernehmen",
+    "layout": "Layout und Lesbarkeit",
+    "density": "Informationsdichte",
+    "comfortable": "Komfortabel",
+    "compact": "Kompakt",
+    "navLabels": "Navigation bei breiten Fenstern beschriften",
+    "previewAi": "Kontext vor dem Senden an AI prüfen",
+    "settingsSearch": "Einstellungen suchen",
+    "resizeSidebar": "Repository-Sidebar skalieren",
+    "stashChanged": "Die Stash-Liste hat sich geändert. Aktualisiere sie und wähle den Stash erneut. Bereits angewendete Änderungen bleiben erhalten; der Stash wurde dann nicht gelöscht.",
+    "recovery": "Wiederherstellung",
+    "recoveryHint": "Undo stellt unterstützte Git-Operationen wieder her. Uncommittete, durch Git verworfene Dateien sind darüber nicht wiederherstellbar. Im Reflog findest du frühere Commits.",
+    "reflog": "Reflog öffnen",
+    "commands": "Befehlsprotokoll",
+    "prScope": "Alle offenen Anfragen und die geladene Historie. Lade weitere Einträge, um ältere abgeschlossene Anfragen zu durchsuchen.",
+    "showHistory": "Geschlossene Anfragen einschließen",
+    "refresh": "Aktualisieren",
+    "retry": "Erneut versuchen",
+    "reset": "Zurücksetzen",
+    "activity": "Aktivität & Wiederherstellung",
+    "activityHint": "Laufende Vorgänge und letzte Ergebnisse dieser Sitzung.",
+    "noActivity": "Noch keine Vorgänge in dieser Sitzung.",
+    "status_success": "Abgeschlossen",
+    "status_failed": "Fehlgeschlagen",
+    "status_canceled": "Abgebrochen",
+    "excludeFile": "Entfernen",
+    "untracked": "Unversioniert",
+    "invalidRepoPath": "Der Repository-Pfad ist ungültig.",
+    "invalidTargetPath": "Der Zielpfad ist ungültig.",
+    "pathOutsideRepo": "Das Ziel muss innerhalb des Repositorys liegen.",
+    "invalidToolsConfig": "Die Repository-Werkzeugkonfiguration enthält ungültiges JSON.",
+    "contextFiles": "Dateien im Diff",
+    "excludeHint": "Entferne Datei-Patches vor dem Senden. Den gesamten Kontext kannst du darunter bearbeiten.",
+    "excludeFileNamed": "{{path}} aus dem Kontext entfernen",
+    "nextRetry": "Nächste automatische Aktualisierung: {{time}}. Bei Fehlern werden die Abstände verlängert.",
+    "providerRateLimit": "Provider-Limit erreicht. Erneuter Abruf ab {{time}}."
   }
 }

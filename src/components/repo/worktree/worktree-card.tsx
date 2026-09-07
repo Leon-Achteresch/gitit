@@ -169,24 +169,24 @@ export function WorktreeCard({
             </div>
 
             {parent && (
-              <p className="mt-0.5 truncate text-[11px] text-muted-foreground/60">
+              <p className="mt-0.5 truncate text-[0.6875rem] text-muted-foreground/60">
                 {parent}
               </p>
             )}
 
             <div className="mt-1.5 flex flex-wrap items-center gap-2.5">
               {entry.branch ? (
-                <span className="flex items-center gap-1 text-[11px] font-medium text-git-branch">
+                <span className="flex items-center gap-1 text-[0.6875rem] font-medium text-git-branch">
                   <GitBranch className="h-3 w-3" />
                   {entry.branch}
                 </span>
               ) : (
-                <span className="text-[11px] italic text-muted-foreground/60">
+                <span className="text-[0.6875rem] italic text-muted-foreground/60">
                   {t("worktree.detachedHead")}
                 </span>
               )}
               {entry.head && (
-                <span className="font-mono text-[10px] text-muted-foreground/50">
+                <span className="font-mono text-[0.625rem] text-muted-foreground/50">
                   {entry.head}
                 </span>
               )}

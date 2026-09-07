@@ -889,7 +889,7 @@ export const AgentChatPane = memo(function AgentChatPane({
       {attachments.map((attachment) => (
         <span
           key={attachment.path}
-          className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] inline-flex max-w-56 items-center gap-1.5 rounded-[9px] px-2 py-1 text-[11px]"
+          className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] inline-flex max-w-56 items-center gap-1.5 rounded-[9px] px-2 py-1 text-[0.6875rem]"
           title={attachment.path}
         >
           {attachment.type === "localImage" ? (
@@ -947,7 +947,7 @@ export const AgentChatPane = memo(function AgentChatPane({
 
       <div
         data-agent-composer-dock=""
-        className="mx-2 flex min-w-0 items-center gap-2 overflow-hidden rounded-b-[var(--ag-r-lg)] border border-t-0 border-[var(--ag-line)] bg-[var(--ag-dock-bg)] px-3 py-1.5 text-[11px] shadow-[0_8px_22px_-18px_rgb(20_32_38_/_0.45)] max-sm:flex-wrap"
+        className="mx-2 flex min-w-0 items-center gap-2 overflow-hidden rounded-b-[var(--ag-r-lg)] border border-t-0 border-[var(--ag-line)] bg-[var(--ag-dock-bg)] px-3 py-1.5 text-[0.6875rem] shadow-[0_8px_22px_-18px_rgb(20_32_38_/_0.45)] max-sm:flex-wrap"
       >
         <span className="text-[var(--ag-text-3)] flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
           {branch ? (
@@ -983,7 +983,7 @@ export const AgentChatPane = memo(function AgentChatPane({
           {branchPr ? (
             <button
               type="button"
-              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-5 gap-1 px-1.5 text-[11px]"
+              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-5 gap-1 px-1.5 text-[0.6875rem]"
               title={branchPr.title}
               onClick={() => void openUrl(branchPr.html_url).catch(() => {})}
             >
@@ -1024,8 +1024,8 @@ export const AgentChatPane = memo(function AgentChatPane({
               data-active={terminalVisible || undefined}
               onClick={onToggleTerminal}
               aria-pressed={terminalVisible}
-              title={`${t("commitPanel.terminalToggleInApp")} (Ctrl+\`)`}
-              aria-label={t("commitPanel.terminalToggleInApp")}
+              title={`${t("toolbar.terminalToggleInApp")} (Ctrl+\`)`}
+              aria-label={t("toolbar.terminalToggleInApp")}
             >
               <SquareTerminal className="size-3.5" />
             </button>

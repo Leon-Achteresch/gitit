@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { invoke } from "@tauri-apps/api/core";
 import { open as pickDirectory } from "@tauri-apps/plugin-dialog";
 import { Plus, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -38,27 +38,41 @@ type Pairing = { qr: string; json: string };
 export function RemoteServerCard() {
   const { t } = useTranslation();
   const [status, setStatus] = useState<RemoteStatus | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
+  const initialized = useRef(false);
   const [port, setPort] = useState("");
   const [relay, setRelay] = useState("");
   const [busy, setBusy] = useState(false);
   const [pairing, setPairing] = useState<Pairing | null>(null);
 
   const apply = useCallback((next: RemoteStatus) => {
+    initialized.current = true;
     setStatus(next);
+    setStatusError(null);
     setPort(String(next.port));
     setRelay(next.relay ?? "");
   }, []);
 
   useEffect(() => {
     let active = true;
-    const poll = async () => {
-      if (document.hidden) return;
-      const next = await invoke<RemoteStatus>("remote_status");
-      if (active) setStatus(next);
+    let pending = false;
+    const poll = async (initial = false) => {
+      if (pending || (!initial && document.hidden)) return;
+      pending = true;
+      try {
+        const next = await invoke<RemoteStatus>("remote_status");
+        if (active) {
+          if (!initialized.current) apply(next);
+          else setStatus(next);
+          setStatusError(null);
+        }
+      } catch (error) {
+        if (active) setStatusError(String(error));
+      } finally {
+        pending = false;
+      }
     };
-    void invoke<RemoteStatus>("remote_status").then((next) => {
-      if (active) apply(next);
-    });
+    void poll(true);
     const id = setInterval(() => void poll(), 15000);
     return () => {
       active = false;
@@ -99,12 +113,16 @@ export function RemoteServerCard() {
         <CardTitle className="flex items-center gap-2">
           {t("remoteServer.title")}
           <Badge variant={status?.running ? "default" : "secondary"}>
-            {status?.running ? t("remoteServer.running") : t("remoteServer.stopped")}
+            {statusError ? t("audit.status_failed") : !status ? t("common.loading") : status.running ? t("remoteServer.running") : t("remoteServer.stopped")}
           </Badge>
         </CardTitle>
         <CardDescription>{t("remoteServer.desc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {statusError && <div role="alert" className="space-y-2 rounded-md border border-destructive/30 p-3">
+          <p className="break-words text-sm text-destructive">{statusError}</p>
+          <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => void run("remote_status")}>{t("audit.retry")}</Button>
+        </div>}
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="remote-server-port">{t("remoteServer.portLabel")}</Label>
@@ -129,7 +147,7 @@ export function RemoteServerCard() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label>{t("remoteServer.rootsLabel")}</Label>
-            <Button type="button" variant="ghost" size="sm" disabled={busy} onClick={() => void addRoot()}>
+            <Button type="button" variant="ghost" size="sm" disabled={busy || !status} onClick={() => void addRoot()}>
               <Plus />
               {t("remoteServer.addRoot")}
             </Button>
@@ -164,7 +182,7 @@ export function RemoteServerCard() {
           <Button
             type="button"
             variant="outline"
-            disabled={busy}
+            disabled={busy || !status}
             onClick={() =>
               void run("remote_set_config", {
                 port: Number(port) || 0,
@@ -185,11 +203,11 @@ export function RemoteServerCard() {
               {t("remoteServer.stop")}
             </Button>
           ) : (
-            <Button type="button" disabled={busy} onClick={() => void run("remote_start")}>
+            <Button type="button" disabled={busy || !status} onClick={() => void run("remote_start")}>
               {t("remoteServer.start")}
             </Button>
           )}
-          <Button type="button" variant="secondary" disabled={busy} onClick={() => void showPairing()}>
+          <Button type="button" variant="secondary" disabled={busy || !status} onClick={() => void showPairing()}>
             {t("remoteServer.pair")}
           </Button>
         </div>
@@ -206,10 +224,10 @@ export function RemoteServerCard() {
               <DialogTitle>{t("remoteServer.pairTitle")}</DialogTitle>
               <DialogDescription>{t("remoteServer.pairDesc")}</DialogDescription>
             </DialogHeader>
-            <pre className="overflow-auto rounded-md bg-black p-3 text-center font-mono text-[8px] leading-[8px] text-white">
+            <pre className="overflow-auto rounded-md bg-black p-3 text-center font-mono text-[0.5rem] leading-none text-white">
               {pairing?.qr}
             </pre>
-            <p className="break-all font-mono text-[10px] text-muted-foreground">{pairing?.json}</p>
+            <p className="break-all font-mono text-[0.625rem] text-muted-foreground">{pairing?.json}</p>
             <Button
               type="button"
               variant="outline"

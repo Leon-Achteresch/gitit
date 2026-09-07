@@ -20,7 +20,7 @@ import { ConflictAiPreview, ConflictAiToolbar } from "./conflict-ai-panel";
 
 function Kbd({ children }: { children: ReactNode }) {
   return (
-    <kbd className="ml-1 rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px] text-muted-foreground opacity-70">
+    <kbd className="ml-1 rounded border border-border bg-muted px-1 py-0.5 font-mono text-[0.625rem] text-muted-foreground opacity-70">
       {children}
     </kbd>
   );
@@ -248,7 +248,7 @@ export function MergeEditor2Way({
                   {activeBlockIdx + 1}/{blocks.length}
                 </span>
                 {activeBlock ? (
-                  <span className="rounded border border-git-modified/40 bg-git-modified/10 px-1.5 py-0.5 font-mono text-[10px] text-git-modified">
+                  <span className="rounded border border-git-modified/40 bg-git-modified/10 px-1.5 py-0.5 font-mono text-[0.625rem] text-git-modified">
                     {t("mergeEditor.lineLabel", { line: activeBlock.startLine + 1 })}
                   </span>
                 ) : null}

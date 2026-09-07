@@ -103,7 +103,7 @@ export function ReflogPage({
             <h2 className='truncate text-sm font-semibold tracking-tight'>
               {t('reflog.title')}
             </h2>
-            <p className='truncate text-[11px] text-muted-foreground'>
+            <p className='truncate text-[0.6875rem] text-muted-foreground'>
               {t('reflog.subtitle', {
                 repo: repoLabel(path),
                 count: entries.length,

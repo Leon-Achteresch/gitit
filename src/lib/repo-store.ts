@@ -1,3 +1,5 @@
+import { useRecentRepos } from "./recent-repos";
+import { readPullRequests } from './provider-reads';
 import { invoke } from '@tauri-apps/api/core';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -362,7 +364,7 @@ type RepoState = {
   toggleGitHook: (path: string, hookName: string, enabled: boolean) => Promise<void>;
   getGitHookContent: (path: string, hookName: string) => Promise<string>;
   runGitHook: (path: string, hookName: string) => Promise<HookRunResult>;
-  loadPRs: (path: string) => Promise<void>;
+  loadPRs: (path: string, force?: boolean) => Promise<void>;
   addRepo: (path: string) => Promise<string | null>;
   removeRepo: (path: string) => void;
   reorderRepos: (fromIndex: number, toIndex: number) => void;
@@ -473,10 +475,10 @@ type RepoState = {
     message: string | undefined,
     opts?: { includeUntracked?: boolean; keepIndex?: boolean }
   ) => Promise<string>;
-  stashPop: (path: string, index: number) => Promise<string>;
-  stashApply: (path: string, index: number) => Promise<string>;
-  stashDrop: (path: string, index: number) => Promise<void>;
-  stashBranch: (path: string, index: number, name: string) => Promise<string>;
+  stashPop: (path: string, index: number, expectedHash?: string) => Promise<string>;
+  stashApply: (path: string, index: number, expectedHash?: string) => Promise<string>;
+  stashDrop: (path: string, index: number, expectedHash?: string) => Promise<void>;
+  stashBranch: (path: string, index: number, name: string, expectedHash?: string) => Promise<string>;
   reloadSubmodules: (path: string) => Promise<void>;
   submoduleInit: (path: string, submodulePath?: string) => Promise<string>;
   submoduleUpdate: (
@@ -789,10 +791,10 @@ export const useRepoStore = create<RepoState>()(
         }
       },
 
-      async loadPRs(path) {
+      async loadPRs(path, force = false) {
         set(s => ({ prsLoading: { ...s.prsLoading, [path]: true } }));
         try {
-          const list = await invoke<PullRequest[]>('pr_list', { path });
+          const list = await readPullRequests(path, force);
           trackPullRequests(path, list);
           set(s => ({
             prs: { ...s.prs, [path]: list },
@@ -812,6 +814,7 @@ export const useRepoStore = create<RepoState>()(
             path,
             hideT3Checkpoints: useWorkspacePrefs.getState().hideT3Checkpoints,
           });
+          useRecentRepos.getState().remember(opened.path);
           set(s => {
             const paths = s.paths.includes(opened.path)
               ? s.paths
@@ -1534,8 +1537,8 @@ export const useRepoStore = create<RepoState>()(
         return out.trim();
       },
 
-      async stashPop(path, index) {
-        const out = await invoke<string>('git_stash_pop', { path, index });
+      async stashPop(path, index, expectedHash) {
+        const out = await invoke<string>('git_stash_pop', { path, index, expectedHash: expectedHash ?? get().stashes[path]?.find(e => e.index === index)?.hash ?? '' }).catch(async error => { await get().reloadStashes(path); throw error; });
         await Promise.all([
           get().reload(path),
           get().reloadStatus(path),
@@ -1544,8 +1547,8 @@ export const useRepoStore = create<RepoState>()(
         return out.trim();
       },
 
-      async stashApply(path, index) {
-        const out = await invoke<string>('git_stash_apply', { path, index });
+      async stashApply(path, index, expectedHash) {
+        const out = await invoke<string>('git_stash_apply', { path, index, expectedHash: expectedHash ?? get().stashes[path]?.find(e => e.index === index)?.hash ?? '' }).catch(async error => { await get().reloadStashes(path); throw error; });
         await Promise.all([
           get().reload(path),
           get().reloadStatus(path),
@@ -1554,8 +1557,8 @@ export const useRepoStore = create<RepoState>()(
         return out.trim();
       },
 
-      async stashDrop(path, index) {
-        await invoke('git_stash_drop', { path, index });
+      async stashDrop(path, index, expectedHash) {
+        await invoke('git_stash_drop', { path, index, expectedHash: expectedHash ?? get().stashes[path]?.find(e => e.index === index)?.hash ?? '' }).catch(async error => { await get().reloadStashes(path); throw error; });
         await Promise.all([
           get().reload(path),
           get().reloadStatus(path),
@@ -1563,12 +1566,13 @@ export const useRepoStore = create<RepoState>()(
         ]);
       },
 
-      async stashBranch(path, index, name) {
+      async stashBranch(path, index, name, expectedHash) {
         const out = await invoke<string>('git_stash_branch', {
+          expectedHash: expectedHash ?? get().stashes[path]?.find(e => e.index === index)?.hash ?? '',
           path,
           index,
           name,
-        });
+        }).catch(async error => { await get().reloadStashes(path); throw error; });
         await Promise.all([
           get().reload(path),
           get().reloadStatus(path),

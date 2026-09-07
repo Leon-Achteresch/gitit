@@ -71,7 +71,10 @@
     "search": "搜索",
     "yes": "是",
     "no": "否",
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "retry": "Retry",
+    "clear": "Clear",
+    "reset": "Reset"
   },
   "crash": {
     "title": "此视图已崩溃",
@@ -401,7 +404,8 @@
       "total": "合计",
       "saved": "缓存节省",
       "disclaimer": "按标价估算：输入 ${{input}}/M，输出 ${{output}}/M。你的套餐实际计费可能不同。",
-      "noPrice": "没有 {{model}} 的标价记录——请在 token-cost.ts 中补充。"
+      "noPrice": "没有 {{model}} 的标价记录——请在 token-cost.ts 中补充。",
+      "rates": "Token rates"
     },
     "switchRepo": "切换仓库",
     "today": "今天",
@@ -684,7 +688,8 @@
     },
     "activityFeed": {
       "title": "最近动态",
-      "empty": "暂无内容。"
+      "empty": "暂无内容。",
+      "loading": "Loading activity…"
     },
     "health": {
       "title": "仓库健康度",
@@ -1170,7 +1175,7 @@
   },
   "animations": {
     "title": "动效与动画",
-    "desc": "细腻的过渡效果——Magic Pill、Tape Reveal 和 Pop Bloom。它们不会阻碍操作：元素还在动画时你依然可以继续点击。自动遵循系统的“减弱动态效果”设置。",
+    "desc": "Adjust transitions and motion to your preference.",
     "enableLabel": "启用动效",
     "enableHint": "关闭后，所有内容都会立即显示，不带过渡效果。"
   },
@@ -1485,7 +1490,20 @@
     "folderStage": "暂存文件夹",
     "folderUnstage": "取消暂存文件夹",
     "folderDiscard": "丢弃文件夹更改",
-    "folderIgnore": "将文件夹添加到 .gitignore"
+    "folderIgnore": "将文件夹添加到 .gitignore",
+    "messageLabel": "Commit message",
+    "bodyLabel": "Description (optional)",
+    "commitDisabledHint": "Stage changes and enter a commit message first.",
+    "commitOptions": "Commit options",
+    "noFileSelectedTitle": "Select a file",
+    "noFileSelectedBody": "Choose a changed file to inspect its diff.",
+    "reloadDiff": "Reload diff",
+    "toggleAll": "Select all files",
+    "resolveConflicts": "Resolve conflicts",
+    "reloadChanges": "Reload changes",
+    "cleanTitle": "Working tree clean",
+    "noMatchesTitle": "No matching files",
+    "noMatchesBody": "Change or clear the filter to see more files."
   },
   "commitSplit": {
     "menuEntry": "用 AI 拆分更改",
@@ -1869,7 +1887,12 @@
     "mergeRunningShort": "正在合并…",
     "checkoutAlertLocalized": "已检出本地分支“{{branch}}”。",
     "mergeConfirmNow": "现在使用 {{strategy}} 合并 PR #{{number}}？",
-    "createSubmitBusy": "…"
+    "createSubmitBusy": "…",
+    "checkoutLocalButton": "Check out locally",
+    "reviewApprove": "Approve",
+    "reviewRequestChanges": "Request changes",
+    "reviewCommentOnly": "Comment",
+    "mergeBusy": "Merging…"
   },
   "ci": {
     "emptyProviderHint": "查看工作流运行需要连接具备 CI 访问权限的 Git 账户。",
@@ -2516,7 +2539,11 @@
     "layoutInline": "行内",
     "layoutInlineTitle": "上下排列显示更改",
     "layoutSideBySide": "并排",
-    "layoutSideBySideTitle": "左右并排显示新旧版本"
+    "layoutSideBySideTitle": "左右并排显示新旧版本",
+    "loading": "Loading diff…",
+    "loadFailedTitle": "Could not load diff",
+    "binaryHint": "Binary file — no text preview available.",
+    "noChangesTitle": "No changes"
   },
   "media": {
     "modeSideBySide": "并排",
@@ -3390,7 +3417,8 @@
     "sidebarSubmodules": "侧边栏：子模块",
     "sidebarWorktrees": "侧边栏：工作树",
     "sidebarHooks": "侧边栏：钩子",
-    "sidebarTools": "侧边栏：工具"
+    "sidebarTools": "侧边栏：工具",
+    "subtitle": "Keyboard shortcuts for your workspace."
   },
   "reflog": {
     "title": "引用日志",
@@ -3554,5 +3582,71 @@
     "linkedToast": "已将 {{key}} 关联到本次对话。",
     "panelHint": "工单按对话关联：在侧边栏右键点击某个聊天 →「关联 Jira 工单」。之后工单键和状态会显示在聊天行中。",
     "sessionNote": "关联工单立即生效，即使聊天已在进行中。上面的开关只对之后新建的聊天生效——CLI 只在连接时请求一次工具列表。"
+  },
+  "audit": {
+    "welcome": "Your next change starts here.",
+    "welcomeHint": "Open a repository to review changes, create commits and work with your agents. Your Git workspace stays on this device.",
+    "dropHint": "You can also drop a repository folder into this window.",
+    "recentRepos": "Recent repositories",
+    "filters": "History filters",
+    "savedFilter": "Saved filter",
+    "query": "Commit message",
+    "author": "Author",
+    "file": "File or directory",
+    "since": "From date",
+    "until": "Until date",
+    "noResults": "No matching results.",
+    "filteredHistory": "{{count}} commits loaded",
+    "loadMore": "Load more",
+    "contextTitle": "Review AI context",
+    "contextHint": "This is the content sent to {{provider}}. Remove files or details you do not want to share before continuing. Shortened excerpts are marked.",
+    "contextSize": "{{count}} characters",
+    "system": "Instructions and context",
+    "prompt": "Request",
+    "sendContext": "Send to provider",
+    "portability": "Workspace data",
+    "portabilityHint": "Transfer layout, shortcuts, repository groups and prompts. API keys and executable commands are excluded. Prompts and repository paths remain in the export.",
+    "export": "Export settings",
+    "import": "Import settings",
+    "diagnostics": "Export diagnostics",
+    "undoImport": "Undo import",
+    "invalidImport": "Use a valid JSON export smaller than 2 MB.",
+    "importHint": "Review the settings below. Applying replaces these preferences; repositories and files are not modified. You can undo this import here.",
+    "applyImport": "Apply settings",
+    "layout": "Layout and reading",
+    "density": "Interface density",
+    "comfortable": "Comfortable",
+    "compact": "Compact",
+    "navLabels": "Show navigation labels on wide windows",
+    "previewAi": "Review context before sending to AI",
+    "settingsSearch": "Search settings",
+    "resizeSidebar": "Resize repository sidebar",
+    "stashChanged": "The stash list changed. Refresh it and select the stash again. If changes were already applied, the stash was retained.",
+    "recovery": "Recovery",
+    "recoveryHint": "Undo restores supported Git operations. Uncommitted files discarded by Git are not recoverable through Undo. Use the reflog to inspect earlier commits.",
+    "reflog": "Open reflog",
+    "commands": "Command log",
+    "prScope": "All open requests and loaded history. Load more to search older completed requests.",
+    "showHistory": "Include closed requests",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "reset": "Reset",
+    "activity": "Activity & recovery",
+    "activityHint": "Running operations and recent results for this session.",
+    "noActivity": "No operations in this session yet.",
+    "status_success": "Completed",
+    "status_failed": "Failed",
+    "status_canceled": "Canceled",
+    "excludeFile": "Remove",
+    "untracked": "Untracked",
+    "invalidRepoPath": "The repository path is invalid.",
+    "invalidTargetPath": "The target path is invalid.",
+    "pathOutsideRepo": "The target must be inside the repository.",
+    "invalidToolsConfig": "The repository tools configuration is not valid JSON.",
+    "contextFiles": "Files in the diff",
+    "excludeHint": "Remove file patches before sending. You can also edit the full context below.",
+    "excludeFileNamed": "Remove {{path}} from context",
+    "nextRetry": "Next automatic refresh: {{time}}. Refreshes are spaced out after errors.",
+    "providerRateLimit": "Provider rate limit reached. Requests can resume at {{time}}."
   }
 }

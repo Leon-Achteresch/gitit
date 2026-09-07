@@ -1,0 +1,16 @@
+{
+  "metrics": {
+    "startupGzip": 368441,
+    "largestJs": 3787384,
+    "largestWorker": 7010192,
+    "totalJsGzip": 8699426
+  },
+  "limits": {
+    "startupGzip": 460800,
+    "largestJs": 4194304,
+    "largestWorker": 8388608,
+    "totalJsGzip": 16777216
+  },
+  "sentinelAbsent": true,
+  "scope": "Static entry graph; lazy editor, language and terminal chunks counted only in total/largest."
+}

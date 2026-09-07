@@ -81,7 +81,7 @@ function DashboardPage() {
           <TabsTrigger value="active">{t("dashboard.tabs.active")}</TabsTrigger>
           <TabsTrigger value="all">
             {t("dashboard.tabs.all")}
-            <span className="ml-1 rounded-full bg-muted px-1.5 text-[10px] text-muted-foreground">
+            <span className="ml-1 rounded-full bg-muted px-1.5 text-[0.625rem] text-muted-foreground">
               {allPaths.length}
             </span>
           </TabsTrigger>

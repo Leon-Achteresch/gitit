@@ -28,6 +28,10 @@ pub async fn dispatch(
             crate::pr::pr_default_branch(path).await
         }
 
+        "pr_list_page" (path: String, page: u64, history: bool) => {
+            crate::pr::pr_list_page(path, page, history).await
+        }
+
         "pr_list" (path: String) => {
             crate::pr::pr_list(path).await
         }

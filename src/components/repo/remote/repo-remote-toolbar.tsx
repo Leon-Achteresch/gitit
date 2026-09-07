@@ -766,7 +766,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
                     title={t("toolbar.searchMinCharsTitle", {
                       count: COMMIT_SEARCH_MIN_CHARS,
                     })}
-                    className='flex h-[18px] min-w-[18px] items-center justify-center rounded-md bg-muted/70 px-1 text-[10px] font-semibold tabular-nums text-muted-foreground'
+                    className='flex h-[18px] min-w-[18px] items-center justify-center rounded-md bg-muted/70 px-1 text-[0.625rem] font-semibold tabular-nums text-muted-foreground'
                   >
                     {`${COMMIT_SEARCH_MIN_CHARS}+`}
                   </span>
@@ -776,7 +776,7 @@ export function RepoRemoteToolbar({ path }: { path: string }) {
                   <PopIn key={hitCount} title={t("toolbar.searchHitsTitle", { count: hitCount })}>
                     <span
                       className={cn(
-                        'flex h-[18px] min-w-[18px] items-center justify-center rounded-md px-1 text-[10px] font-semibold tabular-nums',
+                        'flex h-[18px] min-w-[18px] items-center justify-center rounded-md px-1 text-[0.625rem] font-semibold tabular-nums',
                         hitCount === 0
                           ? 'bg-destructive/10 text-destructive'
                           : 'bg-muted/70 text-muted-foreground',

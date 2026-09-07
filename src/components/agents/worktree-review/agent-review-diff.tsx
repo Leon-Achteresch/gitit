@@ -107,10 +107,10 @@ export function AgentReviewDiffPane({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="border-[var(--ag-line)] flex shrink-0 items-center gap-2 border-b px-3 py-2">
-        <span className="min-w-0 flex-1 truncate font-mono text-[11px]" title={file.path}>
+        <span className="min-w-0 flex-1 truncate font-mono text-[0.6875rem]" title={file.path}>
           {file.path}
         </span>
-        <span className="shrink-0 text-[11px] tabular-nums">
+        <span className="shrink-0 text-[0.6875rem] tabular-nums">
           <span className="text-git-added">+{file.additions}</span>{" "}
           <span className="text-git-removed">-{file.deletions}</span>
         </span>
@@ -139,7 +139,7 @@ export function AgentReviewDiffPane({
       ) : untrackedPlain !== null ? (
         <div className="[scrollbar-color:color-mix(in_oklab,var(--foreground)_16%,transparent)_transparent] [scrollbar-width:thin] min-h-0 flex-1 overflow-y-auto p-2">
           <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] overflow-hidden rounded-lg">
-            <div className="border-[var(--ag-line)] border-b px-3 py-1.5 text-[11px] text-muted-foreground">
+            <div className="border-[var(--ag-line)] border-b px-3 py-1.5 text-[0.6875rem] text-muted-foreground">
               {t("agentReview.untrackedFile")}
             </div>
             <div style={{ height: blockHeight(untrackedPlain.split("\n").length) }}>
@@ -174,13 +174,13 @@ export function AgentReviewDiffPane({
                 )}
               >
                 <div className="border-[var(--ag-line)] flex items-center gap-2 border-b px-3 py-1.5">
-                  <span className="shrink-0 text-[11px] font-medium">
+                  <span className="shrink-0 text-[0.6875rem] font-medium">
                     {t("agentReview.hunkLabel", { index: hunkIdx + 1 })}
                   </span>
-                  <span className="min-w-0 flex-1 truncate font-mono text-[10.5px] text-muted-foreground">
+                  <span className="min-w-0 flex-1 truncate font-mono text-[0.65625rem] text-muted-foreground">
                     {hunk.header}
                   </span>
-                  <span className="shrink-0 text-[11px] tabular-nums">
+                  <span className="shrink-0 text-[0.6875rem] tabular-nums">
                     <span className="text-git-added">+{counts.additions}</span>{" "}
                     <span className="text-git-removed">-{counts.deletions}</span>
                   </span>

@@ -37,7 +37,7 @@ export function TerminalTabChip({
       role="tab"
       aria-selected={active}
       className={cn(
-        "group relative flex h-7 max-w-[168px] min-w-0 shrink-0 items-center gap-1 rounded-full pr-1 pl-2 text-[11px] transition-colors",
+        "group relative flex h-7 max-w-[168px] min-w-0 shrink-0 items-center gap-1 rounded-full pr-1 pl-2 text-[0.6875rem] transition-colors",
         active
           ? "text-foreground"
           : "text-muted-foreground hover:text-foreground",

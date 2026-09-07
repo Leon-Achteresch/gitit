@@ -36,6 +36,7 @@ export function FeatureCard({
         className={cn(
           "flex size-12 shrink-0 items-center justify-center rounded-xl",
           iconWellClassName,
+          "[&>svg]:text-white",
         )}
       >
         {icon}

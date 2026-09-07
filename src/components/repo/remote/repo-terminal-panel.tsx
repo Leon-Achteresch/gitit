@@ -69,10 +69,10 @@ export function RepoTerminalPanel({ path }: Props) {
               <SquareTerminal className="size-3.5 text-foreground/80" />
             </span>
             <div className="min-w-0 leading-tight">
-              <div className="truncate text-[12px] font-semibold tracking-tight">
+              <div className="truncate text-[0.75rem] font-semibold tracking-tight">
                 {t("embeddedTerminal.title")}
               </div>
-              <div className="hidden text-[10px] text-muted-foreground sm:block">
+              <div className="hidden text-[0.625rem] text-muted-foreground sm:block">
                 Ctrl+`
               </div>
             </div>

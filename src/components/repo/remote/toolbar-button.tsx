@@ -69,7 +69,7 @@ export function ToolbarButton({
           <span
             role="status"
             aria-label={`${badge} pending`}
-            className="inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-primary/25 px-1 text-[10px] font-semibold tabular-nums leading-none text-primary"
+            className="inline-flex min-h-4 min-w-4 items-center justify-center rounded-full bg-primary/25 px-1 text-[0.625rem] font-semibold tabular-nums leading-none text-primary"
           >
             {badge > 99 ? "99+" : badge}
           </span>

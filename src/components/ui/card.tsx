@@ -7,7 +7,7 @@ function Card({
   className,
   size = "default",
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: HTMLMotionProps<"div"> & { size?: "default" | "sm" }) {
   return (
     <m.div
       layout

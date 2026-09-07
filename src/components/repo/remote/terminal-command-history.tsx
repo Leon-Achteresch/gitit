@@ -73,7 +73,7 @@ export function TerminalCommandHistory({ path, activeId }: Props) {
                     {entry.cmd}
                   </span>
                   {entry.count > 1 && (
-                    <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                    <span className="shrink-0 text-[0.625rem] tabular-nums text-muted-foreground">
                       ×{entry.count}
                     </span>
                   )}

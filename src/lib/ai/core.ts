@@ -1,3 +1,6 @@
+import { budgetContext } from "./context";
+import { reviewAiContext } from "./context-review";
+import { useWorkspacePrefs } from "@/lib/workspace-prefs";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
@@ -56,7 +59,7 @@ export function buildLanguageModel(
     case "openrouter":
       return createOpenAI({
         baseURL: "https://openrouter.ai/api/v1",
-        apiKey: apiKey || import.meta.env.VITE_OPENROUTER_API_KEY,
+        apiKey,
       })(resolvedModel);
 
     case "ollama":
@@ -84,7 +87,7 @@ export function getAiProviderConfig(): AiProviderConfig {
 export function hasAiCredentials(config: AiProviderConfig = getAiProviderConfig()): boolean {
   if (config.type === "ollama") return true;
   if (config.apiKey.trim().length > 0) return true;
-  return config.type === "openrouter" && !!import.meta.env.VITE_OPENROUTER_API_KEY;
+  return false;
 }
 
 export function resolveLanguageModel(feature?: AiFeature): LanguageModel {
@@ -102,8 +105,7 @@ export function resolveAiLanguage(repoPath?: string): string {
 }
 
 export function truncateForPrompt(text: string, maxChars: number): string {
-  const trimmed = text.trim();
-  return trimmed.length <= maxChars ? trimmed : trimmed.slice(0, maxChars);
+  return budgetContext(text, maxChars);
 }
 
 function isAbortLike(value: unknown): boolean {
@@ -156,16 +158,23 @@ export async function generateAiText(options: GenerateAiTextOptions): Promise<st
 
   const model = options.model ?? resolveLanguageModel(feature);
   const trimmedHint = hint?.trim() ?? "";
-  const finalPrompt = trimmedHint
+  let finalPrompt = trimmedHint
     ? `${prompt}\n\nAdditional instruction from the user for this attempt — follow it strictly:\n${trimmedHint}`
     : prompt;
 
+  let reviewedSystem = system;
   try {
+    if (!options.model && typeof document !== 'undefined' && useWorkspacePrefs.getState().previewAiContext) {
+      const reviewed = await reviewAiContext({ prompt: finalPrompt, system: system ?? '' }, signal);
+      finalPrompt = reviewed.prompt;
+      reviewedSystem = reviewed.system;
+    }
+    if (signal?.aborted) throw new DOMException('Canceled', 'AbortError');
     let text = "";
     if (onDelta) {
       const result = streamText({
         model,
-        ...(system ? { system } : {}),
+        ...(reviewedSystem ? { system: reviewedSystem } : {}),
         prompt: finalPrompt,
         ...(signal ? { abortSignal: signal } : {}),
       });
@@ -176,7 +185,7 @@ export async function generateAiText(options: GenerateAiTextOptions): Promise<st
     } else {
       const result = await generateText({
         model,
-        ...(system ? { system } : {}),
+        ...(reviewedSystem ? { system: reviewedSystem } : {}),
         prompt: finalPrompt,
         ...(signal ? { abortSignal: signal } : {}),
       });

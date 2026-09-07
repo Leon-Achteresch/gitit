@@ -140,7 +140,7 @@ export function DiffViewer({
           <span className="truncate text-sm font-medium" title={selectedRow.path}>
             {selectedRow.path}
           </span>
-          <span className="shrink-0 rounded-sm border border-border/80 bg-muted/40 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="shrink-0 rounded-sm border border-border/80 bg-muted/40 px-2 py-0.5 text-[0.6875rem] font-medium uppercase tracking-wide text-muted-foreground">
             {selectedRow.sector === "staged" ? t("commitPanel.sectorStaged") : t("commitPanel.sectorUnstaged")}
           </span>
         </div>

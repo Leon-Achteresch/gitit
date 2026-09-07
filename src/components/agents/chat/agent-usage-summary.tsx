@@ -24,7 +24,7 @@ export function AgentUsageSummary() {
   return (
     <AgentsEnter>
       <div
-        className="border-[var(--ag-line)] flex h-8.5 min-w-0 shrink-0 items-center gap-2 overflow-hidden border-t bg-[var(--ag-surface-2)]/40 px-3 text-[11px]"
+        className="border-[var(--ag-line)] flex h-8.5 min-w-0 shrink-0 items-center gap-2 overflow-hidden border-t bg-[var(--ag-surface-2)]/40 px-3 text-[0.6875rem]"
         title={t("agentChat.usageWeek", {
           cost: formatUsd(week.costUsd),
           tokens: formatTokens(weekTokens),

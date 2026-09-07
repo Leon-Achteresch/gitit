@@ -20,7 +20,7 @@ function CornerBadge({ count, emphasis }: { count: number; emphasis?: boolean })
     <PopIn key={count} className="pointer-events-none absolute right-0.5 top-0.5">
       <span
         className={cn(
-          "flex h-[14px] min-w-[14px] items-center justify-center rounded-full px-0.5 text-[9px] font-bold tabular-nums",
+          "flex h-[14px] min-w-[14px] items-center justify-center rounded-full px-0.5 text-[0.5625rem] font-bold tabular-nums",
           emphasis
             ? "bg-primary text-primary-foreground"
             : "bg-muted text-muted-foreground ring-1 ring-border",
@@ -80,7 +80,7 @@ export function SidebarNavItem({
         ) : null}
 
         {showLabel && (
-          <span className="max-w-full truncate text-center text-[10px] leading-tight">
+          <span className="max-w-full truncate text-center text-[0.625rem] leading-tight">
             {label}
           </span>
         )}
@@ -109,7 +109,7 @@ export function SidebarNavItem({
         heightClass,
         displayMode === "icons_only"
           ? "justify-center px-1"
-          : "gap-2 pl-2.5 pr-2 text-[13px]",
+          : "gap-2 pl-2.5 pr-2 text-[0.8125rem]",
         "rounded-lg hover:bg-sidebar-accent/50 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
       )}
     >
@@ -133,7 +133,7 @@ export function SidebarNavItem({
         <PopIn key={count} className="ml-auto shrink-0">
           <span
             className={cn(
-              "flex h-[18px] min-w-[18px] items-center justify-center rounded-md px-1 text-[10px] font-semibold tabular-nums transition-colors",
+              "flex h-[18px] min-w-[18px] items-center justify-center rounded-md px-1 text-[0.625rem] font-semibold tabular-nums transition-colors",
               emphasis
                 ? "bg-primary text-primary-foreground"
                 : isActive

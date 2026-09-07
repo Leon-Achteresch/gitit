@@ -41,7 +41,7 @@ export function AgentUsagePill({
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-5 gap-1 px-1.5 text-[11px]"
+          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 h-5 gap-1 px-1.5 text-[0.6875rem]"
           title={t("agentChat.usage.title")}
         >
           <Coins className="size-3 shrink-0" />
@@ -57,9 +57,9 @@ export function AgentUsagePill({
         align="end"
         side="top"
         sideOffset={8}
-        className="overflow-hidden rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[var(--ag-shadow-pop)] w-72 p-3 text-[12px]"
+        className="overflow-hidden rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[var(--ag-shadow-pop)] w-72 p-3 text-[0.75rem]"
       >
-        <div className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1.5">{t("agentChat.usage.title")}</div>
+        <div className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1.5">{t("agentChat.usage.title")}</div>
         <AgentUsageRow
           label={t("agentChat.usage.input")}
           value={formatTokens(input)}
@@ -82,7 +82,7 @@ export function AgentUsagePill({
         {cost ? (
           <>
             <div className="border-[var(--ag-line)] my-2 border-t" />
-            <div className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1.5">{t("agentChat.usage.cost")}</div>
+            <div className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1.5">{t("agentChat.usage.cost")}</div>
             <AgentUsageRow
               label={t("agentChat.usage.input")}
               value={formatUsd(cost.inputUsd)}
@@ -111,7 +111,7 @@ export function AgentUsagePill({
         {price ? (
           <>
             <div className="border-[var(--ag-line)] my-2 border-t" />
-            <div className="text-[var(--ag-text-3)] text-[10px] leading-4">
+            <div className="text-[var(--ag-text-3)] text-[0.625rem] leading-4">
               {t("agentChat.usage.rates", {
                 input: price.input,
                 output: price.output,

@@ -150,7 +150,7 @@ function SortableTabItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "flex items-center gap-3 rounded-lg border border-border/60 bg-card px-3 py-2.5 text-sm transition-all select-none",
+        "flex items-center gap-3 rounded-lg border border-border/60 bg-card px-3 py-1.5 text-sm transition-all select-none",
         isDragging && !overlay && "opacity-30 scale-[0.98]",
         overlay && "shadow-xl opacity-95 ring-2 ring-primary/30 scale-[1.02]",
         isHidden && !overlay && "opacity-50",
@@ -191,7 +191,7 @@ function SortableTabItem({
 
       {/* Hidden badge */}
       {isHidden && (
-        <span className="rounded-full border border-border/60 bg-muted/60 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+        <span className="rounded-full border border-border/60 bg-muted/60 px-2 py-0.5 text-[0.625rem] font-medium text-muted-foreground">
           Ausgeblendet
         </span>
       )}
@@ -251,7 +251,7 @@ function DisplayOption({
       </div>
       <div>
         <p className="text-xs font-semibold">{label}</p>
-        <p className="mt-0.5 text-[10px] text-muted-foreground">{description}</p>
+        <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{description}</p>
       </div>
       {active && (
         <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -331,7 +331,7 @@ function LayoutOption({
       </div>
       <div>
         <p className="text-xs font-semibold">{label}</p>
-        <p className="mt-0.5 text-[10px] text-muted-foreground">{description}</p>
+        <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{description}</p>
       </div>
       {active && (
         <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
@@ -563,7 +563,7 @@ export function SidebarCustomizeSection() {
             </div>
             {/* Size preview strip */}
             <div className="rounded-lg border border-border/50 bg-muted/20 p-3">
-              <p className="mb-2 text-[10px] font-medium uppercase tracking-wide text-muted-foreground/60">
+              <p className="mb-2 text-[0.625rem] font-medium uppercase tracking-wide text-muted-foreground/60">
                 Vorschau
               </p>
               <div className="space-y-0.5">
@@ -574,7 +574,7 @@ export function SidebarCustomizeSection() {
                   <div
                     key={label}
                     className={cn(
-                      "flex w-full items-center gap-2 rounded-md bg-muted/60 pl-2.5 pr-2 text-[13px] text-muted-foreground",
+                      "flex w-full items-center gap-2 rounded-md bg-muted/60 pl-2.5 pr-2 text-[0.8125rem] text-muted-foreground",
                       tabSize === "compact" && "h-7",
                       tabSize === "normal" && "h-8",
                       tabSize === "large" && "h-10",
@@ -666,7 +666,7 @@ export function SidebarCustomizeSection() {
                   value={[gridSidebarWidth]}
                   onValueChange={([value]) => setGridSidebarWidth(value)}
                 />
-                <div className="flex justify-between text-[10px] text-muted-foreground/60">
+                <div className="flex justify-between text-[0.625rem] text-muted-foreground/60">
                   <span>{GRID_SIDEBAR_MIN_WIDTH} px</span>
                   <span>{GRID_SIDEBAR_MAX_WIDTH} px</span>
                 </div>

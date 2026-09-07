@@ -63,10 +63,10 @@ export function CapabilityStudioShell({
             </Button>
             {mark}
             <div className="min-w-0">
-              <p className="truncate text-[15px] font-semibold tracking-[-0.025em] text-[var(--ag-text)]">
+              <p className="truncate text-[0.9375rem] font-semibold tracking-[-0.025em] text-[var(--ag-text)]">
                 {title}
               </p>
-              <p className="text-[var(--ag-text-3)] truncate text-[11px]">{subtitle}</p>
+              <p className="text-[var(--ag-text-3)] truncate text-[0.6875rem]">{subtitle}</p>
             </div>
           </div>
           {onQueryChange && searchPlaceholder ? (
@@ -76,7 +76,7 @@ export function CapabilityStudioShell({
                 value={query ?? ""}
                 onChange={(event) => onQueryChange(event.target.value)}
                 placeholder={searchPlaceholder}
-                className="h-9 w-full rounded-[var(--ag-r-md)] border-0 bg-transparent pl-9 text-[12px] shadow-none focus-visible:ring-0"
+                className="h-9 w-full rounded-[var(--ag-r-md)] border-0 bg-transparent pl-9 text-[0.75rem] shadow-none focus-visible:ring-0"
               />
             </div>
           ) : (
@@ -101,7 +101,7 @@ export function CapabilityStudioShell({
                   aria-pressed={active}
                   onClick={() => onTabChange(item.id)}
                   className={cn(
-                    "relative inline-flex h-10 w-full min-w-0 shrink-0 items-center justify-start rounded-[10px] px-3 text-[12px] font-medium text-[var(--ag-text-3)] outline-none transition-[background-color,color,box-shadow] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring max-lg:w-auto max-lg:min-w-max",
+                    "relative inline-flex h-10 w-full min-w-0 shrink-0 items-center justify-start rounded-[10px] px-3 text-[0.75rem] font-medium text-[var(--ag-text-3)] outline-none transition-[background-color,color,box-shadow] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring max-lg:w-auto max-lg:min-w-max",
                     active && "bg-[var(--ag-surface)] text-[var(--ag-text)] shadow-[var(--ag-shadow-raise)]",
                   )}
                 >
@@ -117,7 +117,7 @@ export function CapabilityStudioShell({
                     <span className="truncate">{item.label}</span>
                     {item.count === undefined ? null : (
                       <span className={cn(
-                        "inline-flex h-[1.15rem] min-w-5 items-center justify-center rounded-full bg-[var(--ag-hover)] px-1.5 text-[10px] tabular-nums text-[var(--ag-text-2)]",
+                        "inline-flex h-[1.15rem] min-w-5 items-center justify-center rounded-full bg-[var(--ag-hover)] px-1.5 text-[0.625rem] tabular-nums text-[var(--ag-text-2)]",
                         active && "bg-[var(--ag-surface-2)] text-[var(--ag-text)]",
                       )}>{item.count}</span>
                     )}

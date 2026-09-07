@@ -49,7 +49,7 @@ export function CapabilityTargetPicker({
     selected.some((entry) => targetKey(entry) === targetKey(target));
 
   if (!targets.length) {
-    return <p className="text-[var(--ag-text-3)] px-1 text-[11px]">{emptyLabel ?? t("agentCapabilities.hub.noTargets")}</p>;
+    return <p className="text-[var(--ag-text-3)] px-1 text-[0.6875rem]">{emptyLabel ?? t("agentCapabilities.hub.noTargets")}</p>;
   }
 
   return (
@@ -64,12 +64,12 @@ export function CapabilityTargetPicker({
               <CapabilityCliMark
                 cli={target.cli}
                 label={target.label}
-                className={cn("min-w-0 text-[11px] font-medium", !supports && "text-muted-foreground line-through")}
+                className={cn("min-w-0 text-[0.6875rem] font-medium", !supports && "text-muted-foreground line-through")}
               />
               {target.installed ? null : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Badge variant="outline" className="h-4 rounded px-1 text-[8px]">
+                    <Badge variant="outline" className="h-4 rounded px-1 text-[0.5rem]">
                       {t("agentCapabilities.hub.notInstalled")}
                     </Badge>
                   </TooltipTrigger>
@@ -94,7 +94,7 @@ export function CapabilityTargetPicker({
                         disabled={blocked}
                         onClick={() => onToggle(reference)}
                         className={cn(
-                          "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-7 gap-1 px-2 text-[10px] font-medium",
+                          "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-7 gap-1 px-2 text-[0.625rem] font-medium",
                           active && "bg-[var(--ag-selected)] text-[var(--ag-text)]",
                           blocked && "cursor-not-allowed opacity-40",
                         )}

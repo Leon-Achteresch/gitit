@@ -73,8 +73,10 @@ export function CommitList({
   selectedHashes,
   onToggleSelect,
   onCherryPick,
+  onLoadMore,
 }: {
   path: string;
+  onLoadMore?: () => unknown;
   commits: Commit[];
   matchPathsByHash: ReadonlyMap<string, string[]>;
   searchActive: boolean;
@@ -256,11 +258,13 @@ export function CommitList({
     const now = performance.now();
     if (now - lastLoadedAt.current < 250) return;
     lastLoadedAt.current = now;
+    if (onLoadMore) { onLoadMore(); return; }
     void loadMoreCommits(path, 80);
     if (searchActive && !searchHitsExhausted) {
       void loadMoreSearchCommits(path, 80);
     }
   }, [
+    onLoadMore,
     maxVisibleRowIndex,
     rows.length,
     path,
@@ -407,7 +411,7 @@ export function CommitList({
                   transform: `translateY(${vi.start}px)`,
                 }}
               >
-                <div className="bg-card px-4 pb-1 pt-3 text-[11px] font-medium text-muted-foreground">
+                <div className="bg-card px-4 pb-1 pt-3 text-[0.6875rem] font-medium text-muted-foreground">
                   {item.label}
                 </div>
               </li>

@@ -69,7 +69,7 @@ export function AgentThreadMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="overflow-hidden rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[var(--ag-shadow-pop)] w-52 p-1.5">
         <DropdownMenuItem
-          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
           disabled={busy}
           onClick={() => void run(() => startReview(threadId))}
         >
@@ -77,7 +77,7 @@ export function AgentThreadMenu({
           {t("agentChat.thread.review")}
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
           disabled={busy}
           onClick={() => void run(() => forkThread(path, threadId))}
         >
@@ -85,7 +85,7 @@ export function AgentThreadMenu({
           {t("agentChat.thread.fork")}
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
           disabled={busy}
           onClick={() =>
             void run(
@@ -97,12 +97,12 @@ export function AgentThreadMenu({
           <Boxes className="size-3.5" />
           {t("agentChat.thread.compact")}
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]" onClick={() => setTerminalsOpen(true)}>
+        <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]" onClick={() => setTerminalsOpen(true)}>
           <SquareTerminal className="size-3.5" />
           Background terminals
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
           disabled={busy}
           onClick={() => void run(() => archiveThread(path, threadId))}
         >
@@ -111,7 +111,7 @@ export function AgentThreadMenu({
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
-          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px]"
+          className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem]"
           disabled={busy}
           onClick={() => setDeleteOpen(true)}
         >

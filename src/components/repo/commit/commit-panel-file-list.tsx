@@ -294,7 +294,7 @@ function VirtualFileListInner({
         {multiSelectedIds.size > 1 && (
           <span
             role="status"
-            className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-muted-foreground"
+            className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-[0.625rem] font-medium tabular-nums text-muted-foreground"
           >
             {t("commitPanel.selectionCount", { count: multiSelectedIds.size })}
           </span>
@@ -528,7 +528,7 @@ function ConflictRowWithPath({
       <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0 text-git-modified" />
       <span className="min-w-0 flex-1 truncate text-sm">
         <span className="font-medium">{row.path.split("/").pop()}</span>
-        <span className="ml-1.5 truncate text-[11px] opacity-40">
+        <span className="ml-1.5 truncate text-[0.6875rem] opacity-40">
           {row.path.split("/").slice(0, -1).join("/")}
         </span>
       </span>

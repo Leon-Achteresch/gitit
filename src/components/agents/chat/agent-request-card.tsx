@@ -33,8 +33,8 @@ function requestDetails(request: AgentPendingRequest): ReactNode {
       {request.command ? (
         <CodeBlock code={request.command} language="bash" showLineNumbers={false} maxHeight={160} />
       ) : null}
-      {request.cwd ? <p className="font-mono text-[10px] opacity-75">{request.cwd}</p> : null}
-      {request.grantRoot ? <p className="font-mono text-[11px]">{request.grantRoot}</p> : null}
+      {request.cwd ? <p className="font-mono text-[0.625rem] opacity-75">{request.cwd}</p> : null}
+      {request.grantRoot ? <p className="font-mono text-[0.6875rem]">{request.grantRoot}</p> : null}
     </div>
   );
 }
@@ -116,7 +116,7 @@ function approvalQuestions(
         description: (
           <div className="space-y-2">
             <p>{request.reason ?? t("agentChat.request.permissionsDescription")}</p>
-            <pre className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] max-h-36 overflow-auto p-2 font-mono text-[10px] leading-4">
+            <pre className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] max-h-36 overflow-auto p-2 font-mono text-[0.625rem] leading-4">
               {JSON.stringify(request.raw.permissions ?? {}, null, 2)}
             </pre>
           </div>
@@ -282,7 +282,7 @@ export const AgentRequestCard = memo(function AgentRequestCard({ request }: { re
       onApprove={() => void rejectUnsupported(request)}
       
     >
-      <pre className="text-[var(--ag-text-2)] max-h-40 overflow-auto whitespace-pre-wrap text-[11px]">
+      <pre className="text-[var(--ag-text-2)] max-h-40 overflow-auto whitespace-pre-wrap text-[0.6875rem]">
         {JSON.stringify(request.raw, null, 2)}
       </pre>
     </ApprovalCard>

@@ -1,6 +1,7 @@
 export const SERIALIZE_TO_IPC_FN = "__TAURI_TO_IPC_KEY__";
 
 export async function invoke(_cmd: string, _args?: Record<string, unknown>): Promise<never> {
+  if (window.__L8GIT_TEST_INVOKE__) return window.__L8GIT_TEST_INVOKE__(_cmd, _args) as Promise<never>;
   return Promise.reject(new Error("tauri invoke is stubbed in ui tests"));
 }
 

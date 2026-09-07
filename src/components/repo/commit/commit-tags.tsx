@@ -9,7 +9,7 @@ function CommitTagsInner({ tags }: { tags: string[] }) {
       {tags.map((t) => (
         <span
           key={t}
-          className="inline-flex min-w-0 max-w-full items-center gap-1 rounded-full border border-git-modified/30 bg-git-modified/15 px-2 py-0.5 font-mono text-[11px] font-medium text-git-modified"
+          className="inline-flex min-w-0 max-w-full items-center gap-1 rounded-full border border-git-modified/30 bg-git-modified/15 px-2 py-0.5 font-mono text-[0.6875rem] font-medium text-git-modified"
           title={t}
         >
           <TagIcon className="h-3.5 w-3.5 shrink-0" />

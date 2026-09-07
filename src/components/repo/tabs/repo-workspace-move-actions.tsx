@@ -57,7 +57,7 @@ export function RepoWorkspaceMoveActions({ paths }: { paths: string[] }) {
           {targets.map((ws) => (
             <ContextMenuItem key={ws.id} onSelect={() => moveTo(ws.id)}>
               <span
-                className="flex size-4 shrink-0 items-center justify-center rounded-[4px] text-[9px] font-bold text-white"
+                className="flex size-4 shrink-0 items-center justify-center rounded-[4px] text-[0.5625rem] font-bold text-white"
                 style={{
                   backgroundColor: `hsl(${repoAvatarHue(ws.name)} 52% 40%)`,
                 }}

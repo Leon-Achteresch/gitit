@@ -49,10 +49,10 @@ export function AgentPlanCard({ request }: { request: AgentPendingRequest }) {
     <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] overflow-hidden">
       <div className="flex items-center gap-2 border-b border-[var(--ag-line)] px-3 py-2">
         <ClipboardList className="size-4 shrink-0 text-muted-foreground" />
-        <span className="text-[13px] font-medium">{t("agentChat.plan.title")}</span>
+        <span className="text-[0.8125rem] font-medium">{t("agentChat.plan.title")}</span>
         <span
           className={cn(
-            "ml-auto rounded-full border px-2 py-0.5 text-[10px] font-medium",
+            "ml-auto rounded-full border px-2 py-0.5 text-[0.625rem] font-medium",
             resolved === "decline"
               ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400"
               : resolved
@@ -69,7 +69,7 @@ export function AgentPlanCard({ request }: { request: AgentPendingRequest }) {
           <AgentMarkdown>{plan}</AgentMarkdown>
         </div>
       ) : (
-        <p className="text-[var(--ag-text-2)] px-3 py-3 text-[12px]">{t("agentChat.plan.empty")}</p>
+        <p className="text-[var(--ag-text-2)] px-3 py-3 text-[0.75rem]">{t("agentChat.plan.empty")}</p>
       )}
 
       {resolved ? null : (
@@ -80,7 +80,7 @@ export function AgentPlanCard({ request }: { request: AgentPendingRequest }) {
             rows={2}
             onChange={(event) => setFeedback(event.target.value)}
             placeholder={t("agentChat.plan.feedbackPlaceholder")}
-            className="min-h-0 resize-none bg-background/70 text-[12px]"
+            className="min-h-0 resize-none bg-background/70 text-[0.75rem]"
           />
           <div className="flex flex-wrap gap-1.5">
             <Button size="sm" disabled={busy} onClick={() => void decide("accept")}>
@@ -118,7 +118,7 @@ export function AgentPlanCard({ request }: { request: AgentPendingRequest }) {
               {t("agentChat.plan.keepPlanning")}
             </Button>
           </div>
-          <p className="text-[var(--ag-text-3)] text-[10px] leading-4">{t("agentChat.plan.hint")}</p>
+          <p className="text-[var(--ag-text-3)] text-[0.625rem] leading-4">{t("agentChat.plan.hint")}</p>
         </div>
       )}
     </div>

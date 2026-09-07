@@ -102,7 +102,7 @@ export function GitHooksList({
           <div>
             <p className="text-sm font-semibold leading-none">{t("hooks.listTitle")}</p>
             {activeCount > 0 && (
-              <p className="mt-0.5 text-[10px] text-muted-foreground">
+              <p className="mt-0.5 text-[0.625rem] text-muted-foreground">
                 {t("hooks.activeHooks", { count: activeCount })}
               </p>
             )}
@@ -131,7 +131,7 @@ export function GitHooksList({
         <div className="space-y-4 p-2 pb-4">
           {hookCategories.map((category) => (
             <div key={category.key}>
-              <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50">
+              <p className="mb-1.5 px-1 text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground/50">
                 {category.label}
               </p>
               <div className="space-y-1">

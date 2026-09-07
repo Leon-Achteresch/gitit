@@ -1,3 +1,9 @@
+import { persist, createJSONStorage } from "zustand/middleware";
+import { mapConcurrent } from "./async-cache";
+import { readPullRequests } from "./provider-reads";
+import { providerRetryAt, withProviderRead } from './provider-rate-limit';
+import { translateKnownError } from './error-toast';
+import { trackPullRequests, trackWorkflowRuns } from "./notifications";
 import { invoke } from "@tauri-apps/api/core";
 import { create } from "zustand";
 
@@ -21,11 +27,13 @@ export type InboxRepoError = {
   path: string;
   repoName: string;
   message: string;
+  retryAt?: number | null;
 };
 
 type InboxState = {
   loading: boolean;
   lastLoadedAt: number | null;
+  nextRefreshAt: number | null;
   sections: InboxSections;
   errors: InboxRepoError[];
   /** Keys of notifications the user has explicitly marked as read. */
@@ -48,6 +56,7 @@ async function loadRepo(
   path: string,
 ): Promise<{ input: InboxRepoInput | null; error: InboxRepoError | null }> {
   const repoName = repoNameFromPath(path);
+  const errorFor = (error: unknown): InboxRepoError => ({ path, repoName, message: translateKnownError(String(error)), retryAt: providerRetryAt(error) });
   let caps: ProviderCapabilities | null = null;
   try {
     caps = await invoke<ProviderCapabilities>("pr_provider_capabilities", { path });
@@ -63,23 +72,28 @@ async function loadRepo(
   let prs: PullRequest[] = [];
   let error: InboxRepoError | null = null;
   try {
-    prs = await invoke<PullRequest[]>("pr_list", { path });
+    prs = await readPullRequests(path);
+    trackPullRequests(path, prs);
   } catch (e) {
-    error = { path, repoName, message: String(e) };
+    error = errorFor(e);
+    if (error.retryAt) return { input: null, error };
   }
 
   let defaultBranch: string | null = null;
   try {
-    defaultBranch = await invoke<string | null>("pr_default_branch", { path });
-  } catch {
+    defaultBranch = await withProviderRead(path, () => invoke<string | null>("pr_default_branch", { path }));
+  } catch (e) {
     defaultBranch = null;
+    if (providerRetryAt(e)) return { input: { path, repoName, viewerLogin, prs, runs: [], defaultBranch }, error: errorFor(e) };
   }
 
   let runs: InboxWorkflowRun[] = [];
   if (caps.can_workflows) {
     try {
-      runs = await invoke<InboxWorkflowRun[]>("list_workflow_runs", { path });
-    } catch {
+      runs = await withProviderRead(path, () => invoke<InboxWorkflowRun[]>("list_workflow_runs", { path }));
+      trackWorkflowRuns(path, runs);
+    } catch (e) {
+      error ??= errorFor(e);
       runs = [];
     }
   }
@@ -90,9 +104,10 @@ async function loadRepo(
   return { input: { path, repoName, viewerLogin, prs, runs, defaultBranch }, error };
 }
 
-export const useInboxStore = create<InboxState>((set, get) => ({
+export const useInboxStore = create<InboxState>()(persist((set, get) => ({
   loading: false,
   lastLoadedAt: null,
+  nextRefreshAt: null,
   sections: emptyInboxSections(),
   errors: [],
   readKeys: [],
@@ -108,22 +123,17 @@ export const useInboxStore = create<InboxState>((set, get) => ({
     }
     set({ loading: true });
     try {
-      const results = await Promise.all(paths.map((path) => loadRepo(path)));
+      const results = await mapConcurrent(paths, 4, loadRepo);
       const inputs = results.map((r) => r.input).filter((r): r is InboxRepoInput => r !== null);
       const errors = results.map((r) => r.error).filter((r): r is InboxRepoError => r !== null);
       const sections = buildInboxSections(inputs);
-      const live = new Set([
-        ...sections.myPrs.map((item) => item.key),
-        ...sections.reviewRequested.map((item) => item.key),
-        ...sections.redRuns.map((item) => item.key),
-      ]);
+
       set((state) => ({
         sections,
         errors,
         lastLoadedAt: Date.now(),
-        // Drop read markers for notifications that no longer exist, keep
-        // agent keys (they are not part of the polled sections).
-        readKeys: state.readKeys.filter((key) => key.startsWith("agent:") || live.has(key)),
+        // Bound the persisted read history without reviving old notifications.
+        readKeys: state.readKeys.slice(-2000),
       }));
     } finally {
       set({ loading: false });
@@ -136,4 +146,4 @@ export const useInboxStore = create<InboxState>((set, get) => ({
     if (lastLoadedAt !== null && Date.now() - lastLoadedAt < INBOX_REFRESH_INTERVAL_MS) return;
     void refresh(paths);
   },
-}));
+}), { name: "l8git-inbox-read", storage: createJSONStorage(() => localStorage), partialize: state => ({ readKeys: state.readKeys.slice(-2000) }) }));

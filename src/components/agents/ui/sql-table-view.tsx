@@ -30,13 +30,13 @@ export function SqlTableView({ table }: { table: SqlTable }) {
 
   return (
     <div className="space-y-1.5">
-      <Table className="text-[11px]">
+      <Table className="text-[0.6875rem]">
         <TableHeader>
           <TableRow>
             {table.columns.map((column, index) => (
               <TableHead
                 key={`${column}-${index}`}
-                className="h-7 whitespace-nowrap px-2 font-mono text-[11px]"
+                className="h-7 whitespace-nowrap px-2 font-mono text-[0.6875rem]"
               >
                 {column}
               </TableHead>
@@ -50,7 +50,7 @@ export function SqlTableView({ table }: { table: SqlTable }) {
                 <TableCell
                   key={`${column}-${columnIndex}`}
                   className={cn(
-                    "whitespace-nowrap px-2 py-1 font-mono text-[11px]",
+                    "whitespace-nowrap px-2 py-1 font-mono text-[0.6875rem]",
                     row[columnIndex] === null && "italic text-muted-foreground",
                   )}
                 >
@@ -61,7 +61,7 @@ export function SqlTableView({ table }: { table: SqlTable }) {
           ))}
         </TableBody>
       </Table>
-      <p className="text-[var(--ag-text-3)] text-[11px]">{footer.join(" · ")}</p>
+      <p className="text-[var(--ag-text-3)] text-[0.6875rem]">{footer.join(" · ")}</p>
     </div>
   );
 }

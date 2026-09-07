@@ -262,7 +262,7 @@ export function StackPrChainDialog({
                       {entry.level}
                     </Badge>
                     <span
-                      className="min-w-0 flex-1 truncate font-mono text-[11px] text-muted-foreground"
+                      className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-muted-foreground"
                       title={`${entry.branch} → ${entry.parent}`}
                     >
                       {entry.branch}
@@ -298,7 +298,7 @@ export function StackPrChainDialog({
                     <div className="mt-1 flex items-start gap-1.5">
                       <Textarea
                         rows={2}
-                        className="min-h-0 flex-1 text-[11px]"
+                        className="min-h-0 flex-1 text-[0.6875rem]"
                         value={entry.body}
                         disabled={busy}
                         placeholder={t("stack.chainBodyPlaceholder")}
@@ -329,17 +329,17 @@ export function StackPrChainDialog({
                     </div>
                   ) : null}
                   {entry.status === "existing" ? (
-                    <p className="mt-1 text-[10px] text-muted-foreground">
+                    <p className="mt-1 text-[0.625rem] text-muted-foreground">
                       {t("stack.chainExisting", { number: entry.prNumber ?? 0 })}
                     </p>
                   ) : null}
                   {entry.status === "skipped" ? (
-                    <p className="mt-1 text-[10px] text-muted-foreground">
+                    <p className="mt-1 text-[0.625rem] text-muted-foreground">
                       {t("stack.chainSkipped")}
                     </p>
                   ) : null}
                   {entry.error ? (
-                    <p className="mt-1 text-[10px] text-git-removed">{entry.error}</p>
+                    <p className="mt-1 text-[0.625rem] text-git-removed">{entry.error}</p>
                   ) : null}
                 </li>
               ))}

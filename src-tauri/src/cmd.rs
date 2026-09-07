@@ -4,7 +4,9 @@ use std::process::Command;
 const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 
 pub(crate) fn git_command() -> Command {
-    cli_command("git")
+    let mut cmd = cli_command("git");
+    cmd.env("LC_ALL", "C").env("LANG", "C");
+    cmd
 }
 
 /// Every CLI we drive headlessly must start through here: on Windows a bare

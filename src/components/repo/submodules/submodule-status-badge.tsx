@@ -89,7 +89,7 @@ export function SubmoduleStatusBadge({
       <TooltipTrigger asChild>
         <span
           className={cn(
-            "inline-flex shrink-0 cursor-default items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
+            "inline-flex shrink-0 cursor-default items-center rounded-full px-2 py-0.5 text-[0.625rem] font-medium",
             className,
           )}
         >

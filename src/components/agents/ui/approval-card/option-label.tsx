@@ -5,7 +5,7 @@ export function OptionLabel({ option }: { option: ApprovalCardOption }) {
     <span className="select-none">
       <span className="block text-sm text-foreground">{option.label}</span>
       {option.description ? (
-        <span className="mt-0.5 block text-[11px] leading-4 text-muted-foreground">
+        <span className="mt-0.5 block text-[0.6875rem] leading-4 text-muted-foreground">
           {option.description}
         </span>
       ) : null}

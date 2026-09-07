@@ -93,7 +93,7 @@ export function ConflictAiToolbar({
       {ai.busy ? (
         <>
           {ai.batch ? (
-            <span className="font-mono text-[10px] text-muted-foreground">
+            <span className="font-mono text-[0.625rem] text-muted-foreground">
               {t("mergeAi.progress", { done: ai.batch.done, total: ai.batch.total })}
             </span>
           ) : null}
@@ -121,10 +121,10 @@ function DiffColumn({
 }) {
   return (
     <div className="min-w-0 flex-1">
-      <div className="mb-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+      <div className="mb-1 text-[0.625rem] font-medium uppercase tracking-wide text-muted-foreground">
         {heading}
       </div>
-      <div className="max-h-40 overflow-auto rounded border border-border bg-background/60 font-mono text-[11px] leading-[1.35]">
+      <div className="max-h-40 overflow-auto rounded border border-border bg-background/60 font-mono text-[0.6875rem] leading-[1.35]">
         {lines.map((line, idx) => (
           <div
             key={`${idx}-${line.text}`}
@@ -173,11 +173,11 @@ export function ConflictAiPreview({
           <WandSparkles className="h-3.5 w-3.5" />
           {t("mergeAi.title")}
         </span>
-        <span className="rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+        <span className="rounded border border-border px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground">
           {t("mergeEditor.lineLabel", { line: block.startLine + 1 })}
         </span>
         {entry.status === "ready" && entry.relation ? (
-          <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+          <span className="rounded bg-muted px-1.5 py-0.5 text-[0.625rem] text-muted-foreground">
             {t(RELATION_KEYS[entry.relation])}
           </span>
         ) : null}

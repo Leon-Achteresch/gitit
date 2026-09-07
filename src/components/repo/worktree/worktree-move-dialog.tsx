@@ -75,7 +75,7 @@ export function WorktreeMoveDialog({
         <header className="mb-3 flex items-center justify-between gap-2">
           <div>
             <h2 className="text-base font-semibold">{t("worktreeMove.title")}</h2>
-            <p className="text-[11px] text-muted-foreground">{entryName}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{entryName}</p>
           </div>
           <Button type="button" variant="ghost" size="icon-sm" onClick={dismiss} disabled={busy} aria-label={t("worktreeMove.closeAria")}>
             <X className="h-4 w-4" />
@@ -99,7 +99,7 @@ export function WorktreeMoveDialog({
                 <FolderOpen className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-[11px] text-muted-foreground">{t("worktreeMove.pathHint")}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{t("worktreeMove.pathHint")}</p>
           </div>
 
           <div className="flex justify-end gap-2 pt-1">
