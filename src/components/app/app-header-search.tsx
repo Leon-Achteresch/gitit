@@ -1038,10 +1038,10 @@ export function AppHeaderSearch() {
         className="h-7 max-w-[220px] gap-2 rounded-full border border-border/60 bg-muted/40 px-2.5 text-muted-foreground hover:bg-muted hover:text-foreground"
       >
         <Search className="size-3.5" strokeWidth={1.75} />
-        <span className="hidden min-w-0 truncate text-[11px] font-normal lg:inline">
+        <span className="hidden min-w-0 truncate text-[0.6875rem] font-normal lg:inline">
           {t("appSearch.triggerPlaceholder")}
         </span>
-        <kbd className="hidden rounded-md bg-background/80 px-1 py-px font-sans text-[10px] text-muted-foreground/80 lg:inline">
+        <kbd className="hidden rounded-md bg-background/80 px-1 py-px font-sans text-[0.625rem] text-muted-foreground/80 lg:inline">
           {MOD_KEY}K
         </kbd>
       </Button>
@@ -1106,11 +1106,11 @@ export function AppHeaderSearch() {
                       {b.name}
                     </span>
                     {b.is_current ? (
-                      <span className="shrink-0 text-[10px] text-muted-foreground">
+                      <span className="shrink-0 text-[0.625rem] text-muted-foreground">
                         {t("appSearch.badgeCurrent")}
                       </span>
                     ) : b.is_remote ? (
-                      <span className="shrink-0 text-[10px] text-muted-foreground">
+                      <span className="shrink-0 text-[0.625rem] text-muted-foreground">
                         {t("appSearch.badgeRemote")}
                       </span>
                     ) : (
@@ -1139,7 +1139,7 @@ export function AppHeaderSearch() {
                     <span className="min-w-0 flex-1 truncate font-mono text-xs">
                       {tag.name}
                     </span>
-                    <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
+                    <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground">
                       {tag.commit.slice(0, 7)}
                     </span>
                   </CommandItem>
@@ -1159,7 +1159,7 @@ export function AppHeaderSearch() {
                     onSelect={() => onFocusCommit(c.hash)}
                   >
                     <GitCommitHorizontal className="size-3.5 shrink-0 text-muted-foreground" />
-                    <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
+                    <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground">
                       {c.short_hash}
                     </span>
                     <span className="min-w-0 flex-1 truncate text-xs">
@@ -1172,7 +1172,7 @@ export function AppHeaderSearch() {
           </CommandList>
 
           {/* Footer */}
-          <div className="flex flex-wrap items-center gap-3 border-t border-border/40 px-3 py-1.5 text-[10px] text-muted-foreground/60">
+          <div className="flex flex-wrap items-center gap-3 border-t border-border/40 px-3 py-1.5 text-[0.625rem] text-muted-foreground/60">
             <span>
               <kbd className="font-sans">↵</kbd> {t("appSearch.footerJumpHistory")}
             </span>

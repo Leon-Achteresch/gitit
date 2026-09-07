@@ -71,7 +71,10 @@
     "search": "検索",
     "yes": "はい",
     "no": "いいえ",
-    "refresh": "更新"
+    "refresh": "更新",
+    "retry": "Retry",
+    "clear": "Clear",
+    "reset": "Reset"
   },
   "crash": {
     "title": "この画面でエラーが発生しました",
@@ -401,7 +404,8 @@
       "total": "合計",
       "saved": "キャッシュによる節約",
       "disclaimer": "入力 100万トークンあたり ${{input}}、出力 100万トークンあたり ${{output}} の定価に基づく概算です。実際の請求はプランにより異なります。",
-      "noPrice": "{{model}} の定価が登録されていません — token-cost.ts に追加してください。"
+      "noPrice": "{{model}} の定価が登録されていません — token-cost.ts に追加してください。",
+      "rates": "Token rates"
     },
     "switchRepo": "リポジトリを切り替え",
     "today": "今日",
@@ -684,7 +688,8 @@
     },
     "activityFeed": {
       "title": "最近のアクティビティ",
-      "empty": "まだ表示するものがありません。"
+      "empty": "まだ表示するものがありません。",
+      "loading": "Loading activity…"
     },
     "health": {
       "title": "リポジトリの状態",
@@ -1170,7 +1175,7 @@
   },
   "animations": {
     "title": "モーションとアニメーション",
-    "desc": "控えめな動き — Magic Pill、Tape Reveal、Pop Bloom。操作を妨げることはなく、アニメーション中でもクリックを続けられます。システムの「視差効果を減らす」設定を自動的に尊重します。",
+    "desc": "Adjust transitions and motion to your preference.",
     "enableLabel": "モーションを有効にする",
     "enableHint": "オフにすると、すべての内容が遷移効果なしで即座に表示されます。"
   },
@@ -1485,7 +1490,20 @@
     "folderStage": "フォルダーをステージ",
     "folderUnstage": "フォルダーをアンステージ",
     "folderDiscard": "フォルダーの変更を破棄",
-    "folderIgnore": "フォルダーを .gitignore に追加"
+    "folderIgnore": "フォルダーを .gitignore に追加",
+    "messageLabel": "Commit message",
+    "bodyLabel": "Description (optional)",
+    "commitDisabledHint": "Stage changes and enter a commit message first.",
+    "commitOptions": "Commit options",
+    "noFileSelectedTitle": "Select a file",
+    "noFileSelectedBody": "Choose a changed file to inspect its diff.",
+    "reloadDiff": "Reload diff",
+    "toggleAll": "Select all files",
+    "resolveConflicts": "Resolve conflicts",
+    "reloadChanges": "Reload changes",
+    "cleanTitle": "Working tree clean",
+    "noMatchesTitle": "No matching files",
+    "noMatchesBody": "Change or clear the filter to see more files."
   },
   "commitSplit": {
     "menuEntry": "AI で変更を分割",
@@ -1869,7 +1887,12 @@
     "mergeRunningShort": "マージ中…",
     "checkoutAlertLocalized": "ローカルブランチ「{{branch}}」をチェックアウトしました。",
     "mergeConfirmNow": "PR #{{number}} を {{strategy}} で今すぐマージしますか？",
-    "createSubmitBusy": "…"
+    "createSubmitBusy": "…",
+    "checkoutLocalButton": "Check out locally",
+    "reviewApprove": "Approve",
+    "reviewRequestChanges": "Request changes",
+    "reviewCommentOnly": "Comment",
+    "mergeBusy": "Merging…"
   },
   "ci": {
     "emptyProviderHint": "ワークフローの実行を表示するには、CI にアクセスできる Git アカウントの接続が必要です。",
@@ -2516,7 +2539,11 @@
     "layoutInline": "インライン",
     "layoutInlineTitle": "変更を上下に並べて表示",
     "layoutSideBySide": "左右表示",
-    "layoutSideBySideTitle": "変更前と変更後を左右に並べて表示"
+    "layoutSideBySideTitle": "変更前と変更後を左右に並べて表示",
+    "loading": "Loading diff…",
+    "loadFailedTitle": "Could not load diff",
+    "binaryHint": "Binary file — no text preview available.",
+    "noChangesTitle": "No changes"
   },
   "media": {
     "modeSideBySide": "左右表示",
@@ -3390,7 +3417,8 @@
     "sidebarSubmodules": "サイドバー: サブモジュール",
     "sidebarWorktrees": "サイドバー: ワークツリー",
     "sidebarHooks": "サイドバー: フック",
-    "sidebarTools": "サイドバー: ツール"
+    "sidebarTools": "サイドバー: ツール",
+    "subtitle": "Keyboard shortcuts for your workspace."
   },
   "reflog": {
     "title": "reflog",
@@ -3554,5 +3582,71 @@
     "linkedToast": "{{key}} をこの会話に紐付けました。",
     "panelHint": "チケットは会話ごとに紐付けます。サイドバーのチャットを右クリック →「Jira チケットを紐付ける」。以降、キーとステータスがチャット行に表示されます。",
     "sessionNote": "チケットの紐付けは、すでに進行中のチャットでも即座に反映されます。上のスイッチは以降に開始したチャットにのみ適用されます — CLI はツール一覧を接続時に一度だけ要求するためです。"
+  },
+  "audit": {
+    "welcome": "Your next change starts here.",
+    "welcomeHint": "Open a repository to review changes, create commits and work with your agents. Your Git workspace stays on this device.",
+    "dropHint": "You can also drop a repository folder into this window.",
+    "recentRepos": "Recent repositories",
+    "filters": "History filters",
+    "savedFilter": "Saved filter",
+    "query": "Commit message",
+    "author": "Author",
+    "file": "File or directory",
+    "since": "From date",
+    "until": "Until date",
+    "noResults": "No matching results.",
+    "filteredHistory": "{{count}} commits loaded",
+    "loadMore": "Load more",
+    "contextTitle": "Review AI context",
+    "contextHint": "This is the content sent to {{provider}}. Remove files or details you do not want to share before continuing. Shortened excerpts are marked.",
+    "contextSize": "{{count}} characters",
+    "system": "Instructions and context",
+    "prompt": "Request",
+    "sendContext": "Send to provider",
+    "portability": "Workspace data",
+    "portabilityHint": "Transfer layout, shortcuts, repository groups and prompts. API keys and executable commands are excluded. Prompts and repository paths remain in the export.",
+    "export": "Export settings",
+    "import": "Import settings",
+    "diagnostics": "Export diagnostics",
+    "undoImport": "Undo import",
+    "invalidImport": "Use a valid JSON export smaller than 2 MB.",
+    "importHint": "Review the settings below. Applying replaces these preferences; repositories and files are not modified. You can undo this import here.",
+    "applyImport": "Apply settings",
+    "layout": "Layout and reading",
+    "density": "Interface density",
+    "comfortable": "Comfortable",
+    "compact": "Compact",
+    "navLabels": "Show navigation labels on wide windows",
+    "previewAi": "Review context before sending to AI",
+    "settingsSearch": "Search settings",
+    "resizeSidebar": "Resize repository sidebar",
+    "stashChanged": "The stash list changed. Refresh it and select the stash again. If changes were already applied, the stash was retained.",
+    "recovery": "Recovery",
+    "recoveryHint": "Undo restores supported Git operations. Uncommitted files discarded by Git are not recoverable through Undo. Use the reflog to inspect earlier commits.",
+    "reflog": "Open reflog",
+    "commands": "Command log",
+    "prScope": "All open requests and loaded history. Load more to search older completed requests.",
+    "showHistory": "Include closed requests",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "reset": "Reset",
+    "activity": "Activity & recovery",
+    "activityHint": "Running operations and recent results for this session.",
+    "noActivity": "No operations in this session yet.",
+    "status_success": "Completed",
+    "status_failed": "Failed",
+    "status_canceled": "Canceled",
+    "excludeFile": "Remove",
+    "untracked": "Untracked",
+    "invalidRepoPath": "The repository path is invalid.",
+    "invalidTargetPath": "The target path is invalid.",
+    "pathOutsideRepo": "The target must be inside the repository.",
+    "invalidToolsConfig": "The repository tools configuration is not valid JSON.",
+    "contextFiles": "Files in the diff",
+    "excludeHint": "Remove file patches before sending. You can also edit the full context below.",
+    "excludeFileNamed": "Remove {{path}} from context",
+    "nextRetry": "Next automatic refresh: {{time}}. Refreshes are spaced out after errors.",
+    "providerRateLimit": "Provider rate limit reached. Requests can resume at {{time}}."
   }
 }

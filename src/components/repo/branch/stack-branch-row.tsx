@@ -25,6 +25,7 @@ import {
   Plus,
   Unlink,
 } from "lucide-react";
+import { m } from "motion/react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -59,10 +60,10 @@ export function StackBranchRow({
   }
 
   return (
-    <li className="min-w-0">
+    <m.li layout className="min-w-0">
       <div
         className={cn(
-          "group/stackrow relative flex min-w-0 items-center gap-1 rounded-md py-1 pl-1 pr-0.5 text-[12px] transition-colors",
+          "group/stackrow relative flex min-w-0 items-center gap-1 rounded-md py-1 pl-1 pr-0.5 text-[0.75rem] transition-colors",
           branch.is_current
             ? "bg-sidebar-accent/70 text-sidebar-accent-foreground"
             : "text-muted-foreground hover:bg-sidebar-accent/40 hover:text-foreground",
@@ -99,7 +100,7 @@ export function StackBranchRow({
 
         <span
           className={cn(
-            "min-w-0 flex-1 truncate font-mono text-[12px]",
+            "min-w-0 flex-1 truncate font-mono text-[0.75rem]",
             branch.exists ? "text-foreground/90" : "text-muted-foreground/70 line-through",
           )}
           title={t("stack.rowTitle", {
@@ -119,14 +120,14 @@ export function StackBranchRow({
         ) : null}
 
         {branch.ahead > 0 ? (
-          <span className="flex shrink-0 items-center gap-px rounded bg-git-added/10 px-1 text-[10px] font-semibold tabular-nums text-git-added">
+          <span className="flex shrink-0 items-center gap-px rounded bg-git-added/10 px-1 text-[0.625rem] font-semibold tabular-nums text-git-added">
             <ArrowUp className="size-2.5" aria-hidden />
             {branch.ahead}
           </span>
         ) : null}
 
         {branch.behind > 0 ? (
-          <span className="flex shrink-0 items-center gap-px rounded bg-git-removed/10 px-1 text-[10px] font-semibold tabular-nums text-git-removed">
+          <span className="flex shrink-0 items-center gap-px rounded bg-git-removed/10 px-1 text-[0.625rem] font-semibold tabular-nums text-git-removed">
             <ArrowDown className="size-2.5" aria-hidden />
             {branch.behind}
           </span>
@@ -182,29 +183,29 @@ export function StackBranchRow({
           {branch.commits.map((c) => (
             <li
               key={c.hash}
-              className="flex min-w-0 items-baseline gap-1.5 text-[11px] text-muted-foreground"
+              className="flex min-w-0 items-baseline gap-1.5 text-[0.6875rem] text-muted-foreground"
               title={c.subject}
             >
-              <span className="shrink-0 font-mono text-[10px] text-muted-foreground/70">
+              <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground/70">
                 {c.short_hash}
               </span>
               <span className="min-w-0 flex-1 truncate">{c.subject}</span>
             </li>
           ))}
           {branch.commit_count > branch.commits.length ? (
-            <li className="text-[10px] text-muted-foreground/70">
+            <li className="text-[0.625rem] text-muted-foreground/70">
               {t("stack.moreCommits", {
                 count: branch.commit_count - branch.commits.length,
               })}
             </li>
           ) : null}
           {branch.last_commit_at ? (
-            <li className="pt-0.5 text-[10px] text-muted-foreground/70">
+            <li className="pt-0.5 text-[0.625rem] text-muted-foreground/70">
               {formatRelative(branch.last_commit_at)}
             </li>
           ) : null}
         </ul>
       ) : null}
-    </li>
+    </m.li>
   );
 }

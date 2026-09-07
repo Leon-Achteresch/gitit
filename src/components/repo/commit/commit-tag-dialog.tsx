@@ -151,7 +151,7 @@ export function CommitTagDialog({
                   disabled={busy}
                   onClick={() => setKind(option)}
                   className={cn(
-                    "rounded-md px-2 py-1.5 text-[12px] font-medium transition-colors",
+                    "rounded-md px-2 py-1.5 text-[0.75rem] font-medium transition-colors",
                     kind === option
                       ? "bg-background text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground",
@@ -161,11 +161,11 @@ export function CommitTagDialog({
                 </button>
               ))}
             </div>
-            <p className="text-[11px] leading-snug text-muted-foreground">
+            <p className="text-[0.6875rem] leading-snug text-muted-foreground">
               {t(`commitTagDialog.kindHint.${kind}`)}
             </p>
             {kind === "signed" && signing && !signing.toolAvailable && (
-              <p className="text-[11px] leading-snug text-destructive">
+              <p className="text-[0.6875rem] leading-snug text-destructive">
                 {t("commitTagDialog.signToolMissing", {
                   format: signingFormatLabel(signing.format),
                   program: signing.program,
@@ -186,7 +186,7 @@ export function CommitTagDialog({
                 rows={3}
                 spellCheck={false}
                 placeholder={t("commitTagDialog.messagePlaceholder")}
-                className="resize-none text-[12.5px]"
+                className="resize-none text-[0.78125rem]"
               />
             </div>
           )}

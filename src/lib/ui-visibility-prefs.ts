@@ -12,7 +12,8 @@ export const useUiVisibilityPrefs = create<UiVisibilityPrefs>()(
   persist(
     (set) => ({
       showAgentDock: true,
-      showHeaderIsland: true,
+      // Activity and repository status are already in the header; floating overlays are opt-in.
+      showHeaderIsland: false,
       setShowAgentDock: (showAgentDock) => set({ showAgentDock }),
       setShowHeaderIsland: (showHeaderIsland) => set({ showHeaderIsland }),
     }),

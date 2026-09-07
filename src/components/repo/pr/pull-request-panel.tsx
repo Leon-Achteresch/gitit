@@ -1,3 +1,6 @@
+import { readGit } from '@/lib/ipc/git';
+import { toastError } from '@/lib/error-toast';
+import type { PullRequest } from '@/lib/repo-store';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -6,7 +9,7 @@ import {
 import { useRepoStore, type Branch } from "@/lib/repo-store";
 import { useUiStore } from "@/lib/ui-store";
 import { writeLocalStorageDebounced } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { PullRequestInspectDetail } from "./pull-request-inspect-detail";
 import { PullRequestList } from "./pull-request-list";
 
@@ -15,7 +18,7 @@ const EMPTY_BRANCHES: Branch[] = [];
 
 export function PullRequestPanel({ path }: { path: string }) {
   const prs = useRepoStore((s) => s.prs[path]);
-  const loading = useRepoStore((s) => !s.prsLoading[path]);
+  const loading = useRepoStore((s) => !!s.prsLoading[path]);
   const loadPRs = useRepoStore((s) => s.loadPRs);
   const currentBranch = useRepoStore((s) => s.repos[path]?.branch ?? "");
   const branches = useRepoStore((s) => s.repos[path]?.branches ?? EMPTY_BRANCHES);
@@ -25,6 +28,10 @@ export function PullRequestPanel({ path }: { path: string }) {
   const toggleSelected = useCallback((n: number) => {
     setSelectedNumber((cur) => (cur === n ? null : n));
   }, []);
+  const historyEpoch = useRef(0);
+  const [historyPage, setHistoryPage] = useState<number | null>(2);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyRows, setHistoryRows] = useState<PullRequest[]>([]);
   const [createOpen, setCreateOpen] = useState(false);
   const [createInitialHead, setCreateInitialHead] = useState<string | undefined>(undefined);
   const [defaultLayout] = useState<Record<string, number> | undefined>(() => {
@@ -41,6 +48,13 @@ export function PullRequestPanel({ path }: { path: string }) {
     setSelectedNumber(null);
     setCreateOpen(false);
     setCreateInitialHead(undefined);
+    historyEpoch.current++;
+    setHistoryLoading(false);
+    setHistoryPage(2);
+    setHistoryRows([]);
+  }, [path]);
+
+  useEffect(() => {
     if (!prs) {
       void loadPRs(path);
     }
@@ -66,10 +80,26 @@ export function PullRequestPanel({ path }: { path: string }) {
     clearPrFocusRequest();
   }, [prFocusRequest, path, prs, clearPrFocusRequest]);
 
+  const loadHistory = async () => {
+    if (historyLoading || historyPage === null) return;
+    const epoch = historyEpoch.current;
+    setHistoryLoading(true);
+    try {
+      const page = await readGit('pr_list_page', { path, page: historyPage, history: true });
+      if (historyEpoch.current !== epoch) return;
+      setHistoryRows(rows => [...rows, ...page.items]);
+      setHistoryPage(page.next_page);
+    } catch (error) { toastError(String(error)); }
+    finally { if (historyEpoch.current === epoch) setHistoryLoading(false); }
+  };
+  const combined = prs ? [...new Map([...historyRows, ...prs].map(pr => [pr.number, pr])).values()] : prs;
   const listProps = {
     path,
-    prs,
+    prs: combined,
     loading,
+    historyLoading,
+    hasMoreHistory: historyPage !== null,
+    onLoadHistory: loadHistory,
     selectedNumber,
     branches,
     currentBranch,
@@ -84,10 +114,10 @@ export function PullRequestPanel({ path }: { path: string }) {
       setCreateInitialHead(undefined);
     },
     onCreated: (pr: { number: number }) => {
-      void loadPRs(path);
+      void loadPRs(path, true);
       setSelectedNumber(pr.number);
     },
-    onReload: () => loadPRs(path),
+    onReload: () => { historyEpoch.current++; setHistoryLoading(false); setHistoryRows([]); setHistoryPage(2); void loadPRs(path, true); },
   };
 
   return (
@@ -124,7 +154,7 @@ export function PullRequestPanel({ path }: { path: string }) {
               path={path}
               number={selectedNumber}
               onClose={() => setSelectedNumber(null)}
-              onMutated={() => loadPRs(path)}
+              onMutated={() => loadPRs(path, true)}
             />
           </ResizablePanel>
         </ResizablePanelGroup>

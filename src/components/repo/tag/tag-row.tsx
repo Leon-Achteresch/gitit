@@ -11,6 +11,7 @@ import { useRepoStore } from '@/lib/repo-store';
 import { useUiStore } from '@/lib/ui-store';
 import { cn } from '@/lib/utils';
 import { Tag as TagIcon, Trash2 } from 'lucide-react';
+import { m } from 'motion/react';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RemoteTagDeleteDialog } from './remote-tag-delete-dialog';
@@ -50,14 +51,15 @@ function TagRowInner({
     .join('\n');
 
   const row = (
-    <li
+    <m.li
+      layout
       onClick={e => {
         if (e.button !== 0) return;
         focusCommitFromBranchTip(path, tag.commit);
       }}
       title={rowTitle}
       className={cn(
-        'group/row relative flex min-w-0 max-w-full cursor-pointer items-start gap-2 rounded-md py-1 pl-2 pr-1.5 text-[13px] text-muted-foreground transition-all hover:bg-sidebar-accent/40 hover:text-foreground hover:shadow-2xs'
+        'group/row relative flex min-w-0 max-w-full cursor-pointer items-start gap-2 rounded-md py-1 pl-2 pr-1.5 text-[0.8125rem] text-muted-foreground transition-all hover:bg-sidebar-accent/40 hover:text-foreground hover:shadow-2xs'
       )}
     >
       <span
@@ -75,18 +77,18 @@ function TagRowInner({
 
       <span className='flex min-w-0 flex-1 flex-col gap-0.5'>
         <span className='flex min-w-0 items-center gap-1.5'>
-          <span className='min-w-0 flex-1 truncate font-mono text-[12px] text-foreground/90'>
+          <span className='min-w-0 flex-1 truncate font-mono text-[0.75rem] text-foreground/90'>
             {tag.name}
           </span>
           {kind !== 'lightweight' && <TagKindBadge kind={kind} compact />}
         </span>
         {message && (
-          <span className='min-w-0 truncate text-[11px] leading-snug text-muted-foreground/80'>
+          <span className='min-w-0 truncate text-[0.6875rem] leading-snug text-muted-foreground/80'>
             {message.split('\n')[0]}
           </span>
         )}
       </span>
-    </li>
+    </m.li>
   );
 
   if (!path) return row;

@@ -35,7 +35,7 @@ const LINE_HEIGHT_PX = 18;
 const EMPTY_SET: ReadonlySet<string> = new Set();
 
 const lineWrap =
-  "box-border block w-max min-w-full whitespace-pre px-4 py-0.5 font-mono text-[11px]";
+  "box-border block w-max min-w-full whitespace-pre px-4 py-0.5 font-mono text-[0.6875rem]";
 
 type WordDiffLookup = (index: number) => WordDiffSegment[] | null;
 type SyntaxLookup = (index: number) => AgentCodeToken[] | undefined;
@@ -400,7 +400,7 @@ function HunkActionButton({
       size="xs"
       onClick={onClick}
       title={isStaged ? t("commitPanel.hunkUnstageTitle") : t("commitPanel.hunkStageTitle")}
-      className="h-[14px] gap-0.5 px-1 text-[9px] uppercase tracking-wider"
+      className="h-[14px] gap-0.5 px-1 text-[0.5625rem] uppercase tracking-wider"
     >
       <MorphIcon icon={isStaged ? MinusData : PlusData} />
       {isStaged ? t("commitPanel.hunkUnstageVerb") : t("commitPanel.hunkStageVerb")}
@@ -448,7 +448,7 @@ function interactiveLineNode(
     return (
       <div className="flex h-full items-center">
         <div className="w-5 shrink-0" />
-        <div className="whitespace-pre font-mono text-[11px] text-muted-foreground/70">
+        <div className="whitespace-pre font-mono text-[0.6875rem] text-muted-foreground/70">
           {line.text}
         </div>
       </div>
@@ -459,7 +459,7 @@ function interactiveLineNode(
     return (
       <div className="flex h-full items-center gap-1 bg-muted/5 px-1">
         <div className="w-4 shrink-0" />
-        <div className="min-w-0 flex-1 truncate font-mono text-[11px] text-muted-foreground/70">
+        <div className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-muted-foreground/70">
           {line.text}
         </div>
         <HunkActionButton
@@ -479,7 +479,7 @@ function interactiveLineNode(
     return (
       <div className="flex h-full items-center">
         <div className="w-5 shrink-0" />
-        <div className="whitespace-pre font-mono text-[11px] text-foreground/80">
+        <div className="whitespace-pre font-mono text-[0.6875rem] text-foreground/80">
           <CodeText text={line.text} segments={null} kind="ctx" tokens={tokens} />
         </div>
       </div>
@@ -505,7 +505,7 @@ function interactiveLineNode(
         onToggle={() => onToggleLine(key)}
       />
       <div
-        className={`whitespace-pre font-mono text-[11px] ${isAdd ? "text-git-added" : "text-git-removed"}`}
+        className={`whitespace-pre font-mono text-[0.6875rem] ${isAdd ? "text-git-added" : "text-git-removed"}`}
       >
         <CodeText
           text={line.text}

@@ -1,4 +1,5 @@
 import * as React from "react"
+import { m, type HTMLMotionProps } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
@@ -6,9 +7,10 @@ function Card({
   className,
   size = "default",
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: HTMLMotionProps<"div"> & { size?: "default" | "sm" }) {
   return (
-    <div
+    <m.div
+      layout
       data-slot="card"
       data-size={size}
       className={cn(

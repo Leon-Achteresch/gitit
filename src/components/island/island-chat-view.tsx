@@ -271,18 +271,18 @@ export function IslandChatView({
       </div>
 
       {!path ? (
-        <p className="px-3 py-4 text-center text-[11px] opacity-60">
+        <p className="px-3 py-4 text-center text-[0.6875rem] opacity-60">
           {t("islandChat.noRepo")}
         </p>
       ) : requiresAuth ? (
         <div className="flex flex-col items-center gap-2 px-3 py-4 text-center">
-          <p className="text-[11px] opacity-60">
+          <p className="text-[0.6875rem] opacity-60">
             {provider === "claude"
               ? t("agentChat.loginTitleClaude")
               : t("agentChat.loginTitle")}
           </p>
           {loginError ? (
-            <p className="text-[11px] text-git-removed">{loginError}</p>
+            <p className="text-[0.6875rem] text-git-removed">{loginError}</p>
           ) : null}
           <Button
             size="sm"
@@ -300,7 +300,7 @@ export function IslandChatView({
         </div>
       ) : connectionStatus === "error" ? (
         <div className="flex flex-col items-center gap-2 px-3 py-4 text-center">
-          <p className="text-[11px] text-git-removed">
+          <p className="text-[0.6875rem] text-git-removed">
             {connectionError || t("agentChat.startErrorTitle", { agent: meta.label })}
           </p>
           <Button
@@ -319,13 +319,13 @@ export function IslandChatView({
             className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-2 py-1 [scrollbar-width:thin]"
           >
             {connectionStatus === "connecting" && previews.length === 0 && (
-              <span className="flex items-center gap-1.5 px-1 py-3 text-[10px] opacity-55">
+              <span className="flex items-center gap-1.5 px-1 py-3 text-[0.625rem] opacity-55">
                 <SpinIcon icon={Loader2} className="size-3" />
                 {t("agentChat.connecting", { agent: meta.label })}
               </span>
             )}
             {ready && previews.length === 0 && !busy && (
-              <p className="px-1 py-4 text-center text-[11px] leading-relaxed opacity-50">
+              <p className="px-1 py-4 text-center text-[0.6875rem] leading-relaxed opacity-50">
                 {t("islandChat.empty", { agent: meta.label })}
               </p>
             )}
@@ -337,9 +337,9 @@ export function IslandChatView({
                   row.kind === "user" && "self-end bg-background/15",
                   row.kind === "agent" && "self-start bg-background/8",
                   row.kind === "tool" &&
-                    "self-start bg-background/8 font-mono text-[10px] opacity-70",
+                    "self-start bg-background/8 font-mono text-[0.625rem] opacity-70",
                   row.kind === "error" &&
-                    "self-start bg-git-removed/15 text-[11px] text-git-removed",
+                    "self-start bg-git-removed/15 text-[0.6875rem] text-git-removed",
                 )}
               >
                 {clip(row.text)}
@@ -350,7 +350,7 @@ export function IslandChatView({
                 key={`${request.threadId}:${String(request.requestId)}`}
                 className="flex w-full max-w-[92%] flex-col gap-1 self-start rounded-xl bg-background/8 px-2.5 py-1.5"
               >
-                <span className="truncate text-[11px] font-medium">
+                <span className="truncate text-[0.6875rem] font-medium">
                   {request.command ||
                     request.reason ||
                     t("agentChat.request.approveCommand")}
@@ -367,7 +367,7 @@ export function IslandChatView({
                       }
                       className={cn(
                         ISLAND_ROW,
-                        "h-6 flex-1 justify-center text-[11px] font-medium",
+                        "h-6 flex-1 justify-center text-[0.6875rem] font-medium",
                       )}
                     >
                       {t("islandChat.approve")}
@@ -383,7 +383,7 @@ export function IslandChatView({
                       }
                       className={cn(
                         ISLAND_ROW,
-                        "h-6 flex-1 justify-center text-[11px]",
+                        "h-6 flex-1 justify-center text-[0.6875rem]",
                       )}
                     >
                       {t("islandChat.deny")}
@@ -392,7 +392,7 @@ export function IslandChatView({
               </span>
             ))}
             {busy && (
-              <span className="flex items-center gap-1.5 px-1 text-[10px] opacity-55">
+              <span className="flex items-center gap-1.5 px-1 text-[0.625rem] opacity-55">
                 <SpinIcon icon={Loader2} className="size-3" />
                 {t("islandChat.thinking")}
               </span>

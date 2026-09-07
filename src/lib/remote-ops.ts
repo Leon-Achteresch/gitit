@@ -35,7 +35,11 @@ export type RemoteOpEntry = {
   startedAt: number;
 };
 
+export type RemoteOpResult = { opId: string; op: RemoteOpKind; repoPath: string; status: 'success' | 'failed' | 'canceled'; message: string; finishedAt: number; retry?: () => Promise<unknown> };
+
 type RemoteOpsState = {
+  history: RemoteOpResult[];
+  recordResult: (result: RemoteOpResult) => void;
   ops: RemoteOpEntry[];
   startOp: (opId: string, op: RemoteOpKind, repoPath: string) => void;
   applyProgress: (event: GitProgressEvent) => void;
@@ -45,6 +49,8 @@ type RemoteOpsState = {
 
 export const useRemoteOps = create<RemoteOpsState>((set) => ({
   ops: [],
+  history: [],
+  recordResult: (result) => set(s => ({ history: [result, ...s.history.filter(r => r.opId !== result.opId)].slice(0, 30) })),
   startOp: (opId, op, repoPath) =>
     set((s) =>
       s.ops.some((o) => o.opId === opId)
@@ -137,7 +143,12 @@ export async function runRemoteOp<T>(
   const opId = newOpId();
   useRemoteOps.getState().startOp(opId, op, repoPath);
   try {
-    return await run(opId);
+    const result = await run(opId);
+    useRemoteOps.getState().recordResult({ opId, op, repoPath, status: 'success', message: '', finishedAt: Date.now() });
+    return result;
+  } catch (error) {
+    useRemoteOps.getState().recordResult({ opId, op, repoPath, status: isRemoteCanceled(error) ? 'canceled' : 'failed', message: String(error), finishedAt: Date.now(), retry: op === 'fetch' ? () => runRemoteOp(op, repoPath, run) : undefined });
+    throw error;
   } finally {
     useRemoteOps.getState().finishOp(opId);
   }

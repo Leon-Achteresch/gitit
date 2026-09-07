@@ -153,7 +153,7 @@ export function FadeIn({
   style?: React.CSSProperties;
 }) {
   return (
-    <m.div
+    <m.div layout
       className={className}
       style={style}
       initial={{ opacity: 0, y }}
@@ -310,7 +310,7 @@ export function StaggerItem({
   className?: string;
 }) {
   return (
-    <m.div
+    <m.div layout
       className={className}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
@@ -323,6 +323,7 @@ export function StaggerItem({
 
 export function staggerEnter(index: number) {
   return {
+    layout: true,
     initial: { opacity: 0, y: 6 },
     animate: { opacity: 1, y: 0 },
     transition: { ...easeOutSoft, delay: Math.min(index, 14) * 0.025 },

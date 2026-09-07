@@ -23,7 +23,7 @@ export function CommitPanelConflictPlaceholder({
         <p className="max-w-48 text-xs text-muted-foreground">
           {t("commitPanel.mergeConflictHint")}
         </p>
-        <p className="font-mono text-[11px] text-muted-foreground/60">
+        <p className="font-mono text-[0.6875rem] text-muted-foreground/60">
           {filePath.split("/").pop()}
         </p>
       </div>

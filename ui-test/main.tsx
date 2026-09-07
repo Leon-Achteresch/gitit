@@ -7,16 +7,19 @@ import { MotionProvider } from "@/components/motion/motion-provider";
 
 import "@/lib/i18n";
 import { changeAppLanguage } from "@/lib/i18n";
+import { useLocalePrefs } from "@/lib/locale-prefs";
 import { isAppLocale } from "@/lib/locales";
 import { AgentsUiRoot } from "@/components/agents/test-harness/agents-ui-root";
 import { seedAgentUi } from "@/components/agents/test-harness/seed-agent-ui";
 
 import "@/index.css";
 
+const AuditScenes = React.lazy(() => import("./audit-scenes"));
 const params = new URLSearchParams(window.location.search);
 const scene = params.get("scene") ?? "chat";
 const locale = params.get("lang");
 
+useLocalePrefs.setState({ locale: isAppLocale(locale) ? locale : "en" });
 await changeAppLanguage(isAppLocale(locale) ? locale : "en");
 seedAgentUi(scene);
 if (params.get("theme") === "light") {
@@ -27,7 +30,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <HotkeysProvider>
       <MotionProvider>
-        <AgentsUiRoot scene={scene} />
+        {["app", "git-workflow", "performance", "conflict", "review", "context"].includes(scene) ? <React.Suspense fallback={<p>Loading…</p>}><AuditScenes scene={scene} /></React.Suspense> : <AgentsUiRoot scene={scene} />}
       </MotionProvider>
     </HotkeysProvider>
   </React.StrictMode>,

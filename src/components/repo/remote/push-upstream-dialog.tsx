@@ -138,7 +138,7 @@ export function PushUpstreamDialog({
                   title={r.url}
                   onClick={() => setRemote(r.name)}
                   className={cn(
-                    "rounded-md px-2.5 py-1.5 text-[12px] font-medium transition-colors",
+                    "rounded-md px-2.5 py-1.5 text-[0.75rem] font-medium transition-colors",
                     remote === r.name
                       ? "bg-background text-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground",

@@ -64,7 +64,7 @@ export function SubmoduleDetail({
               <h3 className="truncate text-sm font-semibold">{entry.name}</h3>
               <SubmoduleStatusBadge entry={entry} />
             </div>
-            <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+            <p className="mt-0.5 truncate text-[0.6875rem] text-muted-foreground">
               {entry.path} · {displayUrl}
             </p>
           </div>
@@ -73,12 +73,12 @@ export function SubmoduleDetail({
         <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
           <div className="grid grid-cols-[1fr_auto_1fr_auto] items-center gap-2">
             <div className="min-w-0 space-y-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground">
                 {t("submodule.detailPinnedSuperRepo")}
               </p>
               <p className="font-mono text-sm font-semibold">{shortPinned}</p>
               {entry.branch && (
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[0.625rem] font-medium text-primary">
                   {entry.branch}
                 </span>
               )}
@@ -87,12 +87,12 @@ export function SubmoduleDetail({
             <span className="text-lg font-light text-muted-foreground">=</span>
 
             <div className="min-w-0 space-y-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground">
                 {t("submodule.detailRemoteHead")}
               </p>
               <p className="font-mono text-sm font-semibold">{shortRemote}</p>
               {entry.behind_count != null && entry.behind_count > 0 && (
-                <span className="text-[10px] text-git-removed">
+                <span className="text-[0.625rem] text-git-removed">
                   {t("submodule.commitsBehindShort", {
                     count: entry.behind_count,
                   })}
@@ -105,7 +105,7 @@ export function SubmoduleDetail({
                 type="button"
                 variant="outline"
                 size="xs"
-                className="gap-1 text-[11px]"
+                className="gap-1 text-[0.6875rem]"
                 onClick={onPull}
               >
                 <Download className="h-3 w-3" />
@@ -115,7 +115,7 @@ export function SubmoduleDetail({
                 type="button"
                 variant="ghost"
                 size="xs"
-                className="gap-1 text-[11px]"
+                className="gap-1 text-[0.6875rem]"
                 onClick={() =>
                   toast.info(`cd ${entry.path}`, { duration: 4000 })
                 }
@@ -129,25 +129,25 @@ export function SubmoduleDetail({
 
         {entry.gitmodules_raw && (
           <div className="space-y-1.5">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground">
               {t("submodule.detailGitmodules")}
             </p>
-            <pre className="overflow-x-auto rounded-lg border border-border/60 bg-muted/30 p-3 font-mono text-[11px] leading-relaxed text-foreground/80">
+            <pre className="overflow-x-auto rounded-lg border border-border/60 bg-muted/30 p-3 font-mono text-[0.6875rem] leading-relaxed text-foreground/80">
               {entry.gitmodules_raw}
             </pre>
           </div>
         )}
 
         <div className="space-y-1.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground">
             {t("submodule.lastCommits")}
           </p>
           {loadingCommits ? (
-            <div className="py-4 text-center text-[11px] text-muted-foreground">
+            <div className="py-4 text-center text-[0.6875rem] text-muted-foreground">
               {t("submodule.loadingCommits")}
             </div>
           ) : commits.length === 0 ? (
-            <div className="py-4 text-center text-[11px] text-muted-foreground">
+            <div className="py-4 text-center text-[0.6875rem] text-muted-foreground">
               {t("submodule.noCommits")}
             </div>
           ) : (
@@ -164,19 +164,19 @@ export function SubmoduleDetail({
                   <CommitDot active={c.is_pinned} />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] text-muted-foreground">
+                      <span className="font-mono text-[0.625rem] text-muted-foreground">
                         {c.short_hash}
                       </span>
-                      <span className="min-w-0 flex-1 truncate text-[11px]">
+                      <span className="min-w-0 flex-1 truncate text-[0.6875rem]">
                         {c.message}
                       </span>
                       {c.is_pinned && (
-                        <span className="shrink-0 rounded-full bg-primary/15 px-1.5 py-0.5 text-[9px] font-medium text-primary">
+                        <span className="shrink-0 rounded-full bg-primary/15 px-1.5 py-0.5 text-[0.5625rem] font-medium text-primary">
                           {t("submodule.pinnedBadge")}
                         </span>
                       )}
                     </div>
-                    <div className="mt-0.5 flex gap-2 text-[10px] text-muted-foreground/60">
+                    <div className="mt-0.5 flex gap-2 text-[0.625rem] text-muted-foreground/60">
                       <span>{c.author}</span>
                       <span>{c.date}</span>
                     </div>

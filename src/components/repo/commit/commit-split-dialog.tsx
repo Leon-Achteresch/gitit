@@ -217,7 +217,7 @@ export function CommitSplitDialog({
         </DialogHeader>
 
         {unstagedNotice ? (
-          <p className="rounded-md bg-git-modified/10 px-2 py-1.5 text-[11px] text-git-modified">
+          <p className="rounded-md bg-git-modified/10 px-2 py-1.5 text-[0.6875rem] text-git-modified">
             {t("commitSplit.unstagedNotice")}
           </p>
         ) : null}
@@ -237,7 +237,7 @@ export function CommitSplitDialog({
 
         {phase === "failed" ? (
           <div className="space-y-2 py-6">
-            <p className="flex items-start gap-2 rounded-md bg-destructive/10 px-2 py-1.5 text-[11px] text-destructive">
+            <p className="flex items-start gap-2 rounded-md bg-destructive/10 px-2 py-1.5 text-[0.6875rem] text-destructive">
               <TriangleAlert className="mt-px size-3.5 shrink-0" />
               <span className="min-w-0 break-words">{error}</span>
             </p>
@@ -266,9 +266,9 @@ export function CommitSplitDialog({
                 : t("commitSplit.applying")}
             </div>
             {progress ? (
-              <p className="truncate text-[11px] font-medium">{progress.message.split("\n")[0]}</p>
+              <p className="truncate text-[0.6875rem] font-medium">{progress.message.split("\n")[0]}</p>
             ) : null}
-            <p className="text-[11px] text-muted-foreground">{t("commitSplit.cancelHint")}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{t("commitSplit.cancelHint")}</p>
             <Button
               type="button"
               size="xs"
@@ -285,7 +285,7 @@ export function CommitSplitDialog({
         {phase === "ready" ? (
           <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
             {warnings.length > 0 ? (
-              <p className="rounded-md bg-muted px-2 py-1.5 text-[11px] text-muted-foreground">
+              <p className="rounded-md bg-muted px-2 py-1.5 text-[0.6875rem] text-muted-foreground">
                 {t("commitSplit.warnings", { list: warnings.join(", ") })}
               </p>
             ) : null}
@@ -334,7 +334,7 @@ export function CommitSplitDialog({
         ) : null}
 
         <DialogFooter className="items-center gap-2 sm:justify-between">
-          <span className="text-[11px] text-muted-foreground">
+          <span className="text-[0.6875rem] text-muted-foreground">
             {issues.includes("coverage") || issues.includes("duplicate")
               ? t("commitSplit.issueCoverage")
               : issues.includes("message")
@@ -453,11 +453,11 @@ function SplitGroupCard({
       </header>
 
       {rationale ? (
-        <p className="pl-1 text-[11px] text-muted-foreground">{rationale}</p>
+        <p className="pl-1 text-[0.6875rem] text-muted-foreground">{rationale}</p>
       ) : null}
 
       {unitIds.length === 0 ? (
-        <p className="pl-1 text-[11px] text-muted-foreground">{t("commitSplit.emptyGroup")}</p>
+        <p className="pl-1 text-[0.6875rem] text-muted-foreground">{t("commitSplit.emptyGroup")}</p>
       ) : (
         <ul className="space-y-1">
           {unitIds.map((unitId) => {
@@ -472,7 +472,7 @@ function SplitGroupCard({
                   event.dataTransfer.effectAllowed = "move";
                 }}
                 className={cn(
-                  "flex cursor-grab items-center gap-2 rounded-md px-1.5 py-1 text-[11px] hover:bg-muted/60",
+                  "flex cursor-grab items-center gap-2 rounded-md px-1.5 py-1 text-[0.6875rem] hover:bg-muted/60",
                   selection.has(unitId) && "bg-primary/10",
                 )}
               >
@@ -485,7 +485,7 @@ function SplitGroupCard({
                   {unitLabel(unit)}
                 </span>
                 {unit.kind === "file" ? (
-                  <Badge variant="outline" className="h-4 px-1 text-[9.5px]">
+                  <Badge variant="outline" className="h-4 px-1 text-[0.59375rem]">
                     {unit.untracked ? t("commitSplit.newFile") : t("commitSplit.wholeFile")}
                   </Badge>
                 ) : null}

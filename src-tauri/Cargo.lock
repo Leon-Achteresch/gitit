@@ -2362,6 +2362,7 @@ dependencies = [
  "futures-util",
  "hkdf",
  "hmac",
+ "httpdate",
  "keyring",
  "libc",
  "log",

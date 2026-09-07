@@ -76,7 +76,7 @@ export function IslandUsage({
               {Logo ? <Logo className="size-4" /> : null}
             </span>
             <span
-              className="text-[10px] font-semibold tabular-nums leading-none tracking-tight opacity-90"
+              className="text-[0.625rem] font-semibold tabular-nums leading-none tracking-tight opacity-90"
               style={known ? { color } : undefined}
             >
               {known ? `${percent}%` : "—"}
@@ -116,7 +116,7 @@ export function IslandUsageDetails({
       {row.primary ? usageWindowBlock(t("island.usage.session"), row.primary, i18n.language, t) : null}
       {row.secondary ? usageWindowBlock(t("island.usage.allModels"), row.secondary, i18n.language, t) : null}
       {!row.primary && !row.secondary ? (
-        <p className="px-1 py-2 text-center text-[11px] opacity-50">{t("island.usage.unknown")}</p>
+        <p className="px-1 py-2 text-center text-[0.6875rem] opacity-50">{t("island.usage.unknown")}</p>
       ) : null}
     </div>
   );
@@ -141,7 +141,7 @@ function usageWindowBlock(
   );
   return (
     <div key={label} className="px-1 pb-3 last:pb-1">
-      <div className="mb-2 flex items-baseline justify-between gap-2 text-[11px] leading-none">
+      <div className="mb-2 flex items-baseline justify-between gap-2 text-[0.6875rem] leading-none">
         <span className="font-medium opacity-90">{label}</span>
         {resets ? <span className="shrink-0 opacity-45">{resets}</span> : null}
       </div>
@@ -156,7 +156,7 @@ function usageWindowBlock(
           }}
         />
       </span>
-      <span className="mt-1.5 block text-[11px] font-medium tabular-nums opacity-90">
+      <span className="mt-1.5 block text-[0.6875rem] font-medium tabular-nums opacity-90">
         {t("island.usage.used", { value: `${Math.round(used)}%` })}
       </span>
     </div>

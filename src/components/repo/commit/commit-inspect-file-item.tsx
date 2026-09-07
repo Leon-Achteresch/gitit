@@ -16,6 +16,7 @@ import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 export type CommitChangedFile = {
+  untracked?: boolean;
   path: string;
   additions: number;
   deletions: number;
@@ -79,14 +80,15 @@ export const CommitInspectFileItem = memo(function CommitInspectFileItem({
           {baseName}
         </span>
         {directory ? (
-          <span className="truncate text-[10px] font-medium opacity-60">
+          <span className="truncate text-[0.625rem] font-medium opacity-60">
             {directory}
           </span>
         ) : null}
       </div>
       <div className="flex shrink-0 items-center gap-2 text-xs font-medium">
+        {file.untracked && <span className="text-xs text-muted-foreground">{t("audit.untracked")}</span>}
         {file.binary ? (
-          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+          <span className="rounded-full bg-muted px-2 py-0.5 text-[0.625rem] uppercase tracking-wider text-muted-foreground">
             {t("commitInspect.binaryBadge")}
           </span>
         ) : (

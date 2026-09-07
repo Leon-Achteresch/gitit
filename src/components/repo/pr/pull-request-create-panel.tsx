@@ -157,7 +157,7 @@ function BranchDropdown({
               </span>
             )}
           </span>
-          <m.span
+          <m.span layout
             animate={{ rotate: open ? 180 : 0 }}
             transition={{ duration: 0.18 }}
             className="shrink-0 opacity-60"
@@ -168,7 +168,7 @@ function BranchDropdown({
         <OverlayPortal>
         <AnimatePresence>
           {open ? (
-            <m.div
+            <m.div layout
               ref={panelRef}
               initial={{ opacity: 0, y: -6, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -240,7 +240,7 @@ function BranchSection({
   if (branches.length === 0) return null;
   return (
     <div className="px-1 pb-1">
-      <div className="px-2 pt-1 pb-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70">
+      <div className="px-2 pt-1 pb-0.5 text-[0.625rem] font-medium uppercase tracking-wider text-muted-foreground/70">
         {title}
       </div>
       {branches.map((b) => {
@@ -267,7 +267,7 @@ function BranchSection({
             </span>
             <span className="min-w-0 flex-1 truncate">{b.name}</span>
             {b.is_current ? (
-              <span className="shrink-0 rounded bg-primary/15 px-1 text-[9px] font-semibold uppercase tracking-wider text-primary">
+              <span className="shrink-0 rounded bg-primary/15 px-1 text-[0.5625rem] font-semibold uppercase tracking-wider text-primary">
                 {t("pr.branchCurrentBadge")}
               </span>
             ) : null}
@@ -444,7 +444,7 @@ export function PullRequestCreatePanel({
       transition={SHELL_TRANSITION}
       className="mx-3 mt-3 overflow-hidden rounded-xl border border-primary/30 bg-card shadow-lg ring-1 ring-primary/10"
     >
-      <m.form
+      <m.form layout
         onSubmit={(e) => void submit(e)}
         initial={{ opacity: 0, y: -4 }}
         animate={{

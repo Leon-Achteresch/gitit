@@ -13,17 +13,17 @@ export function PrStatsBar({ detail }: { detail: PullRequestDetail }) {
   };
 
   return (
-    <m.div
+    <m.div layout
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15 }}
-      className="flex flex-wrap items-center gap-2 text-[11px]"
+      className="flex flex-wrap items-center gap-2 text-[0.6875rem]"
     >
       {detail.head_sha && (
         <button
           type="button"
           onClick={() => copySha(detail.head_sha)}
-          className="group inline-flex items-center gap-1 rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 font-mono text-[11px] text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors cursor-pointer"
+          className="group inline-flex items-center gap-1 rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 font-mono text-[0.6875rem] text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors cursor-pointer"
           title={`Copy full SHA: ${detail.head_sha}`}
         >
           <GitCommit className="h-3 w-3 text-muted-foreground/70" />

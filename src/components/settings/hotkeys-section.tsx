@@ -110,7 +110,7 @@ export function HotkeysSection() {
       <CardContent className="space-y-6">
         {groups.map((group) => (
           <section key={group.id} className="space-y-1.5">
-            <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+            <h3 className="text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
               {group.label}
             </h3>
             <ul className="divide-y rounded-lg border">
@@ -131,7 +131,7 @@ export function HotkeysSection() {
                         {t(action.labelKey, action.labelParams ?? {})}
                       </p>
                       {partners.length > 0 && (
-                        <p className="mt-0.5 flex items-center gap-1 text-[11px] text-destructive">
+                        <p className="mt-0.5 flex items-center gap-1 text-[0.6875rem] text-destructive">
                           <AlertTriangle className="size-3 shrink-0" />
                           <span className="truncate">
                             {t("settings.hotkeysConflict", {

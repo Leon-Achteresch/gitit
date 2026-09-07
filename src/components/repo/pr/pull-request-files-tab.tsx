@@ -410,15 +410,15 @@ export function PullRequestFilesTab({
                     title={f.path}
                   >
                     <span
-                      className={`shrink-0 font-mono text-[11px] uppercase ${status}`}
+                      className={`shrink-0 font-mono text-[0.6875rem] uppercase ${status}`}
                       title={f.status}
                     >
                       {f.status[0]?.toUpperCase() ?? "?"}
                     </span>
-                    <span className="min-w-0 flex-1 truncate font-mono text-[12px]">
+                    <span className="min-w-0 flex-1 truncate font-mono text-[0.75rem]">
                       {f.path}
                     </span>
-                    <span className="shrink-0 font-mono text-[10px] tabular-nums font-semibold">
+                    <span className="shrink-0 font-mono text-[0.625rem] tabular-nums font-semibold">
                       <span className="text-emerald-400">+{f.additions}</span>{" "}
                       <span className="text-rose-400">-{f.deletions}</span>
                     </span>

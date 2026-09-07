@@ -93,7 +93,7 @@ export function LanguageBreakdown({ path }: { path: string | null }) {
             />
             <span className="flex-1 truncate font-medium">{s.language}</span>
             <span className="tabular-nums text-muted-foreground">{s.percent.toFixed(1)}%</span>
-            <span className="w-14 text-right tabular-nums text-[10px] text-muted-foreground">
+            <span className="w-14 text-right tabular-nums text-[0.625rem] text-muted-foreground">
               {formatBytes(s.bytes)}
             </span>
           </li>

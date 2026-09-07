@@ -221,7 +221,7 @@ export function IslandActionsView({
             <RepoLogo
               path={active.path}
               label={active.label}
-              className="size-4 text-[8px]"
+              className="size-4 text-[0.5rem]"
             />
           )}
           <span className="min-w-0 flex-1 truncate text-left text-xs font-medium">
@@ -272,13 +272,13 @@ export function IslandActionsView({
 
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:thin]">
         {grouped.length === 0 && (
-          <p className="px-2 py-3 text-center text-[11px] opacity-50">
+          <p className="px-2 py-3 text-center text-[0.6875rem] opacity-50">
             {t("islandActions.empty")}
           </p>
         )}
         {grouped.map(({ group, items }) => (
           <div key={group}>
-            <span className="block px-2 pb-0.5 pt-1.5 text-[10px] font-medium uppercase tracking-wider opacity-50">
+            <span className="block px-2 pb-0.5 pt-1.5 text-[0.625rem] font-medium uppercase tracking-wider opacity-50">
               {t(`islandActions.group.${group}`)}
             </span>
             {items.map((action) => {

@@ -131,23 +131,23 @@ function CommitInfoCard({
       className="overflow-hidden rounded-xl border border-border/80 bg-popover shadow-2xl"
     >
       <div className="border-b border-border/40 px-4 py-3">
-        <p className="text-[13px] font-semibold leading-snug text-foreground">
+        <p className="text-[0.8125rem] font-semibold leading-snug text-foreground">
           {info.entry.summary || t("blame.noSubject")}
         </p>
       </div>
       <div className="flex flex-col gap-2 px-4 py-3">
         <div className="flex items-center gap-2.5">
           <div
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[0.625rem] font-bold text-white"
             style={{ background: color }}
           >
             {initials(info.entry.author)}
           </div>
-          <span className="text-[12px] font-medium text-foreground">
+          <span className="text-[0.75rem] font-medium text-foreground">
             {info.entry.author}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
           <span className="font-mono">{info.entry.short_hash}</span>
           <span className="opacity-40">·</span>
           <span>{formatFullDate(info.entry.timestamp, i18n.language)}</span>
@@ -226,7 +226,7 @@ function BlameLines({
               />
 
               <span
-                className="flex shrink-0 select-none items-center justify-end pr-3 pl-2 font-mono text-[11px] text-muted-foreground/40"
+                className="flex shrink-0 select-none items-center justify-end pr-3 pl-2 font-mono text-[0.6875rem] text-muted-foreground/40"
                 style={{ width: `${lineNoWidth + 2}ch` }}
               >
                 {entry.line_no}
@@ -246,15 +246,15 @@ function BlameLines({
                     className="group"
                   >
                     <div
-                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white shadow-sm"
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[0.5625rem] font-bold text-white shadow-sm"
                       style={{ background: color }}
                     >
                       {initials(entry.author)}
                     </div>
-                    <span className="min-w-0 flex-1 truncate text-left text-[11px] font-semibold text-foreground/80">
+                    <span className="min-w-0 flex-1 truncate text-left text-[0.6875rem] font-semibold text-foreground/80">
                       {entry.author}
                     </span>
-                    <span className="shrink-0 text-[10px] text-muted-foreground/60">
+                    <span className="shrink-0 text-[0.625rem] text-muted-foreground/60">
                       {entry.date}
                     </span>
                   </ListRow>
@@ -270,7 +270,7 @@ function BlameLines({
 
               <div className="w-px shrink-0 self-stretch bg-border/30" />
 
-              <span className="min-w-0 flex-1 self-center truncate whitespace-pre px-3 font-mono text-[12px] text-foreground/85">
+              <span className="min-w-0 flex-1 self-center truncate whitespace-pre px-3 font-mono text-[0.75rem] text-foreground/85">
                 {entry.content}
               </span>
             </div>
@@ -360,18 +360,18 @@ export function GitBlameSheet({
             {fileName}
           </span>
           {dir && (
-            <span className="truncate text-[11px] text-muted-foreground/50">
+            <span className="truncate text-[0.6875rem] text-muted-foreground/50">
               {dir}
             </span>
           )}
           {commit && (
-            <span className="ml-1 shrink-0 rounded-md bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+            <span className="ml-1 shrink-0 rounded-md bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground">
               @ {commit.slice(0, 8)}
             </span>
           )}
         </div>
         {!loading && !failed && (
-          <span className="shrink-0 text-[11px] text-muted-foreground/50">
+          <span className="shrink-0 text-[0.6875rem] text-muted-foreground/50">
             {t("blame.linesCount", { count: entries.length })}
           </span>
         )}

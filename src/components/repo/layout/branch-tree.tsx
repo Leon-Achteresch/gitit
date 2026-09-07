@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next";
 function SectionCount({ count }: { count: number }) {
   return (
     <PopIn key={count} className="shrink-0">
-      <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-md bg-muted/70 px-1 text-[10px] font-semibold tabular-nums text-muted-foreground">
+      <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-md bg-muted/70 px-1 text-[0.625rem] font-semibold tabular-nums text-muted-foreground">
         {count > 99 ? "99+" : count}
       </span>
     </PopIn>
@@ -56,7 +56,7 @@ function Section({
   const { t } = useTranslation();
   const trigger = (
     <AccordionTrigger className="group/trigger my-px flex w-full min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-left hover:no-underline hover:bg-sidebar-accent/30 [&>svg]:shrink-0 [&>svg]:text-muted-foreground/70">
-        <span className="min-w-0 flex-1 truncate text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground group-data-[state=open]/trigger:text-foreground">
+        <span className="min-w-0 flex-1 truncate text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground group-data-[state=open]/trigger:text-foreground">
           {label}
         </span>
       <SectionCount count={count} />
@@ -73,7 +73,7 @@ function Section({
               <Brush className="h-3.5 w-3.5" aria-hidden />
               <span>{t("branchCleanup.buttonLabel")}</span>
               {cleanupCount ? (
-                <span className="ml-auto text-[10px] font-semibold tabular-nums text-git-modified">
+                <span className="ml-auto text-[0.625rem] font-semibold tabular-nums text-git-modified">
                   {cleanupCount > 99 ? "99+" : cleanupCount}
                 </span>
               ) : null}

@@ -98,7 +98,7 @@ function Slot({
 }) {
   const reduce = useReducedMotion();
   return (
-    <m.div
+    <m.div layout
       key={keyId}
       initial={
         reduce
@@ -170,7 +170,7 @@ export function DynamicIsland({
 
   return (
     <IslandContext.Provider value={contextValue}>
-      <m.div
+      <m.div layout
         role="status"
         aria-live="polite"
         initial={false}

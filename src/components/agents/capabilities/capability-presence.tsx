@@ -44,7 +44,7 @@ export function CapabilityPresence({
         const isSource = column.cli === sourceCli;
         const actionable = Boolean(onPick) && (status === "missing" || status === "different") && !isSource;
         return (
-          <m.button
+          <m.button layout
             key={`${column.cli}:${column.scope}`}
             type="button"
             disabled={!actionable}

@@ -163,7 +163,7 @@ export function CommitComposer({
       >
         <AnimatePresence initial={false}>
           {amendMode && (
-            <m.div
+            <m.div layout
               key="amend-banner"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -173,7 +173,7 @@ export function CommitComposer({
             >
               <div
                 role="status"
-                className="flex items-center gap-2 bg-git-modified/10 px-3 py-1.5 text-[11px] font-medium text-git-modified"
+                className="flex items-center gap-2 bg-git-modified/10 px-3 py-1.5 text-[0.6875rem] font-medium text-git-modified"
               >
                 <Pencil className="size-3 shrink-0" aria-hidden />
                 <span className="truncate">{t("commitPanel.amendBanner")}</span>
@@ -194,7 +194,7 @@ export function CommitComposer({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             placeholder={t("commitPanel.messagePlaceholder")}
-            className="flex-1 py-1 text-[13px] font-medium leading-snug tracking-tight placeholder:font-normal"
+            className="flex-1 py-1 text-[0.8125rem] font-medium leading-snug tracking-tight placeholder:font-normal"
           />
 
           <div className="flex shrink-0 items-center gap-0.5 pt-0.5">
@@ -249,7 +249,7 @@ export function CommitComposer({
             >
               <AnimatePresence mode="wait" initial={false}>
                 {aiGenerating ? (
-                  <m.span
+                  <m.span layout
                     key="spin"
                     initial={{ opacity: 0, scale: 0.7, rotate: -40 }}
                     animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -260,7 +260,7 @@ export function CommitComposer({
                     <SpinIcon icon={Loader2} className="size-3.5" />
                   </m.span>
                 ) : (
-                  <m.span
+                  <m.span layout
                     key="spark"
                     initial={{ opacity: 0, scale: 0.7 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -305,7 +305,7 @@ export function CommitComposer({
                 }}
                 placeholder={t("commitPanel.bodyPlaceholder")}
                 rows={2}
-                className="resize-none border-0 bg-transparent px-2.5 py-2 text-[12.5px] leading-relaxed shadow-none focus-visible:ring-0"
+                className="resize-none border-0 bg-transparent px-2.5 py-2 text-[0.78125rem] leading-relaxed shadow-none focus-visible:ring-0"
               />
             </m.div>
           ) : (
@@ -345,7 +345,7 @@ export function CommitComposer({
                   animate={{ opacity: 1, scale: 1, x: 0 }}
                   exit={{ opacity: 0, scale: 0.85, x: -6 }}
                   transition={spring}
-                  className="truncate rounded-full bg-muted/70 px-2 py-0.5 text-[10px] font-medium tabular-nums text-muted-foreground"
+                  className="truncate rounded-full bg-muted/70 px-2 py-0.5 text-[0.625rem] font-medium tabular-nums text-muted-foreground"
                 >
                   {t("commitPanel.stagedSummary", {
                     count: stagedFiles,
@@ -367,7 +367,7 @@ export function CommitComposer({
                   title={signingTitle}
                   aria-label={signingTitle}
                   className={cn(
-                    "inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium",
+                    "inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-[0.625rem] font-medium",
                     signingInfo?.toolAvailable
                       ? "bg-git-added/10 text-git-added"
                       : "bg-git-modified/10 text-git-modified",
@@ -389,7 +389,7 @@ export function CommitComposer({
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={spring}
                   className={cn(
-                    "font-mono text-[10px] tabular-nums transition-colors duration-200",
+                    "font-mono text-[0.625rem] tabular-nums transition-colors duration-200",
                     subjectTone === "over" && "text-destructive",
                     subjectTone === "warn" && "text-git-modified",
                     subjectTone === "ok" && "text-muted-foreground/45",
@@ -433,7 +433,7 @@ export function CommitComposer({
                     : `${commitLabel} (⌘↵)`
               }
               className={cn(
-                "relative flex h-8 max-w-[220px] cursor-pointer items-center justify-center gap-1.5 overflow-hidden rounded-l-xl px-3 text-[12.5px] font-medium transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1 disabled:cursor-not-allowed",
+                "relative flex h-8 max-w-[220px] cursor-pointer items-center justify-center gap-1.5 overflow-hidden rounded-l-xl px-3 text-[0.78125rem] font-medium transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1 disabled:cursor-not-allowed",
                 amendMode
                   ? "bg-git-modified text-white hover:bg-git-modified disabled:bg-git-modified/50"
                   : canCommit
@@ -442,7 +442,7 @@ export function CommitComposer({
               )}
             >
               <AnimatePresence mode="wait" initial={false}>
-                <m.span
+                <m.span layout
                   key={commitLabel}
                   initial={{ y: 10, opacity: 0, filter: "blur(4px)" }}
                   animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}

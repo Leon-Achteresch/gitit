@@ -37,7 +37,7 @@ export function TodoHeaderIcon({ complete }: { complete: boolean }) {
             />
           </m.svg>
         ) : (
-          <m.span
+          <m.span layout
             key="todo"
             initial={reduce ? { opacity: 1 } : { opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

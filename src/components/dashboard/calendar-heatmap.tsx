@@ -117,7 +117,7 @@ export function CalendarHeatmap({
               key={`${m.week}-${m.label}`}
               x={LEFT_W + m.week * STEP}
               y={11}
-              className="fill-muted-foreground text-[10px]"
+              className="fill-muted-foreground text-[0.625rem]"
             >
               {m.label}
             </text>
@@ -128,7 +128,7 @@ export function CalendarHeatmap({
               x={LEFT_W - 8}
               y={TOP_H + w.row * STEP + CELL - 2}
               textAnchor="end"
-              className="fill-muted-foreground text-[10px]"
+              className="fill-muted-foreground text-[0.625rem]"
             >
               {w.label}
             </text>
@@ -163,7 +163,7 @@ export function CalendarHeatmap({
           y={TOP_H + hover.dow * STEP - 8}
           containerWidth={width}
         >
-          <div className="mb-1 text-[11px] font-medium">
+          <div className="mb-1 text-[0.6875rem] font-medium">
             {dayFmt.format(new Date(hoveredDay.date + "T00:00:00Z"))}
           </div>
           <ChartTooltipRow label={countLabel} value={hoveredDay.count} />

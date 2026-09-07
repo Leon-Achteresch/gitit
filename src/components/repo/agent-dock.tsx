@@ -56,11 +56,11 @@ export function AgentDock({ path }: { path: string }) {
   };
 
   return (
-    <m.div
+    <m.div layout
       initial={{ y: 16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.6 }}
-      className="pointer-events-auto absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 items-center gap-0.5 rounded-full border border-border/60 bg-background/80 p-1 shadow-lg backdrop-blur-md"
+      className="pointer-events-auto z-30 my-2 flex max-w-full shrink-0 self-center items-center gap-0.5 overflow-x-auto rounded-full border border-border/60 bg-background/80 p-1 shadow-sm backdrop-blur-md"
     >
       <DockButton
         label={t("dock.shell")}

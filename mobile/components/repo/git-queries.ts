@@ -158,23 +158,24 @@ export function useStashes(scope: RepoScope) {
   });
 }
 
-export function useStashInspect(scope: RepoScope, index: number) {
+export function useStashInspect(scope: RepoScope, index: number, expectedHash?: string) {
   const { hostId, repoPath, invoke, enabled } = scope;
   return useQuery({
-    queryKey: hostQueryKey(hostId, repoPath, 'stash', index, 'inspect'),
-    enabled: enabled && Number.isFinite(index) && index >= 0,
-    queryFn: () => invoke<InspectPayload>('git_stash_show', { path: repoPath, index }),
+    queryKey: hostQueryKey(hostId, repoPath, 'stash', index, expectedHash ?? '', 'inspect'),
+    enabled: enabled && Number.isFinite(index) && index >= 0 && Boolean(expectedHash),
+    queryFn: () => invoke<InspectPayload>('git_stash_show', { path: repoPath, index, expectedHash }),
   });
 }
 
-export function useStashFileDiff(scope: RepoScope, index: number, file: string | null) {
+export function useStashFileDiff(scope: RepoScope, index: number, file: string | null, expectedHash?: string) {
   const { hostId, repoPath, invoke, enabled } = scope;
   return useQuery({
-    queryKey: hostQueryKey(hostId, repoPath, 'stash', index, 'diff', file ?? ''),
-    enabled: enabled && Number.isFinite(index) && index >= 0 && Boolean(file),
+    queryKey: hostQueryKey(hostId, repoPath, 'stash', index, expectedHash ?? '', 'diff', file ?? ''),
+    enabled: enabled && Number.isFinite(index) && index >= 0 && Boolean(file) && Boolean(expectedHash),
     staleTime: 5 * 60_000,
     queryFn: () =>
       invoke<FileDiffPayload>('git_stash_file_diff', {
+        expectedHash,
         path: repoPath,
         index,
         file: file ?? '',

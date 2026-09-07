@@ -19,7 +19,7 @@ export function ApprovalProgressDots({
         })}
       </span>
       {ids.map((id, index) => (
-        <m.span
+        <m.span layout
           key={id}
           aria-hidden="true"
           initial={{

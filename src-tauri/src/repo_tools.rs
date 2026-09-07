@@ -48,7 +48,7 @@ pub fn list_repo_tools(path: String) -> Result<Vec<Tool>, String> {
     };
 
     let manifest: Manifest = serde_json::from_str(&raw)
-        .map_err(|e| format!(".l8git/tools.json ist ungültig: {e}"))?;
+        .map_err(|e| format!("__INVALID_TOOLS_CONFIG__| {e}"))?;
 
     let tools = manifest
         .tools

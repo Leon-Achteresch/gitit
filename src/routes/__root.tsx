@@ -1,3 +1,5 @@
+import { ContextReviewDialog } from "@/components/ai/context-review-dialog";
+import { useInboxRefresh } from "@/lib/use-inbox-refresh";
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { m } from "motion/react";
 import { lazy, Suspense, useEffect } from "react";
@@ -59,10 +61,12 @@ export const Route = createRootRoute({
 });
 
 function RootLayout() {
+  useInboxRefresh();
   const [hotkeysOpen, setHotkeysOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useAppHotkeys({ onShowShortcuts: () => setHotkeysOpen(true) });
   const addRepo = useRepoStore((s) => s.addRepo);
+  const uiDensity = useWorkspacePrefs((s) => s.uiDensity);
   const uiScale = useWorkspacePrefs((s) => s.uiScale);
   const islandEnabled = useUiVisibilityPrefs((s) => s.showHeaderIsland);
   const hasActiveRepo = useRepoStore((s) => !!s.activePath);
@@ -78,8 +82,9 @@ function RootLayout() {
   const closeCommandLog = useUiStore((s) => s.closeCommandLog);
 
   useEffect(() => {
+    document.documentElement.dataset.density = uiDensity;
     document.documentElement.style.fontSize = uiScale === 1 ? "" : `${uiScale * 100}%`;
-  }, [uiScale]);
+  }, [uiScale, uiDensity]);
 
   // Accept folder drops anywhere in the window to open a repository.
   useEffect(() => {
@@ -106,8 +111,9 @@ function RootLayout() {
           Skip to content
         </a>
         <AppHeader />
+        <ContextReviewDialog />
         <main id="main-content" className="min-h-0 flex-1 overflow-y-auto bg-background" tabIndex={-1}>
-          <m.div
+          <m.div layout
             key={pathname}
             className="h-full"
             initial={{ opacity: 0, y: 6 }}

@@ -91,7 +91,7 @@ export function MessageBubbleCollapsible({
         )}
       >
         <span>{currentOpen ? lessLabel : moreLabel}</span>
-        <m.span
+        <m.span layout
           aria-hidden="true"
           animate={{ rotate: currentOpen ? 180 : 0 }}
           transition={reduce ? { duration: 0 } : SPRING_SWAP}

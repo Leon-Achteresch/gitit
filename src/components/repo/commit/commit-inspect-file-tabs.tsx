@@ -77,11 +77,11 @@ function FileTab({
   const hasStats = file.binary || file.additions > 0 || file.deletions > 0;
 
   const stats = file.binary ? (
-    <span className="rounded-full bg-muted px-1.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+    <span className="rounded-full bg-muted px-1.5 text-[0.5625rem] font-semibold uppercase tracking-wider text-muted-foreground">
       {t("commitInspect.binaryBadge")}
     </span>
   ) : (
-    <span className="flex items-center gap-1 font-mono text-[10px] font-semibold">
+    <span className="flex items-center gap-1 font-mono text-[0.625rem] font-semibold">
       {file.additions > 0 && (
         <span className="flex items-center gap-px text-git-added">
           <Plus className="size-2.5" aria-hidden />

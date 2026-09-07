@@ -117,13 +117,13 @@ export function StackSection({ path }: { path: string }) {
   return (
     <div className="min-w-0 px-1 pb-1">
       {error ? (
-        <p className="mb-1 rounded-md bg-git-removed/10 px-2 py-1 text-[11px] text-git-removed">
+        <p className="mb-1 rounded-md bg-git-removed/10 px-2 py-1 text-[0.6875rem] text-git-removed">
           {t("stack.loadError", { error })}
         </p>
       ) : null}
 
       {cycles.length > 0 ? (
-        <p className="mb-1 rounded-md bg-git-modified/10 px-2 py-1 text-[11px] text-git-modified">
+        <p className="mb-1 rounded-md bg-git-modified/10 px-2 py-1 text-[0.6875rem] text-git-modified">
           {t("stack.cycleWarning", {
             branches: cycles.map((c) => c.join(" → ")).join(", "),
           })}
@@ -131,7 +131,7 @@ export function StackSection({ path }: { path: string }) {
       ) : null}
 
       {errors.map((e) => (
-        <p key={e} className="mb-1 px-2 text-[10px] text-muted-foreground">
+        <p key={e} className="mb-1 px-2 text-[0.625rem] text-muted-foreground">
           {e}
         </p>
       ))}
@@ -139,7 +139,7 @@ export function StackSection({ path }: { path: string }) {
       {stacks.length === 0 ? (
         <div className="rounded-md border border-dashed border-sidebar-border/70 px-2 py-3 text-center">
           <Layers className="mx-auto mb-1 h-4 w-4 text-muted-foreground/70" aria-hidden />
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[0.6875rem] text-muted-foreground">
             {loading ? t("stack.loading") : t("stack.empty")}
           </p>
           {currentBranch ? (
@@ -147,7 +147,7 @@ export function StackSection({ path }: { path: string }) {
               type="button"
               variant="ghost"
               size="sm"
-              className="mt-1 h-6 max-w-full text-[11px]"
+              className="mt-1 h-6 max-w-full text-[0.6875rem]"
               disabled={busy}
               title={t("stack.startOnCurrent", { parent: currentBranch })}
               onClick={() =>

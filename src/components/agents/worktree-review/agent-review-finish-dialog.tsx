@@ -188,7 +188,7 @@ export function AgentReviewFinishDialog({
 
         {hasUncommitted ? (
           <AgentReviewStepCard step={commitStep} title={t("agentReview.stepCommit")}>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[0.6875rem] text-muted-foreground">
               {t("agentReview.stepCommitHint")}
             </p>
             {commitStep.status !== "done" ? (
@@ -242,7 +242,7 @@ export function AgentReviewFinishDialog({
         ) : null}
 
         <AgentReviewStepCard step={mergeStep} title={t("agentReview.stepMerge")}>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[0.6875rem] text-muted-foreground">
             {t("agentReview.stepMergeHint", {
               session: sessionBranch,
               base: baseBranch,
@@ -275,7 +275,7 @@ export function AgentReviewFinishDialog({
         </AgentReviewStepCard>
 
         <AgentReviewStepCard step={cleanupStep} title={t("agentReview.stepCleanup")}>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[0.6875rem] text-muted-foreground">
             {t("agentReview.stepCleanupHint")}
           </p>
           <AgentReviewStepAction

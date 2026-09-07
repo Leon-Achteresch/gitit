@@ -37,7 +37,7 @@ export function CommitInspectMessage({ message }: { message: string }) {
         </AccordionTrigger>
         <AccordionContent>
           <ScrollArea className="max-h-[min(50vh,360px)]">
-            <pre className="whitespace-pre-wrap break-words pb-1 font-mono text-[11px] leading-relaxed text-foreground/90">
+            <pre className="whitespace-pre-wrap break-words pb-1 font-mono text-[0.6875rem] leading-relaxed text-foreground/90">
               {message}
             </pre>
           </ScrollArea>

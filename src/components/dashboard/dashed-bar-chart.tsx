@@ -84,7 +84,7 @@ export function DashedBarChart({
                     x={cx}
                     y={height - 6}
                     textAnchor="middle"
-                    className="fill-muted-foreground text-[10px]"
+                    className="fill-muted-foreground text-[0.625rem]"
                   >
                     {d.label}
                   </text>
@@ -106,7 +106,7 @@ export function DashedBarChart({
 
       {width > 0 && data.length > 0 && data[peakIdx].value > 0 && hover === null ? (
         <div
-          className="pointer-events-none absolute -translate-x-1/2 rounded-full bg-foreground px-2 py-0.5 text-[10px] font-semibold tabular-nums text-background"
+          className="pointer-events-none absolute -translate-x-1/2 rounded-full bg-foreground px-2 py-0.5 text-[0.625rem] font-semibold tabular-nums text-background"
           style={{
             left: Math.min(Math.max(peakIdx * slot + slot / 2, 28), width - 28),
             top: barTop(data[peakIdx].value) - 24,
@@ -122,7 +122,7 @@ export function DashedBarChart({
           y={barTop(hovered.value) - 8}
           containerWidth={width}
         >
-          <div className="mb-1 text-[11px] font-medium">{hovered.label}</div>
+          <div className="mb-1 text-[0.6875rem] font-medium">{hovered.label}</div>
           <ChartTooltipRow
             swatchClassName="bg-foreground/60"
             label={valueLabel}

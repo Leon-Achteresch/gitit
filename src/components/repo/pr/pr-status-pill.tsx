@@ -42,11 +42,11 @@ export function PrStatusPill({ state, isDraft }: { state: string; isDraft: boole
   const lk = LABEL_KEYS[key] ?? "prInspect.pillOpen";
 
   return (
-    <m.span
+    <m.span layout
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ type: "spring", stiffness: 450, damping: 28 }}
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide shadow-xs backdrop-blur-xs ${pill.bg} ${pill.border}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[0.6875rem] font-semibold tracking-wide shadow-xs backdrop-blur-xs ${pill.bg} ${pill.border}`}
     >
       <span className="relative flex h-2 w-2 items-center justify-center">
         {key === "open" && (

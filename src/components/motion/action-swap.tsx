@@ -297,7 +297,7 @@ export function ActionSwapButton({
   const accessibleLabel = activeItem.ariaLabel ?? (iconOnly && typeof activeItem.label === "string" ? activeItem.label : undefined);
 
   return (
-    <m.button
+    <m.button layout
       type="button"
       disabled={disabled}
       whileTap={reduce || disabled ? undefined : { scale: 0.97 }}

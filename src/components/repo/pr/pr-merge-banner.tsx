@@ -128,7 +128,7 @@ export function PrMergeBanner({
   if (isResolved) {
     const isMerged = detail.state === "merged";
     return (
-      <m.div
+      <m.div layout
         {...bannerMotion}
         className={`rounded-xl border p-3.5 shadow-xs backdrop-blur-sm ${
           isMerged
@@ -141,17 +141,17 @@ export function PrMergeBanner({
             {isMerged ? <GitMerge className="h-4 w-4 text-purple-400" /> : <AlertCircle className="h-4 w-4" />}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-[13px] font-semibold text-foreground">
+            <div className="text-[0.8125rem] font-semibold text-foreground">
               {isMerged ? t("prInspect.mergedBannerTitle") : t("prInspect.closedBannerTitle")}
             </div>
-            <div className="mt-0.5 text-[11px] opacity-80 text-muted-foreground">
+            <div className="mt-0.5 text-[0.6875rem] opacity-80 text-muted-foreground">
               {t("prInspect.branchMaybeDeleteHint", { branch: detail.source_branch })}
             </div>
           </div>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-[11px] rounded-lg shadow-xs"
+            className="h-8 text-[0.6875rem] rounded-lg shadow-xs"
             onClick={onCheckout}
             disabled={busy !== null}
           >
@@ -167,7 +167,7 @@ export function PrMergeBanner({
 
   if (detail.state === "draft" || detail.is_draft) {
     return (
-      <m.div
+      <m.div layout
         {...bannerMotion}
         className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-3.5 text-amber-300 shadow-xs backdrop-blur-sm"
       >
@@ -177,10 +177,10 @@ export function PrMergeBanner({
               <ShieldAlert className="h-4 w-4 text-amber-400" />
             </div>
             <div>
-              <div className="text-[13px] font-semibold text-amber-200">
+              <div className="text-[0.8125rem] font-semibold text-amber-200">
                 {t("prInspect.draftBlockedTitle")}
               </div>
-              <div className="mt-0.5 text-[11px] text-amber-300/80">
+              <div className="mt-0.5 text-[0.6875rem] text-amber-300/80">
                 {t("prInspect.draftBlockedSubtitle")}
               </div>
             </div>
@@ -188,7 +188,7 @@ export function PrMergeBanner({
           <Button
             variant="outline"
             size="sm"
-            className="h-8 shrink-0 rounded-lg border-amber-500/40 bg-amber-500/15 text-[11px] font-medium text-amber-200 hover:bg-amber-500/25"
+            className="h-8 shrink-0 rounded-lg border-amber-500/40 bg-amber-500/15 text-[0.6875rem] font-medium text-amber-200 hover:bg-amber-500/25"
             onClick={onCheckout}
             disabled={busy !== null}
           >
@@ -202,7 +202,7 @@ export function PrMergeBanner({
 
   if (detail.mergeable === false) {
     return (
-      <m.div
+      <m.div layout
         {...bannerMotion}
         className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-rose-300 shadow-xs backdrop-blur-sm"
       >
@@ -211,20 +211,20 @@ export function PrMergeBanner({
             <AlertCircle className="h-4 w-4 text-rose-400" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-[13px] font-semibold text-rose-200">
+            <div className="text-[0.8125rem] font-semibold text-rose-200">
               {t("prInspect.mergeConflictLead")}{" "}
               <code className="rounded bg-background/50 px-1.5 py-0.5 font-mono text-rose-300">
                 {detail.target_branch}
               </code>
             </div>
-            <div className="mt-0.5 text-[11px] text-rose-300/80">
+            <div className="mt-0.5 text-[0.6875rem] text-rose-300/80">
               {t("prInspect.mergeConflictResolveHint", { branch: detail.target_branch })}
             </div>
           </div>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 shrink-0 rounded-lg border-rose-500/40 bg-rose-500/15 text-[11px] font-medium text-rose-200 hover:bg-rose-500/25"
+            className="h-8 shrink-0 rounded-lg border-rose-500/40 bg-rose-500/15 text-[0.6875rem] font-medium text-rose-200 hover:bg-rose-500/25"
             onClick={onCheckout}
             disabled={busy !== null}
           >
@@ -238,7 +238,7 @@ export function PrMergeBanner({
 
   if (detail.mergeable === true) {
     return (
-      <m.div
+      <m.div layout
         {...bannerMotion}
         className="flex flex-col gap-3 rounded-xl border border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-emerald-500/5 p-4 shadow-xs backdrop-blur-sm"
       >
@@ -248,10 +248,10 @@ export function PrMergeBanner({
               <CheckCircle2 className="h-4 w-4 text-emerald-400" />
             </div>
             <div>
-              <div className="text-[13px] font-semibold text-emerald-200">
+              <div className="text-[0.8125rem] font-semibold text-emerald-200">
                 {t("prInspect.mergeReadyTitle")}
               </div>
-              <div className="mt-0.5 text-[11px] text-emerald-300/80">
+              <div className="mt-0.5 text-[0.6875rem] text-emerald-300/80">
                 {t("pr.noConflicts", { branch: detail.target_branch })}
               </div>
             </div>
@@ -260,7 +260,7 @@ export function PrMergeBanner({
           <Button
             variant="outline"
             size="sm"
-            className="h-8 rounded-lg text-[11px]"
+            className="h-8 rounded-lg text-[0.6875rem]"
             onClick={onCheckout}
             disabled={busy !== null}
           >
@@ -271,7 +271,7 @@ export function PrMergeBanner({
 
         {!protectionLoading && protection && protection.required_status_checks.length > 0 && (
           <div className="flex flex-col gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2">
-            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300">
+            <div className="flex items-center gap-1.5 text-[0.625rem] font-semibold uppercase tracking-wider text-emerald-300">
               <ShieldCheck className="h-3.5 w-3.5" />
               {t("prInspect.requiredChecks")}
             </div>
@@ -279,7 +279,7 @@ export function PrMergeBanner({
               {protection.required_status_checks.map((ctx) => (
                 <span
                   key={ctx}
-                  className="rounded-md border border-emerald-500/20 bg-background/50 px-1.5 py-0.5 font-mono text-[10px] text-emerald-300"
+                  className="rounded-md border border-emerald-500/20 bg-background/50 px-1.5 py-0.5 font-mono text-[0.625rem] text-emerald-300"
                 >
                   {ctx}
                 </span>
@@ -287,7 +287,7 @@ export function PrMergeBanner({
             </div>
             {protection.required_approving_review_count != null &&
               protection.required_approving_review_count > 0 && (
-                <div className="text-[10px] text-emerald-300/90 font-medium">
+                <div className="text-[0.625rem] text-emerald-300/90 font-medium">
                   {t("prInspect.requiredApprovals", {
                     count: protection.required_approving_review_count,
                   })}
@@ -301,7 +301,7 @@ export function PrMergeBanner({
             value={strategy}
             onValueChange={(value) => onStrategyChange(value as MergeStrategy)}
           >
-            <SelectTrigger size="sm" className="w-36 h-8 text-[11px] rounded-lg border-border/80 bg-background/80">
+            <SelectTrigger size="sm" className="w-36 h-8 text-[0.6875rem] rounded-lg border-border/80 bg-background/80">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -317,12 +317,12 @@ export function PrMergeBanner({
             value={mergeMessage}
             onChange={(e) => onMergeMessageChange(e.target.value)}
             placeholder={t("prInspect.mergePlaceholder")}
-            className="h-8 min-w-[180px] flex-1 text-[11px] rounded-lg border-border/80 bg-background/80"
+            className="h-8 min-w-[180px] flex-1 text-[0.6875rem] rounded-lg border-border/80 bg-background/80"
           />
 
           <Button
             size="sm"
-            className="h-8 shrink-0 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-medium shadow-xs"
+            className="h-8 shrink-0 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[0.6875rem] font-medium shadow-xs"
             onClick={onMerge}
             disabled={busy !== null}
           >
@@ -332,7 +332,7 @@ export function PrMergeBanner({
         </div>
 
         {canDeleteSource && (
-          <label className="flex cursor-pointer items-center gap-2 text-[11px] text-muted-foreground hover:text-foreground transition-colors">
+          <label className="flex cursor-pointer items-center gap-2 text-[0.6875rem] text-muted-foreground hover:text-foreground transition-colors">
             <Checkbox
               checked={deleteSourceBranch}
               onCheckedChange={(v) => onDeleteSourceBranchChange(v === true)}
@@ -342,7 +342,7 @@ export function PrMergeBanner({
         )}
 
         {canAutoMerge && detail.node_id && (
-          <div className="flex items-center justify-between gap-2 border-t border-emerald-500/20 pt-2 text-[11px]">
+          <div className="flex items-center justify-between gap-2 border-t border-emerald-500/20 pt-2 text-[0.6875rem]">
             <div className="flex items-center gap-1.5">
               <Zap className="h-3.5 w-3.5 text-amber-400" />
               {detail.auto_merge_method ? (
@@ -360,7 +360,7 @@ export function PrMergeBanner({
             <Button
               variant="outline"
               size="sm"
-              className="h-7 shrink-0 text-[10px] rounded-md"
+              className="h-7 shrink-0 text-[0.625rem] rounded-md"
               disabled={autoMergeBusy || busy !== null}
               onClick={() => void toggleAutoMerge()}
             >
@@ -380,16 +380,16 @@ export function PrMergeBanner({
   }
 
   return (
-    <m.div
+    <m.div layout
       {...bannerMotion}
-      className="flex items-center gap-2 rounded-xl border border-border/80 bg-muted/30 px-3.5 py-2.5 text-[11px] text-muted-foreground shadow-xs"
+      className="flex items-center gap-2 rounded-xl border border-border/80 bg-muted/30 px-3.5 py-2.5 text-[0.6875rem] text-muted-foreground shadow-xs"
     >
       <SpinIcon icon={Loader2} className="h-4 w-4 text-primary" />
       <span>{t("prInspect.checksMergeability")}</span>
       <Button
         variant="outline"
         size="sm"
-        className="ml-auto h-7 text-[10px] rounded-md"
+        className="ml-auto h-7 text-[0.625rem] rounded-md"
         onClick={onCheckout}
         disabled={busy !== null}
       >

@@ -2,8 +2,14 @@ import { toast } from "sonner";
 
 import i18n from "@/lib/i18n";
 import { providerUnknownHost } from "@/lib/pr-provider";
+import { providerRetryAt } from './provider-rate-limit';
 
-function translateKnownError(message: string): string {
+export function translateKnownError(message: string): string {
+  const retryAt = providerRetryAt(message);
+  if (retryAt) return i18n.t('audit.providerRateLimit', { time: new Date(retryAt).toLocaleString() });
+  const codes: Record<string, string> = { __INVALID_REPO_PATH__: 'audit.invalidRepoPath', __INVALID_TARGET_PATH__: 'audit.invalidTargetPath', __PATH_OUTSIDE_REPO__: 'audit.pathOutsideRepo', __INVALID_TOOLS_CONFIG__: 'audit.invalidToolsConfig' };
+  for (const [code, key] of Object.entries(codes)) if (message.includes(code)) return i18n.t(key);
+  if (message.includes("__STASH_CHANGED__")) return i18n.t("audit.stashChanged");
   const markerIdx = message.indexOf("__LOCAL_CHANGES_BLOCK__|");
   if (markerIdx >= 0) {
     const payload = message.slice(markerIdx + "__LOCAL_CHANGES_BLOCK__|".length);

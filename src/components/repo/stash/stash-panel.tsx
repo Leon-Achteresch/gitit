@@ -19,9 +19,15 @@ export function StashPanel({ path }: { path: string }) {
   const stashes = useRepoStore((s) => s.stashes[path] ?? EMPTY_STASHES);
   const loading = useRepoStore((s) => !!s.stashesLoading[path]);
   const reloadStashes = useRepoStore((s) => s.reloadStashes);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedHash, setSelectedHash] = useState<string | null>(null);
+  const selectedIndex = stashes.find(e => e.hash === selectedHash)?.index ?? null;
+  const setSelectedIndex = (value: number | null | ((old: number | null) => number | null)) => {
+    const index = typeof value === 'function' ? value(selectedIndex) : value;
+    setSelectedHash(stashes.find(e => e.index === index)?.hash ?? null);
+  };
   const [createOpen, setCreateOpen] = useState(false);
-  const [branchIndex, setBranchIndex] = useState<number | null>(null);
+  const [branchEntry, setBranchEntry] = useState<StashEntry | null>(null);
+  const setBranchIndex = (index: number | null) => setBranchEntry(stashes.find(e => e.index === index) ?? null);
   const [defaultLayout] = useState<Record<string, number> | undefined>(() => {
     const raw = localStorage.getItem(layoutStorageKey);
     if (!raw) return undefined;
@@ -40,15 +46,6 @@ export function StashPanel({ path }: { path: string }) {
     setSelectedIndex(null);
   }, [path]);
 
-  useEffect(() => {
-    if (stashes.length === 0) {
-      setSelectedIndex(null);
-      return;
-    }
-    setSelectedIndex((prev) =>
-      prev != null && stashes.some((e) => e.index === prev) ? prev : null,
-    );
-  }, [stashes]);
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -94,6 +91,7 @@ export function StashPanel({ path }: { path: string }) {
             <StashInspectDetail
               path={path}
               stashIndex={selectedIndex}
+              expectedHash={selectedHash ?? undefined}
               onClose={() => setSelectedIndex(null)}
             />
           </ResizablePanel>
@@ -120,10 +118,11 @@ export function StashPanel({ path }: { path: string }) {
         path={path}
       />
       <StashBranchDialog
-        open={branchIndex != null}
+        open={branchEntry != null}
         onClose={() => setBranchIndex(null)}
         path={path}
-        stashIndex={branchIndex ?? 0}
+        stashIndex={branchEntry?.index ?? 0}
+        expectedHash={branchEntry?.hash ?? ""}
       />
     </div>
   );

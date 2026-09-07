@@ -33,7 +33,7 @@ export function TagKindBadge({
       title={label}
       aria-label={label}
       className={cn(
-        'inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-medium uppercase tracking-[0.06em]',
+        'inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-[0.59375rem] font-medium uppercase tracking-[0.06em]',
         TONES[kind] ?? TONES.lightweight,
         className
       )}

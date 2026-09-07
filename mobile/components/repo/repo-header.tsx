@@ -10,7 +10,7 @@ import {
   type LucideIcon,
 } from 'lucide-react-native';
 import * as React from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { initials } from '~/components/shared/format';
@@ -33,9 +33,9 @@ const SECTION_ICON: Record<RepoSection, LucideIcon> = {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <View className="flex-1 items-center gap-0.5">
+    <View className="flex-1 flex-row items-center justify-center gap-1.5">
       <Text className="text-muted-foreground text-xs">{label}</Text>
-      <Text style={{ fontVariant: ['tabular-nums'] }} className="text-foreground text-2xl font-bold">
+      <Text style={{ fontVariant: ['tabular-nums'] }} className="text-foreground text-sm font-semibold">
         {value}
       </Text>
     </View>
@@ -67,8 +67,8 @@ function SectionChip({
     </>
   );
   const shape = {
-    height: 36,
-    borderRadius: 18,
+    height: 44,
+    borderRadius: 22,
     paddingHorizontal: 14,
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
@@ -138,6 +138,7 @@ export function RepoHeader({
       <View className="flex-row items-center justify-between px-5 pt-2">
         <GlassCircle icon={ArrowLeft} label="Back" onPress={onBack} />
         <Glass
+          accessibilityLabel={`${host?.name ?? hostId}: ${online ? "Online" : "Offline"}`}
           style={{
             height: 44,
             borderRadius: 22,
@@ -169,46 +170,28 @@ export function RepoHeader({
         </Glass>
       </View>
 
-      <View className="items-center gap-1.5 pt-4">
-        <View
-          style={{
-            width: 92,
-            height: 92,
-            borderRadius: 46,
-            borderWidth: 2,
-            borderColor: 'rgba(255,255,255,0.28)',
-            overflow: 'hidden',
-            backgroundColor: palette.card,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Icon as={FileDiff} size={32} color={palette.foreground} />
+      <View className="flex-row items-center gap-3 px-5 pt-2 pb-1">
+        <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: palette.card, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon as={FileDiff} size={20} color={palette.foreground} />
         </View>
-        <Text numberOfLines={1} className="text-foreground pt-2 text-2xl font-bold tracking-tight">
-          {repoName}
-        </Text>
-        <View className="flex-row items-center gap-1.5">
-          <Icon as={GitBranch} size={12} color={palette.mutedForeground} />
-          <Text numberOfLines={1} className="text-muted-foreground max-w-64 text-xs">
-            {branch || repoPath}
-          </Text>
+        <View className="flex-1 gap-0.5">
+          <Text selectable numberOfLines={1} className="text-foreground text-lg font-bold">{repoName}</Text>
+          <View className="flex-row items-center gap-1.5">
+            <Icon as={GitBranch} size={12} color={palette.mutedForeground} />
+            <Text selectable numberOfLines={1} className="text-muted-foreground flex-1 text-xs">{branch || repoPath}</Text>
+          </View>
         </View>
       </View>
-
-      <View
-        className="mx-5 mt-4 flex-row items-center py-3"
-        style={{ borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.06)' }}>
+      <View className="mx-5 flex-row items-center py-1">
         <Stat label="Ahead" value={ahead} />
-        <View style={{ width: StyleSheet.hairlineWidth, height: 36, backgroundColor: 'rgba(255,255,255,0.12)' }} />
         <Stat label="Behind" value={behind} />
-        <View style={{ width: StyleSheet.hairlineWidth, height: 36, backgroundColor: 'rgba(255,255,255,0.12)' }} />
         <Stat label="Changes" value={changes} />
       </View>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20, gap: 8, paddingTop: 16, paddingBottom: 14 }}
+        contentContainerStyle={{ paddingHorizontal: 20, gap: 8, paddingTop: 6, paddingBottom: 8 }}
         className="grow-0">
         {REPO_SECTIONS.map((item) => (
           <SectionChip key={item} section={item} active={item === section} onPress={() => select(item)} />

@@ -98,7 +98,7 @@ export function HotkeysOverlay({ open, onClose }: Props) {
         <div className="mt-2 max-h-[70vh] space-y-5 overflow-y-auto pr-1">
           {groups.map((g) => (
             <section key={g.group} aria-label={g.group}>
-              <h3 className="mb-2 text-[10.5px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+              <h3 className="mb-2 text-[0.65625rem] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                 {g.group}
               </h3>
               <table className="w-full text-sm">
@@ -112,7 +112,7 @@ export function HotkeysOverlay({ open, onClose }: Props) {
                           {row.keys.map((k) => (
                             <Kbd
                               key={k}
-                              className="px-1.5 py-0.5 font-mono text-[11px]"
+                              className="px-1.5 py-0.5 font-mono text-[0.6875rem]"
                             >
                               {k}
                             </Kbd>

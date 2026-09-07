@@ -32,7 +32,7 @@ export function ChartTooltipRow({
   value: ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-2 text-[11px] leading-4">
+    <div className="flex items-center gap-2 text-[0.6875rem] leading-4">
       {swatchClassName ? <span className={`size-2 shrink-0 rounded-[3px] ${swatchClassName}`} /> : null}
       <span className="min-w-0 truncate text-muted-foreground">{label}</span>
       <span className="ml-auto shrink-0 pl-3 font-medium tabular-nums">{value}</span>

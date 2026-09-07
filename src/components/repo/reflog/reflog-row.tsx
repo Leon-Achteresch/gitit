@@ -18,6 +18,7 @@ import { formatDate, formatRelative } from '@/lib/format';
 import { reflogActionTone, type ReflogEntry } from '@/lib/reflog-format';
 import { cn } from '@/lib/utils';
 import { Copy, MoreHorizontal, RotateCcw } from 'lucide-react';
+import { m } from 'motion/react';
 import { useTranslation } from 'react-i18next';
 
 const TONE_VARIANT = {
@@ -47,18 +48,18 @@ export function ReflogRow({
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div className='flex items-center gap-2 rounded-lg border border-border/50 bg-card/40 px-2.5 py-2 transition-colors hover:border-border hover:bg-card/70'>
-          <span className='w-20 shrink-0 font-mono text-[11px] text-muted-foreground'>
+        <m.div layout className='flex items-center gap-2 rounded-lg border border-border/50 bg-card/40 px-2.5 py-2 transition-colors hover:border-border hover:bg-card/70'>
+          <span className='w-20 shrink-0 font-mono text-[0.6875rem] text-muted-foreground'>
             {entry.selector}
           </span>
-          <Badge variant={variant} className='shrink-0 font-mono text-[10px]'>
+          <Badge variant={variant} className='shrink-0 font-mono text-[0.625rem]'>
             {entry.action}
           </Badge>
           <Button
             type='button'
             variant='ghost'
             size='sm'
-            className='h-6 shrink-0 gap-1 px-1.5 font-mono text-[11px] text-muted-foreground hover:text-foreground'
+            className='h-6 shrink-0 gap-1 px-1.5 font-mono text-[0.6875rem] text-muted-foreground hover:text-foreground'
             title={t('reflog.copyHash')}
             onClick={() => onCopyHash(entry.hash)}
           >
@@ -72,7 +73,7 @@ export function ReflogRow({
             {entry.message || entry.subject}
           </span>
           <span
-            className='shrink-0 text-[11px] tabular-nums text-muted-foreground'
+            className='shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground'
             title={formatDate(entry.date)}
           >
             {formatRelative(entry.date)}
@@ -109,7 +110,7 @@ export function ReflogRow({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </m.div>
       </ContextMenuTrigger>
       <ContextMenuContent className='min-w-64'>
         <ContextMenuItem onSelect={() => onResetKeep(entry)}>

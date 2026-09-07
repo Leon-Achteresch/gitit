@@ -2,6 +2,8 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
+import { m, type HTMLMotionProps } from "motion/react"
+
 import { cn } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 
@@ -63,16 +65,16 @@ function Item({
   ...props
 }: React.ComponentProps<"div"> &
   VariantProps<typeof itemVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "div"
-  return (
-    <Comp
-      data-slot="item"
-      data-variant={variant}
-      data-size={size}
-      className={cn(itemVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+  const shared = {
+    "data-slot": "item",
+    "data-variant": variant,
+    "data-size": size,
+    className: cn(itemVariants({ variant, size, className })),
+  }
+  if (asChild) {
+    return <Slot.Root {...shared} {...props} />
+  }
+  return <m.div layout {...shared} {...(props as HTMLMotionProps<"div">)} />
 }
 
 const itemMediaVariants = cva(

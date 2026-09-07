@@ -24,6 +24,7 @@ import {
   timeAgo,
 } from "./ci-types";
 import { PulseIcon, SpinIcon } from "@/components/motion/kit";
+import { m } from "motion/react";
 
 // ── Status icon ───────────────────────────────────────────────────────────────
 
@@ -71,7 +72,7 @@ function StepRow({ step }: { step: WorkflowJob["steps"][number] }) {
       <span className="flex-1 truncate">
         {step.number}. {step.name}
       </span>
-      {dur && <span className="shrink-0 font-mono text-[10px]">{dur}</span>}
+      {dur && <span className="shrink-0 font-mono text-[0.625rem]">{dur}</span>}
     </div>
   );
 }
@@ -94,7 +95,7 @@ const JobRow = memo(function JobRow({ job }: { job: WorkflowJob }) {
           {job.name}
         </span>
         {dur && (
-          <span className="shrink-0 font-mono text-[10px] text-muted-foreground/60">
+          <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground/60">
             {dur}
           </span>
         )}
@@ -140,7 +141,7 @@ const JobRow = memo(function JobRow({ job }: { job: WorkflowJob }) {
 function EventBadge({ event }: { event: string }) {
   const label = event.replace(/_/g, " ");
   return (
-    <span className="inline-flex items-center rounded-full border border-border/40 px-1.5 py-0 text-[10px] font-medium text-muted-foreground/70">
+    <span className="inline-flex items-center rounded-full border border-border/40 px-1.5 py-0 text-[0.625rem] font-medium text-muted-foreground/70">
       {label}
     </span>
   );
@@ -239,7 +240,8 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
   })();
 
   return (
-    <div
+    <m.div
+      layout
       className={`group flex flex-col rounded-xl border-l-2 bg-muted/10 transition-all hover:bg-muted/30 ${statusBg}`}
     >
       {/* ── Main row ── */}
@@ -259,11 +261,11 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
             <span className="truncate text-sm font-semibold text-foreground/90 transition-colors group-hover:text-foreground">
               {run.name}
             </span>
-            <span className="shrink-0 font-mono text-[10px] text-muted-foreground/60">
+            <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground/60">
               #{run.run_number}
             </span>
             {run.run_attempt != null && run.run_attempt > 1 && (
-              <span className="shrink-0 text-[10px] text-muted-foreground/50">
+              <span className="shrink-0 text-[0.625rem] text-muted-foreground/50">
                 {t("ci.attempt", { n: run.run_attempt })}
               </span>
             )}
@@ -279,7 +281,7 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
           {/* Meta row */}
           <div className="mt-1 flex flex-wrap items-center gap-1.5">
             {run.head_branch && (
-              <span className="flex items-center gap-1 text-[10px] text-muted-foreground/70">
+              <span className="flex items-center gap-1 text-[0.625rem] text-muted-foreground/70">
                 <GitBranch className="h-3 w-3" />
                 <span className="max-w-[120px] truncate font-medium">
                   {run.head_branch}
@@ -287,11 +289,11 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
               </span>
             )}
             <EventBadge event={run.event} />
-            <span className="font-mono text-[10px] text-muted-foreground/50">
+            <span className="font-mono text-[0.625rem] text-muted-foreground/50">
               {sha7}
             </span>
             {run.actor_login && (
-              <span className="flex items-center gap-1 text-[10px] text-muted-foreground/60">
+              <span className="flex items-center gap-1 text-[0.625rem] text-muted-foreground/60">
                 {run.actor_avatar && (
                   <img
                     src={run.actor_avatar}
@@ -302,9 +304,9 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
                 {run.actor_login}
               </span>
             )}
-            <span className="text-[10px] text-muted-foreground/50">{ago}</span>
+            <span className="text-[0.625rem] text-muted-foreground/50">{ago}</span>
             {dur && (
-              <span className="text-[10px] text-muted-foreground/50">
+              <span className="text-[0.625rem] text-muted-foreground/50">
                 · {dur}
               </span>
             )}
@@ -382,6 +384,6 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
           )}
         </div>
       )}
-    </div>
+    </m.div>
   );
 });

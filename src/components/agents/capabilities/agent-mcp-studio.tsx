@@ -141,11 +141,11 @@ function McpEditor({
       <div className="w-full min-w-0 px-[clamp(1rem,2.5vw,2rem)] pb-10 pt-6 max-sm:px-3 space-y-6">
         <section className="grid gap-4 rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-name" className="text-[10px]">{t("agentCapabilities.mcp.name")}</Label>
+            <Label htmlFor="mcp-name" className="text-[0.625rem]">{t("agentCapabilities.mcp.name")}</Label>
             <Input id="mcp-name" value={draft.name} disabled={Boolean(originalName)} onChange={(event) => onChange({ ...draft, name: event.target.value.replace(/[^A-Za-z0-9_-]/gu, "-") })} placeholder="github" className="h-9 rounded-lg font-mono text-xs" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-transport" className="text-[10px]">{t("agentCapabilities.mcp.transport")}</Label>
+            <Label htmlFor="mcp-transport" className="text-[0.625rem]">{t("agentCapabilities.mcp.transport")}</Label>
             <Select
               value={draft.transport}
               onValueChange={(value) => {
@@ -169,15 +169,15 @@ function McpEditor({
           </div>
           <label className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between px-3 py-2.5">
             <span>
-              <span className="block text-[11px] font-medium">{t("agentCapabilities.enabled")}</span>
-              <span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.mcp.enabledHint")}</span>
+              <span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.enabled")}</span>
+              <span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.mcp.enabledHint")}</span>
             </span>
             <Switch checked={draft.enabled} onCheckedChange={(checked) => onChange({ ...draft, enabled: checked })} />
           </label>
           <label className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between px-3 py-2.5">
             <span>
-              <span className="block text-[11px] font-medium">{t("agentCapabilities.mcp.required")}</span>
-              <span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.mcp.requiredHint")}</span>
+              <span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.mcp.required")}</span>
+              <span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.mcp.requiredHint")}</span>
             </span>
             <Switch checked={draft.required} onCheckedChange={(checked) => onChange({ ...draft, required: checked })} />
           </label>
@@ -187,15 +187,15 @@ function McpEditor({
           <section className="space-y-4">
             <div>
               <h3 className="flex items-center gap-2 text-xs font-semibold"><Globe2 className="size-3.5" />HTTP endpoint</h3>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">{t("agentCapabilities.mcp.httpHint")}</p>
+              <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{t("agentCapabilities.mcp.httpHint")}</p>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="mcp-url" className="text-[10px]">URL</Label>
+              <Label htmlFor="mcp-url" className="text-[0.625rem]">URL</Label>
               <Input id="mcp-url" value={draft.url} onChange={(event) => onChange({ ...draft, url: event.target.value })} placeholder="https://example.com/mcp" className="h-9 rounded-lg font-mono text-xs" />
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-auth-mode" className="text-[10px]">{t("agentCapabilities.mcp.authMode")}</Label>
+                <Label htmlFor="mcp-auth-mode" className="text-[0.625rem]">{t("agentCapabilities.mcp.authMode")}</Label>
                 <Select value={draft.auth} onValueChange={(value) => onChange({ ...draft, auth: value as "oauth" | "chatgpt" })}>
                   <SelectTrigger id="mcp-auth-mode" className="w-full">
                     <SelectValue />
@@ -207,26 +207,26 @@ function McpEditor({
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-oauth-resource" className="text-[10px]">OAuth resource (RFC 8707)</Label>
+                <Label htmlFor="mcp-oauth-resource" className="text-[0.625rem]">OAuth resource (RFC 8707)</Label>
                 <Input id="mcp-oauth-resource" value={draft.oauthResource} onChange={(event) => onChange({ ...draft, oauthResource: event.target.value })} placeholder="https://api.example.com" className="h-9 rounded-lg font-mono text-xs" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-token-env" className="text-[10px]">Bearer token env var</Label>
+                <Label htmlFor="mcp-token-env" className="text-[0.625rem]">Bearer token env var</Label>
                 <Input id="mcp-token-env" value={draft.bearerTokenEnvVar} onChange={(event) => onChange({ ...draft, bearerTokenEnvVar: event.target.value })} placeholder="GITHUB_TOKEN" className="h-9 rounded-lg font-mono text-xs" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-scopes" className="text-[10px]">OAuth scopes</Label>
+                <Label htmlFor="mcp-scopes" className="text-[0.625rem]">OAuth scopes</Label>
                 <Input id="mcp-scopes" value={draft.scopes.join(", ")} onChange={(event) => onChange({ ...draft, scopes: event.target.value.split(",").map((item) => item.trim()).filter(Boolean) })} placeholder="repo, read:user" className="h-9 rounded-lg font-mono text-xs" />
               </div>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-http-headers" className="text-[10px]">{t("agentCapabilities.mcp.staticHeaders")}</Label>
-                <Textarea id="mcp-http-headers" value={pairLines(draft.httpHeaders)} onChange={(event) => onChange({ ...draft, httpHeaders: pairs(event.target.value) })} placeholder="X-Client=l8git" className="min-h-24 rounded-lg font-mono text-[10px] leading-5" />
+                <Label htmlFor="mcp-http-headers" className="text-[0.625rem]">{t("agentCapabilities.mcp.staticHeaders")}</Label>
+                <Textarea id="mcp-http-headers" value={pairLines(draft.httpHeaders)} onChange={(event) => onChange({ ...draft, httpHeaders: pairs(event.target.value) })} placeholder="X-Client=l8git" className="min-h-24 rounded-lg font-mono text-[0.625rem] leading-5" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-env-headers" className="text-[10px]">{t("agentCapabilities.mcp.envHeaders")}</Label>
-                <Textarea id="mcp-env-headers" value={pairLines(draft.envHttpHeaders)} onChange={(event) => onChange({ ...draft, envHttpHeaders: pairs(event.target.value) })} placeholder="X-Auth=AUTH_ENV" className="min-h-24 rounded-lg font-mono text-[10px] leading-5" />
+                <Label htmlFor="mcp-env-headers" className="text-[0.625rem]">{t("agentCapabilities.mcp.envHeaders")}</Label>
+                <Textarea id="mcp-env-headers" value={pairLines(draft.envHttpHeaders)} onChange={(event) => onChange({ ...draft, envHttpHeaders: pairs(event.target.value) })} placeholder="X-Auth=AUTH_ENV" className="min-h-24 rounded-lg font-mono text-[0.625rem] leading-5" />
               </div>
             </div>
           </section>
@@ -234,43 +234,43 @@ function McpEditor({
           <section className="space-y-4">
             <div>
               <h3 className="flex items-center gap-2 text-xs font-semibold"><TerminalSquare className="size-3.5" />STDIO process</h3>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">{t("agentCapabilities.mcp.stdioHint")}</p>
+              <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{t("agentCapabilities.mcp.stdioHint")}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-command" className="text-[10px]">{t("agentCapabilities.mcp.command")}</Label>
+                <Label htmlFor="mcp-command" className="text-[0.625rem]">{t("agentCapabilities.mcp.command")}</Label>
                 <Input id="mcp-command" value={draft.command} onChange={(event) => onChange({ ...draft, command: event.target.value })} placeholder="npx" className="h-9 rounded-lg font-mono text-xs" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-args" className="text-[10px]">{t("agentCapabilities.mcp.arguments")}</Label>
+                <Label htmlFor="mcp-args" className="text-[0.625rem]">{t("agentCapabilities.mcp.arguments")}</Label>
                 <Input id="mcp-args" value={draft.args.join(" ")} onChange={(event) => onChange({ ...draft, args: event.target.value.split(/\s+/u).filter(Boolean) })} placeholder="--yes @scope/server" className="h-9 rounded-lg font-mono text-xs" />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="mcp-cwd" className="text-[10px]">{t("agentCapabilities.mcp.workingDirectory")}</Label>
+              <Label htmlFor="mcp-cwd" className="text-[0.625rem]">{t("agentCapabilities.mcp.workingDirectory")}</Label>
               <Input id="mcp-cwd" value={draft.cwd} onChange={(event) => onChange({ ...draft, cwd: event.target.value })} placeholder="/absolute/path" className="h-9 rounded-lg font-mono text-xs" />
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-env" className="text-[10px]">{t("agentCapabilities.mcp.environment")}</Label>
-                <Textarea id="mcp-env" value={pairLines(draft.env)} onChange={(event) => onChange({ ...draft, env: pairs(event.target.value) })} placeholder="API_URL=https://example.com" className="min-h-24 rounded-lg font-mono text-[10px] leading-5" />
+                <Label htmlFor="mcp-env" className="text-[0.625rem]">{t("agentCapabilities.mcp.environment")}</Label>
+                <Textarea id="mcp-env" value={pairLines(draft.env)} onChange={(event) => onChange({ ...draft, env: pairs(event.target.value) })} placeholder="API_URL=https://example.com" className="min-h-24 rounded-lg font-mono text-[0.625rem] leading-5" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="mcp-env-vars" className="text-[10px]">{t("agentCapabilities.mcp.forwardedVars")}</Label>
-                <Textarea id="mcp-env-vars" value={draft.envVars.join("\n")} onChange={(event) => onChange({ ...draft, envVars: lines(event.target.value) })} placeholder="GITHUB_TOKEN" className="min-h-24 rounded-lg font-mono text-[10px] leading-5" />
+                <Label htmlFor="mcp-env-vars" className="text-[0.625rem]">{t("agentCapabilities.mcp.forwardedVars")}</Label>
+                <Textarea id="mcp-env-vars" value={draft.envVars.join("\n")} onChange={(event) => onChange({ ...draft, envVars: lines(event.target.value) })} placeholder="GITHUB_TOKEN" className="min-h-24 rounded-lg font-mono text-[0.625rem] leading-5" />
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="mcp-remote-env-vars" className="text-[10px]">{t("agentCapabilities.mcp.remoteForwardedVars")}</Label>
-              <Textarea id="mcp-remote-env-vars" value={draft.remoteEnvVars.join("\n")} disabled={draft.experimentalEnvironment !== "remote"} onChange={(event) => onChange({ ...draft, remoteEnvVars: lines(event.target.value) })} placeholder="REMOTE_TOKEN" className="min-h-20 rounded-lg font-mono text-[10px] leading-5" />
-              <p className="text-[9px] leading-4 text-muted-foreground">{t("agentCapabilities.mcp.remoteForwardedVarsHint")}</p>
+              <Label htmlFor="mcp-remote-env-vars" className="text-[0.625rem]">{t("agentCapabilities.mcp.remoteForwardedVars")}</Label>
+              <Textarea id="mcp-remote-env-vars" value={draft.remoteEnvVars.join("\n")} disabled={draft.experimentalEnvironment !== "remote"} onChange={(event) => onChange({ ...draft, remoteEnvVars: lines(event.target.value) })} placeholder="REMOTE_TOKEN" className="min-h-20 rounded-lg font-mono text-[0.625rem] leading-5" />
+              <p className="text-[0.5625rem] leading-4 text-muted-foreground">{t("agentCapabilities.mcp.remoteForwardedVarsHint")}</p>
             </div>
           </section>
         )}
 
         <section className="grid gap-3 rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4 sm:grid-cols-2">
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-default-approval" className="text-[10px]">{t("agentCapabilities.mcp.defaultApproval")}</Label>
+            <Label htmlFor="mcp-default-approval" className="text-[0.625rem]">{t("agentCapabilities.mcp.defaultApproval")}</Label>
             <Select value={draft.defaultApprovalMode} onValueChange={(value) => onChange({ ...draft, defaultApprovalMode: value as AgentMcpServerDraft["defaultApprovalMode"] })}>
               <SelectTrigger id="mcp-default-approval" className="w-full">
                 <SelectValue />
@@ -284,7 +284,7 @@ function McpEditor({
             </Select>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-environment-placement" className="text-[10px]">{t("agentCapabilities.mcp.placement")}</Label>
+            <Label htmlFor="mcp-environment-placement" className="text-[0.625rem]">{t("agentCapabilities.mcp.placement")}</Label>
             <Select
               value={draft.experimentalEnvironment}
               onValueChange={(value) => {
@@ -306,20 +306,20 @@ function McpEditor({
             </Select>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-startup-timeout" className="text-[10px]">{t("agentCapabilities.mcp.startupTimeout")}</Label>
+            <Label htmlFor="mcp-startup-timeout" className="text-[0.625rem]">{t("agentCapabilities.mcp.startupTimeout")}</Label>
             <Input id="mcp-startup-timeout" type="number" min={1} value={draft.startupTimeoutSec} onChange={(event) => onChange({ ...draft, startupTimeoutSec: Number(event.target.value) || 10 })} className="h-9 rounded-lg text-xs" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-tool-timeout" className="text-[10px]">{t("agentCapabilities.mcp.toolTimeout")}</Label>
+            <Label htmlFor="mcp-tool-timeout" className="text-[0.625rem]">{t("agentCapabilities.mcp.toolTimeout")}</Label>
             <Input id="mcp-tool-timeout" type="number" min={1} value={draft.toolTimeoutSec} onChange={(event) => onChange({ ...draft, toolTimeoutSec: Number(event.target.value) || 60 })} className="h-9 rounded-lg text-xs" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-enabled-tools" className="text-[10px]">{t("agentCapabilities.mcp.allowTools")}</Label>
-            <Textarea id="mcp-enabled-tools" value={draft.enabledTools.join("\n")} onChange={(event) => onChange({ ...draft, enabledTools: lines(event.target.value) })} className="min-h-20 rounded-lg font-mono text-[10px]" />
+            <Label htmlFor="mcp-enabled-tools" className="text-[0.625rem]">{t("agentCapabilities.mcp.allowTools")}</Label>
+            <Textarea id="mcp-enabled-tools" value={draft.enabledTools.join("\n")} onChange={(event) => onChange({ ...draft, enabledTools: lines(event.target.value) })} className="min-h-20 rounded-lg font-mono text-[0.625rem]" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="mcp-disabled-tools" className="text-[10px]">{t("agentCapabilities.mcp.denyTools")}</Label>
-            <Textarea id="mcp-disabled-tools" value={draft.disabledTools.join("\n")} onChange={(event) => onChange({ ...draft, disabledTools: lines(event.target.value) })} className="min-h-20 rounded-lg font-mono text-[10px]" />
+            <Label htmlFor="mcp-disabled-tools" className="text-[0.625rem]">{t("agentCapabilities.mcp.denyTools")}</Label>
+            <Textarea id="mcp-disabled-tools" value={draft.disabledTools.join("\n")} onChange={(event) => onChange({ ...draft, disabledTools: lines(event.target.value) })} className="min-h-20 rounded-lg font-mono text-[0.625rem]" />
           </div>
         </section>
       </div>
@@ -392,7 +392,7 @@ export function AgentMcpStudio({ query }: { query: string }) {
         list={(
           <div className="p-3.5">
             <div className="mb-2 flex items-center justify-between px-1">
-              <p className="text-[10px] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
+              <p className="text-[0.625rem] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
               <Button type="button" variant="ghost" size="icon-xs" className="rounded-md" onClick={() => setDraft(emptyMcpServerDraft())} title={t("agentCapabilities.mcp.create")}>
                 <Plus className="size-3.5" />
               </Button>
@@ -495,8 +495,8 @@ export function AgentMcpStudio({ query }: { query: string }) {
                       return (
                         <div key={name} className={`grid gap-3 px-3 py-2.5 sm:grid-cols-[minmax(0,1fr)_8rem_2.5rem] ${index ? "border-t border-border/35" : ""}`}>
                           <div className="min-w-0">
-                            <p className="truncate font-mono text-[11px] font-medium">{tool.title || name}</p>
-                            <p className="mt-0.5 line-clamp-2 text-[10px] leading-4 text-muted-foreground">{tool.description || name}</p>
+                            <p className="truncate font-mono text-[0.6875rem] font-medium">{tool.title || name}</p>
+                            <p className="mt-0.5 line-clamp-2 text-[0.625rem] leading-4 text-muted-foreground">{tool.description || name}</p>
                           </div>
                           <Select
                             value={policy.mode}
@@ -519,7 +519,7 @@ export function AgentMcpStudio({ query }: { query: string }) {
                     })}
                   </div>
                 ) : (
-                  <p className="text-[var(--ag-text-3)] rounded-[12px] border border-dashed border-[var(--ag-line-strong)] p-4 text-center text-[11px]">{t("agentCapabilities.mcp.noTools")}</p>
+                  <p className="text-[var(--ag-text-3)] rounded-[12px] border border-dashed border-[var(--ag-line-strong)] p-4 text-center text-[0.6875rem]">{t("agentCapabilities.mcp.noTools")}</p>
                 )}
               </section>
 
@@ -532,14 +532,14 @@ export function AgentMcpStudio({ query }: { query: string }) {
                   <div className="space-y-1.5">
                     {selected.resources.map((resource) => (
                       <div key={resource.uri} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] px-3 py-2.5">
-                        <p className="text-[11px] font-medium">{resource.title || resource.name}</p>
-                        <p className="mt-0.5 truncate font-mono text-[9px] text-muted-foreground">{resource.uri}</p>
+                        <p className="text-[0.6875rem] font-medium">{resource.title || resource.name}</p>
+                        <p className="mt-0.5 truncate font-mono text-[0.5625rem] text-muted-foreground">{resource.uri}</p>
                       </div>
                     ))}
                     {selected.resourceTemplates.map((resource) => (
                       <div key={resource.uriTemplate} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] px-3 py-2.5">
-                        <div className="flex items-center gap-2"><p className="text-[11px] font-medium">{resource.title || resource.name}</p><CapabilityPill>template</CapabilityPill></div>
-                        <p className="mt-0.5 truncate font-mono text-[9px] text-muted-foreground">{resource.uriTemplate}</p>
+                        <div className="flex items-center gap-2"><p className="text-[0.6875rem] font-medium">{resource.title || resource.name}</p><CapabilityPill>template</CapabilityPill></div>
+                        <p className="mt-0.5 truncate font-mono text-[0.5625rem] text-muted-foreground">{resource.uriTemplate}</p>
                       </div>
                     ))}
                   </div>

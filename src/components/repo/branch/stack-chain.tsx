@@ -45,12 +45,12 @@ export function StackChain({
           style={{ backgroundColor: laneColor(stack.root) }}
         />
         <span
-          className="min-w-0 flex-1 truncate font-mono text-[11px] text-foreground/80"
+          className="min-w-0 flex-1 truncate font-mono text-[0.6875rem] text-foreground/80"
           title={t("stack.rootTitle", { root: stack.root, levels: levels.length })}
         >
           {stack.root}
         </span>
-        <span className="shrink-0 rounded bg-muted/60 px-1 text-[10px] font-medium tabular-nums text-muted-foreground">
+        <span className="shrink-0 rounded bg-muted/60 px-1 text-[0.625rem] font-medium tabular-nums text-muted-foreground">
           {levels.length}
         </span>
         <Button
@@ -94,7 +94,7 @@ export function StackChain({
       {broken || needsRestack ? (
         <p
           className={cn(
-            "mx-1 mb-1 flex items-center gap-1 rounded px-1 py-0.5 text-[10px]",
+            "mx-1 mb-1 flex items-center gap-1 rounded px-1 py-0.5 text-[0.625rem]",
             broken
               ? "bg-git-removed/10 text-git-removed"
               : "bg-git-modified/10 text-git-modified",

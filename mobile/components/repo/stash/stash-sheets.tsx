@@ -48,17 +48,17 @@ export function StashActionSheet({
     }
   }, [entry]);
 
-  const apply = useRepoMutation<{ index: number }, string>(scope, (invoke, vars) =>
-    invoke('git_stash_apply', { path: scope.repoPath, index: vars.index })
+  const apply = useRepoMutation<{ index: number; hash: string }, string>(scope, (invoke, vars) =>
+    invoke('git_stash_apply', { path: scope.repoPath, index: vars.index, expectedHash: vars.hash })
   );
-  const pop = useRepoMutation<{ index: number }, string>(scope, (invoke, vars) =>
-    invoke('git_stash_pop', { path: scope.repoPath, index: vars.index })
+  const pop = useRepoMutation<{ index: number; hash: string }, string>(scope, (invoke, vars) =>
+    invoke('git_stash_pop', { path: scope.repoPath, index: vars.index, expectedHash: vars.hash })
   );
-  const drop = useRepoMutation<{ index: number }, unknown>(scope, (invoke, vars) =>
-    invoke('git_stash_drop', { path: scope.repoPath, index: vars.index })
+  const drop = useRepoMutation<{ index: number; hash: string }, unknown>(scope, (invoke, vars) =>
+    invoke('git_stash_drop', { path: scope.repoPath, index: vars.index, expectedHash: vars.hash })
   );
-  const branch = useRepoMutation<{ index: number; name: string }, string>(scope, (invoke, vars) =>
-    invoke('git_stash_branch', { path: scope.repoPath, index: vars.index, name: vars.name })
+  const branch = useRepoMutation<{ index: number; hash: string; name: string }, string>(scope, (invoke, vars) =>
+    invoke('git_stash_branch', { path: scope.repoPath, index: vars.index, expectedHash: vars.hash, name: vars.name })
   );
 
   const busy = apply.isPending || pop.isPending || drop.isPending || branch.isPending;
@@ -102,7 +102,7 @@ export function StashActionSheet({
               disabled={busy}
               onPress={() =>
                 drop.mutate(
-                  { index: entry.index },
+                  { index: entry.index, hash: entry.hash },
                   settle('Stash dropped', 'Could not drop the stash', true)
                 )
               }
@@ -133,7 +133,7 @@ export function StashActionSheet({
               disabled={busy || trimmed.length === 0}
               onPress={() =>
                 branch.mutate(
-                  { index: entry.index, name: trimmed },
+                  { index: entry.index, hash: entry.hash, name: trimmed },
                   settle(`Branch ${trimmed} created`, 'Could not branch from the stash', true)
                 )
               }
@@ -167,7 +167,7 @@ export function StashActionSheet({
         tone="accent"
         disabled={busy}
         onPress={() =>
-          apply.mutate({ index: entry.index }, settle('Stash applied', 'Could not apply the stash'))
+          apply.mutate({ index: entry.index, hash: entry.hash }, settle('Stash applied', 'Could not apply the stash'))
         }
       />
       <SheetAction
@@ -177,7 +177,7 @@ export function StashActionSheet({
         disabled={busy}
         onPress={() =>
           pop.mutate(
-            { index: entry.index },
+            { index: entry.index, hash: entry.hash },
             settle('Stash popped', 'Could not pop the stash', true)
           )
         }

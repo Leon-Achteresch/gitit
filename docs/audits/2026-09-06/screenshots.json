@@ -1,0 +1,57 @@
+[
+  {
+    "name": "home",
+    "scene": "app",
+    "locale": "de",
+    "theme": "light",
+    "width": 1280,
+    "height": 860,
+    "scale": 1,
+    "scrollWidth": 1280,
+    "errors": []
+  },
+  {
+    "name": "settings",
+    "scene": "app",
+    "locale": "de",
+    "theme": "light",
+    "width": 1280,
+    "height": 860,
+    "scale": 1,
+    "scrollWidth": 1280,
+    "errors": []
+  },
+  {
+    "name": "git-125",
+    "scene": "git-workflow",
+    "locale": "de",
+    "theme": "dark",
+    "width": 1280,
+    "height": 860,
+    "scale": 1.25,
+    "scrollWidth": 1280,
+    "errors": []
+  },
+  {
+    "name": "git-small-150",
+    "scene": "git-workflow",
+    "locale": "de",
+    "theme": "light",
+    "width": 800,
+    "height": 768,
+    "scale": 1.5,
+    "scrollWidth": 800,
+    "errors": []
+  },
+  {
+    "name": "fleet-150",
+    "scene": "workspace",
+    "locale": "de",
+    "theme": "dark",
+    "width": 1280,
+    "height": 860,
+    "scale": 1.5,
+    "scrollWidth": 1280,
+    "errors": []
+  }
+]

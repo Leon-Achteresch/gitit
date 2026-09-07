@@ -1,0 +1,17 @@
+{
+  "scope": "Native backend integration-test process after fixture; excludes renderer and Git child processes. macOS local run.",
+  "fixture": {
+    "files": 1001,
+    "changedLines": 20000
+  },
+  "metrics": {
+    "statusMs": 33,
+    "diffMs": 23,
+    "backendRssBytes": 13959168
+  },
+  "limits": {
+    "statusMs": 10000,
+    "diffMs": 5000,
+    "backendRssBytes": 536870912
+  }
+}

@@ -88,7 +88,7 @@ export function RebaseStatusBanner({ path }: { path: string }) {
             : t('rebaseBanner.title')}
         </span>
         {progress ? (
-          <span className='rounded bg-git-modified/20 px-1.5 py-0.5 font-mono text-[11px]'>
+          <span className='rounded bg-git-modified/20 px-1.5 py-0.5 font-mono text-[0.6875rem]'>
             {progress}
           </span>
         ) : null}
@@ -97,14 +97,14 @@ export function RebaseStatusBanner({ path }: { path: string }) {
             className='min-w-0 truncate text-xs text-muted-foreground'
             title={state.stopped.subject}
           >
-            <code className='mr-1 font-mono text-[11px] text-foreground'>
+            <code className='mr-1 font-mono text-[0.6875rem] text-foreground'>
               {state.stopped.short_hash}
             </code>
             {state.stopped.subject}
           </span>
         ) : null}
         {actionLabel ? (
-          <span className='rounded border border-border px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground'>
+          <span className='rounded border border-border px-1.5 py-0.5 text-[0.625rem] uppercase tracking-wide text-muted-foreground'>
             {actionLabel}
           </span>
         ) : null}
@@ -212,7 +212,7 @@ export function RebaseStatusBanner({ path }: { path: string }) {
         </ul>
       ) : null}
       {state.todo.length > 0 ? (
-        <p className='text-[11px] text-muted-foreground'>
+        <p className='text-[0.6875rem] text-muted-foreground'>
           {t('rebaseBanner.remaining', { count: state.todo.length })}
         </p>
       ) : null}

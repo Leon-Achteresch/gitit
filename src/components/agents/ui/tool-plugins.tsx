@@ -81,7 +81,7 @@ export function ToolPluginView({
         variant="outline"
         value={mode}
         onValueChange={(next) => next && setMode(next as "plugin" | "raw")}
-        className="text-[11px]"
+        className="text-[0.6875rem]"
       >
         <ToggleGroupItem value="plugin">{resolved.plugin.label}</ToggleGroupItem>
         <ToggleGroupItem value="raw">Rohtext</ToggleGroupItem>

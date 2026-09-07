@@ -30,7 +30,7 @@ export function AgentActivityHeatmap({ entries }: { entries: AgentOverviewEntry[
   const total = useMemo(() => columns.flat().reduce((sum, cell) => sum + cell.count, 0), [columns]);
 
   return (
-    <m.div initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...easeOutSoft, delay: 0.15 }}>
+    <m.div layout initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ ...easeOutSoft, delay: 0.15 }}>
       <Card data-testid="agent-activity-heatmap">
         <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3 space-y-0">
           <div>
@@ -55,7 +55,7 @@ export function AgentActivityHeatmap({ entries }: { entries: AgentOverviewEntry[
                   {col.map((cell, di) => (
                     <Tooltip key={cell.key} delayDuration={150}>
                       <TooltipTrigger asChild>
-                        <m.span
+                        <m.span layout
                           initial={reduce ? false : { opacity: 0, scale: 0.6 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ ...easeOutSoft, delay: Math.min(ci * 7 + di, 80) * 0.004 }}
@@ -71,7 +71,7 @@ export function AgentActivityHeatmap({ entries }: { entries: AgentOverviewEntry[
               ))}
             </div>
           </div>
-          <div className="mt-3 flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
+          <div className="mt-3 flex items-center justify-end gap-1 text-[0.6875rem] text-muted-foreground">
             {t("agentProfile.less")}
             {[0, 1, 2, 3, 4].map((l) => (
               <span key={l} className={cn("size-[11px] rounded-[3px]", LEVEL_CLASS[l])} />

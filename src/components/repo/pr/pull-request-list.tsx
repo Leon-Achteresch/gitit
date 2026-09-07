@@ -41,6 +41,9 @@ export function PullRequestList({
   onCreated,
   onSelect,
   onReload,
+  onLoadHistory,
+  hasMoreHistory,
+  historyLoading,
 }: {
   path: string;
   prs: PullRequest[] | undefined;
@@ -55,6 +58,9 @@ export function PullRequestList({
   onCreated: (pr: PullRequest) => void;
   onSelect: (n: number) => void;
   onReload: () => void;
+  onLoadHistory: () => void;
+  hasMoreHistory: boolean;
+  historyLoading: boolean;
 }) {
   const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -186,7 +192,7 @@ export function PullRequestList({
                     variant="ghost"
                     size="sm"
                     onClick={() => setFilterAndStore(id)}
-                    className="relative h-7 rounded-lg px-2.5 text-[11px] font-semibold hover:bg-transparent"
+                    className="relative h-7 rounded-lg px-2.5 text-[0.6875rem] font-semibold hover:bg-transparent"
                   >
                     {active && (
                       <m.span
@@ -205,7 +211,7 @@ export function PullRequestList({
                     <m.span
                       layout
                       className={[
-                        "relative z-10 ml-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 font-mono text-[9px] font-bold transition-colors",
+                        "relative z-10 ml-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 font-mono text-[0.5625rem] font-bold transition-colors",
                         active
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-muted-foreground",
@@ -254,7 +260,7 @@ export function PullRequestList({
 
         <AnimatePresence>
           {showSearch && (
-            <m.div
+            <m.div layout
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -267,7 +273,7 @@ export function PullRequestList({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Filter by title, author, branch, #..."
-                  className="h-7.5 pl-8 pr-7 text-[11px] rounded-lg bg-background/80"
+                  className="h-7.5 pl-8 pr-7 text-[0.6875rem] rounded-lg bg-background/80"
                   autoFocus
                 />
                 {searchQuery && (
@@ -285,6 +291,7 @@ export function PullRequestList({
         </AnimatePresence>
       </div>
 
+      <p className="px-3 py-1 text-xs text-muted-foreground">{t("audit.prScope")}</p>
       <AnimatePresence initial={false}>
         {createOpen && (
           <PullRequestCreatePanel
@@ -299,6 +306,7 @@ export function PullRequestList({
         )}
       </AnimatePresence>
 
+      {filter !== "open" && hasMoreHistory && <Button variant="outline" size="sm" className="mx-3 my-2" onClick={onLoadHistory} disabled={historyLoading}>{historyLoading ? t("common.loading") : t("audit.loadMore")}</Button>}
       <div ref={scrollerRef} className="min-h-0 flex-1 overflow-y-auto">
         <div className="py-2">
           {loading && !prs ? (

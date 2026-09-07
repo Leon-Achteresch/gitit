@@ -188,7 +188,7 @@ function RepoGroup({
                 "group/header relative inline-flex h-7 min-w-0 cursor-pointer items-center gap-1.5 rounded-lg px-2 text-left text-xs font-medium transition-colors duration-150 hover:bg-foreground/[0.06]",
               )}
             >
-              <m.span
+              <m.span layout
                 className="flex shrink-0 items-center justify-center"
                 animate={{ rotate: collapsed ? 0 : 90 }}
                 transition={{ type: "spring", stiffness: 600, damping: 32 }}
@@ -203,7 +203,7 @@ function RepoGroup({
               <span className="flex size-[22px] shrink-0 items-center justify-center">
                 <AnimatePresence mode="wait" initial={false}>
                   {collapsed ? (
-                    <m.span
+                    <m.span layout
                       key="closed"
                       initial={{ opacity: 0, scale: 0.6 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -217,7 +217,7 @@ function RepoGroup({
                       />
                     </m.span>
                   ) : (
-                    <m.span
+                    <m.span layout
                       key="open"
                       initial={{ opacity: 0, scale: 0.6 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -239,7 +239,7 @@ function RepoGroup({
               </span>
 
               <span
-                className="ml-0.5 inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full px-1 font-mono text-[10px] font-semibold tabular-nums"
+                className="ml-0.5 inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full px-1 font-mono text-[0.625rem] font-semibold tabular-nums"
                 style={{
                   color: `hsl(${group.hue} 55% 38%)`,
                   backgroundColor: `hsl(${group.hue} 55% 50% / 0.16)`,
@@ -280,7 +280,7 @@ function RepoGroup({
 
         <AnimatePresence initial={false}>
           {!collapsed && (
-            <m.div
+            <m.div layout
               key="children"
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: "auto", opacity: 1 }}
@@ -300,7 +300,7 @@ function RepoGroup({
                   nested
                 />
                 {group.children.length === 0 && (
-                  <span className="px-2 text-[11px] italic text-muted-foreground">
+                  <span className="px-2 text-[0.6875rem] italic text-muted-foreground">
                     {t("repoGroup.empty")}
                   </span>
                 )}

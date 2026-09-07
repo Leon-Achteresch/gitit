@@ -68,10 +68,10 @@ export function PullRequestReviewDraftsBar({
     <div className="mt-2 flex flex-col gap-1.5 rounded-xl bg-muted/40 px-3 py-2 ring-1 ring-border/50">
       <div className="flex items-center gap-2">
         <MessageSquare className="h-3.5 w-3.5 shrink-0 text-primary" />
-        <span className="text-[12px] font-semibold">
+        <span className="text-[0.75rem] font-semibold">
           {t("prReview.pendingComments", { count: drafts.length })}
         </span>
-        <span className="text-[10px] text-muted-foreground">
+        <span className="text-[0.625rem] text-muted-foreground">
           {batched ? t("prReview.batchedHint") : t("prReview.oneByOneHint")}
         </span>
         <span className="flex-1" />
@@ -79,7 +79,7 @@ export function PullRequestReviewDraftsBar({
           type="button"
           variant="ghost"
           size="xs"
-          className="h-6 text-[10px]"
+          className="h-6 text-[0.625rem]"
           disabled={busy !== null}
           onClick={() => clearDrafts(draftKey(path, number))}
           title={t("prReview.discardAll")}
@@ -93,13 +93,13 @@ export function PullRequestReviewDraftsBar({
           value={summary}
           onChange={(e) => setSummary(e.target.value)}
           placeholder={t("prReview.summaryPlaceholder")}
-          className="h-7 min-w-0 flex-1 text-[11px]"
+          className="h-7 min-w-0 flex-1 text-[0.6875rem]"
         />
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="h-7 shrink-0 text-[11px]"
+          className="h-7 shrink-0 text-[0.6875rem]"
           disabled={busy !== null}
           onClick={() => void submit("COMMENT")}
         >
@@ -115,7 +115,7 @@ export function PullRequestReviewDraftsBar({
             type="button"
             variant="default"
             size="pill"
-            className="h-7 shrink-0 text-[11px]"
+            className="h-7 shrink-0 text-[0.6875rem]"
             disabled={busy !== null}
             onClick={() => void submit("APPROVE")}
           >
@@ -132,7 +132,7 @@ export function PullRequestReviewDraftsBar({
             type="button"
             variant="ghost"
             size="pill"
-            className="h-7 shrink-0 text-[11px]"
+            className="h-7 shrink-0 text-[0.6875rem]"
             disabled={busy !== null}
             onClick={() => void submit("REQUEST_CHANGES")}
           >

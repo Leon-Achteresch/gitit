@@ -210,7 +210,7 @@ export function ApprovalCard({
 
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 items-start gap-3">
-            <h3 className="min-w-0 flex-1 text-[14px] font-medium leading-5">
+            <h3 className="min-w-0 flex-1 text-[0.875rem] font-medium leading-5">
               <ActionSwapRollText value={titleKey}>
                 {displayTitle}
               </ActionSwapRollText>
@@ -222,7 +222,7 @@ export function ApprovalCard({
             ) : (
               <span
                 className={cn(
-                  "shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors",
+                  "shrink-0 rounded-full border px-2 py-0.5 text-[0.6875rem] font-medium transition-colors",
                   getStatusBadgeClass(status),
                 )}
               >
@@ -246,7 +246,7 @@ export function ApprovalCard({
           <AgentDisclosure open={interactive}>
             {questionMode && question ? (
               <AnimatePresence initial={false} mode="wait">
-                <m.div
+                <m.div layout
                   key={question.id}
                   initial={reduce ? { opacity: 1 } : { opacity: 0, x: 8 }}
                   animate={{ opacity: 1, x: 0 }}

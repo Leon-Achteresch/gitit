@@ -74,7 +74,7 @@ function AddonCard({
   const reduce = useReducedMotion();
 
   return (
-    <m.section
+    <m.section layout
       className="flex min-h-35 min-w-0 flex-col gap-3 rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] px-5 py-[1.15rem] shadow-[var(--ag-shadow-raise)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-px hover:border-[var(--ag-line-strong)] hover:shadow-[var(--ag-shadow-panel)]"
       initial={reduce ? false : { opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -84,7 +84,7 @@ function AddonCard({
         <span className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] grid size-8 shrink-0 place-items-center rounded-[10px]">{icon}</span>
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
-            <h3 className="text-[13px] font-semibold tracking-tight">{title}</h3>
+            <h3 className="text-[0.8125rem] font-semibold tracking-tight">{title}</h3>
             {status}
           </div>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">{description}</p>
@@ -106,9 +106,9 @@ function Field({
 }) {
   return (
     <label className="block min-w-0 space-y-1.5">
-      <span className="block text-[11px] font-medium">{label}</span>
+      <span className="block text-[0.6875rem] font-medium">{label}</span>
       {children}
-      {hint ? <span className="text-[var(--ag-text-3)] block text-[10px] leading-4">{hint}</span> : null}
+      {hint ? <span className="text-[var(--ag-text-3)] block text-[0.625rem] leading-4">{hint}</span> : null}
     </label>
   );
 }
@@ -172,7 +172,7 @@ function BarcodeAddonCard() {
                 value={label}
                 onChange={(event) => setLabel(event.target.value)}
                 placeholder={t("agentAddons.barcode.labelPlaceholder")}
-                className="h-8 text-[12px]"
+                className="h-8 text-[0.75rem]"
               />
             </Field>
           </div>
@@ -181,7 +181,7 @@ function BarcodeAddonCard() {
               value={value}
               onChange={(event) => setValue(event.target.value)}
               rows={2}
-              className="font-mono text-[11px]"
+              className="font-mono text-[0.6875rem]"
             />
           </Field>
           <div className="flex flex-wrap gap-2">
@@ -189,7 +189,7 @@ function BarcodeAddonCard() {
               type="button"
               size="sm"
               variant="outline"
-              className="h-8 text-[11px]"
+              className="h-8 text-[0.6875rem]"
               onClick={() => {
                 insertIntoAgentComposer(`\`\`\`barcode\n${block}\n\`\`\``);
                 toast.success(t("agentAddons.barcode.inserted"));
@@ -201,14 +201,14 @@ function BarcodeAddonCard() {
               type="button"
               size="sm"
               variant="ghost"
-              className="h-8 gap-1.5 text-[11px]"
+              className="h-8 gap-1.5 text-[0.6875rem]"
               onClick={() => copyToClipboard(BARCODE_FORMAT_DOC, t("agentAddons.barcode.docCopied"))}
             >
               <Copy className="size-3" />
               {t("agentAddons.barcode.copyDoc")}
             </Button>
           </div>
-          <p className="text-[var(--ag-text-3)] text-[10px] leading-4">
+          <p className="text-[var(--ag-text-3)] text-[0.625rem] leading-4">
             {t("agentAddons.barcode.usage", { count: BARCODE_FORMATS.length })}
           </p>
         </div>
@@ -216,7 +216,7 @@ function BarcodeAddonCard() {
           {spec ? (
             <AgentBarcode spec={spec} />
           ) : (
-            <p className="mt-3 rounded-xl border border-border/45 px-3 py-6 text-center text-[11px] text-muted-foreground">
+            <p className="mt-3 rounded-xl border border-border/45 px-3 py-6 text-center text-[0.6875rem] text-muted-foreground">
               {t("agentAddons.barcode.noPreview")}
             </p>
           )}
@@ -325,7 +325,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               aria-pressed={provider === entry.value}
               onClick={() => setProvider(entry.value)}
               className={cn(
-                "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-8 shrink-0 gap-1.5 border-0 bg-transparent px-2.5 text-[11px] font-medium shadow-none",
+                "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-8 shrink-0 gap-1.5 border-0 bg-transparent px-2.5 text-[0.6875rem] font-medium shadow-none",
                 provider === entry.value && "bg-[var(--ag-surface)] text-[var(--ag-text)] shadow-[var(--ag-shadow-raise)]",
               )}
             >
@@ -348,15 +348,15 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
         </div>
 
         {status?.error ? (
-          <p className="rounded-xl border border-destructive/25 bg-destructive/[0.06] px-3 py-2 text-[11px] text-destructive">
+          <p className="rounded-xl border border-destructive/25 bg-destructive/[0.06] px-3 py-2 text-[0.6875rem] text-destructive">
             {status.error}
           </p>
         ) : null}
 
         <section className="">
           <div className="mb-3">
-            <p className="text-[12px] font-semibold text-[var(--ag-text)]">{t("agentAddons.browser.browser")}</p>
-            <p className="text-[var(--ag-text-3)] mt-0.5 text-[10px] leading-4">{t("agentAddons.browser.approvalHint")}</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--ag-text)]">{t("agentAddons.browser.browser")}</p>
+            <p className="text-[var(--ag-text-3)] mt-0.5 text-[0.625rem] leading-4">{t("agentAddons.browser.approvalHint")}</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           <Field label={t("agentAddons.browser.browser")}>
@@ -381,7 +381,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               value={options.viewport}
               onChange={(event) => update("viewport", event.target.value)}
               placeholder="1280x720"
-              className="h-8 text-[12px]"
+              className="h-8 text-[0.75rem]"
             />
           </Field>
           <Field label={t("agentAddons.browser.device")} hint={t("agentAddons.browser.deviceHint")}>
@@ -389,7 +389,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               value={options.device}
               onChange={(event) => update("device", event.target.value)}
               placeholder="iPhone 15"
-              className="h-8 text-[12px]"
+              className="h-8 text-[0.75rem]"
             />
           </Field>
           <Field label={t("agentAddons.browser.allowedOrigins")} hint={t("agentAddons.browser.allowedOriginsHint")}>
@@ -397,7 +397,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               value={options.allowedOrigins}
               onChange={(event) => update("allowedOrigins", event.target.value)}
               placeholder="http://localhost:5173"
-              className="h-8 text-[12px]"
+              className="h-8 text-[0.75rem]"
             />
           </Field>
           <Field label={t("agentAddons.browser.caps")} hint={t("agentAddons.browser.capsHint")}>
@@ -405,7 +405,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               value={options.caps}
               onChange={(event) => update("caps", event.target.value)}
               placeholder="vision,pdf"
-              className="h-8 text-[12px]"
+              className="h-8 text-[0.75rem]"
             />
           </Field>
           <Field label={t("agentAddons.browser.baseUrl")} hint={t("agentAddons.browser.baseUrlHint")}>
@@ -413,14 +413,14 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               value={options.baseUrl}
               onChange={(event) => update("baseUrl", event.target.value)}
               placeholder="http://localhost:5173"
-              className="h-8 text-[12px]"
+              className="h-8 text-[0.75rem]"
             />
           </Field>
           </div>
         </section>
 
         <div className="flex flex-wrap gap-x-6 gap-y-3 rounded-[var(--ag-r-md)] border border-[var(--ag-line)] px-3 py-2.5">
-          <label className="flex items-center gap-2 text-[11px]">
+          <label className="flex items-center gap-2 text-[0.6875rem]">
             <Switch
               size="sm"
               checked={options.headless}
@@ -428,7 +428,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
             />
             {t("agentAddons.browser.headless")}
           </label>
-          <label className="flex items-center gap-2 text-[11px]">
+          <label className="flex items-center gap-2 text-[0.6875rem]">
             <Switch
               size="sm"
               checked={options.isolated}
@@ -439,19 +439,19 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
         </div>
 
         <div className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] rounded-[var(--ag-r-md)] px-3 py-3">
-          <p className="text-[9px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="text-[0.5625rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
             {t("agentAddons.browser.serverName", { name: BROWSER_ADDON_SERVER_NAME })}
           </p>
-          <code className="mt-1 block break-all font-mono text-[10px] leading-4 text-[var(--ag-text-2)]">
+          <code className="mt-1 block break-all font-mono text-[0.625rem] leading-4 text-[var(--ag-text-2)]">
             {status?.command}
           </code>
-          <p className="text-[var(--ag-text-3)] mt-1.5 break-all text-[10px] leading-4">
+          <p className="text-[var(--ag-text-3)] mt-1.5 break-all text-[0.625rem] leading-4">
             {status?.file ?? t("agentAddons.browser.codexTarget")}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="button" size="sm" className="h-8 text-[11px]" disabled={busy || loading} onClick={install}>
+          <Button type="button" size="sm" className="h-8 text-[0.6875rem]" disabled={busy || loading} onClick={install}>
             {busy ? <SpinIcon icon={LoaderCircle} className="size-3.5" /> : null}
             {installed ? t("agentAddons.browser.update") : t("agentAddons.browser.install")}
           </Button>
@@ -459,7 +459,7 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
             type="button"
             size="sm"
             variant="ghost"
-            className="h-8 gap-1.5 text-[11px]"
+            className="h-8 gap-1.5 text-[0.6875rem]"
             disabled={busy || loading || !installed}
             onClick={remove}
           >
@@ -470,8 +470,8 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
 
         <section className="space-y-3 rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface-2)]/55 p-4">
           <div>
-            <p className="text-[12px] font-semibold text-[var(--ag-text)]">{t("agentAddons.browser.runTest")}</p>
-            <p className="text-[var(--ag-text-3)] mt-0.5 text-[10px] leading-4">{t("agentAddons.browser.scenarioHint")}</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--ag-text)]">{t("agentAddons.browser.runTest")}</p>
+            <p className="text-[var(--ag-text-3)] mt-0.5 text-[0.625rem] leading-4">{t("agentAddons.browser.scenarioHint")}</p>
           </div>
           <Field label={t("agentAddons.browser.scenario")} hint={t("agentAddons.browser.scenarioHint")}>
             <Textarea
@@ -479,14 +479,14 @@ function BrowserAddonCard({ path, onBack }: { path: string; onBack: () => void }
               onChange={(event) => setScenario(event.target.value)}
               rows={3}
               placeholder={t("agentAddons.browser.scenarioPlaceholder")}
-              className="text-[12px]"
+              className="text-[0.75rem]"
             />
           </Field>
           <Button
             type="button"
             size="sm"
             variant="outline"
-            className="h-8 gap-1.5 text-[11px]"
+            className="h-8 gap-1.5 text-[0.6875rem]"
             disabled={!installed}
             onClick={() => void startTest()}
           >
@@ -526,7 +526,7 @@ export function AgentAddonStudio({ path, onBack }: { path: string; onBack: () =>
       <ScrollArea className="min-h-0 flex-1">
         <div className="w-full min-w-0 px-[clamp(1rem,2.5vw,2rem)] pb-10 pt-6 max-sm:px-3 mx-auto max-w-5xl">
           <AnimatePresence mode="wait" initial={false}>
-            <m.div
+            <m.div layout
               key={activeAddon}
               initial={reduce ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}

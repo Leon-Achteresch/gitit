@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { openCodeChatStore } from "@/lib/agents/providers/opencode/chat-store";
 
-const RADIO_CLASS = "rounded-[9px] py-1.5 text-[12px]";
+const RADIO_CLASS = "rounded-[9px] py-1.5 text-[0.75rem]";
 const BOOLEAN_ON = "__on";
 const BOOLEAN_OFF = "__off";
 
@@ -43,7 +43,7 @@ export function AgentOpenCodeConfigPills() {
             label={label}
             title={selection.description || selection.name}
           >
-            <DropdownMenuLabel className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">
+            <DropdownMenuLabel className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">
               {selection.name}
             </DropdownMenuLabel>
             {selection.type === "boolean" ? (

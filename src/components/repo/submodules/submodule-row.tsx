@@ -70,11 +70,11 @@ export function SubmoduleRow({
           )}
         />
         <div className="min-w-0">
-          <p className="truncate text-[13px] font-medium leading-tight">
+          <p className="truncate text-[0.8125rem] font-medium leading-tight">
             {shortName}
           </p>
           {parentPath && (
-            <p className="truncate text-[10px] text-muted-foreground/60 leading-tight">
+            <p className="truncate text-[0.625rem] text-muted-foreground/60 leading-tight">
               {parentPath}
             </p>
           )}
@@ -84,28 +84,28 @@ export function SubmoduleRow({
       {/* BRANCH */}
       <div className="px-2 py-2.5">
         {entry.branch ? (
-          <span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+          <span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 font-mono text-[0.625rem] text-muted-foreground">
             {entry.branch}
           </span>
         ) : (
-          <span className="text-[11px] text-muted-foreground/40">—</span>
+          <span className="text-[0.6875rem] text-muted-foreground/40">—</span>
         )}
       </div>
 
       {/* PINNED */}
       <div className="px-2 py-2.5">
-        <span className="font-mono text-[11px] text-muted-foreground">
+        <span className="font-mono text-[0.6875rem] text-muted-foreground">
           {shortPinned}
         </span>
       </div>
 
       {/* REMOTE */}
       <div className="flex items-center gap-1 px-2 py-2.5">
-        <span className="font-mono text-[11px] text-muted-foreground">
+        <span className="font-mono text-[0.6875rem] text-muted-foreground">
           {shortRemote}
         </span>
         {entry.behind_count != null && entry.behind_count > 0 && (
-          <span className="text-[10px] font-medium text-git-removed">
+          <span className="text-[0.625rem] font-medium text-git-removed">
             ↓{entry.behind_count}
           </span>
         )}

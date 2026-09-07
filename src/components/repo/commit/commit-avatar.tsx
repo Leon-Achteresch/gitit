@@ -12,8 +12,8 @@ const SIZE_CLASSES: Record<Size, string> = {
 };
 
 const FALLBACK_CLASSES: Record<Size, string> = {
-  xs: "text-[9px]",
-  sm: "text-[10px]",
+  xs: "text-[0.5625rem]",
+  sm: "text-[0.625rem]",
   md: "text-xs",
 };
 

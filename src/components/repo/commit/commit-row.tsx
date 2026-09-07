@@ -175,7 +175,7 @@ function CommitRowInner({
   };
 
   const inner = (
-    <m.div
+    <m.div layout
       key={focusPulseToken != null ? `pulse-${focusPulseToken}` : "row"}
       onClick={handleClick}
       initial={false}
@@ -308,7 +308,7 @@ function CommitRowInner({
         {bisectRole === 'good' && <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-git-added" />}
         {bisectRole === 'current' && <PulseIcon icon={CircleDot} className="h-3.5 w-3.5 shrink-0 text-git-branch" />}
         {bisectRole === 'result' && (
-          <span className="rounded-sm bg-git-modified/15 px-1 py-0.5 text-[10px] font-semibold text-git-modified">
+          <span className="rounded-sm bg-git-modified/15 px-1 py-0.5 text-[0.625rem] font-semibold text-git-modified">
             {t("commitRow.firstBadBadge")}
           </span>
         )}

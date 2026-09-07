@@ -78,7 +78,7 @@ export function RepoWorkspaceSwitch() {
     <>
       <div className="relative shrink-0" ref={wrapRef}>
         <LayoutGroup id="ws-switcher">
-          <m.button
+          <m.button layout
             type="button"
             whileTap={{ scale: 0.86 }}
             transition={{ type: "spring", stiffness: 600, damping: 28, mass: 0.3 }}
@@ -87,7 +87,7 @@ export function RepoWorkspaceSwitch() {
             aria-label={activeWs?.name}
             aria-expanded={open}
             className={cn(
-              "relative flex size-7 shrink-0 items-center justify-center rounded-[8px] text-[11px] font-bold text-white transition-[box-shadow,opacity]",
+              "relative flex size-7 shrink-0 items-center justify-center rounded-[8px] text-[0.6875rem] font-bold text-white transition-[box-shadow,opacity]",
               open ? "opacity-80" : "hover:opacity-90",
             )}
             style={{
@@ -101,7 +101,7 @@ export function RepoWorkspaceSwitch() {
           <OverlayPortal>
           <AnimatePresence>
             {open && (
-              <m.div
+              <m.div layout
                 key="ws-panel"
                 ref={panelRef}
                 variants={panelVariants}
@@ -115,7 +115,7 @@ export function RepoWorkspaceSwitch() {
                 }}
                 className="fixed z-[80] w-[210px] overflow-hidden rounded-xl border border-border/70 bg-popover shadow-[0_10px_28px_rgba(0,0,0,0.13),0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_28px_rgba(0,0,0,0.45),0_2px_8px_rgba(0,0,0,0.3)]"
               >
-                <p className="px-3 pb-1 pt-2.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+                <p className="px-3 pb-1 pt-2.5 text-[0.625rem] font-semibold uppercase tracking-widest text-muted-foreground/60">
                   {t("repoWorkspaceSwitch.menuTitle")}
                 </p>
 
@@ -124,7 +124,7 @@ export function RepoWorkspaceSwitch() {
                     const wsH = wsHue(ws.name);
                     const isActive = ws.id === activeWorkspaceId;
                     return (
-                      <m.div
+                      <m.div layout
                         key={ws.id}
                         custom={i}
                         variants={itemVariants}
@@ -148,14 +148,14 @@ export function RepoWorkspaceSwitch() {
                           className="relative flex-1"
                         >
                           <span
-                            className="flex size-5 shrink-0 items-center justify-center rounded-md text-[10px] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16)]"
+                            className="flex size-5 shrink-0 items-center justify-center rounded-md text-[0.625rem] font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.16)]"
                             style={{ backgroundColor: `hsl(${wsH} 52% 40%)` }}
                           >
                             {wsInitial(ws.name)}
                           </span>
                           <span
                             className={cn(
-                              "flex-1 truncate text-[13px] font-medium",
+                              "flex-1 truncate text-[0.8125rem] font-medium",
                               isActive ? "text-foreground" : "text-foreground/70",
                             )}
                           >

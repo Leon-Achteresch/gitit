@@ -22,11 +22,11 @@ export function AgentThreadJiraBadge({ links }: { links: JiraTicketLink[] }) {
       title={rest.length ? `${title} (+${rest.length})` : title}
     >
       <Ticket className="size-2.5 shrink-0 text-[var(--ag-text-3)]" />
-      <span className="truncate text-[10px] font-medium text-[var(--ag-text-2)]">{first.key}</span>
+      <span className="truncate text-[0.625rem] font-medium text-[var(--ag-text-2)]">{first.key}</span>
       {first.status ? (
-        <span className={`truncate text-[10px] ${statusTone(first)}`}>{first.status}</span>
+        <span className={`truncate text-[0.625rem] ${statusTone(first)}`}>{first.status}</span>
       ) : null}
-      {rest.length ? <span className="text-[var(--ag-text-3)] text-[10px]">+{rest.length}</span> : null}
+      {rest.length ? <span className="text-[var(--ag-text-3)] text-[0.625rem]">+{rest.length}</span> : null}
     </span>
   );
 }

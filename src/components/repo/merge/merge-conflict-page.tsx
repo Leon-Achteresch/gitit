@@ -200,7 +200,7 @@ export function MergeConflictPage({
   const allResolved =
     conflictedFiles.length > 0
       ? conflictedFiles.every((f) => fileStates[f]?.resolved)
-      : rebaseActive;
+      : rebaseActive || Boolean(mergeState?.in_progress);
 
   const current = selectedFile ? fileStates[selectedFile] : null;
   const filesBadge = t("mergeConflictPage.filesBadge", {

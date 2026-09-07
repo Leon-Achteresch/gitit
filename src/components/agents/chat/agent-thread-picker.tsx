@@ -107,7 +107,7 @@ export function AgentThreadPicker({
               >
                 <MessageSquare className="size-3.5 shrink-0 text-muted-foreground" />
                 <span className="flex-1 truncate">{thread.title || t("agentChat.conversation")}</span>
-                <span className="shrink-0 text-[10px] text-muted-foreground">
+                <span className="shrink-0 text-[0.625rem] text-muted-foreground">
                   {formatTimestamp(thread.updatedAt)}
                 </span>
                 {active ? <Check className="size-3.5 shrink-0 text-primary" /> : null}

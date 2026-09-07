@@ -70,7 +70,7 @@ export function WorktreeLockDialog({
         <header className="mb-3 flex items-center justify-between gap-2">
           <div>
             <h2 className="text-base font-semibold">{t("worktreeLock.title")}</h2>
-            <p className="text-[11px] text-muted-foreground">{entryName}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{entryName}</p>
           </div>
           <Button type="button" variant="ghost" size="icon-sm" onClick={dismiss} disabled={busy} aria-label={t("worktreeLock.closeAria")}>
             <X className="h-4 w-4" />
@@ -78,7 +78,7 @@ export function WorktreeLockDialog({
         </header>
 
         <form onSubmit={(e) => void submit(e)} className="grid gap-3">
-          <p className="text-[12px] text-muted-foreground">{t("worktreeLock.intro")}</p>
+          <p className="text-[0.75rem] text-muted-foreground">{t("worktreeLock.intro")}</p>
 
           <div className="grid gap-1">
             <Label htmlFor="wt-lock-reason">{t("worktreeLock.reasonLabel")}</Label>
@@ -90,7 +90,7 @@ export function WorktreeLockDialog({
               rows={3}
               className="resize-none"
             />
-            <p className="text-[11px] text-muted-foreground">{t("worktree.lockReasonHint")}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{t("worktree.lockReasonHint")}</p>
           </div>
 
           <div className="flex justify-end gap-2 pt-1">

@@ -17,7 +17,7 @@ export function PrReviewersPopover({ reviewers }: { reviewers: PrReviewer[] }) {
           title={t("prInspect.reviewerTitle")}
         >
           {shown.length === 0 ? (
-            <span className="inline-flex h-5 items-center gap-1 rounded-full border border-dashed border-border/80 px-2 text-[10px] text-muted-foreground">
+            <span className="inline-flex h-5 items-center gap-1 rounded-full border border-dashed border-border/80 px-2 text-[0.625rem] text-muted-foreground">
               <Users className="h-3 w-3" />
               {t("prInspect.reviewerTitle")}
             </span>
@@ -33,7 +33,7 @@ export function PrReviewersPopover({ reviewers }: { reviewers: PrReviewer[] }) {
             ))
           )}
           {reviewers.length > shown.length && (
-            <span className="ml-1 text-[10px] font-semibold text-muted-foreground">
+            <span className="ml-1 text-[0.625rem] font-semibold text-muted-foreground">
               +{reviewers.length - shown.length}
             </span>
           )}
@@ -41,19 +41,19 @@ export function PrReviewersPopover({ reviewers }: { reviewers: PrReviewer[] }) {
       </PopoverTrigger>
       <PopoverContent align="start" className="w-56 p-3 shadow-lg border-border/80">
         <div className="mb-2 flex items-center justify-between gap-2 border-b border-border/50 pb-2">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-muted-foreground">
             {t("prInspect.reviewerTitle")}
           </span>
-          <span className="text-[10px] text-muted-foreground">{reviewers.length}</span>
+          <span className="text-[0.625rem] text-muted-foreground">{reviewers.length}</span>
         </div>
         {reviewers.length === 0 ? (
-          <span className="text-[11px] italic text-muted-foreground">{t("prInspect.reviewerEmpty")}</span>
+          <span className="text-[0.6875rem] italic text-muted-foreground">{t("prInspect.reviewerEmpty")}</span>
         ) : (
           <ul className="flex flex-col gap-2">
             {reviewers.map((r) => (
               <li key={r.login} className="flex items-center gap-2">
                 <CommitAvatar url={r.avatar} name={r.login} size="xs" />
-                <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-foreground">{r.login}</span>
+                <span className="min-w-0 flex-1 truncate text-[0.75rem] font-medium text-foreground">{r.login}</span>
               </li>
             ))}
           </ul>

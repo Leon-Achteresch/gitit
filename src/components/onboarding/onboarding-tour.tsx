@@ -231,7 +231,7 @@ export function OnboardingTour() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-2">
-          <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="text-[0.6875rem] font-medium uppercase tracking-wide text-muted-foreground">
             {t("tour.stepCounter", { current: index + 1, total: STEPS.length })}
           </span>
           <Button

@@ -77,7 +77,7 @@ export function BrickBarChart({
                   x={AXIS_W - 8}
                   y={y + 3}
                   textAnchor="end"
-                  className="fill-muted-foreground text-[10px] tabular-nums"
+                  className="fill-muted-foreground text-[0.625rem] tabular-nums"
                 >
                   {formatValue(f * axisMax)}
                 </text>
@@ -88,7 +88,7 @@ export function BrickBarChart({
             x={AXIS_W - 8}
             y={chartH + 3}
             textAnchor="end"
-            className="fill-muted-foreground text-[10px] tabular-nums"
+            className="fill-muted-foreground text-[0.625rem] tabular-nums"
           >
             0
           </text>
@@ -134,7 +134,7 @@ export function BrickBarChart({
                     x={AXIS_W + idx * slot + slot / 2}
                     y={height - 6}
                     textAnchor="middle"
-                    className="fill-muted-foreground text-[10px]"
+                    className="fill-muted-foreground text-[0.625rem]"
                   >
                     {d.label}
                   </text>
@@ -160,7 +160,7 @@ export function BrickBarChart({
           y={chartH - Math.min(rows, Math.round(((hovered.primary + hovered.secondary) / axisMax) * rows)) * UNIT - 10}
           containerWidth={width}
         >
-          <div className="mb-1 text-[11px] font-medium">{hovered.label}</div>
+          <div className="mb-1 text-[0.6875rem] font-medium">{hovered.label}</div>
           <ChartTooltipRow
             swatchClassName="bg-foreground/[0.22]"
             label={primaryLabel}

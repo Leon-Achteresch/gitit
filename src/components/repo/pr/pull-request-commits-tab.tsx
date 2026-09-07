@@ -68,7 +68,7 @@ export function PullRequestCommitsTab({
 
   if (!commits || commits.length === 0) {
     return (
-      <m.div
+      <m.div layout
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground"
@@ -83,7 +83,7 @@ export function PullRequestCommitsTab({
     <ScrollArea className="h-full bg-background">
       <ul className="divide-y divide-border/40 p-2">
         {commits.map((c, i) => (
-          <m.li
+          <m.li layout
             key={c.hash}
             initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
@@ -92,10 +92,10 @@ export function PullRequestCommitsTab({
           >
             <CommitAvatar url={c.author_avatar} name={c.author} size="sm" />
             <div className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-[13px] font-semibold text-foreground group-hover:text-primary transition-colors">
+              <span className="truncate text-[0.8125rem] font-semibold text-foreground group-hover:text-primary transition-colors">
                 {c.subject}
               </span>
-              <div className="mt-0.5 flex min-w-0 items-center gap-2 text-[11px] text-muted-foreground">
+              <div className="mt-0.5 flex min-w-0 items-center gap-2 text-[0.6875rem] text-muted-foreground">
                 <span className="truncate font-medium">{c.author}</span>
                 <span className="opacity-30">·</span>
                 <time
@@ -111,7 +111,7 @@ export function PullRequestCommitsTab({
             <button
               type="button"
               onClick={() => copyHash(c.hash)}
-              className="flex items-center gap-1 shrink-0 rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 font-mono text-[11px] text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors cursor-pointer"
+              className="flex items-center gap-1 shrink-0 rounded-md border border-border/60 bg-muted/40 px-2 py-0.5 font-mono text-[0.6875rem] text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors cursor-pointer"
               title={`Copy ${c.hash}`}
             >
               <span>{c.short_hash}</span>

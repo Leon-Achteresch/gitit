@@ -306,7 +306,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
         {step === 0 ? (
           <section className="flex min-w-0 flex-col gap-4">
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">{t("agentCapabilities.hub.stepSourceTitle")}</h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.hub.stepSourceHint")}</p>
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.hub.stepSourceHint")}</p>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,16.5rem),1fr))] gap-3">
               {inventory.targets.map((target) => {
                 const counts = kindCountsForCli(inventory.items, target.cli);
@@ -340,7 +340,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
             </div>
             {source && sourceInfo ? (
               <div className="flex flex-col gap-2">
-                <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">{t("agentCapabilities.hub.scopeHint")}</p>
+                <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">{t("agentCapabilities.hub.scopeHint")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {CAPABILITY_SCOPES.map((scope) => {
                     const info = scopeInfo(sourceInfo, scope);
@@ -351,7 +351,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                         aria-pressed={source.scope === scope}
                         onClick={() => changeSource({ cli: source.cli, scope })}
                         className={cn(
-                          "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-7 gap-1.5 px-2.5 text-[11px] font-medium",
+                          "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-7 gap-1.5 px-2.5 text-[0.6875rem] font-medium",
                           source.scope === scope && "bg-[var(--ag-solid)] text-[var(--ag-solid-fg)]",
                         )}
                       >
@@ -376,7 +376,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
         {step === 1 ? (
           <section className="flex min-w-0 flex-col gap-4">
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">{t("agentCapabilities.hub.stepTargetTitle")}</h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">
               {t("agentCapabilities.hub.stepTargetHint", { source: sourceLabel })}
             </p>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,16.5rem),1fr))] gap-3">
@@ -446,7 +446,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                                   ]);
                                 }}
                                 className={cn(
-                                  "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-6 gap-1 px-2 text-[10px] font-medium",
+                                  "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-6 gap-1 px-2 text-[0.625rem] font-medium",
                                   active && "bg-[var(--ag-solid)] text-[var(--ag-solid-fg)]",
                                 )}
                               >
@@ -477,7 +477,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
         {step === 2 ? (
           <section className="flex min-w-0 flex-col gap-4">
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">{t("agentCapabilities.hub.stepCopyTitle")}</h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">
               {coverage?.missing
                 ? t("agentCapabilities.hub.stepCopyHint", {
                     missing: coverage.missing,
@@ -504,7 +504,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                       )
                     }
                     className={cn(
-                      "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-7 gap-1.5 px-2 text-[10px] font-medium",
+                      "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring h-7 gap-1.5 px-2 text-[0.625rem] font-medium",
                       active && "bg-[var(--ag-selected)] text-[var(--ag-text)]",
                     )}
                   >
@@ -519,7 +519,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                 aria-pressed={gapsOnly}
                 onClick={() => setGapsOnly((value) => !value)}
                 className={cn(
-                  "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring ml-auto h-7 px-2 text-[10px] font-medium",
+                  "inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring ml-auto h-7 px-2 text-[0.625rem] font-medium",
                   gapsOnly && "bg-[var(--ag-selected)]",
                 )}
               >
@@ -557,8 +557,8 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                         />
                         <Icon className="text-[var(--ag-text-3)] mt-0.5 size-3.5 shrink-0" />
                         <span className="min-w-0 flex-1">
-                          <span className="truncate text-[12px] font-medium">{item.name}</span>
-                          <span className="text-[var(--ag-text-2)] mt-0.5 line-clamp-2 block text-[10px] leading-4">
+                          <span className="truncate text-[0.75rem] font-medium">{item.name}</span>
+                          <span className="text-[var(--ag-text-2)] mt-0.5 line-clamp-2 block text-[0.625rem] leading-4">
                             {item.description || t("agentCapabilities.hub.noDescription")}
                           </span>
                         </span>
@@ -581,13 +581,13 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                 }
               />
             )}
-            <details className="text-[12px] text-[var(--ag-text-2)] [&_summary]:cursor-pointer [&_summary]:font-medium">
+            <details className="text-[0.75rem] text-[var(--ag-text-2)] [&_summary]:cursor-pointer [&_summary]:font-medium">
               <summary>{t("agentCapabilities.hub.moreOptions")}</summary>
-              <label className="mt-2 flex items-center gap-2 text-[12px]">
+              <label className="mt-2 flex items-center gap-2 text-[0.75rem]">
                 <Switch checked={overwrite} onCheckedChange={setOverwrite} />
                 {t("agentCapabilities.hub.overwrite")}
               </label>
-              <p className="text-[var(--ag-text-3)] mt-1 text-[11px] leading-4">
+              <p className="text-[var(--ag-text-3)] mt-1 text-[0.6875rem] leading-4">
                 {overwrite
                   ? t("agentCapabilities.hub.overwriteOnHint")
                   : t("agentCapabilities.hub.overwriteOffHint")}
@@ -637,13 +637,13 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
         {step === 3 ? (
           <section className="flex min-w-0 flex-col gap-4">
             <h2 className="text-[1.2rem] font-semibold leading-tight tracking-[-0.03em] text-[var(--ag-text)] text-pretty">{t("agentCapabilities.hub.stepDoneTitle")}</h2>
-            <p className="max-w-[42rem] text-[13px] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.hub.stepDoneHint")}</p>
+            <p className="max-w-[42rem] text-[0.8125rem] leading-5 text-[var(--ag-text-2)] text-pretty">{t("agentCapabilities.hub.stepDoneHint")}</p>
             {results.length ? (
               <ul className="space-y-1.5">
                 {results.map((entry, index) => (
                   <li
                     key={`${entry.kind}:${entry.name}:${entry.target}:${index}`}
-                    className="flex items-start gap-2 text-[12px]"
+                    className="flex items-start gap-2 text-[0.75rem]"
                   >
                     {entry.status === "error" ? (
                       <TriangleAlert className="mt-0.5 size-3.5 shrink-0 text-destructive" />
@@ -655,9 +655,9 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                     <span className="min-w-0 flex-1">
                       <span className="font-medium">{entry.name}</span>
                       <span className="text-[var(--ag-text-3)]"> → {entry.target}</span>
-                      <span className="text-[var(--ag-text-2)] block break-all text-[11px]">{entry.message}</span>
+                      <span className="text-[var(--ag-text-2)] block break-all text-[0.6875rem]">{entry.message}</span>
                       {entry.backup ? (
-                        <span className="text-[var(--ag-text-3)] block break-all font-mono text-[10px]">
+                        <span className="text-[var(--ag-text-3)] block break-all font-mono text-[0.625rem]">
                           {t("agentCapabilities.hub.backup", { path: entry.backup })}
                         </span>
                       ) : null}
@@ -716,12 +716,12 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
                         })
                       }
                     />
-                    <Badge variant="outline" className={cn("h-5 shrink-0 rounded px-1.5 text-[9px]", PLAN_TONE[entry.action])}>
+                    <Badge variant="outline" className={cn("h-5 shrink-0 rounded px-1.5 text-[0.5625rem]", PLAN_TONE[entry.action])}>
                       {t(`agentCapabilities.hub.actions.${entry.action}`)}
                     </Badge>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[11px] font-medium">{entry.name}</span>
-                      <span className="text-[var(--ag-text-3)] block truncate text-[10px]">
+                      <span className="block truncate text-[0.6875rem] font-medium">{entry.name}</span>
+                      <span className="text-[var(--ag-text-3)] block truncate text-[0.625rem]">
                         {t(`agentCapabilities.hub.kinds.${entry.kind}`)} · {entry.targetCli} ·{" "}
                         {scopeLabel(entry.targetScope, t)} · {entry.detail}
                       </span>
@@ -732,7 +732,7 @@ export function CapabilitySyncStudio({ path, query }: { path: string; query: str
             </div>
           </ScrollArea>
           <DialogFooter className="shrink-0 flex-col items-stretch gap-2 border-t border-[var(--ag-line)] pt-3 sm:flex-row sm:items-center">
-            <label className="mr-auto flex items-center gap-2 text-[11px]">
+            <label className="mr-auto flex items-center gap-2 text-[0.6875rem]">
               <Switch checked={deleteExtras} onCheckedChange={setDeleteExtras} />
               {t("agentCapabilities.hub.deleteExtras")}
             </label>

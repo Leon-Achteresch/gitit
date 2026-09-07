@@ -119,7 +119,10 @@ pub(crate) async fn bitbucket_collect_paginated_values(
             ));
         }
         if !res.status().is_success() {
-            let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::response_error(&res) { return Err(error); }
+            let response_status = res.status();
+        let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::body_error(response_status, &body) { return Err(error); }
             return Err(format!("Bitbucket: {}", body.trim()));
         }
         let root: Value = res.json().await.map_err(|e| format!("Bitbucket: {e}"))?;
@@ -201,7 +204,10 @@ async fn github_list(host: &str) -> Result<Vec<RemoteRepo>, String> {
             ));
         }
         if !res.status().is_success() {
-            let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::response_error(&res) { return Err(error); }
+            let response_status = res.status();
+        let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::body_error(response_status, &body) { return Err(error); }
             return Err(format!("GitHub: {}", body.trim()));
         }
         let arr: Vec<serde_json::Value> =
@@ -255,7 +261,10 @@ async fn gitlab_list(host: &str) -> Result<Vec<RemoteRepo>, String> {
         ));
     }
     if !res.status().is_success() {
+        if let Some(error) = crate::provider_rate_limit::response_error(&res) { return Err(error); }
+        let response_status = res.status();
         let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::body_error(response_status, &body) { return Err(error); }
         return Err(format!("GitLab: {}", body.trim()));
     }
     let arr: Vec<Value> = res.json().await.map_err(|e| format!("GitLab: {e}"))?;
@@ -381,8 +390,11 @@ async fn github_create(
         ));
     }
     if !res.status().is_success() {
+        if let Some(error) = crate::provider_rate_limit::response_error(&res) { return Err(error); }
         let status = res.status();
+        let response_status = res.status();
         let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::body_error(response_status, &body) { return Err(error); }
         let msg = serde_json::from_str::<Value>(&body)
             .ok()
             .and_then(|v| v["message"].as_str().map(|s| s.to_string()))
@@ -433,8 +445,11 @@ async fn gitlab_create(
         ));
     }
     if !res.status().is_success() {
+        if let Some(error) = crate::provider_rate_limit::response_error(&res) { return Err(error); }
         let status = res.status();
+        let response_status = res.status();
         let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::body_error(response_status, &body) { return Err(error); }
         let msg = serde_json::from_str::<Value>(&body)
             .ok()
             .and_then(|v| {
@@ -530,8 +545,11 @@ async fn bitbucket_create(
         ));
     }
     if !res.status().is_success() {
+        if let Some(error) = crate::provider_rate_limit::response_error(&res) { return Err(error); }
         let status = res.status();
+        let response_status = res.status();
         let body = res.text().await.unwrap_or_default();
+        if let Some(error) = crate::provider_rate_limit::body_error(response_status, &body) { return Err(error); }
         let msg = serde_json::from_str::<Value>(&body)
             .ok()
             .and_then(|v| v["error"]["message"].as_str().map(|s| s.to_string()))

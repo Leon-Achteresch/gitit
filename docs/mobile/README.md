@@ -1,6 +1,6 @@
 # l8git Remote — Mobile Companion
 
-React-Native-App (Expo) unter `mobile/`, die sich über eine Ende-zu-Ende-verschlüsselte WebSocket-Verbindung mit einem oder mehreren l8git-Hosts verbindet und den vollen Funktionsumfang inklusive Agents-Tab bereitstellt.
+React-Native-App (Expo) unter `mobile/`, die sich über eine Ende-zu-Ende-verschlüsselte WebSocket-Verbindung mit einem oder mehreren l8git-Hosts verbindet und Git- sowie Agent-Funktionen bereitstellt. Desktop-only-Kommandos sind im Remote-Vertrag ausdrücklich ausgeschlossen.
 
 Konzept und Wire-Protokoll: [CONCEPT.md](CONCEPT.md). Server-Interna: [SERVER-INTERNALS.md](SERVER-INTERNALS.md).
 
@@ -18,11 +18,13 @@ Die App scannt den QR-Code (oder fügt das JSON manuell ein) und verbindet sich 
 
 ## Screenshots
 
-Aufgenommen im iPhone-17-Pro-Simulator (Expo Go) gegen einen laufenden `l8gitd` mit Live-Git-Daten — via mobilewright (`MW_ROUTES=/,/repos bunx mobilewright test shots`, `bunx mobilewright test agents|details` in `mobile/`, Ausgabe `/tmp/mw-shots/`, dann hierher kopieren). Design-Regeln: [DESIGN.md](DESIGN.md).
+Die folgende Galerie ist ein älterer Referenzstand und keine Abnahme der aktuellen Version. Das bisherige Home-Bild zeigte einen Expo-Fehler und wurde deshalb aus der Produktgalerie entfernt. Der Repo-Header wurde inzwischen kompakter umgesetzt. Aktuelle Prüfgrenzen stehen im [Audit-Umsetzungsbericht](../audits/2026-09-06/IMPLEMENTATION.md).
 
-| Home | Repos | Repo-Detail | History |
-|---|---|---|---|
-| ![Home](screenshots/home.png) | ![Repos](screenshots/repos.png) | ![Repo-Detail](screenshots/repo-detail.png) | ![History](screenshots/repo-history.png) |
+Die ursprünglichen Aufnahmen entstanden laut damaliger Dokumentation im iPhone-17-Pro-Simulator (Expo Go) gegen `l8gitd` — via mobilewright (`MW_ROUTES=/,/repos bunx mobilewright test shots`, `bunx mobilewright test agents|details` in `mobile/`, Ausgabe `/tmp/mw-shots/`, dann hierher kopieren). Design-Regeln: [DESIGN.md](DESIGN.md).
+
+| Repos (historisch) | Repo-Detail (historisch) | History (historisch) |
+|---|---|---|
+| ![Repos](screenshots/repos.png) | ![Repo-Detail](screenshots/repo-detail.png) | ![History](screenshots/repo-history.png) |
 
 | Branches | Stash | PRs | CI |
 |---|---|---|---|
@@ -37,7 +39,7 @@ Aufgenommen im iPhone-17-Pro-Simulator (Expo Go) gegen einen laufenden `l8gitd` 
 | ![Dashboard](screenshots/dashboard.png) | ![Settings](screenshots/settings.png) | ![Commit](screenshots/commit-detail.png) | ![Diff](screenshots/diff.png) |
 
 - **Home** — Glass-Buttons, Hosts als Story-Avatare mit Status-Ring, „For you“-Karten pro Repo (Branch, ↑↓, Dirty, Open/History), „Needs you“ mit Reviews, roten Pipelines, Agent-Approvals und eigenen PRs; schwebende Pill-Tab-Bar.
-- **Repo-Detail** — Profil-Layout: geblurter Backdrop, rundes Repo-Avatar, Name + Branch, Stats-Reihe Ahead/Behind/Changes, Sektions-Chips (Status/History/Branches/Stash/PRs/CI), darunter Fetch/Pull/Push-Pills, Änderungsliste als Karte und Commit-Composer.
+- **Repo-Detail (aktuell)** — kompakte Kopfzeile mit kleinem Repo-Avatar, Name, Branch und Inline-Status; Sektions-Chips mit 44-Punkt-Touchzielen geben Dateien und Composer mehr Raum. Die ältere Abbildung oben zeigt noch den großen Profil-Header.
 - **Repos** — Glass-Suche, Host-Sektionen mit Gradient-Avatar + Status-Ring, Repos als 2-spaltige Bild-Kacheln (Ahead/Behind-Chip, Dirty-Punkt, Branch); Long-Press vergisst das Repo.
 - **History / Branches / Stash / PRs / CI** — Sektionen unter dem Profil-Header: Glass-Suche, Filter-Chips (weiß aktiv), randlose Listen mit runden Avataren/Status-Bubbles, Aktions-Pills; Detailseiten (Commit, PR, CI-Run, Stash) mit Glass-Back-Kreis und Karten.
 - **Approvals / Reviews** — Agent-Freigaben und Worktree-Reviews mit Glass-Header, Karten, weißer Approve-Pille.

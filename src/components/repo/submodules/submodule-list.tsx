@@ -42,7 +42,7 @@ function StatCard({
       >
         {value}
       </span>
-      <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <span className="mt-0.5 text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground">
         {label}
       </span>
     </div>
@@ -137,7 +137,7 @@ export function SubmoduleList({
             type="button"
             variant="outline"
             size="xs"
-            className="gap-1.5 text-[11px]"
+            className="gap-1.5 text-[0.6875rem]"
             disabled={bulkBusy || submodules.length === 0}
             onClick={() =>
               void bulkRun(
@@ -153,7 +153,7 @@ export function SubmoduleList({
             type="button"
             variant="outline"
             size="xs"
-            className="gap-1.5 text-[11px]"
+            className="gap-1.5 text-[0.6875rem]"
             disabled={bulkBusy || submodules.length === 0}
             onClick={() =>
               void bulkRun(
@@ -170,7 +170,7 @@ export function SubmoduleList({
               type="button"
               variant="outline"
               size="xs"
-              className="gap-1.5 text-[11px] text-git-removed hover:text-git-removed"
+              className="gap-1.5 text-[0.6875rem] text-git-removed hover:text-git-removed"
               disabled={bulkBusy}
               onClick={() =>
                 void bulkRun(
@@ -181,7 +181,7 @@ export function SubmoduleList({
             >
               <Download className="h-3.5 w-3.5" />
               {t("submodule.listPullAll")}
-              <span className="rounded-full bg-git-removed/15 px-1.5 py-0.5 text-[9px] font-bold text-git-removed">
+              <span className="rounded-full bg-git-removed/15 px-1.5 py-0.5 text-[0.5625rem] font-bold text-git-removed">
                 {behindTotal}
               </span>
             </Button>
@@ -193,7 +193,7 @@ export function SubmoduleList({
               type="button"
               variant={showProblems ? "secondary" : "ghost"}
               size="xs"
-              className="gap-1 text-[11px]"
+              className="gap-1 text-[0.6875rem]"
               onClick={() => setShowProblems((v) => !v)}
             >
               <Filter className="h-3 w-3" />
@@ -246,7 +246,7 @@ export function SubmoduleList({
           )}
         >
           {submodules.length > 0 && (
-            <div className="grid shrink-0 grid-cols-[2fr_1fr_1fr_1fr_auto] border-b border-border/40 bg-muted/30 px-0 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="grid shrink-0 grid-cols-[2fr_1fr_1fr_1fr_auto] border-b border-border/40 bg-muted/30 px-0 text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground">
               <div className="px-3 py-1.5">{t("submodule.colSubmodule")}</div>
               <div className="px-2 py-1.5">{t("submodule.colBranch")}</div>
               <div className="px-2 py-1.5">{t("submodule.colPinned")}</div>

@@ -79,7 +79,7 @@ function HeatStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5 text-right">
       <span className="text-sm font-semibold tabular-nums leading-tight">{value}</span>
-      <span className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</span>
+      <span className="text-[0.625rem] uppercase tracking-wide text-muted-foreground">{label}</span>
     </div>
   );
 }

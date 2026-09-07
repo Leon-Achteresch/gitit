@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Bot, Eye, GitPullRequest, TriangleAlert } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -25,7 +25,7 @@ import { useInboxPaths } from "@/components/inbox/use-inbox-paths";
 import { useInboxTargets } from "@/components/inbox/use-inbox-targets";
 import { useAgentOverviewEntries } from "@/lib/agents/use-agent-overview";
 import { formatRelative } from "@/lib/format";
-import { INBOX_REFRESH_INTERVAL_MS, useInboxStore } from "@/lib/inbox-store";
+import {  useInboxStore } from "@/lib/inbox-store";
 
 export const Route = createFileRoute("/inbox")({
   component: InboxPage,
@@ -64,28 +64,6 @@ function InboxPage() {
     [agentEntries],
   );
 
-  useEffect(() => {
-    void refresh(paths);
-    let stale = false;
-    const timer = window.setInterval(() => {
-      if (document.hidden) {
-        stale = true;
-        return;
-      }
-      void refresh(paths);
-    }, INBOX_REFRESH_INTERVAL_MS);
-    const onVisible = () => {
-      if (!document.hidden && stale) {
-        stale = false;
-        void refresh(paths);
-      }
-    };
-    document.addEventListener("visibilitychange", onVisible);
-    return () => {
-      window.clearInterval(timer);
-      document.removeEventListener("visibilitychange", onVisible);
-    };
-  }, [paths, refresh]);
 
   const notifications = useMemo(
     () => buildInboxNotifications(sections, activeAgents),

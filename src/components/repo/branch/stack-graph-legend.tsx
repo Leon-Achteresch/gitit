@@ -39,7 +39,7 @@ export function StackGraphLegend({ path }: { path: string }) {
       />
       {stacks.map((stack) => (
         <div key={stack.root} className="flex shrink-0 items-center gap-1">
-          <span className="shrink-0 font-mono text-[10px] text-muted-foreground/70">
+          <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground/70">
             {stack.root}
           </span>
           {stackChain(stack)
@@ -55,7 +55,7 @@ export function StackGraphLegend({ path }: { path: string }) {
                 })}
                 onClick={() => focusCommitFromBranchTip(path, branch.tip)}
                 className={cn(
-                  "flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-px text-[10px] transition-colors",
+                  "flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-px text-[0.625rem] transition-colors",
                   branch.needs_restack
                     ? "border-git-modified/40 bg-git-modified/10 text-git-modified"
                     : "border-border/70 bg-background text-muted-foreground hover:text-foreground",

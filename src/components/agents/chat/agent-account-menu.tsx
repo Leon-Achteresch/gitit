@@ -37,7 +37,7 @@ function LimitRow({
   const reset = resetLabel(window.resetsAt, locale);
   return (
     <div className="space-y-1.5 px-1.5 py-1">
-      <div className="flex items-center justify-between gap-3 text-[11px]">
+      <div className="flex items-center justify-between gap-3 text-[0.6875rem]">
         <span>{label}</span>
         <span className="tabular-nums text-muted-foreground">
           {t("agentChat.account.used", { value: Math.round(used) })}
@@ -45,7 +45,7 @@ function LimitRow({
       </div>
       <Progress value={used} className="h-1" />
       {reset ? (
-        <p className="text-[9px] text-muted-foreground">
+        <p className="text-[0.5625rem] text-muted-foreground">
           {t("agentChat.account.resets", { value: reset })}
         </p>
       ) : null}
@@ -97,13 +97,13 @@ export function AgentAccountMenu({ onImport }: { onImport?: () => void }) {
             {account.email ?? t("agentChat.account.signedIn")}
           </span>
           {account.planType ? (
-            <span className="mt-0.5 block text-[10px] font-normal capitalize text-muted-foreground">
+            <span className="mt-0.5 block text-[0.625rem] font-normal capitalize text-muted-foreground">
               {account.planType}
             </span>
           ) : null}
         </DropdownMenuLabel>
         {accountUsage?.lifetimeTokens !== null && accountUsage?.lifetimeTokens !== undefined ? (
-          <p className="px-1.5 pb-1 text-[10px] tabular-nums text-muted-foreground">
+          <p className="px-1.5 pb-1 text-[0.625rem] tabular-nums text-muted-foreground">
             {accountUsage.lifetimeTokens.toLocaleString()} lifetime tokens
             {accountUsage.currentStreakDays ? ` · ${accountUsage.currentStreakDays}-day streak` : ""}
           </p>
@@ -124,17 +124,17 @@ export function AgentAccountMenu({ onImport }: { onImport?: () => void }) {
           />
         ) : null}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]" onClick={() => void refresh()}>
+        <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]" onClick={() => void refresh()}>
           <RefreshCw className="size-3.5" />
           {t("agentChat.account.refresh")}
         </DropdownMenuItem>
         {onImport ? (
-          <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]" onClick={onImport}>
+          <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]" onClick={onImport}>
             <Download className="size-3.5" />
             Import from Claude Code
           </DropdownMenuItem>
         ) : null}
-        <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]" onClick={() => void signOut()}>
+        <DropdownMenuItem className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]" onClick={() => void signOut()}>
           <LogOut className="size-3.5" />
           {t("agentChat.account.logout")}
         </DropdownMenuItem>
