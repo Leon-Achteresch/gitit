@@ -217,6 +217,13 @@ export function CommitList({
     [onCherryPick],
   );
 
+  const getItemKey = useCallback((index: number) => {
+    const it = flatItems[index];
+    if (!it) return index;
+    if (it.kind === "header") return it.key;
+    return rows[it.rowIndex]?.commit.hash ?? index;
+  }, [flatItems, rows]);
+
   const virtualizer = useVirtualizer({
     count: flatItems.length,
     getScrollElement: () => scrollerRef.current,
@@ -232,12 +239,7 @@ export function CommitList({
     },
     overscan: 8,
     useAnimationFrameWithResizeObserver: true,
-    getItemKey: (index) => {
-      const it = flatItems[index];
-      if (!it) return index;
-      if (it.kind === "header") return it.key;
-      return rows[it.rowIndex]?.commit.hash ?? index;
-    },
+    getItemKey,
   });
 
   const loadMoreCommits = useRepoStore((s) => s.loadMoreCommits);

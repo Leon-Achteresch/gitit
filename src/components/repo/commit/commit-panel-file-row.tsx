@@ -13,7 +13,6 @@ import {
   Square,
   Undo2,
 } from "lucide-react";
-import { m } from "motion/react";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { StatusIcon } from "./commit-panel-status-icon";
@@ -58,8 +57,7 @@ function FileRowInner({
         : "text-muted-foreground hover:bg-muted/30 hover:text-foreground");
 
   const inner = (
-    <m.div
-      layout
+    <div
       onClick={(e) => {
         if (e.shiftKey) e.preventDefault();
         onSelect(row.id, e.shiftKey);
@@ -104,7 +102,7 @@ function FileRowInner({
           </>
         )}
       </div>
-    </m.div>
+    </div>
   );
 
   const canBlame = !row.entry.untracked && row.entry.index_status !== "A";

@@ -30,7 +30,7 @@ import {
   Undo2,
   X,
 } from "lucide-react";
-import { memo, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FileRow } from "./commit-panel-file-row";
 import { FolderRow } from "./commit-panel-folder-row";
@@ -228,6 +228,13 @@ function VirtualFileListInner({
   );
 
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const getItemKey = useCallback((index: number) => {
+    const item = listItems[index];
+    if (!item) return index;
+    if (item.type === "header") return `h-${item.id}`;
+    if (item.type === "folder") return item.id;
+    return item.row.id;
+  }, [listItems]);
 
   const virtualizer = useVirtualizer({
     count: listItems.length,
@@ -236,13 +243,7 @@ function VirtualFileListInner({
     overscan: 12,
     paddingStart: 2,
     paddingEnd: 4,
-    getItemKey: (index) => {
-      const item = listItems[index];
-      if (!item) return index;
-      if (item.type === "header") return `h-${item.id}`;
-      if (item.type === "folder") return item.id;
-      return item.row.id;
-    },
+    getItemKey,
   });
 
   const isEmpty =

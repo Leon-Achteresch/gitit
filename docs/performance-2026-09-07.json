@@ -1,0 +1,160 @@
+{
+  "scroll": {
+    "before": {
+      "scope": "Chromium production renderer, 1000 files, 240 scrolling frames, animations enabled, CPU throttled 4x; no native Tauri measurement.",
+      "samples": [
+        {
+          "fps": 47.21806878098689,
+          "p95FrameMs": 33.69999999999982,
+          "framesOver33Ms": 22,
+          "scriptMs": 2590.8340000000003,
+          "layoutMs": 428.605,
+          "taskMs": 5185.551
+        },
+        {
+          "fps": 46.160947838128976,
+          "p95FrameMs": 33.70000000000027,
+          "framesOver33Ms": 24,
+          "scriptMs": 2661.997,
+          "layoutMs": 431.80099999999993,
+          "taskMs": 5297.791
+        },
+        {
+          "fps": 51.249199231262025,
+          "p95FrameMs": 33.40000000000009,
+          "framesOver33Ms": 16,
+          "scriptMs": 2329.911,
+          "layoutMs": 376.96200000000005,
+          "taskMs": 4693.742
+        }
+      ],
+      "metrics": {
+        "fps": 47.21806878098689,
+        "p95FrameMs": 33.69999999999982,
+        "framesOver33Ms": 22,
+        "scriptMs": 2590.8340000000003,
+        "layoutMs": 428.605,
+        "taskMs": 5185.551
+      }
+    },
+    "after": {
+      "scope": "Chromium production renderer, 1000 files, 240 scrolling frames, animations enabled, CPU throttled 4x; no native Tauri measurement.",
+      "samples": [
+        {
+          "fps": 56.0328726186029,
+          "p95FrameMs": 33.299999999999955,
+          "framesOver33Ms": 10,
+          "scriptMs": 1937.7,
+          "layoutMs": 386.86199999999997,
+          "taskMs": 4270.958
+        },
+        {
+          "fps": 57.153743570203865,
+          "p95FrameMs": 32.5,
+          "framesOver33Ms": 5,
+          "scriptMs": 1874.1490000000001,
+          "layoutMs": 375.347,
+          "taskMs": 4197.427000000001
+        },
+        {
+          "fps": 56.932748191199174,
+          "p95FrameMs": 33,
+          "framesOver33Ms": 4,
+          "scriptMs": 1826.4,
+          "layoutMs": 366.988,
+          "taskMs": 4134.674999999999
+        }
+      ],
+      "metrics": {
+        "fps": 56.932748191199174,
+        "p95FrameMs": 33,
+        "framesOver33Ms": 5,
+        "scriptMs": 1874.1490000000001,
+        "layoutMs": 375.347,
+        "taskMs": 4197.427000000001
+      }
+    }
+  },
+  "startup_memory": {
+    "before": {
+      "scope": "Production-built Chromium renderer with IPC fixtures; 1000 changed files, 10000 commits, five warmed settings round trips. Timings are renderer readiness; heap is JavaScript after GC, excluding native processes.",
+      "samples": [
+        {
+          "homeReadyMs": 951,
+          "repositoryReadyMs": 840,
+          "heapBytes": 23872520,
+          "retainedGrowthBytes": 2806000,
+          "domNodes": 858
+        },
+        {
+          "homeReadyMs": 898,
+          "repositoryReadyMs": 833,
+          "heapBytes": 23876836,
+          "retainedGrowthBytes": 2797864,
+          "domNodes": 858
+        },
+        {
+          "homeReadyMs": 900,
+          "repositoryReadyMs": 835,
+          "heapBytes": 23875608,
+          "retainedGrowthBytes": 2801716,
+          "domNodes": 858
+        }
+      ],
+      "metrics": {
+        "homeReadyMs": 900,
+        "repositoryReadyMs": 835,
+        "heapBytes": 23875608,
+        "retainedGrowthBytes": 2801716,
+        "domNodes": 858
+      },
+      "limits": {
+        "homeReadyMs": 10000,
+        "repositoryReadyMs": 10000,
+        "heapBytes": 201326592,
+        "retainedGrowthBytes": 33554432,
+        "domNodes": 5000
+      }
+    },
+    "after": {
+      "scope": "Production-built Chromium renderer with IPC fixtures; 1000 changed files, 10000 commits, five warmed settings round trips. Timings are renderer readiness; heap is JavaScript after GC, excluding native processes.",
+      "samples": [
+        {
+          "homeReadyMs": 923,
+          "repositoryReadyMs": 851,
+          "heapBytes": 23775856,
+          "retainedGrowthBytes": 2940720,
+          "domNodes": 858
+        },
+        {
+          "homeReadyMs": 891,
+          "repositoryReadyMs": 844,
+          "heapBytes": 23774136,
+          "retainedGrowthBytes": 2935744,
+          "domNodes": 858
+        },
+        {
+          "homeReadyMs": 897,
+          "repositoryReadyMs": 844,
+          "heapBytes": 23689128,
+          "retainedGrowthBytes": 2828316,
+          "domNodes": 858
+        }
+      ],
+      "metrics": {
+        "homeReadyMs": 897,
+        "repositoryReadyMs": 844,
+        "heapBytes": 23774136,
+        "retainedGrowthBytes": 2935744,
+        "domNodes": 858
+      },
+      "limits": {
+        "homeReadyMs": 10000,
+        "repositoryReadyMs": 10000,
+        "heapBytes": 201326592,
+        "retainedGrowthBytes": 33554432,
+        "domNodes": 5000
+      }
+    }
+  }
+}

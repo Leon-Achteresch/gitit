@@ -1,7 +1,8 @@
 import { useRepoStore } from "@/lib/repo-store";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+import { createCoalescedRefresh } from "@/lib/coalesced-refresh";
 
 // Fallback poll interval once the file-system watcher is attached. A watcher
 // is authoritative for real changes; this interval is only a safety net for
@@ -15,8 +16,6 @@ export function useRepoStatusPoll() {
   const reloadStashes = useRepoStore((s) => s.reloadStashes);
   const reloadRebaseState = useRepoStore((s) => s.reloadRebaseState);
 
-  const inFlightRef = useRef(false);
-
   useEffect(() => {
     if (!activePath) return;
 
@@ -29,19 +28,14 @@ export function useRepoStatusPoll() {
         ? FALLBACK_POLL_MS_VISIBLE
         : FALLBACK_POLL_MS_HIDDEN;
 
-    const tick = async () => {
-      if (cancelled || inFlightRef.current) return;
-      inFlightRef.current = true;
-      try {
-        await Promise.all([
-          reloadLocalStatus(activePath),
-          reloadStashes(activePath),
-          reloadRebaseState(activePath),
-        ]);
-      } finally {
-        inFlightRef.current = false;
-      }
-    };
+    const refresh = createCoalescedRefresh(async () => {
+      await Promise.allSettled([
+        reloadLocalStatus(activePath),
+        reloadStashes(activePath),
+        reloadRebaseState(activePath),
+      ]);
+    });
+    const tick = refresh.request;
 
     const scheduleAfter = (ms: number) => {
       if (cancelled) return;
@@ -69,6 +63,9 @@ export function useRepoStatusPoll() {
     void listen<string>("repo-changed", (event) => {
       if (cancelled) return;
       if (event.payload !== activePath) return;
+      // While hidden, the fallback timer provides bounded refreshes. The
+      // visibility handler catches up immediately when the user returns.
+      if (document.visibilityState !== "visible") return;
       void tick();
     }).then((un) => {
       if (cancelled) {
@@ -91,6 +88,7 @@ export function useRepoStatusPoll() {
 
     return () => {
       cancelled = true;
+      refresh.dispose();
       if (timer != null) clearTimeout(timer);
       document.removeEventListener("visibilitychange", onVisibility);
       if (unlistenFn) unlistenFn();

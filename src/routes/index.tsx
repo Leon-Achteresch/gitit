@@ -72,8 +72,8 @@ function Home() {
   useRepoStatusPoll();
   const hasRepos = useRepoStore((s) => s.paths.length > 0);
   const activePath = useRepoStore((s) => s.activePath);
-  const repo = useRepoStore((s) =>
-    s.activePath ? s.repos[s.activePath] : null,
+  const repoPath = useRepoStore((s) =>
+    s.activePath ? s.repos[s.activePath]?.path : null,
   );
   const sidebarTab = useUiStore((s) => s.sidebarTab);
   const mergeEditorPath = useUiStore((s) => s.mergeEditorPath);
@@ -108,8 +108,8 @@ function Home() {
         <div
           className={`min-w-0 flex-1  pb-3 ${activePath ? "flex min-h-0 flex-col overflow-hidden" : "overflow-y-auto"}`}
         >
-          {activePath && repo ? (
-            <RepoTabLayout path={repo.path}>
+          {activePath && repoPath ? (
+            <RepoTabLayout path={repoPath}>
               <PanelSwap
                 panelKey={`${activePath}::${sidebarTab}`}
                 className="flex min-h-0 flex-1 flex-col overflow-hidden"
@@ -121,31 +121,31 @@ function Home() {
                   <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                     {sidebarTab === "stash" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <StashPanel path={repo.path} />
+                        <StashPanel path={repoPath} />
                       </div>
                     ) : sidebarTab === "pr" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <PullRequestPanel path={repo.path} />
+                        <PullRequestPanel path={repoPath} />
                       </div>
                     ) : sidebarTab === "submodules" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <SubmodulesPanel path={repo.path} />
+                        <SubmodulesPanel path={repoPath} />
                       </div>
                     ) : sidebarTab === "worktrees" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <WorktreePanel path={repo.path} />
+                        <WorktreePanel path={repoPath} />
                       </div>
                     ) : sidebarTab === "hooks" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <GitHooksPanel path={repo.path} />
+                        <GitHooksPanel path={repoPath} />
                       </div>
                     ) : sidebarTab === "ci" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <RepoCiPanel path={repo.path} />
+                        <RepoCiPanel path={repoPath} />
                       </div>
                     ) : sidebarTab === "tools" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">
-                        <ToolsPanel path={repo.path} />
+                        <ToolsPanel path={repoPath} />
                       </div>
                     ) : (
                       <RepoDetails />

@@ -58,8 +58,13 @@ export function useIslandHost(): void {
       void publishSnapshot(buildIslandSnapshot(collectIslandUsage()));
     };
     const schedule = () => {
-      window.clearTimeout(timer.current);
-      timer.current = window.setTimeout(() => push(), SNAPSHOT_DEBOUNCE_MS);
+      // Ignore closed overlays and coalesce bursts without indefinitely
+      // postponing snapshots while a terminal continuously produces output.
+      if (!useIslandWindow.getState().open || timer.current !== undefined) return;
+      timer.current = window.setTimeout(() => {
+        timer.current = undefined;
+        push();
+      }, SNAPSHOT_DEBOUNCE_MS);
     };
 
     const unsubscribes = [
@@ -112,6 +117,7 @@ export function useIslandHost(): void {
 
     return () => {
       window.clearTimeout(timer.current);
+      timer.current = undefined;
       window.clearTimeout(windowTimer.current);
       for (const off of unsubscribes) off();
       void listeners.then((results) => {

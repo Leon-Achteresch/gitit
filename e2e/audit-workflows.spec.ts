@@ -3,6 +3,35 @@ import { readFileSync } from 'node:fs';
 const labels = JSON.parse(readFileSync(new URL('../src/locales/en.json', import.meta.url), 'utf8'));
 import { test, expect } from '@playwright/test';
 
+test('large file list remains correct after scrolling, filtering and clearing the filter', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/?scene=performance');
+  const files = page.getByTestId('files');
+  await expect(files.getByText('file-0000.txt', { exact: true })).toBeVisible();
+  await files.evaluate(root => {
+    const scroller = [...root.querySelectorAll<HTMLElement>('*')].find(node =>
+      node.scrollHeight > node.clientHeight + 100 && /auto|scroll/.test(getComputedStyle(node).overflowY),
+    );
+    if (!scroller) throw new Error('Missing virtual file list');
+    scroller.scrollTop = scroller.scrollHeight;
+  });
+  await expect(files.getByText('file-0999.txt', { exact: true })).toBeVisible();
+  const filter = files.getByRole('textbox', { name: labels.commitPanel.fileListFilter });
+  await filter.fill('file-0500');
+  await expect(files.getByText('file-0500.txt', { exact: true })).toBeVisible();
+  await expect(files.getByText('file-0999.txt', { exact: true })).toHaveCount(0);
+  await files.getByText('file-0500.txt', { exact: true }).click();
+  await filter.fill('');
+  await files.evaluate(root => {
+    for (const node of root.querySelectorAll<HTMLElement>('*')) {
+      if (/auto|scroll/.test(getComputedStyle(node).overflowY)) node.scrollTop = 0;
+    }
+  });
+  await expect(files.getByText('file-0000.txt', { exact: true })).toBeVisible();
+  // Virtualization should still bound the mounted file rows after cache invalidation.
+  expect(await files.getByText(/file-\d{4}\.txt/).count()).toBeLessThan(100);
+});
+
 test('stage, commit and undo through the real commit panel', async ({ page }) => {
   await page.goto('/?scene=git-workflow');
   await page.getByRole('button', { name: 'Select all files', exact: true }).click();

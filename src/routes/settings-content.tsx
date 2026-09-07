@@ -353,8 +353,12 @@ export function Settings() {
     return () => observer.disconnect();
   }, []);
 
-  function scrollToSection(id: string) {
-    sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  function scrollSectionIntoView(id: string, behavior: ScrollBehavior = "smooth") {
+    const container = mainRef.current;
+    const target = sectionRefs.current[id];
+    if (!container || !target) return;
+    const top = target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+    container.scrollTo({ top, behavior });
     setActiveSection(id);
   }
 
@@ -362,10 +366,7 @@ export function Settings() {
     const id = locationHash.replace(/^#/, "");
     if (!id) return;
     const frame = window.requestAnimationFrame(() => {
-      const target = sectionRefs.current[id];
-      if (!target) return;
-      target.scrollIntoView({ block: "start" });
-      setActiveSection(id);
+      scrollSectionIntoView(id, "auto");
     });
     return () => window.cancelAnimationFrame(frame);
   }, [locationHash]);
@@ -398,12 +399,12 @@ export function Settings() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-background">
+    <div className="flex h-full min-h-0 overflow-hidden bg-background">
 
       {/* ═══════════════════════════════════════════════════════════════════
           LEFT SIDEBAR NAV
       ═══════════════════════════════════════════════════════════════════ */}
-      <aside className="flex w-60 shrink-0 flex-col border-r border-border/50 bg-sidebar">
+      <aside className="flex min-h-0 w-60 shrink-0 flex-col border-r border-border/50 bg-sidebar">
 
         {/* Back button */}
         <div className="flex h-14 shrink-0 items-center border-b border-border/50 px-4">
@@ -439,7 +440,7 @@ export function Settings() {
                       key={item.id}
                       {...item}
                       active={activeSection === item.id}
-                      onClick={() => scrollToSection(item.id)}
+                      onClick={() => scrollSectionIntoView(item.id)}
                     />
                   ))}
                 </div>
@@ -454,7 +455,7 @@ export function Settings() {
       ═══════════════════════════════════════════════════════════════════ */}
       <main
         ref={mainRef}
-        className="flex-1 overflow-y-auto"
+        className="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain"
       >
         <div className="mx-auto max-w-3xl space-y-10 px-6 py-6">
 

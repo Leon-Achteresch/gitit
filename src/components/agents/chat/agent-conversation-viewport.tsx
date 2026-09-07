@@ -129,13 +129,14 @@ export const AgentConversationViewport = memo(
     );
 
     const { scrollMargin, listRef } = useScrollMargin(scrollRef);
+    const getItemKey = useCallback((index: number) => rows[index]?.key ?? index, [rows]);
     const virtualizer = useVirtualizer({
       count: rows.length,
       getScrollElement: () => scrollRef.current,
       estimateSize: (index) => estimateRow(rows[index]),
       overscan: 6,
       useAnimationFrameWithResizeObserver: true,
-      getItemKey: (index) => rows[index]?.key ?? index,
+      getItemKey,
       scrollMargin,
     });
     const virtualRows = virtualizer.getVirtualItems();

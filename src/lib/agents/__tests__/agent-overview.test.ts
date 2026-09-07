@@ -5,6 +5,7 @@ import {
   compareOverviewEntries,
   countPendingRequests,
   countRunningTurns,
+  createOverviewConversationSelector,
   filterOverviewEntries,
   groupEntriesByRepo,
   groupFleetLanes,
@@ -54,6 +55,30 @@ function conversation(overrides: Partial<AgentConversation> = {}): AgentConversa
 function input(overrides: Partial<ProviderOverviewInput> = {}): ProviderOverviewInput {
   return { threadsByPath: {}, conversations: {}, requestsByThread: {}, ...overrides };
 }
+
+describe("overview subscriptions", () => {
+  it("ignores streamed text while publishing completion, failure, usage and removals", () => {
+    const select = createOverviewConversationSelector();
+    const turn = { id: "turn", status: "inProgress", items: [{ id: "message", type: "agentMessage", text: "a" }] } as const;
+    const initial = conversation({ activeTurnId: "turn", turns: [{ ...turn, items: [...turn.items] }] });
+    const first = select({ conversations: { t1: initial } });
+    const streamed = { ...initial, turns: [{ ...initial.turns[0], items: [{ ...turn.items[0], text: "abc" }] }] };
+    expect(select({ conversations: { t1: streamed } })).toBe(first);
+    const failed = conversation({ turns: [{ ...streamed.turns[0], status: "failed" }], error: "failure" });
+    const updated = select({ conversations: { t1: failed } });
+    expect(updated).not.toBe(first);
+    expect(buildProviderEntries("codex", input({
+      threadsByPath: { "/repo": [thread()] }, conversations: updated,
+    }), {})[0].status).toBe("failed");
+    const withUsage = { ...failed, tokenUsage: { inputTokens: 10, outputTokens: 20, totalTokens: 30, modelContextWindow: null } };
+    const usage = select({ conversations: { t1: withUsage } });
+    expect(usage).not.toBe(updated);
+    expect(buildProviderEntries("codex", input({
+      threadsByPath: { "/repo": [thread()] }, conversations: usage,
+    }), {})[0].tokens).toBe(30);
+    expect(select({ conversations: {} })).toEqual({});
+  });
+});
 
 function entry(overrides: Partial<AgentOverviewEntry> = {}): AgentOverviewEntry {
   return {

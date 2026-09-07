@@ -103,7 +103,7 @@ function RootLayout() {
   }, [addRepo]);
   return (
     <MotionProvider>
-      <div className="flex h-dvh min-h-0 flex-col bg-sidebar text-foreground">
+      <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-sidebar text-foreground">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:top-1 focus:left-1 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-3 focus:py-1.5 focus:text-xs focus:font-medium focus:text-primary-foreground"
@@ -112,10 +112,14 @@ function RootLayout() {
         </a>
         <AppHeader />
         <ContextReviewDialog />
-        <main id="main-content" className="min-h-0 flex-1 overflow-y-auto bg-background" tabIndex={-1}>
-          <m.div layout
+        <main
+          id="main-content"
+          className={`min-h-0 flex-1 bg-background ${pathname === "/settings" ? "overflow-hidden" : "overflow-y-auto"}`}
+          tabIndex={-1}
+        >
+          <m.div
             key={pathname}
-            className="h-full"
+            className={pathname === "/settings" ? "h-full min-h-0 overflow-hidden" : "h-full"}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={easeOutSoft}

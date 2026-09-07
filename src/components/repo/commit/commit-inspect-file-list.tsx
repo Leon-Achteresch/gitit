@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Undo2 } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   CommitChangedFile,
@@ -38,12 +38,13 @@ export function CommitInspectFileList({
   else if (someChecked) checkboxState = "indeterminate";
 
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const getItemKey = useCallback((i: number) => files[i]?.path ?? i, [files]);
   const virtualizer = useVirtualizer({
     count: files.length,
     getScrollElement: () => scrollerRef.current,
     estimateSize: () => 54,
     overscan: 8,
-    getItemKey: (i) => files[i]?.path ?? i,
+    getItemKey,
   });
 
   return (

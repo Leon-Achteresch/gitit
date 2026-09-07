@@ -68,12 +68,13 @@ function notifyFinished(provider: NativeAgentProvider, threadId: string): void {
 export function armTurnAttention(): () => void {
   const unsubscribes = PROVIDERS.map((provider) => {
     const store = chatStoreFor(provider);
-    let previous = activeTurnIds(store.getState().conversations);
-    return store.subscribe((state) => {
-      const next = activeTurnIds(state.conversations);
-      const finished = finishedThreads(previous, next);
-      previous = next;
-      for (const threadId of finished) notifyFinished(provider, threadId);
+    return store.subscribe((state, previous) => {
+      if (state.conversations === previous.conversations) return;
+      for (const threadId in previous.conversations) {
+        if (previous.conversations[threadId].activeTurnId && !state.conversations[threadId]?.activeTurnId) {
+          notifyFinished(provider, threadId);
+        }
+      }
     });
   });
   return () => {
