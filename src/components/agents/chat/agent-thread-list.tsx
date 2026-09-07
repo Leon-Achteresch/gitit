@@ -107,6 +107,7 @@ export function AgentThreadList({
   const items = useMemo(() => flattenThreads(visible), [visible]);
 
   const { scrollMargin, listRef } = useScrollMargin(scrollRef);
+  const getItemKey = useCallback((index: number) => items[index]?.key ?? index, [items]);
   const virtualizer = useVirtualizer({
     count: items.length,
     getScrollElement: () => scrollRef.current,
@@ -114,7 +115,7 @@ export function AgentThreadList({
       items[index]?.kind === "header" ? HEADER_ESTIMATE_PX : ROW_ESTIMATE_PX,
     overscan: OVERSCAN,
     useAnimationFrameWithResizeObserver: true,
-    getItemKey: (index) => items[index]?.key ?? index,
+    getItemKey,
     scrollMargin,
   });
 

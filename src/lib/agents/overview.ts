@@ -37,8 +37,56 @@ export interface AgentOverviewCounts {
 
 export interface ProviderOverviewInput {
   threadsByPath: Record<string, AgentThreadSummary[]>;
-  conversations: Record<string, AgentConversation>;
+  conversations: Record<string, OverviewConversation>;
   requestsByThread: Record<string, AgentPendingRequest[]>;
+}
+
+type OverviewConversation = Pick<AgentConversation, "activeTurnId" | "error" | "model" | "tokenUsage"> & {
+  turns: readonly { status: string }[];
+};
+
+/** Subscribe to overview metadata, excluding streamed message bodies. */
+export function createOverviewConversationSelector() {
+  let previousInput: Record<string, AgentConversation> | undefined;
+  let selected: Record<string, OverviewConversation> = {};
+  return ({ conversations }: { conversations: Record<string, AgentConversation> }) => {
+    if (conversations === previousInput) return selected;
+    const next: Record<string, OverviewConversation> = {};
+    let changed = false;
+    for (const id in conversations) {
+      const conversation = conversations[id];
+      const previous = selected[id];
+      const lastStatus = conversation.turns[conversation.turns.length - 1]?.status;
+      if (previous && (
+        conversation === previousInput?.[id] || (
+          previous.activeTurnId === conversation.activeTurnId &&
+          previous.error === conversation.error &&
+          previous.model === conversation.model &&
+          previous.tokenUsage === conversation.tokenUsage &&
+          previous.turns[previous.turns.length - 1]?.status === lastStatus
+        )
+      )) {
+        next[id] = previous;
+      } else {
+        changed = true;
+        next[id] = {
+          activeTurnId: conversation.activeTurnId,
+          error: conversation.error,
+          model: conversation.model,
+          tokenUsage: conversation.tokenUsage,
+          turns: lastStatus ? [{ status: lastStatus }] : [],
+        };
+      }
+    }
+    if (!changed) {
+      for (const id in selected) {
+        if (!(id in conversations)) { changed = true; break; }
+      }
+    }
+    previousInput = conversations;
+    if (changed) selected = next;
+    return selected;
+  };
 }
 
 export interface ThreadCost {

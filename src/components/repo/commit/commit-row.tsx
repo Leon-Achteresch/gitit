@@ -175,7 +175,7 @@ function CommitRowInner({
   };
 
   const inner = (
-    <m.div layout
+    <m.div
       key={focusPulseToken != null ? `pulse-${focusPulseToken}` : "row"}
       onClick={handleClick}
       initial={false}

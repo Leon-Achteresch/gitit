@@ -176,8 +176,11 @@ export function armUsageLedger(): () => void {
     for (const [threadId, conversation] of Object.entries(store.getState().conversations)) {
       previous.set(threadId, usageTotals(conversation.tokenUsage));
     }
-    return store.subscribe((state) => {
+    return store.subscribe((state, prevState) => {
+      if (state.conversations === prevState.conversations) return;
       for (const [threadId, conversation] of Object.entries(state.conversations)) {
+        const prevConversation = prevState.conversations[threadId];
+        if (prevConversation && conversation.tokenUsage === prevConversation.tokenUsage) continue;
         const next = usageTotals(conversation.tokenUsage);
         const delta = usageDelta(previous.get(threadId), next);
         previous.set(threadId, next);
@@ -186,6 +189,9 @@ export function armUsageLedger(): () => void {
             .getState()
             .record(provider, conversation.model || null, delta, threadCostKey(provider, threadId));
         }
+      }
+      for (const threadId of previous.keys()) {
+        if (!state.conversations[threadId]) previous.delete(threadId);
       }
     });
   });

@@ -113,7 +113,7 @@ function RootLayout() {
         <AppHeader />
         <ContextReviewDialog />
         <main id="main-content" className="min-h-0 flex-1 overflow-y-auto bg-background" tabIndex={-1}>
-          <m.div layout
+          <m.div
             key={pathname}
             className="h-full"
             initial={{ opacity: 0, y: 6 }}

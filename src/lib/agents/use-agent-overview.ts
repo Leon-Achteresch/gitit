@@ -5,6 +5,7 @@ import { useAgentRepoPaths } from "@/lib/agents/agent-repo-store";
 import { useAgentWorktreeStore } from "@/lib/agents/agent-worktrees";
 import {
   buildProviderEntries,
+  createOverviewConversationSelector,
   knownPathEntries,
   countPendingRequests,
   countRunningTurns,
@@ -36,7 +37,8 @@ function useProviderEntries(
   ledger: Record<string, ThreadCost>,
 ): AgentOverviewEntry[] {
   const threadsByPath = useProviderChatStore(provider, (state) => state.threadsByPath);
-  const conversations = useProviderChatStore(provider, (state) => state.conversations);
+  const selectConversations = useMemo(() => createOverviewConversationSelector(), [provider]);
+  const conversations = useProviderChatStore(provider, selectConversations);
   const requestsByThread = useProviderChatStore(provider, (state) => state.requestsByThread);
   const worktrees = useAgentWorktreeStore((state) => state.worktrees);
   return useMemo(

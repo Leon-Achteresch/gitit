@@ -6,7 +6,7 @@ import type { Branch, PullRequest } from "@/lib/repo-store";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Loader2, RefreshCw, Search, X } from "lucide-react";
 import { AnimatePresence, LayoutGroup, m } from "motion/react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PrEmptyState } from "./pr-empty-state";
 import { PrListGroupHeader } from "./pr-list-group-header";
@@ -154,16 +154,17 @@ export function PullRequestList({
   }, [groups]);
 
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const getItemKey = useCallback((i: number) => {
+    const it = flatItems[i];
+    if (!it) return i;
+    return it.kind === "header" ? it.key : it.pr.number;
+  }, [flatItems]);
   const virtualizer = useVirtualizer({
     count: flatItems.length,
     getScrollElement: () => scrollerRef.current,
     estimateSize: (i) => (flatItems[i]?.kind === "header" ? 34 : 64),
     overscan: 8,
-    getItemKey: (i) => {
-      const it = flatItems[i];
-      if (!it) return i;
-      return it.kind === "header" ? it.key : it.pr.number;
-    },
+    getItemKey,
   });
 
   const TABS: { id: Filter; label: string }[] = useMemo(

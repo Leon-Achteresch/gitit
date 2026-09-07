@@ -154,12 +154,13 @@ export function PullRequestFilesTab({
   const [patchFailed, setPatchFailed] = useState(false);
 
   const listRef = useRef<HTMLDivElement>(null);
+  const getItemKey = useCallback((i: number) => files?.[i]?.path ?? i, [files]);
   const virtualizer = useVirtualizer({
     count: files?.length ?? 0,
     getScrollElement: () => listRef.current,
     estimateSize: () => 36,
     overscan: 12,
-    getItemKey: (i) => files?.[i]?.path ?? i,
+    getItemKey,
   });
 
   useEffect(() => {
