@@ -152,7 +152,6 @@ export const ISLAND_ACTIONS: readonly IslandActionDef[] = [
   { id: "view.submodules", group: "view", labelKey: "viewSubmodules", keywords: "submodule", needsRepo: true },
   { id: "view.tools", group: "view", labelKey: "viewTools", keywords: "tools scripts werkzeuge", needsRepo: true },
   { id: "view.dashboard", group: "view", labelKey: "viewDashboard", keywords: "dashboard overview uebersicht", needsRepo: false },
-  { id: "view.agents", group: "view", labelKey: "viewAgents", keywords: "agents chat claude codex cursor", needsRepo: false },
   { id: "view.inbox", group: "view", labelKey: "viewInbox", keywords: "inbox notifications posteingang", needsRepo: false },
   { id: "view.settings", group: "view", labelKey: "viewSettings", keywords: "settings preferences einstellungen", needsRepo: false },
   { id: "view.reflog", group: "view", labelKey: "viewReflog", keywords: "reflog undo history", needsRepo: true },

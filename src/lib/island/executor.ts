@@ -58,7 +58,6 @@ const SIDEBAR_ACTIONS: Record<string, SidebarTab> = {
 
 const ROUTE_ACTIONS: Record<string, string> = {
   "view.dashboard": "/dashboard",
-  "view.agents": "/agents",
   "view.inbox": "/inbox",
   "view.settings": "/settings",
 };

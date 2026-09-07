@@ -2,7 +2,6 @@ import { ActivityCenter } from "./activity-center";
 import { useWorkspacePrefs } from "@/lib/workspace-prefs";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Bot,
   GitFork,
   Inbox,
   Info,
@@ -24,12 +23,6 @@ import {
 import { Kbd } from "@/components/ui/kbd";
 import { RepoTabBar } from "@/components/repo/tabs/repo-tab-bar";
 import { cn } from "@/lib/utils";
-
-const AppAgentsIndicator = lazy(() =>
-  import("@/components/app/app-agents-indicator").then((m) => ({
-    default: m.AppAgentsIndicator,
-  })),
-);
 
 const InboxIndicator = lazy(() =>
   import("@/components/inbox/inbox-indicator").then((m) => ({
@@ -53,7 +46,6 @@ export function AppHeader() {
     { to: "/" as const, label: t("header.repo"), icon: GitFork },
     { to: "/dashboard" as const, label: t("header.dashboard"), icon: LayoutDashboard },
     { to: "/inbox" as const, label: t("header.inbox"), icon: Inbox },
-    { to: "/agents" as const, label: t("header.agents"), icon: Bot },
     { to: "/info" as const, label: t("header.info"), icon: Info },
     { to: "/about" as const, label: t("header.about"), icon: User },
   ] as const;
@@ -75,10 +67,6 @@ export function AppHeader() {
       >
         <AppHeaderSearch />
         <ActivityCenter />
-
-        <Suspense fallback={null}>
-          <AppAgentsIndicator />
-        </Suspense>
 
         <Suspense fallback={null}>
           <InboxIndicator />

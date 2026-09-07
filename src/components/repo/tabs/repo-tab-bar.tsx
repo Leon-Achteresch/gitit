@@ -1,6 +1,3 @@
-import { useRouterState } from "@tanstack/react-router";
-
-import { useAgentRepoStore } from "@/lib/agents/agent-repo-store";
 import {
   filterForest,
   flattenRepoPaths,
@@ -41,7 +38,7 @@ import { m } from "motion/react";
 const TAB_GAP = 4;
 
 export function RepoTabBar() {
-  const { paths, activePath: repoActivePath, activeLoading } = useRepoStore(
+  const { paths, activePath, activeLoading } = useRepoStore(
     useShallow((s) => ({
       paths: s.paths,
       activePath: s.activePath,
@@ -49,11 +46,6 @@ export function RepoTabBar() {
     })),
   );
 
-  const onAgents = useRouterState({
-    select: (s) => s.location.pathname.startsWith("/agents"),
-  });
-  const agentPath = useAgentRepoStore((s) => s.path);
-  const activePath = onAgents ? agentPath : repoActivePath;
 
   const forest = useRepoGroupsStore((s) => s.forest);
   const moveNodeRelativeTo = useRepoGroupsStore((s) => s.moveNodeRelativeTo);
@@ -212,7 +204,7 @@ export function RepoTabBar() {
 
   return (
     <div className="relative flex min-w-0 flex-1 items-stretch self-stretch">
-      {repoActivePath && activeLoading && (
+      {activePath && activeLoading && (
         <div
           className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-0.5 overflow-hidden"
           aria-hidden

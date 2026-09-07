@@ -15,7 +15,6 @@ import {
   Archive,
   ArrowDownToLine,
   ArrowUpToLine,
-  Bot,
   ClipboardCopy,
   CloudDownload,
   Code2,
@@ -818,20 +817,6 @@ export function AppHeaderSearch() {
         onSelect: () => {
           setOpen(false);
           void router.navigate({ to: "/dashboard" });
-        },
-      },
-      {
-        id: "action:agents",
-        group: "views",
-        label: t("appSearch.actionAgents"),
-        icon: <Bot className="size-3.5" />,
-        keywords: "agents ai ki assistent chat",
-        onSelect: () => {
-          setOpen(false);
-          void router.navigate({
-            to: "/agents",
-            search: { path: activePath ?? undefined },
-          });
         },
       },
       {

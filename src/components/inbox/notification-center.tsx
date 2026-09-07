@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-export type NotificationCenterTab = "all" | "mine" | "review" | "ci" | "agents";
+export type NotificationCenterTab = "all" | "mine" | "review" | "ci";
 
 export type NotificationCenterAction = {
   id: string;
