@@ -308,6 +308,8 @@ fn kill_remote_op(op: &RemoteOp) {
         }
         let _ = crate::cmd::cli_command("taskkill")
             .args(["/PID", &op.pid.to_string(), "/T", "/F"])
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
             .status();
     }
     #[cfg(unix)]
@@ -399,11 +401,12 @@ fn run_git_streamed(
         reg.remove(op_id);
     }
 
+    let canceled = canceled.load(Ordering::Relaxed);
     Ok(StreamOutcome {
-        success: status.map(|s| s.success()).unwrap_or(false),
+        success: status.map(|s| s.success()).unwrap_or(false) && !canceled,
         stdout: stdout_text.trim().to_string(),
         stderr: stderr_text.trim().to_string(),
-        canceled: canceled.load(Ordering::Relaxed),
+        canceled,
     })
 }
 
