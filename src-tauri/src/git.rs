@@ -199,6 +199,8 @@ struct RemoteOp {
     child: std::sync::Arc<std::sync::Mutex<std::process::Child>>,
     canceled: std::sync::Arc<std::sync::atomic::AtomicBool>,
     pid: u32,
+    #[cfg(windows)]
+    job: std::sync::Arc<std::sync::Mutex<Option<crate::pty::job::PtyJob>>>,
 }
 
 struct StreamOutcome {
@@ -299,6 +301,11 @@ fn read_progress_stream<R: std::io::Read>(
 fn kill_remote_op(op: &RemoteOp) {
     #[cfg(windows)]
     {
+        // Git may launch a shell for aliases and that shell can outlive the
+        // git process. Closing the job object terminates the complete tree.
+        if let Ok(mut job) = op.job.lock() {
+            drop(job.take());
+        }
         let _ = crate::cmd::cli_command("taskkill")
             .args(["/PID", &op.pid.to_string(), "/T", "/F"])
             .status();
@@ -312,6 +319,14 @@ fn kill_remote_op(op: &RemoteOp) {
     if let Ok(mut child) = op.child.lock() {
         let _ = child.kill();
     }
+}
+
+#[cfg(windows)]
+fn create_remote_job(pid: u32) -> std::sync::Arc<std::sync::Mutex<Option<crate::pty::job::PtyJob>>> {
+    let job = crate::pty::job::PtyJob::create_for(pid)
+        .map_err(|error| log::warn!("remote git job-object setup failed for pid={pid}: {error}"))
+        .ok();
+    std::sync::Arc::new(std::sync::Mutex::new(job))
 }
 
 fn run_git_streamed(
@@ -341,6 +356,8 @@ fn run_git_streamed(
         .spawn()
         .map_err(|e| format!("failed to run git: {e}"))?;
     let pid = child.id();
+    #[cfg(windows)]
+    let job = create_remote_job(pid);
     let stdout = child.stdout.take();
     let stderr = child.stderr.take();
     let shared = Arc::new(Mutex::new(child));
@@ -353,6 +370,8 @@ fn run_git_streamed(
                 child: shared.clone(),
                 canceled: canceled.clone(),
                 pid,
+                #[cfg(windows)]
+                job,
             },
         );
     }
@@ -495,6 +514,8 @@ pub(crate) fn track_remote_op_for_test(op_id: &str, child: std::process::Child) 
                 child: std::sync::Arc::new(std::sync::Mutex::new(child)),
                 canceled: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
                 pid,
+                #[cfg(windows)]
+                job: create_remote_job(pid),
             },
         );
     }

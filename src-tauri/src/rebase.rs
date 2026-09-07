@@ -1039,6 +1039,10 @@ mod tests {
             repo.git(&["config", "user.email", "test@example.com"]);
             repo.git(&["config", "user.name", "Test"]);
             repo.git(&["config", "commit.gpgsign", "false"]);
+            // Keep fixture bytes stable when Git runs on Windows. Otherwise
+            // core.autocrlf can turn the LF-based test contents into CRLF
+            // during checkout/rebase operations.
+            repo.git(&["config", "core.autocrlf", "false"]);
             repo
         }
 
