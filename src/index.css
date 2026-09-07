@@ -366,19 +366,24 @@
   *::-webkit-scrollbar-corner {
     background: transparent;
   }
+  html {
+    @apply font-sans;
+    height: 100%;
+    overflow: hidden;
+  }
   body {
     @apply bg-background text-foreground antialiased;
-    /* slightly denser line-height — UI rows, not prose */
+    height: 100%;
+    overflow: hidden;
     line-height: 1.45;
-    /* lining tabular figures so counts/hashes/columns don't jitter */
     font-variant-numeric: tabular-nums;
     text-rendering: optimizeLegibility;
     overscroll-behavior-y: none;
     scrollbar-gutter: stable;
   }
-  html {
-    @apply font-sans;
-    scroll-behavior: smooth;
+  #root {
+    height: 100%;
+    overflow: hidden;
   }
 
   /* The detached Dynamic Island lives in a transparent, borderless window —
