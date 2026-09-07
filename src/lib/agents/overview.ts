@@ -41,7 +41,7 @@ export interface ProviderOverviewInput {
   requestsByThread: Record<string, AgentPendingRequest[]>;
 }
 
-type OverviewConversation = Pick<AgentConversation, "activeTurnId" | "error" | "model" | "tokenUsage"> & {
+type OverviewConversation = Pick<AgentConversation, "path" | "title" | "activeTurnId" | "error" | "model" | "tokenUsage"> & {
   turns: readonly { status: string }[];
 };
 
@@ -59,6 +59,8 @@ export function createOverviewConversationSelector() {
       const lastStatus = conversation.turns[conversation.turns.length - 1]?.status;
       if (previous && (
         conversation === previousInput?.[id] || (
+          previous.path === conversation.path &&
+          previous.title === conversation.title &&
           previous.activeTurnId === conversation.activeTurnId &&
           previous.error === conversation.error &&
           previous.model === conversation.model &&
@@ -70,6 +72,8 @@ export function createOverviewConversationSelector() {
       } else {
         changed = true;
         next[id] = {
+          path: conversation.path,
+          title: conversation.title,
           activeTurnId: conversation.activeTurnId,
           error: conversation.error,
           model: conversation.model,
