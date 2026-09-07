@@ -29,12 +29,12 @@ export function TagSection({
             "mb-1 grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2",
           )}
         >
-          <h3 className="min-w-0 justify-self-stretch truncate text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+          <h3 className="min-w-0 justify-self-stretch truncate text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             {title}
           </h3>
           <span className="flex shrink-0 items-center justify-end gap-0.5">
             <span
-              className="flex h-[18px] min-w-[20px] items-center justify-center rounded-md bg-muted/60 px-1.5 text-[10px] font-medium tabular-nums text-muted-foreground"
+              className="flex h-[18px] min-w-[20px] items-center justify-center rounded-md bg-muted/60 px-1.5 text-[0.625rem] font-medium tabular-nums text-muted-foreground"
               aria-label={`${tags.length} ${t("sidebar.tags")}`}
             >
               {tags.length}
@@ -44,7 +44,7 @@ export function TagSection({
       )}
 
       {isEmpty ? (
-        <p className={cn("px-2 pb-1 text-[11px] text-muted-foreground/70", hideHeader && "pt-1")}>
+        <p className={cn("px-2 pb-1 text-[0.6875rem] text-muted-foreground/70", hideHeader && "pt-1")}>
           {emptyLabel ?? t("tag.defaultEmpty")}
         </p>
       ) : (

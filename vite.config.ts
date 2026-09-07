@@ -11,10 +11,13 @@ const host = process.env.TAURI_DEV_HOST;
 
 // https://vite.dev/config/
 export default defineConfig(async () => ({
+  // Only intentionally public configuration may enter the renderer.
+  envPrefix: "L8GIT_PUBLIC_",
   plugins: [
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,
+      routeFileIgnorePattern: "settings-content",
     }),
     react(),
     tailwindcss(),
@@ -26,6 +29,8 @@ export default defineConfig(async () => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  build: { manifest: true },
 
   worker: {
     format: "es",

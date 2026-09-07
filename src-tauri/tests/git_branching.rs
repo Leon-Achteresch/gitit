@@ -396,7 +396,7 @@ async fn stash_push_and_pop_move_changes_out_of_and_back_into_the_worktree() {
     assert_eq!(stashes[0].message, "On main: wip note");
     assert!(stashes[0].date.contains('T'));
 
-    git::git_stash_pop(repo.s(), 0).await.unwrap();
+    git::git_stash_pop(repo.s(), 0, repo.git(&["rev-parse", "stash@{0}"])).await.unwrap();
     assert_eq!(repo.read("a.txt"), "v2\n");
     assert!(git::list_stashes(repo.s()).await.unwrap().is_empty());
 }
@@ -437,12 +437,12 @@ async fn stash_apply_keeps_the_entry_and_drop_removes_it() {
     assert_eq!(stashes[0].subject, "second");
     assert_eq!(stashes[1].subject, "first");
 
-    git::git_stash_apply(repo.s(), 1).await.unwrap();
+    git::git_stash_apply(repo.s(), 1, repo.git(&["rev-parse", "stash@{1}"])).await.unwrap();
     assert_eq!(repo.read("a.txt"), "v2\n");
     assert_eq!(git::list_stashes(repo.s()).await.unwrap().len(), 2);
 
     repo.git(&["checkout", "--", "a.txt"]);
-    git::git_stash_drop(repo.s(), 1).await.unwrap();
+    git::git_stash_drop(repo.s(), 1, repo.git(&["rev-parse", "stash@{1}"])).await.unwrap();
     let left = git::list_stashes(repo.s()).await.unwrap();
     assert_eq!(left.len(), 1);
     assert_eq!(left[0].subject, "second");
@@ -460,7 +460,7 @@ async fn stash_push_can_include_untracked_files() {
         .unwrap();
     assert!(!repo.exists("new.txt"));
 
-    git::git_stash_pop(repo.s(), 0).await.unwrap();
+    git::git_stash_pop(repo.s(), 0, repo.git(&["rev-parse", "stash@{0}"])).await.unwrap();
     assert_eq!(repo.read("new.txt"), "fresh\n");
 }
 
@@ -473,14 +473,14 @@ async fn stash_show_and_file_diff_describe_the_stashed_change() {
         .await
         .unwrap();
 
-    let show = git::git_stash_show(repo.s(), 0).await.unwrap();
+    let show = git::git_stash_show(repo.s(), 0, None).await.unwrap();
     assert!(show.header.contains("inspect me"), "{}", show.header);
     assert_eq!(show.files.len(), 1);
     assert_eq!(show.files[0].path, "a.txt");
     assert_eq!(show.files[0].additions, 1);
     assert_eq!(show.files[0].deletions, 0);
 
-    assert!(git::git_stash_file_diff(repo.s(), 0, "  ".into()).await.is_err());
+    assert!(git::git_stash_file_diff(repo.s(), 0, "  ".into(), None).await.is_err());
 }
 
 #[tokio::test]
@@ -494,7 +494,7 @@ async fn stash_file_diff_should_return_the_patch_for_one_file() {
         .await
         .unwrap();
 
-    let diff = json(&git::git_stash_file_diff(repo.s(), 0, "a.txt".into()).await.unwrap());
+    let diff = json(&git::git_stash_file_diff(repo.s(), 0, "a.txt".into(), None).await.unwrap());
     assert_eq!(diff["is_binary"], false);
     let patch = diff["diff"].as_str().unwrap_or("");
     assert!(patch.contains("+v2"), "expected the stashed hunk, got {diff}");
@@ -503,7 +503,7 @@ async fn stash_file_diff_should_return_the_patch_for_one_file() {
         "the patch must be limited to the requested file, got {diff}"
     );
 
-    let untouched = json(&git::git_stash_file_diff(repo.s(), 0, "missing.txt".into()).await.unwrap());
+    let untouched = json(&git::git_stash_file_diff(repo.s(), 0, "missing.txt".into(), None).await.unwrap());
     assert!(untouched["diff"].is_null(), "unchanged files have no patch, got {untouched}");
 }
 
@@ -516,12 +516,12 @@ async fn stash_branch_moves_the_stash_onto_a_new_branch() {
         .await
         .unwrap();
 
-    git::git_stash_branch(repo.s(), 0, "recovered".into()).await.unwrap();
+    git::git_stash_branch(repo.s(), 0, "recovered".into(), repo.git(&["rev-parse", "stash@{0}"])).await.unwrap();
     assert_eq!(repo.branch(), "recovered");
     assert_eq!(repo.read("a.txt"), "v2\n");
     assert!(git::list_stashes(repo.s()).await.unwrap().is_empty());
 
-    assert!(git::git_stash_branch(repo.s(), 0, "  ".into()).await.is_err());
+    assert!(git::git_stash_branch(repo.s(), 0, "  ".into(), String::new()).await.is_err());
 }
 
 #[tokio::test]

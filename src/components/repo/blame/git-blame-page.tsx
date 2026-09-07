@@ -117,18 +117,18 @@ export function GitBlamePage({
       <div className="flex shrink-0 items-center gap-3 border-b border-border/60 bg-card/60 px-4 py-2.5">
         <FileClock className="h-4 w-4 shrink-0 text-primary/70" />
         <div className="flex min-w-0 flex-1 items-baseline gap-2">
-          <span className="text-[13px] font-semibold text-foreground">
+          <span className="text-[0.8125rem] font-semibold text-foreground">
             {t("blamePage.title")}
           </span>
           {fileName && (
             <>
               <span className="text-muted-foreground/40">·</span>
               {fileDir && (
-                <span className="truncate text-[11px] text-muted-foreground/50">{fileDir}/</span>
+                <span className="truncate text-[0.6875rem] text-muted-foreground/50">{fileDir}/</span>
               )}
-              <span className="text-[12px] font-semibold text-foreground/80">{fileName}</span>
+              <span className="text-[0.75rem] font-semibold text-foreground/80">{fileName}</span>
               {blameEntries.length > 0 && (
-                <span className="text-[11px] text-muted-foreground/50">
+                <span className="text-[0.6875rem] text-muted-foreground/50">
                   ({t("blamePage.linesCount", { count: blameEntries.length })})
                 </span>
               )}
@@ -154,7 +154,7 @@ export function GitBlamePage({
         >
           <div className="flex shrink-0 items-center gap-1.5 border-b border-border/40 px-3 py-1.5">
             <GitCommitHorizontal className="h-3.5 w-3.5 text-muted-foreground/60" />
-            <span className="text-[11px] font-medium text-muted-foreground/60 uppercase tracking-wide">
+            <span className="text-[0.6875rem] font-medium text-muted-foreground/60 uppercase tracking-wide">
               {t("blamePage.gutterLabel")}
             </span>
           </div>
@@ -163,15 +163,15 @@ export function GitBlamePage({
             {blameLoading ? (
               <div className="flex h-full items-center justify-center gap-2 text-muted-foreground">
                 <SpinIcon icon={Loader2} className="h-4 w-4 text-primary/50" />
-                <span className="text-[12px]">{t("blamePage.loading")}</span>
+                <span className="text-[0.75rem]">{t("blamePage.loading")}</span>
               </div>
             ) : !selectedFile ? (
               <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-muted-foreground">
                 <FileClock className="h-7 w-7 opacity-30" />
-                <span className="text-[12px]">{t("blamePage.pickFile")}</span>
+                <span className="text-[0.75rem]">{t("blamePage.pickFile")}</span>
               </div>
             ) : blameEntries.length === 0 ? (
-              <div className="flex h-full items-center justify-center text-[12px] text-muted-foreground">
+              <div className="flex h-full items-center justify-center text-[0.75rem] text-muted-foreground">
                 {t("blamePage.noData")}
               </div>
             ) : (
@@ -211,7 +211,7 @@ export function GitBlamePage({
           style={{ width: 224 }}
         >
           <div className="shrink-0 border-b border-border/40 px-3 py-1.5">
-            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground/60">
+            <span className="text-[0.6875rem] font-medium uppercase tracking-wide text-muted-foreground/60">
               {t("blamePage.explorerLabel")}
             </span>
           </div>
@@ -248,7 +248,7 @@ export function GitBlamePage({
                 <SpinIcon icon={Loader2} className="h-4 w-4 text-primary/40" />
               </div>
             ) : tree.length === 0 ? (
-              <div className="px-3 py-4 text-center text-[12px] text-muted-foreground/50">
+              <div className="px-3 py-4 text-center text-[0.75rem] text-muted-foreground/50">
                 {t("blamePage.noFiles")}
               </div>
             ) : (

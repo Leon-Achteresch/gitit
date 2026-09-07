@@ -15,7 +15,7 @@ export function WorktreeStatusBadge({ entry }: { entry: WorktreeEntry }) {
   if (entry.is_main) {
     badges.push(
       <PopIn key="main" delay={0}>
-        <span className="inline-flex items-center rounded-md bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+        <span className="inline-flex items-center rounded-md bg-primary/15 px-1.5 py-0.5 text-[0.625rem] font-semibold text-primary">
           {t("worktree.badgeMain")}
         </span>
       </PopIn>,
@@ -24,7 +24,7 @@ export function WorktreeStatusBadge({ entry }: { entry: WorktreeEntry }) {
 
   if (entry.is_locked) {
     const badge = (
-      <span className="inline-flex items-center rounded-md bg-git-modified/15 px-1.5 py-0.5 text-[10px] font-semibold text-git-modified">
+      <span className="inline-flex items-center rounded-md bg-git-modified/15 px-1.5 py-0.5 text-[0.625rem] font-semibold text-git-modified">
         {t("worktree.badgeLocked")}
       </span>
     );
@@ -48,7 +48,7 @@ export function WorktreeStatusBadge({ entry }: { entry: WorktreeEntry }) {
     const badge = (
       <span
         className={cn(
-          "inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold",
+          "inline-flex items-center rounded-md px-1.5 py-0.5 text-[0.625rem] font-semibold",
           "bg-destructive/15 text-destructive",
         )}
       >

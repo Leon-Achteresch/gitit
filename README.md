@@ -12,7 +12,7 @@
     <a href="ROADMAP.md">Roadmap</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/version-0.5.0-blue.svg" alt="Version" />
+    <img src="https://img.shields.io/badge/version-0.6.0-blue.svg" alt="Version" />
     <img src="https://img.shields.io/badge/Tauri-2-ffc131.svg" alt="Tauri 2" />
     <img src="https://img.shields.io/badge/React-19-61DAFB.svg" alt="React 19" />
     <img src="https://img.shields.io/badge/Rust-2021-ed7b2b.svg" alt="Rust" />
@@ -60,6 +60,7 @@ Instead of switching between windows or terminals, l8git puts every repository o
 ### Undo & Transparency
 - **Universal undo** — reverse the last merge, rebase, reset, cherry-pick, revert, commit or amend; never uses `--hard`
 - **Reflog view** — browse where `HEAD` has been and reset back, keeping or discarding local changes
+- **Activity and recovery** — running operations, cancellation, recent failures, fetch retry, Undo and Reflog in one place
 - **Git command log** — every git command l8git runs, with duration and exit status
 
 ### Stacked Branches
@@ -95,7 +96,7 @@ Instead of switching between windows or terminals, l8git puts every repository o
 - **Merge/cherry-pick state inspection** — view in-progress conflicts with path lists
 
 ### Repository Insights
-- **Commit history** — virtualized infinite-scroll log with date-ordered commits
+- **Commit history** — virtualized log, server-side branch/author/date/path/message filters, pagination and a saved filter
 - **Search commits** — search by hash, author, email, subject, body, or changed paths
 - **Blame annotations** — inline git blame with author, date, and commit hash
 - **Language statistics** — per-repo breakdown of programming languages
@@ -125,6 +126,7 @@ Instead of switching between windows or terminals, l8git puts every repository o
 - **Explain** — explain a commit, a branch against its base, or the current diff
 - **Conflict suggestions** — proposed resolutions in the three-way editor, never applied automatically
 - **Reroll & hints** — regenerate or refine any AI output, with editable prompt templates per feature
+- **Context review** — inspect and edit the exact prompt before sending, remove file patches, and see when diffs have been shortened with a per-file budget
 - **Local models** — Ollama as a first-class, key-free option
 
 ### Agents
@@ -140,10 +142,12 @@ Instead of switching between windows or terminals, l8git puts every repository o
 ### Quality of Life
 - **Command palette** — every action reachable without the mouse
 - **Hotkey rebinding** — remap every shortcut, with conflict detection
-- **Onboarding** — open a repo, see the graph, get an AI commit message with zero configuration; interactive mini tour
+- **Onboarding** — open a repo, see the graph, configure your own AI provider or Ollama and create a commit message; interactive mini tour
 - **Themes** — light, dark, and system theme with smooth transitions
+- **Settings transfer** — validated layout/workspace/group/shortcut/prompt export and import with preview and session undo; credentials are excluded
+- **Diagnostics** — local JSON export of versions and command outcomes with arguments, paths and content omitted
 - **Animations** — configurable UI animation preferences
-- **Internationalization** — English and German, switchable at runtime
+- **Internationalization** — English, German, Spanish, French, Portuguese, Japanese and Chinese, switchable at runtime (new audit controls currently use English fallbacks outside German)
 - **Auto-updater** — Tauri updater with automatic update checks
 - **Git credentials** — store and manage HTTPS credentials for GitHub, GitHub Enterprise, GitLab, Bitbucket and Gitea/Forgejo in the OS keychain
 
@@ -151,7 +155,13 @@ Instead of switching between windows or terminals, l8git puts every repository o
 
 ## Screenshots
 
-*Coming soon.*
+Current React UI, captured on September 6, 2026. Repository and agent views use controlled fixture data; these are browser captures, not native installer certification.
+
+| Start | Settings |
+|---|---|
+| ![Start page](docs/audits/2026-09-06/home.png) | ![Searchable settings](docs/audits/2026-09-06/settings.png) |
+
+[Audit implementation and verification matrix](docs/audits/2026-09-07/IMPLEMENTATION.md) · [Git at 125%](docs/audits/2026-09-06/git-125.png) · [Agent workspace at 150%](docs/audits/2026-09-06/fleet-150.png)
 
 ---
 
@@ -164,7 +174,7 @@ Download the latest `.dmg` from the [releases page](https://github.com/Leon-Acht
 Download the latest `.msi` installer from the [releases page](https://github.com/Leon-Achteresch/l8git/releases).
 
 ### Linux
-Download the `.deb` or `.AppImage` from the [releases page](https://github.com/Leon-Achteresch/l8git/releases).
+Build from source using the development instructions below. The current release workflow publishes macOS and Windows artifacts; it does not publish Linux installers.
 
 > **Note:** You need `git` installed and available in your `PATH`.
 

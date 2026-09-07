@@ -1,3 +1,5 @@
+import { ActivityCenter } from "./activity-center";
+import { useWorkspacePrefs } from "@/lib/workspace-prefs";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Bot,
@@ -44,6 +46,7 @@ const IS_WINDOWS =
 
 export function AppHeader() {
   const { t } = useTranslation();
+  const navLabels = useWorkspacePrefs(s => s.navLabels);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const navItems = [
@@ -71,6 +74,7 @@ export function AppHeader() {
         style={{ WebkitAppRegion: "no-drag" } as CSSProperties}
       >
         <AppHeaderSearch />
+        <ActivityCenter />
 
         <Suspense fallback={null}>
           <AppAgentsIndicator />
@@ -101,12 +105,14 @@ export function AppHeader() {
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "relative inline-flex size-7 items-center justify-center rounded-lg transition-all duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1 focus-visible:ring-offset-sidebar",
+                      navLabels && "xl:w-auto xl:gap-1.5 xl:px-2",
                       active
                         ? "bg-muted text-foreground shadow-xs ring-1 ring-border/50"
                         : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
                     )}
                   >
                     <Icon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
+                    {navLabels && <span className="hidden text-xs xl:inline">{label}</span>}
                     {active && (
                       <span
                         aria-hidden
@@ -143,7 +149,7 @@ export function AppHeader() {
             <TooltipContent side="bottom" sideOffset={8}>
               <span className="inline-flex items-center gap-1.5 font-medium">
                 {t("header.settingsAria")}
-                <Kbd className="h-4 px-1 text-[10px]">⌘,</Kbd>
+                <Kbd className="h-4 px-1 text-[0.625rem]">⌘,</Kbd>
               </span>
             </TooltipContent>
           </Tooltip>

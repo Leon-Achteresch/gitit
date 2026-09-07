@@ -118,7 +118,7 @@ export function RepoLanguageStats({
                     className="h-2.5 w-2.5 shrink-0 rounded-full ring-1 ring-black/10"
                     style={{ backgroundColor: s.color }}
                   />
-                  <span className="min-w-0 flex-1 truncate text-[13px]">{s.language}</span>
+                  <span className="min-w-0 flex-1 truncate text-[0.8125rem]">{s.language}</span>
                   <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
                     {s.percent.toFixed(1)}%
                   </span>

@@ -85,7 +85,7 @@ function Info() {
           ) : (
             groups.map((group) => (
               <section key={group.id}>
-                <h2 className="mb-2 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                <h2 className="mb-2 text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                   {group.label}
                 </h2>
                 <ul className="divide-y rounded-lg border text-sm">

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,7 +14,7 @@ import { toastError } from "@/lib/error-toast";
 import { invoke } from "@tauri-apps/api/core";
 import { writeLocalStorageDebounced } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { SpinIcon, pulseKeyframes, pulseTransition } from "@/components/motion/kit";
 import { m } from "motion/react";
@@ -41,13 +42,18 @@ function readSplitFlexFromStorage(): { files: number; diff: number } {
 export function StashInspectDetail({
   path,
   stashIndex,
+  expectedHash,
   onClose,
 }: {
   path: string;
   stashIndex: number | null;
+  expectedHash?: string;
   onClose: () => void;
 }) {
   const { t } = useTranslation();
+  const inspectEpoch = useRef(0);
+  const diffEpoch = useRef(0);
+  useEffect(() => () => { inspectEpoch.current++; diffEpoch.current++; }, []);
   const [payload, setPayload] = useState<InspectPayload | null>(null);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -70,50 +76,58 @@ export function StashInspectDetail({
 
   const loadInspect = useCallback(async () => {
     if (stashIndex == null) {
+      inspectEpoch.current++;
       setPayload(null);
       setFailed(false);
       return;
     }
+    const epoch = ++inspectEpoch.current;
     setLoading(true);
     setFailed(false);
     try {
       const out = await invoke<InspectPayload>("git_stash_show", {
         path,
         index: stashIndex,
+        expectedHash,
       });
-      setPayload(out);
+      if (inspectEpoch.current === epoch) setPayload(out);
     } catch (e) {
+      if (inspectEpoch.current !== epoch) return;
       setFailed(true);
       setPayload(null);
       toastError(String(e));
     } finally {
-      setLoading(false);
+      if (inspectEpoch.current === epoch) setLoading(false);
     }
-  }, [path, stashIndex]);
+  }, [path, stashIndex, expectedHash]);
 
   const loadFileDiff = useCallback(async () => {
     if (stashIndex == null || !selectedFile) {
+      diffEpoch.current++;
       setFileDiff(null);
       setDiffFailed(false);
       return;
     }
+    const epoch = ++diffEpoch.current;
     setDiffLoading(true);
     setDiffFailed(false);
     try {
       const out = await invoke<FileDiffPayload>("git_stash_file_diff", {
         path,
         index: stashIndex,
+        expectedHash,
         file: selectedFile,
       });
-      setFileDiff(out);
+      if (diffEpoch.current === epoch) setFileDiff(out);
     } catch (e) {
+      if (diffEpoch.current !== epoch) return;
       setDiffFailed(true);
       setFileDiff(null);
       toastError(String(e));
     } finally {
-      setDiffLoading(false);
+      if (diffEpoch.current === epoch) setDiffLoading(false);
     }
-  }, [path, stashIndex, selectedFile]);
+  }, [path, stashIndex, selectedFile, expectedHash]);
 
   useEffect(() => {
     void loadInspect();
@@ -123,7 +137,7 @@ export function StashInspectDetail({
     setSelectedFile(null);
     setFileDiff(null);
     setDiffFailed(false);
-  }, [stashIndex]);
+  }, [path, expectedHash]);
 
   useEffect(() => {
     void loadFileDiff();
@@ -175,6 +189,7 @@ export function StashInspectDetail({
             <span className="text-sm font-semibold text-foreground">
               {t("stash.detailLoadFailed")}
             </span>
+            <Button variant="outline" onClick={() => void loadInspect()}>{t("audit.retry")}</Button>
           </div>
         ) : (
           <div className="flex h-full min-h-0 flex-col">

@@ -46,7 +46,7 @@ function StatusPill({
 
   if (["success", "successful", "passed"].includes(key))
     return (
-      <span className="flex items-center gap-1 rounded-full bg-git-added/10 px-2 py-0.5 text-[10px] font-semibold capitalize text-git-added">
+      <span className="flex items-center gap-1 rounded-full bg-git-added/10 px-2 py-0.5 text-[0.625rem] font-semibold capitalize text-git-added">
         <CheckCircle2 className="h-3 w-3" />
         {label}
       </span>
@@ -54,7 +54,7 @@ function StatusPill({
 
   if (["failure", "failed", "timed_out", "error", "action_required"].includes(key))
     return (
-      <span className="flex items-center gap-1 rounded-full bg-git-removed/10 px-2 py-0.5 text-[10px] font-semibold capitalize text-git-removed">
+      <span className="flex items-center gap-1 rounded-full bg-git-removed/10 px-2 py-0.5 text-[0.625rem] font-semibold capitalize text-git-removed">
         <XCircle className="h-3 w-3" />
         {label}
       </span>
@@ -62,7 +62,7 @@ function StatusPill({
 
   if (["in_progress", "queued", "pending", "waiting"].includes(key))
     return (
-      <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold capitalize text-primary">
+      <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[0.625rem] font-semibold capitalize text-primary">
         <SpinIcon icon={Loader2} className="h-3 w-3" />
         {label}
       </span>
@@ -70,14 +70,14 @@ function StatusPill({
 
   if (["cancelled"].includes(key))
     return (
-      <span className="flex items-center gap-1 rounded-full bg-muted/60 px-2 py-0.5 text-[10px] font-semibold capitalize text-muted-foreground">
+      <span className="flex items-center gap-1 rounded-full bg-muted/60 px-2 py-0.5 text-[0.625rem] font-semibold capitalize text-muted-foreground">
         <Square className="h-3 w-3" />
         {label}
       </span>
     );
 
   return (
-    <span className="flex items-center gap-1 rounded-full bg-muted/40 px-2 py-0.5 text-[10px] font-semibold capitalize text-muted-foreground">
+    <span className="flex items-center gap-1 rounded-full bg-muted/40 px-2 py-0.5 text-[0.625rem] font-semibold capitalize text-muted-foreground">
       <CircleDashed className="h-3 w-3" />
       {label}
     </span>
@@ -154,16 +154,16 @@ export function CiDetailPanel({
             {/* Meta */}
             <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
               {run.head_branch && (
-                <span className="flex items-center gap-1 text-[11px] text-muted-foreground/70">
+                <span className="flex items-center gap-1 text-[0.6875rem] text-muted-foreground/70">
                   <GitBranch className="h-3 w-3" />
                   {run.head_branch}
                 </span>
               )}
-              <span className="font-mono text-[11px] text-muted-foreground/60">
+              <span className="font-mono text-[0.6875rem] text-muted-foreground/60">
                 {sha7}
               </span>
               {run.actor_avatar && (
-                <span className="flex items-center gap-1 text-[11px] text-muted-foreground/70">
+                <span className="flex items-center gap-1 text-[0.6875rem] text-muted-foreground/70">
                   <img
                     src={run.actor_avatar}
                     alt={run.actor_login ?? ""}
@@ -172,9 +172,9 @@ export function CiDetailPanel({
                   {run.actor_login}
                 </span>
               )}
-              <span className="text-[11px] text-muted-foreground/60">{ago}</span>
+              <span className="text-[0.6875rem] text-muted-foreground/60">{ago}</span>
               {dur && (
-                <span className="text-[11px] text-muted-foreground/60">
+                <span className="text-[0.6875rem] text-muted-foreground/60">
                   · {dur}
                 </span>
               )}

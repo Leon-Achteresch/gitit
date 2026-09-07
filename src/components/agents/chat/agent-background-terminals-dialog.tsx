@@ -68,7 +68,7 @@ export function AgentBackgroundTerminalsDialog({
               <SquareTerminal className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
               <div className="min-w-0 flex-1">
                 <p className="break-all font-mono text-xs">{terminal.command}</p>
-                <p className="mt-1 truncate text-[10px] text-muted-foreground">
+                <p className="mt-1 truncate text-[0.625rem] text-muted-foreground">
                   PID {terminal.osPid ?? terminal.processId} · {terminal.cwd}
                   {terminal.cpuPercent !== null ? ` · ${terminal.cpuPercent.toFixed(1)}% CPU` : ""}
                 </p>

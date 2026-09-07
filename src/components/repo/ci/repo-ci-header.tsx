@@ -36,11 +36,11 @@ export function RepoCiHeader({
               {t("ci.headerTitle")}
             </span>
             {headSha ? (
-              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/80">
+              <span className="font-mono text-[0.625rem] uppercase tracking-wider text-muted-foreground/80">
                 {headSha.substring(0, 7)}
               </span>
             ) : loading ? (
-              <m.span animate={pulseKeyframes} transition={pulseTransition} className="text-[10px] text-muted-foreground/80">
+              <m.span animate={pulseKeyframes} transition={pulseTransition} className="text-[0.625rem] text-muted-foreground/80">
                 {t("ci.headerLoading")}
               </m.span>
             ) : null}

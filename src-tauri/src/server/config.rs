@@ -103,8 +103,22 @@ pub fn check_path(allowed: &[PathBuf], raw: &str) -> Result<(), String> {
     if trimmed.is_empty() {
         return Ok(());
     }
+
+    // `Path::is_absolute()` follows the host platform's path rules. On
+    // Windows, however, a rooted POSIX-style path such as `/etc` is not
+    // considered absolute because it has no drive prefix. Treat rooted and
+    // drive-qualified paths consistently so a path cannot bypass the allowlist
+    // merely by using the other platform's spelling.
     let candidate = Path::new(trimmed);
-    if !candidate.is_absolute() {
+    let bytes = trimmed.as_bytes();
+    let has_drive_prefix = bytes.len() >= 3
+        && bytes[1] == b':'
+        && matches!(bytes[2], b'/' | b'\\');
+    let is_absolute = candidate.is_absolute()
+        || trimmed.starts_with('/')
+        || trimmed.starts_with('\\')
+        || has_drive_prefix;
+    if !is_absolute {
         return Ok(());
     }
     if allowed.is_empty() {

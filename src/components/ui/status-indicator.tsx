@@ -36,7 +36,7 @@ export function StatusIndicator({
     <span
       role="status"
       className={cn(
-        "inline-flex h-5 items-center gap-1.5 rounded-full border border-border/60 bg-card px-2 text-[11px] font-medium text-muted-foreground tabular-nums",
+        "inline-flex h-5 items-center gap-1.5 rounded-full border border-border/60 bg-card px-2 text-[0.6875rem] font-medium text-muted-foreground tabular-nums",
         className
       )}
     >

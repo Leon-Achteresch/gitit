@@ -1,14 +1,18 @@
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 import type { Screen } from 'mobilewright';
 
-export const UDID = '9A5394B5-084C-4E4F-9D02-E64F9A5E898F';
+export const UDID = process.env.MW_DEVICE_ID ?? 'booted';
 export const OUT = process.env.MW_OUT ?? '/tmp/mw-shots';
 export const METRO = process.env.MW_METRO ?? 'http://127.0.0.1:8090';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export const shot = (name: string) =>
-  execSync(`mkdir -p ${OUT} && xcrun simctl io ${UDID} screenshot "${OUT}/${name}.png"`);
+export const shot = (name: string) => {
+  mkdirSync(OUT, { recursive: true });
+  execFileSync('xcrun', ['simctl', 'io', UDID, 'screenshot', join(OUT, `${name}.png`)]);
+};
 
 export function findNode(tree: any, pred: (n: any) => boolean): any {
   const stack = Array.isArray(tree) ? [...tree] : [tree];
@@ -34,7 +38,7 @@ export async function tapLabel(screen: Screen, label: string | RegExp): Promise<
 
 export async function openRoute(screen: Screen, route = '/', settle = 6000): Promise<void> {
   const url = `exp://${METRO.replace(/^https?:\/\//, '')}/--${route}`;
-  execSync(`xcrun simctl openurl ${UDID} "${url}"`);
+  execFileSync('xcrun', ['simctl', 'openurl', UDID, url]);
   await sleep(1500);
   for (let i = 0; i < 4; i++) {
     if (await tapLabel(screen, /^(Öffnen|Open)$/)) break;
@@ -51,4 +55,5 @@ export async function waitForApp(screen: Screen, timeoutMs = 120_000): Promise<v
     if (!blocker && findNode(tree, (n) => /Add host|Settings|Repos/.test(n.label ?? n.text ?? ''))) return;
     await sleep(2500);
   }
+  throw new Error(`App did not become ready within ${timeoutMs}ms`);
 }

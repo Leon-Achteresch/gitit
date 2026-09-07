@@ -45,7 +45,7 @@ export function useInboxTargets() {
         .catch((error: unknown) => {
           toast.error(error instanceof Error ? error.message : String(error));
         });
-      void navigate({ to: "/agents", search: { path: entry.path, view: undefined } });
+      void navigate({ to: "/agents", search: { path: entry.path, view: "chat" } });
     },
     [navigate, setAgentProvider, setSelectedAgentPath],
   );

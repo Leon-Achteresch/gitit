@@ -18,7 +18,7 @@ export function PanelValue({
 }) {
   return (
     <div className={cn("flex min-w-0 flex-col gap-1", className)}>
-      <span className="font-heading text-[28px] font-semibold leading-none tracking-tight tabular-nums">
+      <span className="font-heading text-[1.75rem] font-semibold leading-none tracking-tight tabular-nums">
         {value}
       </span>
       <span className="text-xs text-muted-foreground">{label}</span>
@@ -41,7 +41,7 @@ export function DeltaBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 text-[11px] font-medium tabular-nums",
+        "inline-flex items-center gap-1 text-[0.6875rem] font-medium tabular-nums",
         up ? "text-git-added" : "text-git-removed",
         className,
       )}
@@ -73,7 +73,7 @@ export function LegendDot({
   label: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
+    <span className="inline-flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
       <span className={cn("size-2 rounded-full", swatchClassName)} />
       {label}
     </span>
@@ -104,7 +104,7 @@ export function RangePills<T extends string>({
         <ToggleGroupItem
           key={opt.key}
           value={opt.key}
-          className="rounded-full px-2.5 py-1 text-[11px] font-medium text-muted-foreground hover:text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+          className="rounded-full px-2.5 py-1 text-[0.6875rem] font-medium text-muted-foreground hover:text-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
         >
           {opt.label}
         </ToggleGroupItem>

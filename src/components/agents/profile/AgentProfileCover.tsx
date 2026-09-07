@@ -31,7 +31,7 @@ export function AgentProfileCover({
       </span>
       <div className="min-w-0 flex-1">
         <h2 className="truncate text-lg font-semibold tracking-[-0.03em]">{name}</h2>
-        <p className="mt-0.5 truncate text-[12px] text-[var(--ag-text-3)]">
+        <p className="mt-0.5 truncate text-[0.75rem] text-[var(--ag-text-3)]">
           {meta.label}
           {branch ? ` · ${branch}` : ""}
           {` · ${t("agentWorkspace.threadCount", { count: threadCount })}`}

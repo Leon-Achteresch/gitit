@@ -128,7 +128,7 @@ export function SubmoduleAddDialog({
               spellCheck={false}
               required
             />
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[0.6875rem] text-muted-foreground">
               {t("submoduleAdd.localPathHint")}
             </p>
           </div>
@@ -151,7 +151,7 @@ export function SubmoduleAddDialog({
               placeholder={t("submoduleAdd.branchPlaceholder")}
               spellCheck={false}
             />
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[0.6875rem] text-muted-foreground">
               {t("submoduleAdd.branchHint")}
             </p>
           </div>

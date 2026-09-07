@@ -6,6 +6,8 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   root: path.resolve(__dirname, "ui-test"),
   publicDir: false,
+  build: { outDir: path.resolve(__dirname, 'dist-ui-test'), emptyOutDir: true },
+  worker: { format: 'es' },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -21,6 +23,7 @@ export default defineConfig({
     },
   },
   server: {
+    warmup: { clientFiles: ["./main.tsx", "./audit-scenes.tsx"] },
     port: 4173,
     strictPort: true,
     host: "127.0.0.1",

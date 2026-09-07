@@ -28,6 +28,12 @@ type WorkspacePrefs = {
   setPushDryRun: (value: boolean) => void;
   pullStrategy: PullStrategy;
   setPullStrategy: (value: PullStrategy) => void;
+  previewAiContext: boolean;
+  setPreviewAiContext: (value: boolean) => void;
+  navLabels: boolean;
+  setNavLabels: (value: boolean) => void;
+  uiDensity: "compact" | "comfortable";
+  setUiDensity: (value: "compact" | "comfortable") => void;
   uiScale: number;
   setUiScale: (value: number) => void;
   hideT3Checkpoints: boolean;
@@ -61,6 +67,12 @@ export const useWorkspacePrefs = create<WorkspacePrefs>()(
       setPushDryRun: (pushDryRun) => set({ pushDryRun }),
       pullStrategy: "merge" as PullStrategy,
       setPullStrategy: (pullStrategy) => set({ pullStrategy }),
+      previewAiContext: true,
+      setPreviewAiContext: (previewAiContext) => set({ previewAiContext }),
+      navLabels: true,
+      setNavLabels: (navLabels) => set({ navLabels }),
+      uiDensity: "comfortable",
+      setUiDensity: (uiDensity) => set({ uiDensity }),
       uiScale: 1.0,
       setUiScale: (uiScale) => set({ uiScale: Math.min(1.5, Math.max(0.7, uiScale)) }),
       hideT3Checkpoints: true,

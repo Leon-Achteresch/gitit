@@ -94,7 +94,11 @@ impl TestRepo {
     }
 
     pub fn file_url(&self) -> String {
-        format!("file://{}", self.path.to_string_lossy())
+        // A file URI uses forward slashes even when the host path uses
+        // Windows separators. Git normalizes the value in .gitmodules to this
+        // form when a submodule is added.
+        let path = self.path.to_string_lossy().replace('\\', "/");
+        format!("file://{path}")
     }
 
     pub fn git(&self, args: &[&str]) -> String {

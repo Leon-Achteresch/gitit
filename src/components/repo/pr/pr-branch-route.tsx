@@ -24,7 +24,7 @@ export function PrBranchRoute({ head, base }: { head: string; base: string }) {
           type="button"
           onClick={() => copyBranch(head, true)}
           title={`Copy "${head}"`}
-          className="flex items-center gap-1 rounded font-mono text-[11px] font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
+          className="flex items-center gap-1 rounded font-mono text-[0.6875rem] font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
         >
           <span className="max-w-[140px] truncate">{head}</span>
           {copiedHead ? (
@@ -44,7 +44,7 @@ export function PrBranchRoute({ head, base }: { head: string; base: string }) {
           type="button"
           onClick={() => copyBranch(base, false)}
           title={`Copy "${base}"`}
-          className="flex items-center gap-1 rounded bg-primary/10 px-1.5 py-0.2 font-mono text-[11px] font-medium text-primary hover:bg-primary/20 transition-colors cursor-pointer"
+          className="flex items-center gap-1 rounded bg-primary/10 px-1.5 py-0.2 font-mono text-[0.6875rem] font-medium text-primary hover:bg-primary/20 transition-colors cursor-pointer"
         >
           <span className="max-w-[140px] truncate">{base}</span>
           {copiedBase ? (

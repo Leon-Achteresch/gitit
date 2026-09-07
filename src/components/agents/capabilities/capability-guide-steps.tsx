@@ -37,13 +37,13 @@ export function CapabilityGuideSteps({
               )}
             >
               <span className={cn(
-                "grid size-5 shrink-0 place-items-center rounded-full border border-[var(--ag-line)] text-[10px] font-semibold tabular-nums",
+                "grid size-5 shrink-0 place-items-center rounded-full border border-[var(--ag-line)] text-[0.625rem] font-semibold tabular-nums",
                 state === "current" && "border-[var(--ag-text)] bg-[var(--ag-text)] text-[var(--ag-solid-fg)]",
                 state === "done" && "border-transparent bg-[var(--ag-selected)] text-[var(--ag-text)]",
               )}>
                 {state === "done" ? <Check className="size-3" /> : index + 1}
               </span>
-              <span className="truncate text-[12px] font-medium">{label}</span>
+              <span className="truncate text-[0.75rem] font-medium">{label}</span>
             </button>
           </li>
         );

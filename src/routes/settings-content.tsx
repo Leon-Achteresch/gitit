@@ -1,3 +1,5 @@
+import { DataPortabilityCard } from "@/components/settings/data-portability-card";
+import { LayoutPrefsCard } from "@/components/settings/layout-prefs-card";
 import { ListRow } from "@/components/ui/list-row";
 import { useRouter, useRouterState } from "@tanstack/react-router";
 import { open } from "@tauri-apps/plugin-dialog";
@@ -324,6 +326,8 @@ export function Settings() {
 
   const mainRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [settingsQuery, setSettingsQuery] = useState("");
+  const [matchedSections, setMatchedSections] = useState<string[] | null>(null);
   const [activeSection, setActiveSection] = useState("sidebar");
   const locationHash = useRouterState({ select: (s) => s.location.hash });
 
@@ -365,6 +369,14 @@ export function Settings() {
     });
     return () => window.cancelAnimationFrame(frame);
   }, [locationHash]);
+
+  useEffect(() => {
+    const query = settingsQuery.trim().toLocaleLowerCase();
+    const sections = Object.values(sectionRefs.current).filter((el): el is HTMLElement => !!el);
+    const matches = sections.filter(el => !query || (el.textContent ?? '').toLocaleLowerCase().includes(query)).map(el => el.id);
+    for (const el of sections) el.hidden = !matches.includes(el.id);
+    setMatchedSections(query ? matches : null);
+  }, [settingsQuery, t]);
 
   function setRef(id: string) {
     return (el: HTMLElement | null) => { sectionRefs.current[id] = el; };
@@ -412,16 +424,17 @@ export function Settings() {
           <p className="text-base font-semibold tracking-tight">{t("settings.title")}</p>
         </div>
 
+        <div className="px-3 pb-3"><Input type="search" aria-label={t('audit.settingsSearch')} placeholder={t('audit.settingsSearch')} value={settingsQuery} onChange={e => setSettingsQuery(e.target.value)} /></div>
         {/* Nav groups */}
         <nav className="flex-1 overflow-y-auto px-2 pb-6">
           <div className="space-y-5">
             {navGroups.map((group) => (
               <div key={group.label}>
-                <p className="mb-1 px-3 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/50">
+                <p className="mb-1 px-3 text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground/50">
                   {group.label}
                 </p>
                 <div className="space-y-0.5">
-                  {group.items.map((item) => (
+                  {group.items.filter(item => !matchedSections || matchedSections.includes(item.id)).map((item) => (
                     <SettingsNavItem
                       key={item.id}
                       {...item}
@@ -443,8 +456,9 @@ export function Settings() {
         ref={mainRef}
         className="flex-1 overflow-y-auto"
       >
-        <div className="mx-auto max-w-3xl space-y-16 px-10 py-10">
+        <div className="mx-auto max-w-3xl space-y-10 px-6 py-6">
 
+          {matchedSections?.length === 0 && <p role="status" className="text-sm text-muted-foreground">{t('audit.noResults')}</p>}
           {/* ── SIDEBAR ───────────────────────────────────────────────── */}
           <section id="sidebar" ref={setRef("sidebar")} className="scroll-mt-10">
             <SectionHeader
@@ -454,7 +468,7 @@ export function Settings() {
               gradient="from-git-branch/25 to-git-branch/25"
               iconColor="text-git-branch"
             />
-            <SidebarCustomizeSection />
+            <div className="space-y-4"><LayoutPrefsCard /><SidebarCustomizeSection /></div>
           </section>
 
           {/* ── APPEARANCE ────────────────────────────────────────────── */}
@@ -566,7 +580,7 @@ export function Settings() {
                         onValueChange={([i]: number[]) => setUiScale(UI_SCALE_STEPS[i])}
                         className="w-full"
                       />
-                      <div className="flex justify-between text-[11px] text-muted-foreground/60 select-none">
+                      <div className="flex justify-between text-[0.6875rem] text-muted-foreground/60 select-none">
                         <span>70%</span>
                         <Button
                           type="button"
@@ -733,7 +747,7 @@ export function Settings() {
                         </Label>
                         <p className="text-xs leading-relaxed text-muted-foreground">
                           {t("settings.hideT3HintPart1")}
-                          <code className="rounded bg-muted px-1 py-0.5 text-[11px]">
+                          <code className="rounded bg-muted px-1 py-0.5 text-[0.6875rem]">
                             refs/t3/checkpoints/*
                           </code>
                           {t("settings.hideT3HintPart2")}
@@ -772,9 +786,9 @@ export function Settings() {
                         }}
                         className="w-full"
                       />
-                      <div className="flex justify-between text-[11px] text-muted-foreground/60 select-none">
+                      <div className="flex justify-between text-[0.6875rem] text-muted-foreground/60 select-none">
                         <span>20 px</span>
-                        <span className="text-center text-muted-foreground/50 text-[10px]">
+                        <span className="text-center text-muted-foreground/50 text-[0.625rem]">
                           {t("settings.graphLaneWidthHint")}
                         </span>
                         <span>240 px</span>
@@ -1082,6 +1096,7 @@ export function Settings() {
 
           {/* ── WORKSPACE ─────────────────────────────────────────────── */}
           <section id="workspace" ref={setRef("workspace")} className="scroll-mt-10">
+            <DataPortabilityCard />
             <SectionHeader
               icon={Terminal}
               title={t("settings.workspaceSectionTitle")}

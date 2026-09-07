@@ -265,7 +265,7 @@ export function LfsSection({ path }: { path: string }) {
 
       <div className="mt-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          <span className="text-[0.6875rem] font-medium uppercase tracking-wide text-muted-foreground">
             {t("lfs.patternsTitle")}
           </span>
           <Button
@@ -305,7 +305,7 @@ export function LfsSection({ path }: { path: string }) {
                   >
                     {p.pattern}
                   </code>
-                  <span className="truncate text-[10px] text-muted-foreground">
+                  <span className="truncate text-[0.625rem] text-muted-foreground">
                     {p.source || ".gitattributes"}
                     {p.excluded ? ` · ${t("lfs.patternExcluded")}` : ""}
                   </span>
@@ -356,11 +356,11 @@ export function LfsSection({ path }: { path: string }) {
       {status?.installed ? (
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            <span className="text-[0.6875rem] font-medium uppercase tracking-wide text-muted-foreground">
               {t("lfs.filesTitle")}
             </span>
             {fileList ? (
-              <span className="text-[10px] tabular-nums text-muted-foreground">
+              <span className="text-[0.625rem] tabular-nums text-muted-foreground">
                 {t("lfs.filesCount", {
                   shown: shownFiles.length,
                   total: fileList.total,
@@ -384,13 +384,13 @@ export function LfsSection({ path }: { path: string }) {
                   className="flex items-center gap-2 px-2 py-1.5"
                 >
                   <span
-                    className="min-w-0 flex-1 truncate font-mono text-[11px]"
+                    className="min-w-0 flex-1 truncate font-mono text-[0.6875rem]"
                     title={f.path}
                   >
                     {f.path}
                   </span>
                   {f.size ? (
-                    <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                    <span className="shrink-0 text-[0.625rem] tabular-nums text-muted-foreground">
                       {f.size}
                     </span>
                   ) : null}

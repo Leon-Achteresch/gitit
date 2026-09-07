@@ -27,8 +27,8 @@
     --ag-line: rgb(24 24 27 / 0.08);
     --ag-line-strong: rgb(24 24 27 / 0.12);
     --ag-text: var(--foreground);
-    --ag-text-2: color-mix(in oklab, var(--foreground) 66%, transparent);
-    --ag-text-3: color-mix(in oklab, var(--foreground) 48%, transparent);
+    --ag-text-2: color-mix(in oklab, var(--foreground) 78%, transparent);
+    --ag-text-3: color-mix(in oklab, var(--foreground) 68%, transparent);
     --ag-hover: color-mix(in oklab, var(--foreground) 5%, transparent);
     --ag-press: color-mix(in oklab, var(--foreground) 9%, transparent);
     --ag-selected: color-mix(in oklab, var(--foreground) 7%, transparent);
@@ -643,3 +643,9 @@ html[data-animations="off"] *::after {
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
 }
+
+/* Density changes row spacing independently from user-selected text scaling. */
+:root { --row-density: 1; }
+:root[data-density="compact"] { --row-density: .8; }
+[data-density="compact"] [data-agent-overview-row] { padding-block: .625rem; }
+[hidden] { display: none !important; }

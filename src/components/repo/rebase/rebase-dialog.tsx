@@ -220,7 +220,7 @@ export function RebaseDialog({
                 className='mt-1 font-mono text-xs'
               />
             ) : null}
-            <p className='text-[11px] text-muted-foreground'>
+            <p className='text-[0.6875rem] text-muted-foreground'>
               {t('rebase.targetHint')}
             </p>
           </div>
@@ -233,28 +233,28 @@ export function RebaseDialog({
               {previewLoading ? (
                 <SpinIcon icon={Loader2} className='h-3.5 w-3.5 text-muted-foreground' />
               ) : preview ? (
-                <span className='text-[11px] text-muted-foreground'>
+                <span className='text-[0.6875rem] text-muted-foreground'>
                   {t('rebase.previewCount', { count: previewCount })}
                 </span>
               ) : null}
             </div>
             {!target ? (
-              <p className='text-[11px] text-muted-foreground'>
+              <p className='text-[0.6875rem] text-muted-foreground'>
                 {t('rebase.previewPickTarget')}
               </p>
             ) : previewError ? (
-              <p className='text-[11px] text-muted-foreground'>
+              <p className='text-[0.6875rem] text-muted-foreground'>
                 {t('rebase.previewFailed')}
               </p>
             ) : preview && previewCount === 0 ? (
-              <p className='text-[11px] text-muted-foreground'>
+              <p className='text-[0.6875rem] text-muted-foreground'>
                 {t('rebase.previewEmpty')}
               </p>
             ) : preview ? (
               <ul className='max-h-32 overflow-y-auto text-xs'>
                 {preview.slice(0, 30).map(c => (
                   <li key={c.hash} className='flex items-baseline gap-2 py-0.5'>
-                    <span className='shrink-0 font-mono text-[10px] text-muted-foreground'>
+                    <span className='shrink-0 font-mono text-[0.625rem] text-muted-foreground'>
                       {c.short_hash}
                     </span>
                     <span className='min-w-0 flex-1 truncate' title={c.subject}>
@@ -263,7 +263,7 @@ export function RebaseDialog({
                   </li>
                 ))}
                 {previewCount > 30 ? (
-                  <li className='py-0.5 text-[11px] text-muted-foreground'>
+                  <li className='py-0.5 text-[0.6875rem] text-muted-foreground'>
                     {t('rebase.previewMore', { count: previewCount - 30 })}
                   </li>
                 ) : null}
@@ -280,7 +280,7 @@ export function RebaseDialog({
             />
             <span className='grid gap-0.5'>
               <span>{t('rebase.autostashLabel')}</span>
-              <span className='text-[11px] text-muted-foreground'>
+              <span className='text-[0.6875rem] text-muted-foreground'>
                 {t('rebase.autostashHint')}
               </span>
             </span>
@@ -306,7 +306,7 @@ export function RebaseDialog({
                   disabled={busy}
                   className='font-mono text-xs'
                 />
-                <p className='text-[11px] text-muted-foreground'>
+                <p className='text-[0.6875rem] text-muted-foreground'>
                   {t('rebase.ontoHint')}
                 </p>
               </>

@@ -95,7 +95,7 @@ function RouteCrashFallback({
             {error.message || error.name}
           </p>
           {details ? (
-            <pre className="max-h-64 overflow-auto rounded-lg border border-border/60 bg-muted/40 px-3 py-2 font-mono text-[11px] leading-5 whitespace-pre-wrap text-muted-foreground">
+            <pre className="max-h-64 overflow-auto rounded-lg border border-border/60 bg-muted/40 px-3 py-2 font-mono text-[0.6875rem] leading-5 whitespace-pre-wrap text-muted-foreground">
               {details}
             </pre>
           ) : null}

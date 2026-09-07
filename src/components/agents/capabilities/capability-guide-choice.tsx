@@ -35,11 +35,11 @@ export function CapabilityGuideChoice({
     >
       {mark ? <span className="shrink-0">{mark}</span> : null}
       <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="text-[13px] font-semibold tracking-[-0.015em] text-[var(--ag-text)] text-pretty">{title}</span>
-        {description ? <span className="text-[12px] leading-[1.45] text-[var(--ag-text-2)] text-pretty">{description}</span> : null}
-        {meta ? <span className="text-[11px] leading-[1.45] text-[var(--ag-text-3)] break-words">{meta}</span> : null}
+        <span className="text-[0.8125rem] font-semibold tracking-[-0.015em] text-[var(--ag-text)] text-pretty">{title}</span>
+        {description ? <span className="text-[0.75rem] leading-[1.45] text-[var(--ag-text-2)] text-pretty">{description}</span> : null}
+        {meta ? <span className="text-[0.6875rem] leading-[1.45] text-[var(--ag-text-3)] break-words">{meta}</span> : null}
       </span>
-      {badge ? <span className="shrink-0 rounded-full bg-[var(--ag-surface-2)] px-2 py-0.5 text-[10px] font-semibold text-[var(--ag-text-2)]">{badge}</span> : null}
+      {badge ? <span className="shrink-0 rounded-full bg-[var(--ag-surface-2)] px-2 py-0.5 text-[0.625rem] font-semibold text-[var(--ag-text-2)]">{badge}</span> : null}
     </button>
   );
 }

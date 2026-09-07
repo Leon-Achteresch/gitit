@@ -107,7 +107,7 @@ function SideCaption({
   const { t } = useTranslation();
   const size = formatBytes(side.byteSize);
   return (
-    <div className="flex min-w-0 items-center gap-2 text-[11px] text-muted-foreground">
+    <div className="flex min-w-0 items-center gap-2 text-[0.6875rem] text-muted-foreground">
       <span className="shrink-0 font-medium text-foreground/80">{side.label}</span>
       {dimensions ? (
         <span className="shrink-0 tabular-nums">
@@ -288,7 +288,7 @@ export function ImageDiff({
             )}
           </div>
           <div className="flex shrink-0 items-center gap-3 border-t border-border/60 px-4 py-2">
-            <span className="shrink-0 text-[11px] text-muted-foreground">
+            <span className="shrink-0 text-[0.6875rem] text-muted-foreground">
               {mode === "swipe" ? t("media.swipeLabel") : t("media.opacityLabel")}
             </span>
             <Slider
@@ -303,7 +303,7 @@ export function ImageDiff({
                 else setOpacity(next);
               }}
             />
-            <span className="w-10 shrink-0 text-right text-[11px] tabular-nums text-muted-foreground">
+            <span className="w-10 shrink-0 text-right text-[0.6875rem] tabular-nums text-muted-foreground">
               {mode === "swipe" ? swipe : opacity}%
             </span>
           </div>

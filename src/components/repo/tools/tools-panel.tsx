@@ -118,7 +118,7 @@ export function ToolsPanel({ path }: { path: string }) {
                     {tool.name}
                   </span>
                   {!tool.available && tool.requires && (
-                    <span className="text-[11px] text-git-modified">
+                    <span className="text-[0.6875rem] text-git-modified">
                       {t("tools.unavailable", { requires: tool.requires })}
                     </span>
                   )}
@@ -133,7 +133,7 @@ export function ToolsPanel({ path }: { path: string }) {
                         <div className="truncate text-sm text-foreground">
                           {action.label}
                         </div>
-                        <code className="block truncate font-mono text-[11px] text-muted-foreground">
+                        <code className="block truncate font-mono text-[0.6875rem] text-muted-foreground">
                           {action.run}
                         </code>
                       </div>

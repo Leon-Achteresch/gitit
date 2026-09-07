@@ -30,7 +30,7 @@ export function AgentTrustBanner({ path }: { path: string }) {
 
   return (
     <AgentsEnter>
-    <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] mt-2 flex w-full items-start gap-2.5 border-amber-500/30 bg-amber-500/[0.07] px-3 py-2.5 text-[12px]">
+    <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] mt-2 flex w-full items-start gap-2.5 border-amber-500/30 bg-amber-500/[0.07] px-3 py-2.5 text-[0.75rem]">
       <ShieldAlert className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
       <div className="min-w-0 flex-1">
         <p className="font-medium">{t("agentTrust.bannerTitle")}</p>

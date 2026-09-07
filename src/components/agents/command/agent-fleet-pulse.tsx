@@ -17,7 +17,7 @@ export function AgentFleetPulse({
   const needsYou = counts.awaitingApproval + counts.failed;
 
   return (
-    <ul className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1 text-[12px] font-medium tabular-nums">
+    <ul className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-1 text-[0.75rem] font-medium tabular-nums">
       <li className="flex items-center gap-1.5 text-[var(--git-branch)]">
         <span
           aria-hidden

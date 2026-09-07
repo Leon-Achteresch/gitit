@@ -1,3 +1,7 @@
+import { invoke } from '@tauri-apps/api/core';
+import type { PullRequest } from '@/lib/repo-store';
+import { useAgentRepoStore } from "@/lib/agents/agent-repo-store";
+import { toastError } from "@/lib/error-toast";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { onAction, type Options } from "@tauri-apps/plugin-notification";
@@ -81,16 +85,34 @@ function focusMainWindow(): void {
   void window.setFocus().catch(() => {});
 }
 
-function navigateToTarget(target: NotificationTarget): void {
+export async function navigateToTarget(target: NotificationTarget): Promise<void> {
   if (target.view === "agents") {
-    useAgentProviderStore.getState().setProvider(target.provider as NativeAgentProvider);
-    void router.navigate({ to: "/agents" });
+    if (!PROVIDERS.includes(target.provider as NativeAgentProvider)) return;
+    const provider = target.provider as NativeAgentProvider;
+    const store = chatStoreFor(provider).getState();
+    const thread = store.conversations[target.threadId];
+    if (!thread?.path) throw new Error("Session is no longer available");
+    useAgentProviderStore.getState().setProvider(provider);
+    useAgentRepoStore.getState().setPath(thread.path);
+    await store.openThread(thread.path, target.threadId);
+    await router.navigate({ to: "/agents", search: { path: thread.path, view: "chat" } });
     return;
   }
-  useRepoStore.getState().setActive(target.path);
+  const repoStore = useRepoStore.getState();
+  if (!repoStore.repos[target.path]) await repoStore.addRepo(target.path);
+  if (!useRepoStore.getState().repos[target.path]) throw new Error("Repository is unavailable");
+  repoStore.setActive(target.path);
   if (target.view === "ci") useUiStore.getState().setSidebarTab("ci");
-  if (target.view === "pr") useUiStore.getState().setSidebarTab("pr");
-  void router.navigate({ to: "/" });
+  if (target.view === "pr") {
+    useUiStore.getState().setSidebarTab("pr");
+    // A notification may point beyond the loaded history page.
+    if (!useRepoStore.getState().prs[target.path]?.some(pr => pr.number === target.number)) {
+      const pr = await invoke<PullRequest>('pr_detail', { path: target.path, number: target.number });
+      useRepoStore.setState(state => ({ prs: { ...state.prs, [target.path]: [...(state.prs[target.path] ?? []).filter(row => row.number !== pr.number), pr] } }));
+    }
+    useUiStore.getState().requestPrFocus(target.path, target.number);
+  }
+  await router.navigate({ to: "/" });
 }
 
 function readTarget(notification: Options): NotificationTarget | null {
@@ -103,7 +125,7 @@ function armClickHandling(): () => void {
   void onAction((notification) => {
     focusMainWindow();
     const target = readTarget(notification);
-    if (target) navigateToTarget(target);
+    if (target) void navigateToTarget(target).catch(error => toastError(String(error)));
   })
     .then((listener) => {
       unlisten = () => void listener.unregister().catch(() => {});

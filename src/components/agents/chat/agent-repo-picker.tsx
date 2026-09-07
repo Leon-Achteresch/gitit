@@ -100,7 +100,7 @@ export function AgentRepoPicker({ selectedPath }: { selectedPath: string }) {
 
   if (!selectedPath && paths.length === 0) {
     return (
-      <h2 className="min-w-0 truncate text-[13px] font-semibold tracking-[-0.01em] text-[var(--ag-text)]">
+      <h2 className="min-w-0 truncate text-[0.8125rem] font-semibold tracking-[-0.01em] text-[var(--ag-text)]">
         {t("header.agents")}
       </h2>
     );
@@ -112,7 +112,7 @@ export function AgentRepoPicker({ selectedPath }: { selectedPath: string }) {
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            className="relative flex w-full min-w-0 items-center gap-2 rounded-[var(--ag-r-md)] px-2 text-left text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform,box-shadow] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:bg-[var(--ag-press)] focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:bg-[var(--ag-surface)] data-[active=true]:text-[var(--ag-text)] data-[active=true]:shadow-[var(--ag-shadow-raise)] -ml-0.5 h-8.5 w-full min-w-0 gap-2 rounded-[var(--ag-r-md)] border border-transparent px-1.5 text-[13px] hover:border-[var(--ag-line)] hover:bg-[var(--ag-surface-2)]"
+            className="relative flex w-full min-w-0 items-center gap-2 rounded-[var(--ag-r-md)] px-2 text-left text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform,box-shadow] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:bg-[var(--ag-press)] focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:bg-[var(--ag-surface)] data-[active=true]:text-[var(--ag-text)] data-[active=true]:shadow-[var(--ag-shadow-raise)] -ml-0.5 h-8.5 w-full min-w-0 gap-2 rounded-[var(--ag-r-md)] border border-transparent px-1.5 text-[0.8125rem] hover:border-[var(--ag-line)] hover:bg-[var(--ag-surface-2)]"
             aria-label={t("agentChat.switchRepo")}
             title={selectedPath}
           >
@@ -126,19 +126,19 @@ export function AgentRepoPicker({ selectedPath }: { selectedPath: string }) {
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="overflow-hidden rounded-[var(--ag-r-lg)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[var(--ag-shadow-pop)] w-72 p-1.5">
-          <DropdownMenuLabel className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">
+          <DropdownMenuLabel className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">
             {t("agentChat.switchRepo")}
           </DropdownMenuLabel>
           {repoPaths.map((path) => (
             <DropdownMenuItem
               key={path}
               onSelect={() => setPath(path)}
-              className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+              className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
               title={path}
             >
               <span className="min-w-0 flex-1 truncate">{repoName(path)}</span>
               {branches[path]?.branch ? (
-                <span className="text-[var(--ag-text-3)] max-w-20 truncate text-[10px]">
+                <span className="text-[var(--ag-text-3)] max-w-20 truncate text-[0.625rem]">
                   {branches[path]?.branch}
                 </span>
               ) : null}
@@ -150,21 +150,21 @@ export function AgentRepoPicker({ selectedPath }: { selectedPath: string }) {
           {worktreeEntries.length > 0 ? (
             <>
               <DropdownMenuSeparator className="border-[var(--ag-line)] my-1" />
-              <DropdownMenuLabel className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">
+              <DropdownMenuLabel className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)]">
                 {t("agentChat.worktrees")}
               </DropdownMenuLabel>
               {worktreeEntries.map((entry) => (
                 <DropdownMenuItem
                   key={entry.path}
                   onSelect={() => setPath(entry.path)}
-                  className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+                  className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
                   title={`${entry.path} · ${entry.branch}`}
                 >
                   <FolderGit2 className="text-[var(--ag-text-3)] size-3.5 shrink-0" />
                   <span className="min-w-0 flex-1 truncate">
                     {worktreeDisplayName(entry.path)}
                   </span>
-                  <span className="text-[var(--ag-text-3)] max-w-24 truncate text-[10px]">
+                  <span className="text-[var(--ag-text-3)] max-w-24 truncate text-[0.625rem]">
                     {repoName(entry.basePath)}
                   </span>
                   {entry.path === selectedPath ? (
@@ -209,7 +209,7 @@ export function AgentRepoPicker({ selectedPath }: { selectedPath: string }) {
           <DropdownMenuItem
             disabled={pending || !basePath}
             onSelect={() => void newWorktree()}
-            className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[12px] focus:bg-[var(--ag-hover)]"
+            className="flex w-full items-center gap-2.5 rounded-[var(--ag-r-sm)] px-2 py-1.5 text-left outline-none transition-colors duration-100 hover:bg-[var(--ag-hover)] focus-visible:bg-[var(--ag-hover)] disabled:pointer-events-none disabled:opacity-40 text-[0.75rem] focus:bg-[var(--ag-hover)]"
           >
             <Plus className="size-3.5 shrink-0" />
             <span className="min-w-0 flex-1 truncate">

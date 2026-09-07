@@ -153,7 +153,7 @@ export function AiSetupDialog({
                   />
                   <div className="text-xs font-semibold">{label}</div>
                   {isOllama && (
-                    <div className="text-[10px] text-muted-foreground">
+                    <div className="text-[0.625rem] text-muted-foreground">
                       {ollamaReachable
                         ? t("aiSetup.ollamaReady")
                         : t("aiSetup.ollamaOffline")}

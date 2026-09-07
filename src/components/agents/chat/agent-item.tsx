@@ -212,7 +212,7 @@ function LocalCommandItem({ item }: { item: AgentItem }) {
             type="button"
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
-            className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 max-w-full gap-1.5 font-mono text-[11px]"
+            className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 max-w-full gap-1.5 font-mono text-[0.6875rem]"
             title="Ausgabe ein- oder ausblenden"
           >
             {pill}
@@ -222,13 +222,13 @@ function LocalCommandItem({ item }: { item: AgentItem }) {
             />
           </button>
         ) : (
-          <span className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 max-w-full gap-1.5 font-mono text-[11px]" title={label}>
+          <span className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45 max-w-full gap-1.5 font-mono text-[0.6875rem]" title={label}>
             {pill}
           </span>
         )}
         {output ? (
           <AgentDisclosure open={open} className="mt-1.5 w-full">
-            <pre className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] max-h-56 overflow-auto whitespace-pre-wrap p-2 font-mono text-[10px] leading-4">
+            <pre className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] max-h-56 overflow-auto whitespace-pre-wrap p-2 font-mono text-[0.625rem] leading-4">
               {boundedTail(output, 20_000, 400)}
             </pre>
           </AgentDisclosure>
@@ -277,7 +277,7 @@ function UserMessage({ item }: { item: AgentItem }) {
             {content.images.map((path) => (
               <span
                 key={path}
-                className="inline-flex max-w-56 items-center gap-1.5 rounded-[8px] bg-white/12 px-2 py-1 font-mono text-[10px]"
+                className="inline-flex max-w-56 items-center gap-1.5 rounded-[8px] bg-white/12 px-2 py-1 font-mono text-[0.625rem]"
                 title={path}
               >
                 <FileImage className="size-3 shrink-0" />
@@ -289,13 +289,13 @@ function UserMessage({ item }: { item: AgentItem }) {
         {content.mentions.length > 0 || content.audio.length > 0 ? (
           <div className="mt-2 flex flex-wrap justify-end gap-1.5">
             {content.mentions.map((mention) => (
-              <span key={mention} className="inline-flex items-center gap-1 rounded-[8px] bg-white/12 px-2 py-1 text-[10px]">
+              <span key={mention} className="inline-flex items-center gap-1 rounded-[8px] bg-white/12 px-2 py-1 text-[0.625rem]">
                 <AtSign className="size-3" />
                 {mention}
               </span>
             ))}
             {content.audio.map((audio) => (
-              <span key={audio} className="inline-flex max-w-56 items-center gap-1 rounded-[8px] bg-white/12 px-2 py-1 text-[10px]">
+              <span key={audio} className="inline-flex max-w-56 items-center gap-1 rounded-[8px] bg-white/12 px-2 py-1 text-[0.625rem]">
                 <Volume2 className="size-3 shrink-0" />
                 <span className="truncate">{audio.split(/[\\/]/).pop()}</span>
               </span>
@@ -305,7 +305,7 @@ function UserMessage({ item }: { item: AgentItem }) {
       </MessageBubbleContent>
     </MessageBubble>
     {queued ? (
-      <div className="mt-1 flex items-center justify-end gap-1.5 text-[10px] text-muted-foreground">
+      <div className="mt-1 flex items-center justify-end gap-1.5 text-[0.625rem] text-muted-foreground">
         <PulseIcon icon={Clock} className="size-3" />
         In Warteschlange – wird an die KI übermittelt
       </div>
@@ -380,7 +380,7 @@ function AgentMessage({ item, turn }: { item: AgentItem; turn: AgentTurn }) {
                   <span
                     key={`${path}-${line ?? index}`}
                     title={stringValue(entry.note)}
-                    className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] rounded-[6px] px-1.5 py-0.5 font-mono text-[10px] text-[var(--ag-text-2)]"
+                    className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] rounded-[6px] px-1.5 py-0.5 font-mono text-[0.625rem] text-[var(--ag-text-2)]"
                   >
                     {path}{line ? `:${line}` : ""}
                   </span>
@@ -478,7 +478,7 @@ function CommandItem({ item }: { item: AgentItem }) {
         {displayedOutput || "Noch keine Ausgabe"}
       </ToolResultOutput>
       {typeof item.exitCode === "number" ? (
-        <p className="mt-2 text-[11px] text-muted-foreground">Exit-Code {item.exitCode}</p>
+        <p className="mt-2 text-[0.6875rem] text-muted-foreground">Exit-Code {item.exitCode}</p>
       ) : null}
     </ToolResult>
     </ItemMenu>
@@ -724,8 +724,8 @@ function PlanProposalItem({ item, turn }: { item: AgentItem; turn: AgentTurn }) 
           className="flex w-full items-center gap-2 px-3 py-2 text-left"
         >
           <ClipboardList className="size-4 shrink-0 text-muted-foreground" />
-          <span className="text-[13px] font-medium">Umsetzungsplan</span>
-          <span className="text-[var(--ag-text-3)] ml-auto text-[10px]">{label}</span>
+          <span className="text-[0.8125rem] font-medium">Umsetzungsplan</span>
+          <span className="text-[var(--ag-text-3)] ml-auto text-[0.625rem]">{label}</span>
           <ChevronDown
             className="size-3.5 shrink-0 opacity-70 transition-transform"
             style={{ transform: open ? "rotate(180deg)" : undefined }}
@@ -738,7 +738,7 @@ function PlanProposalItem({ item, turn }: { item: AgentItem; turn: AgentTurn }) 
             </div>
           </AgentDisclosure>
         ) : (
-          <p className="text-[var(--ag-text-2)] px-3 pb-3 text-[12px]">
+          <p className="text-[var(--ag-text-2)] px-3 pb-3 text-[0.75rem]">
             {turn.status === "inProgress" ? "Plan wird erstellt …" : "Kein Planinhalt übermittelt."}
           </p>
         )}
@@ -756,8 +756,8 @@ function UserQuestionItem({ item }: { item: AgentItem }) {
     <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] overflow-hidden">
       <div className="flex items-center gap-2 px-3 py-2">
         <MessageCircleQuestion className="size-4 shrink-0 text-muted-foreground" />
-        <span className="text-[13px] font-medium">Rückfrage</span>
-        <span className="text-[var(--ag-text-3)] ml-auto text-[10px]">
+        <span className="text-[0.8125rem] font-medium">Rückfrage</span>
+        <span className="text-[var(--ag-text-3)] ml-auto text-[0.625rem]">
           {pending ? "Wartet auf Antwort" : "Beantwortet"}
         </span>
       </div>
@@ -768,10 +768,10 @@ function UserQuestionItem({ item }: { item: AgentItem }) {
           const answer = stringValue(answers[text]);
           return (
             <div key={`${item.id}-q-${index}`} className="rounded-[var(--ag-r-md)] bg-[var(--ag-surface-2)] p-2.5">
-              {header ? <p className="text-[10px] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1">{header}</p> : null}
-              <p className="text-[12px] leading-5">{text}</p>
+              {header ? <p className="text-[0.625rem] font-medium tracking-[0.02em] text-[var(--ag-text-3)] mb-1">{header}</p> : null}
+              <p className="text-[0.75rem] leading-5">{text}</p>
               {answer ? (
-                <p className="mt-1.5 text-[12px] font-medium leading-5 text-foreground">
+                <p className="mt-1.5 text-[0.75rem] font-medium leading-5 text-foreground">
                   → {answer}
                 </p>
               ) : (
@@ -779,7 +779,7 @@ function UserQuestionItem({ item }: { item: AgentItem }) {
                   {arrayValue(question.options).filter(isRecord).map((option, optionIndex) => (
                     <span
                       key={`${item.id}-q-${index}-o-${optionIndex}`}
-                      className="text-[var(--ag-text-3)] rounded-[7px] bg-[var(--ag-surface-3)] px-1.5 py-0.5 text-[10px]"
+                      className="text-[var(--ag-text-3)] rounded-[7px] bg-[var(--ag-surface-3)] px-1.5 py-0.5 text-[0.625rem]"
                     >
                       {stringValue(option.label)}
                     </span>
@@ -811,7 +811,7 @@ function CollaborationItem({ item }: { item: AgentItem }) {
       {agentStates.length > 0 ? (
         <div className="mt-2 grid gap-1 border-t border-border/50 pt-2">
           {agentStates.map(([threadId, state]) => (
-            <div key={threadId} className="flex items-center justify-between gap-3 text-[11px]">
+            <div key={threadId} className="flex items-center justify-between gap-3 text-[0.6875rem]">
               <span className="truncate font-mono text-muted-foreground">{threadId}</span>
               <span>{isRecord(state) ? stringValue(state.status, prettyJson(state)) : prettyJson(state)}</span>
             </div>

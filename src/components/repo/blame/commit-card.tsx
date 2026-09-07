@@ -35,21 +35,21 @@ export function CommitCard({
       className="overflow-hidden rounded-xl border border-border/80 bg-popover shadow-2xl"
     >
       <div className="border-b border-border/40 px-4 py-3">
-        <p className="text-[13px] font-semibold leading-snug text-foreground">
+        <p className="text-[0.8125rem] font-semibold leading-snug text-foreground">
           {card.entry.summary || "(no commit subject)"}
         </p>
       </div>
       <div className="flex flex-col gap-2 px-4 py-3">
         <div className="flex items-center gap-2.5">
           <div
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[0.625rem] font-bold text-white"
             style={{ background: color }}
           >
             {initials(card.entry.author)}
           </div>
-          <span className="text-[12px] font-medium text-foreground">{card.entry.author}</span>
+          <span className="text-[0.75rem] font-medium text-foreground">{card.entry.author}</span>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
           <span className="font-mono">{card.entry.short_hash}</span>
           <span className="opacity-40">·</span>
           <span>{formatFullDate(card.entry.timestamp, i18n.language)}</span>

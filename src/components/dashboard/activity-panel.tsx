@@ -87,7 +87,7 @@ export function ActivityPanel({
               onChange={onRangeChange}
             />
             {data ? (
-              <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+              <div className="flex items-center gap-2 text-[0.6875rem] text-muted-foreground">
                 <span className="tabular-nums">
                   <span className="text-git-added">+{compact(totals.insertions)}</span>
                   {" / "}

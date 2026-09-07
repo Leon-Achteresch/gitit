@@ -101,7 +101,7 @@ export function AgentsPage({
     toggleTerminal(selectedPath);
   }, [selectedPath, toggleTerminal]);
 
-  const requestedSection: ProfileSection = initialView === "overview" ? "threads" : initialView ?? "chat";
+  const requestedSection: ProfileSection = initialView === "overview" ? "threads" : initialView ?? "threads";
   const section = requestedSection === "capabilities" && !providerSupportsCapabilityCenter(provider)
     ? "chat" : requestedSection;
   const handleSectionChange = useCallback(

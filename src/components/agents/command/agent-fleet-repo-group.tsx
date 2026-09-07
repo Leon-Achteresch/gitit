@@ -22,7 +22,7 @@ export function AgentFleetRepoGroup({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex h-8 w-full min-w-0 items-center gap-2 rounded-[var(--ag-r-sm)] px-1.5 text-left text-[12px] font-medium text-[var(--ag-text-2)] outline-none transition-colors hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex h-8 w-full min-w-0 items-center gap-2 rounded-[var(--ag-r-sm)] px-1.5 text-left text-[0.75rem] font-medium text-[var(--ag-text-2)] outline-none transition-colors hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] focus-visible:ring-2 focus-visible:ring-ring"
       >
         <ChevronRight
           className={cn(
@@ -31,7 +31,7 @@ export function AgentFleetRepoGroup({
           )}
         />
         <span className="min-w-0 flex-1 truncate">{repoName}</span>
-        <span className="tabular-nums text-[11px] text-[var(--ag-text-3)]">{count}</span>
+        <span className="tabular-nums text-[0.6875rem] text-[var(--ag-text-3)]">{count}</span>
       </button>
       {open ? <div className="min-w-0">{children}</div> : null}
     </div>

@@ -161,7 +161,7 @@ export function AgentModelPicker({
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45"
+          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[0.75rem] text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-45"
           title={t("agentChat.settings.model")}
           aria-label={t("agentChat.settings.model")}
         >
@@ -213,15 +213,15 @@ export function AgentModelPicker({
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder={t("agentChat.searchModels")}
                 aria-label={t("agentChat.searchModels")}
-                className="min-w-0 flex-1 bg-transparent text-[12px] text-[var(--ag-text)] outline-none placeholder:text-[var(--ag-text-3)]"
+                className="min-w-0 flex-1 bg-transparent text-[0.75rem] text-[var(--ag-text)] outline-none placeholder:text-[var(--ag-text-3)]"
               />
             </div>
 
             <div className="[scrollbar-color:color-mix(in_oklab,var(--foreground)_16%,transparent)_transparent] [scrollbar-width:thin] max-h-64 min-h-0 overflow-y-auto p-1.5">
               {models.length === 0 && paneModels.length > 0 ? (
-                <p className="text-[var(--ag-text-3)] px-2 py-3 text-[11px]">{t("agentChat.noMatchingModels")}</p>
+                <p className="text-[var(--ag-text-3)] px-2 py-3 text-[0.6875rem]">{t("agentChat.noMatchingModels")}</p>
               ) : models.length === 0 && (warming || paneStatus === "connecting") ? (
-                <p className="text-[var(--ag-text-3)] px-2 py-3 text-[11px]">{t("agentChat.loadingModels")}</p>
+                <p className="text-[var(--ag-text-3)] px-2 py-3 text-[0.6875rem]">{t("agentChat.loadingModels")}</p>
               ) : models.length === 0 ? (
                 <button
                   type="button"
@@ -229,10 +229,10 @@ export function AgentModelPicker({
                   className="relative flex w-full min-w-0 items-center gap-2 rounded-[var(--ag-r-md)] px-2 text-left text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform,box-shadow] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:bg-[var(--ag-press)] focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:bg-[var(--ag-surface)] data-[active=true]:text-[var(--ag-text)] data-[active=true]:shadow-[var(--ag-shadow-raise)] h-auto items-start gap-2 px-2 py-1.5 text-left"
                 >
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12px] font-medium text-[var(--ag-text)]">
+                    <span className="block truncate text-[0.75rem] font-medium text-[var(--ag-text)]">
                       {paneMeta.label}
                     </span>
-                    <span className="text-[var(--ag-text-3)] mt-0.5 flex items-center gap-1 text-[10px]">
+                    <span className="text-[var(--ag-text-3)] mt-0.5 flex items-center gap-1 text-[0.625rem]">
                       <PaneLogo className="size-2.5 shrink-0" />
                       {warmError ?? t("agentChat.noModels")}
                     </span>
@@ -250,10 +250,10 @@ export function AgentModelPicker({
                       className="relative flex w-full min-w-0 items-center gap-2 rounded-[var(--ag-r-md)] px-2 text-left text-[var(--ag-text-2)] outline-none transition-[background-color,color,transform,box-shadow] duration-200 hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:bg-[var(--ag-press)] focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:bg-[var(--ag-surface)] data-[active=true]:text-[var(--ag-text)] data-[active=true]:shadow-[var(--ag-shadow-raise)] h-auto items-start gap-2 px-2 py-1.5 text-left"
                     >
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[12px] font-medium text-[var(--ag-text)]">
+                        <span className="block truncate text-[0.75rem] font-medium text-[var(--ag-text)]">
                           {option.label}
                         </span>
-                        <span className="text-[var(--ag-text-3)] mt-0.5 flex items-center gap-1 text-[10px]">
+                        <span className="text-[var(--ag-text-3)] mt-0.5 flex items-center gap-1 text-[0.625rem]">
                           <PaneLogo className="size-2.5 shrink-0" />
                           {paneMeta.label}
                         </span>

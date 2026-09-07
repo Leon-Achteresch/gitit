@@ -104,7 +104,7 @@ export function AgentAppStudio({ query }: { query: string }) {
     <CapabilitySplit
       list={(
         <div className="p-3.5">
-          <p className="mb-2 px-1 text-[10px] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
+          <p className="mb-2 px-1 text-[0.625rem] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
           {error ? <CapabilityError message={error} /> : null}
           <div className="space-y-0.5">
             <ProgressiveCapabilityList
@@ -115,7 +115,7 @@ export function AgentAppStudio({ query }: { query: string }) {
               renderItem={(app) => (
               <CapabilityListButton
                 selected={app.id === selected?.id}
-                icon={app.logoUrl ? <img src={app.logoUrl} alt="" className="size-5 rounded-md object-cover" /> : <span className="text-[11px] font-semibold">{appInitial(app)}</span>}
+                icon={app.logoUrl ? <img src={app.logoUrl} alt="" className="size-5 rounded-md object-cover" /> : <span className="text-[0.6875rem] font-semibold">{appInitial(app)}</span>}
                 title={app.name}
                 description={app.description}
                 meta={app.distributionChannel ? <CapabilityPill>{app.distributionChannel}</CapabilityPill> : undefined}
@@ -151,22 +151,22 @@ export function AgentAppStudio({ query }: { query: string }) {
             <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_18rem]">
               <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
                 <div className="flex items-center gap-2"><ShieldCheck className="size-3.5 text-muted-foreground" /><h3 className="text-xs font-semibold">{t("agentCapabilities.apps.permissions")}</h3></div>
-                <p className="mt-1 text-[10px] leading-4 text-muted-foreground">{t("agentCapabilities.apps.permissionsHint")}</p>
+                <p className="mt-1 text-[0.625rem] leading-4 text-muted-foreground">{t("agentCapabilities.apps.permissionsHint")}</p>
                 <div className="mt-4 space-y-2">
                   <label className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between gap-3 px-3 py-2.5">
-                    <span><span className="block text-[11px] font-medium">{t("agentCapabilities.apps.destructive")}</span><span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.apps.destructiveHint")}</span></span>
+                    <span><span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.apps.destructive")}</span><span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.apps.destructiveHint")}</span></span>
                     <Switch checked={destructive} disabled={busyKey === `app:${selected.id}:policy`} onCheckedChange={(checked) => void savePolicy("destructive_enabled", checked)} />
                   </label>
                   <label className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between gap-3 px-3 py-2.5">
-                    <span><span className="block text-[11px] font-medium">{t("agentCapabilities.apps.openWorld")}</span><span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.apps.openWorldHint")}</span></span>
+                    <span><span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.apps.openWorld")}</span><span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.apps.openWorldHint")}</span></span>
                     <Switch checked={openWorld} disabled={busyKey === `app:${selected.id}:policy`} onCheckedChange={(checked) => void savePolicy("open_world_enabled", checked)} />
                   </label>
                   <label className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between gap-3 px-3 py-2.5">
-                    <span><span className="block text-[11px] font-medium">{t("agentCapabilities.apps.defaultToolsEnabled")}</span><span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.apps.defaultToolsEnabledHint")}</span></span>
+                    <span><span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.apps.defaultToolsEnabled")}</span><span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.apps.defaultToolsEnabledHint")}</span></span>
                     <Switch checked={defaultToolsEnabled} disabled={busyKey === `app:${selected.id}:policy`} onCheckedChange={(checked) => void savePolicy("default_tools_enabled", checked)} />
                   </label>
                   <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between gap-3 px-3 py-2.5">
-                    <span><span className="block text-[11px] font-medium">{t("agentCapabilities.apps.defaultApproval")}</span><span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.apps.defaultApprovalHint")}</span></span>
+                    <span><span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.apps.defaultApproval")}</span><span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.apps.defaultApprovalHint")}</span></span>
                     <Select value={defaultMode} disabled={busyKey === `app:${selected.id}:policy`} onValueChange={(value) => void savePolicy("default_tools_approval_mode", value)}>
                       <SelectTrigger size="sm" className="w-32">
                         <SelectValue />
@@ -180,7 +180,7 @@ export function AgentAppStudio({ query }: { query: string }) {
                     </Select>
                   </div>
                   <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] flex items-center justify-between gap-3 px-3 py-2.5">
-                    <span><span className="block text-[11px] font-medium">{t("agentCapabilities.apps.reviewer")}</span><span className="mt-0.5 block text-[9px] text-muted-foreground">{t("agentCapabilities.apps.reviewerHint")}</span></span>
+                    <span><span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.apps.reviewer")}</span><span className="mt-0.5 block text-[0.5625rem] text-muted-foreground">{t("agentCapabilities.apps.reviewerHint")}</span></span>
                     <Select value={reviewer} disabled={busyKey === `app:${selected.id}:policy`} onValueChange={(value) => void savePolicy("approvals_reviewer", value)}>
                       <SelectTrigger size="sm" className="w-32">
                         <SelectValue />
@@ -196,9 +196,9 @@ export function AgentAppStudio({ query }: { query: string }) {
               <aside className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
                 <span className="grid size-9 place-items-center rounded-xl bg-background ring-1 ring-border/40">{selected.logoUrl ? <img src={selected.logoUrl} alt="" className="size-7 rounded-lg object-cover" /> : <AppWindow className="size-4" />}</span>
                 <p className="mt-3 text-xs font-medium">{selected.branding?.developer || selected.metadata?.developer || t("agentCapabilities.apps.unknownDeveloper")}</p>
-                <p className="mt-1 text-[10px] leading-4 text-muted-foreground">{selected.metadata?.version ? `v${selected.metadata.version}` : selected.id}</p>
+                <p className="mt-1 text-[0.625rem] leading-4 text-muted-foreground">{selected.metadata?.version ? `v${selected.metadata.version}` : selected.id}</p>
                 {selected.pluginDisplayNames.length ? <div className="mt-3 flex flex-wrap gap-1">{selected.pluginDisplayNames.map((name) => <CapabilityPill key={name}>{name}</CapabilityPill>)}</div> : null}
-                {selected.branding?.website ? <Button type="button" variant="link" size="sm" className="mt-3 h-auto px-0 text-[10px]" onClick={() => void openUrl(selected.branding?.website ?? "")}><Globe2 className="size-3" />{t("agentCapabilities.openWebsite")}</Button> : null}
+                {selected.branding?.website ? <Button type="button" variant="link" size="sm" className="mt-3 h-auto px-0 text-[0.625rem]" onClick={() => void openUrl(selected.branding?.website ?? "")}><Globe2 className="size-3" />{t("agentCapabilities.openWebsite")}</Button> : null}
               </aside>
             </section>
 
@@ -214,8 +214,8 @@ export function AgentAppStudio({ query }: { query: string }) {
                     return (
                       <div key={tool.name} className={`grid gap-3 px-3 py-2.5 sm:grid-cols-[minmax(0,1fr)_8rem_2.5rem] ${index ? "border-t border-border/35" : ""}`}>
                         <div className="min-w-0">
-                          <div className="flex min-w-0 items-center gap-2"><p className="truncate font-mono text-[11px] font-medium">{tool.title || tool.name}</p>{tool.isReadOnly ? <CapabilityPill tone="good">Read only</CapabilityPill> : <CapabilityPill tone="warning">Writes</CapabilityPill>}</div>
-                          <p className="mt-0.5 line-clamp-2 text-[10px] leading-4 text-muted-foreground">{tool.disabledReason || tool.description}</p>
+                          <div className="flex min-w-0 items-center gap-2"><p className="truncate font-mono text-[0.6875rem] font-medium">{tool.title || tool.name}</p>{tool.isReadOnly ? <CapabilityPill tone="good">Read only</CapabilityPill> : <CapabilityPill tone="warning">Writes</CapabilityPill>}</div>
+                          <p className="mt-0.5 line-clamp-2 text-[0.625rem] leading-4 text-muted-foreground">{tool.disabledReason || tool.description}</p>
                         </div>
                         <Select value={mode} disabled={toolBusy} onValueChange={(value) => void updateAppToolPolicy(selected.id, tool.name, enabled, value as ApprovalMode).catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))}>
                           <SelectTrigger size="sm" className="w-full">
@@ -234,7 +234,7 @@ export function AgentAppStudio({ query }: { query: string }) {
                   })}
                 </div>
               ) : (
-                <div className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-border/55 p-6 text-[10px] text-muted-foreground"><LockKeyhole className="size-3.5" />{t("agentCapabilities.apps.noTools")}</div>
+                <div className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-border/55 p-6 text-[0.625rem] text-muted-foreground"><LockKeyhole className="size-3.5" />{t("agentCapabilities.apps.noTools")}</div>
               )}
             </section>
           </div>

@@ -119,7 +119,7 @@ export function WorktreeAddDialog({
                 <FolderOpen className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-[11px] text-muted-foreground">{t("worktreeAdd.pathHint")}</p>
+            <p className="text-[0.6875rem] text-muted-foreground">{t("worktreeAdd.pathHint")}</p>
           </div>
 
           <div className="grid gap-1">
@@ -165,7 +165,7 @@ export function WorktreeAddDialog({
                   ))}
                 </SelectContent>
               </Select>
-              <p className="text-[11px] text-muted-foreground">{t("worktreeAdd.existingBranchHint")}</p>
+              <p className="text-[0.6875rem] text-muted-foreground">{t("worktreeAdd.existingBranchHint")}</p>
             </div>
           ) : (
             <>
@@ -194,7 +194,7 @@ export function WorktreeAddDialog({
                       ))}
                   </SelectContent>
                 </Select>
-                <p className="text-[11px] text-muted-foreground">{t("worktreeAdd.basisHint")}</p>
+                <p className="text-[0.6875rem] text-muted-foreground">{t("worktreeAdd.basisHint")}</p>
               </div>
             </>
           )}

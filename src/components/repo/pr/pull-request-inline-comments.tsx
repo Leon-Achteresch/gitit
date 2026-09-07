@@ -74,14 +74,14 @@ function SuggestionPreview({
 
   return (
     <div className="mt-1.5 overflow-hidden rounded border border-git-added/40">
-      <div className="flex items-center gap-1.5 border-b border-git-added/30 bg-git-added/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-git-added">
+      <div className="flex items-center gap-1.5 border-b border-git-added/30 bg-git-added/10 px-2 py-1 text-[0.625rem] font-semibold uppercase tracking-wide text-git-added">
         <Lightbulb className="h-3 w-3" />
         {t("prReview.suggestionTitle")}
         <Button
           type="button"
           variant="outline"
           size="xs"
-          className="ml-auto h-5 text-[10px]"
+          className="ml-auto h-5 text-[0.625rem]"
           disabled={!applyEnabled || busy}
           title={applyEnabled ? undefined : applyDisabledHint}
           onClick={() => void apply()}
@@ -91,7 +91,7 @@ function SuggestionPreview({
         </Button>
       </div>
       {lines.length === 0 ? (
-        <div className="px-2 py-1 font-mono text-[11px] italic text-muted-foreground">
+        <div className="px-2 py-1 font-mono text-[0.6875rem] italic text-muted-foreground">
           {t("prReview.suggestionDeletesLine")}
         </div>
       ) : (
@@ -99,7 +99,7 @@ function SuggestionPreview({
           {lines.map((text, i) => (
             <div
               key={i}
-              className="whitespace-pre px-2 py-0.5 font-mono text-[11px] text-git-added"
+              className="whitespace-pre px-2 py-0.5 font-mono text-[0.6875rem] text-git-added"
             >
               {text}
             </div>
@@ -130,7 +130,7 @@ function CommentBody({
     <>
       {segments.map((segment, i) =>
         segment.kind === "text" ? (
-          <div key={i} className="mt-1 whitespace-pre-wrap text-[12px] leading-relaxed">
+          <div key={i} className="mt-1 whitespace-pre-wrap text-[0.75rem] leading-relaxed">
             {segment.text}
           </div>
         ) : (
@@ -174,14 +174,14 @@ export function InlineCommentComposer({
         value={body}
         onChange={(e) => setBody(e.target.value)}
         placeholder={t("prReview.commentPlaceholder")}
-        className="min-h-[64px] text-[12px]"
+        className="min-h-[64px] text-[0.75rem]"
       />
       <div className="mt-1.5 flex items-center gap-1.5">
         <Button
           type="button"
           variant="ghost"
           size="xs"
-          className="h-6 text-[10px]"
+          className="h-6 text-[0.625rem]"
           title={t("prReview.suggestionModeHint")}
           onClick={() => setBody((prev) => buildSuggestionBody(lineText, prev))}
         >
@@ -193,7 +193,7 @@ export function InlineCommentComposer({
           type="button"
           variant="ghost"
           size="xs"
-          className="h-6 text-[10px]"
+          className="h-6 text-[0.625rem]"
           onClick={onCancel}
         >
           {t("prReview.cancel")}
@@ -201,7 +201,7 @@ export function InlineCommentComposer({
         <Button
           type="button"
           size="xs"
-          className="h-6 text-[10px]"
+          className="h-6 text-[0.625rem]"
           disabled={busy || !body.trim()}
           onClick={() => onSubmit(body.trim())}
         >
@@ -250,7 +250,7 @@ export function InlineDraftCard({
     <div className="rounded border border-dashed border-primary/40 bg-primary/5 px-2 py-1.5">
       <div className="flex items-center gap-1.5">
         <Badge variant="info">{t("prReview.draftBadge")}</Badge>
-        <span className="font-mono text-[10px] text-muted-foreground">
+        <span className="font-mono text-[0.625rem] text-muted-foreground">
           {t("prReview.lineLabel", { line: draft.line })}
         </span>
         <span className="flex-1" />
@@ -373,22 +373,22 @@ export function InlineThreadCard({
           <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground" />
         )}
         <MessageSquare className="h-3 w-3 shrink-0 text-primary" />
-        <span className="text-[11px] font-medium">{first.author}</span>
+        <span className="text-[0.6875rem] font-medium">{first.author}</span>
         {isResolved && (
           <Badge variant="success">{t("prReview.threadResolved")}</Badge>
         )}
         {!open && (
-          <span className="min-w-0 flex-1 truncate text-[11px] text-muted-foreground">
+          <span className="min-w-0 flex-1 truncate text-[0.6875rem] text-muted-foreground">
             {first.body.split("\n")[0]}
           </span>
         )}
-        <span className="ml-auto flex shrink-0 items-center gap-1 text-[10px] text-muted-foreground">
+        <span className="ml-auto flex shrink-0 items-center gap-1 text-[0.625rem] text-muted-foreground">
           {canReply && (
             <Button
               type="button"
               variant="ghost"
               size="xs"
-              className="h-6 text-[10px]"
+              className="h-6 text-[0.625rem]"
               onClick={(e) => {
                 e.stopPropagation();
                 setOpen(true);
@@ -406,7 +406,7 @@ export function InlineThreadCard({
         <div className="flex flex-col gap-1.5 border-t px-2 py-1.5">
           {thread.comments.map((comment) => (
             <div key={comment.id}>
-              <div className="flex min-w-0 items-center gap-1.5 text-[11px]">
+              <div className="flex min-w-0 items-center gap-1.5 text-[0.6875rem]">
                 <CommitAvatar
                   url={comment.author_avatar}
                   name={comment.author}
@@ -443,7 +443,7 @@ export function InlineThreadCard({
                   type="button"
                   variant="ghost"
                   size="xs"
-                  className="h-6 text-[10px]"
+                  className="h-6 text-[0.625rem]"
                   disabled={resolving}
                   onClick={() => void toggleResolved()}
                 >

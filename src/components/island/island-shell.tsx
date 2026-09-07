@@ -171,7 +171,7 @@ export function IslandShell({
               <RepoLogo
                 path={active.path}
                 label={active.label}
-                className="size-4 text-[8px]"
+                className="size-4 text-[0.5rem]"
               />
             )}
             <span className="min-w-0 flex-1 truncate text-left">
@@ -220,7 +220,7 @@ export function IslandShell({
             <span className="truncate text-xs font-medium">
               {primaryBusy?.label}
             </span>
-            <span className="truncate text-[10px] opacity-55">
+            <span className="truncate text-[0.625rem] opacity-55">
               {t("island.working", { repo: active?.label ?? "" })}
             </span>
           </span>
@@ -244,7 +244,7 @@ export function IslandShell({
           <span className="flex min-w-0 flex-1 flex-col text-left">
             <span className="truncate text-xs font-medium">{flash?.title}</span>
             {flash?.description ? (
-              <span className="truncate text-[10px] opacity-55">
+              <span className="truncate text-[0.625rem] opacity-55">
                 {flash.description}
               </span>
             ) : null}
@@ -274,7 +274,7 @@ export function IslandShell({
             >
               <ChevronLeft />
             </Button>
-            <span className="flex-1 truncate text-[10px] font-medium uppercase tracking-wider opacity-50">
+            <span className="flex-1 truncate text-[0.625rem] font-medium uppercase tracking-wider opacity-50">
               {t("island.projects", { count: snapshot.repos.length })}
             </span>
             <Button
@@ -315,14 +315,14 @@ export function IslandShell({
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="truncate text-xs font-medium">{repo.label}</span>
                     {showBranch && (
-                      <span className="flex items-center gap-1 text-[10px] opacity-55">
+                      <span className="flex items-center gap-1 text-[0.625rem] opacity-55">
                         <GitBranch className="size-2.5 shrink-0" />
                         <span className="truncate">{repo.branch || "—"}</span>
                       </span>
                     )}
                   </span>
                   {showDirty && repo.dirty > 0 && (
-                    <span className="shrink-0 rounded-full bg-git-modified/20 px-1.5 py-0.5 text-[10px] font-medium text-git-modified">
+                    <span className="shrink-0 rounded-full bg-git-modified/20 px-1.5 py-0.5 text-[0.625rem] font-medium text-git-modified">
                       {repo.dirty}
                     </span>
                   )}
@@ -440,7 +440,7 @@ export function IslandShell({
 
               <div className="my-1 border-t border-background/10" />
 
-              <span className="px-2 pb-0.5 text-[10px] font-medium uppercase tracking-wider opacity-50">
+              <span className="px-2 pb-0.5 text-[0.625rem] font-medium uppercase tracking-wider opacity-50">
                 {t("island.window")}
               </span>
 
@@ -494,7 +494,7 @@ export function IslandShell({
 
               <div className="my-1 border-t border-background/10" />
 
-              <span className="px-2 pb-0.5 text-[10px] font-medium uppercase tracking-wider opacity-50">
+              <span className="px-2 pb-0.5 text-[0.625rem] font-medium uppercase tracking-wider opacity-50">
                 {t("island.display")}
               </span>
 

@@ -77,7 +77,7 @@ function SkillPreview({ draft }: { draft: AgentSkillDraft }) {
           <p className="truncate text-sm font-semibold tracking-tight">
             {draft.displayName || draft.name || "New skill"}
           </p>
-          <p className="mt-1 line-clamp-2 text-[11px] leading-4 text-muted-foreground">
+          <p className="mt-1 line-clamp-2 text-[0.6875rem] leading-4 text-muted-foreground">
             {draft.shortDescription || draft.description || "Describe when this workflow should run."}
           </p>
           <div className="mt-3 flex flex-wrap gap-1.5">
@@ -142,11 +142,11 @@ function SkillEditor({
           <section className="space-y-3">
             <div>
               <h3 className="text-xs font-semibold">{t("agentCapabilities.skills.identity")}</h3>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">{t("agentCapabilities.skills.identityHint")}</p>
+              <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{t("agentCapabilities.skills.identityHint")}</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="skill-name" className="text-[10px]">{t("agentCapabilities.skills.name")}</Label>
+                <Label htmlFor="skill-name" className="text-[0.625rem]">{t("agentCapabilities.skills.name")}</Label>
                 <Input
                   id="skill-name"
                   value={draft.name}
@@ -157,7 +157,7 @@ function SkillEditor({
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="skill-scope" className="text-[10px]">{t("agentCapabilities.scope")}</Label>
+                <Label htmlFor="skill-scope" className="text-[0.625rem]">{t("agentCapabilities.scope")}</Label>
                 <Select
                   value={draft.scope}
                   disabled={Boolean(draft.originalPath)}
@@ -174,7 +174,7 @@ function SkillEditor({
               </div>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="skill-description" className="text-[10px]">{t("agentCapabilities.skills.triggerDescription")}</Label>
+              <Label htmlFor="skill-description" className="text-[0.625rem]">{t("agentCapabilities.skills.triggerDescription")}</Label>
               <Textarea
                 id="skill-description"
                 value={draft.description}
@@ -188,13 +188,13 @@ function SkillEditor({
           <section className="space-y-3">
             <div>
               <h3 className="text-xs font-semibold">{t("agentCapabilities.skills.instructions")}</h3>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">{t("agentCapabilities.skills.instructionsHint")}</p>
+              <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{t("agentCapabilities.skills.instructionsHint")}</p>
             </div>
             <Textarea
               value={draft.instructions}
               onChange={(event) => onChange({ ...draft, instructions: event.target.value })}
               spellCheck={false}
-              className="min-h-[22rem] resize-y rounded-xl bg-foreground/[0.025] font-mono text-[11px] leading-5"
+              className="min-h-[22rem] resize-y rounded-xl bg-foreground/[0.025] font-mono text-[0.6875rem] leading-5"
             />
           </section>
 
@@ -202,7 +202,7 @@ function SkillEditor({
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h3 className="text-xs font-semibold">{t("agentCapabilities.skills.dependencies")}</h3>
-                <p className="mt-0.5 text-[10px] text-muted-foreground">{t("agentCapabilities.skills.dependenciesHint")}</p>
+                <p className="mt-0.5 text-[0.625rem] text-muted-foreground">{t("agentCapabilities.skills.dependenciesHint")}</p>
               </div>
               <Button
                 type="button"
@@ -240,13 +240,13 @@ function SkillEditor({
                         value={dependency.value}
                         onChange={(event) => updateDependency(index, { value: event.target.value })}
                         placeholder={dependency.type === "mcp" ? "server-name" : "GITHUB_TOKEN"}
-                        className="h-7 rounded-md font-mono text-[10px]"
+                        className="h-7 rounded-md font-mono text-[0.625rem]"
                       />
                       <Input
                         value={dependency.description ?? ""}
                         onChange={(event) => updateDependency(index, { description: event.target.value })}
                         placeholder={t("agentCapabilities.description")}
-                        className="h-7 rounded-md text-[10px]"
+                        className="h-7 rounded-md text-[0.625rem]"
                       />
                       <Button
                         type="button"
@@ -273,15 +273,15 @@ function SkillEditor({
                             <SelectItem value="stdio">STDIO</SelectItem>
                           </SelectContent>
                         </Select>
-                        <Input value={dependency.url ?? ""} onChange={(event) => updateDependency(index, { url: event.target.value })} placeholder="https://example.com/mcp" className="h-7 rounded-md font-mono text-[10px]" />
-                        <Input value={dependency.command ?? ""} onChange={(event) => updateDependency(index, { command: event.target.value })} placeholder="npx server" className="h-7 rounded-md font-mono text-[10px]" />
+                        <Input value={dependency.url ?? ""} onChange={(event) => updateDependency(index, { url: event.target.value })} placeholder="https://example.com/mcp" className="h-7 rounded-md font-mono text-[0.625rem]" />
+                        <Input value={dependency.command ?? ""} onChange={(event) => updateDependency(index, { command: event.target.value })} placeholder="npx server" className="h-7 rounded-md font-mono text-[0.625rem]" />
                       </div>
                     ) : null}
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-[var(--ag-text-3)] rounded-[12px] border border-dashed border-[var(--ag-line-strong)] px-3 py-4 text-center text-[11px]">
+              <p className="text-[var(--ag-text-3)] rounded-[12px] border border-dashed border-[var(--ag-line-strong)] px-3 py-4 text-center text-[0.6875rem]">
                 {t("agentCapabilities.skills.noDependencies")}
               </p>
             )}
@@ -291,50 +291,50 @@ function SkillEditor({
         <aside className="space-y-4 xl:sticky xl:top-5 xl:self-start">
           <SkillPreview draft={draft} />
           <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] space-y-3 p-3.5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               {t("agentCapabilities.skills.presentation")}
             </p>
             <div className="space-y-1.5">
-              <Label htmlFor="skill-display-name" className="text-[10px]">{t("agentCapabilities.skills.displayName")}</Label>
+              <Label htmlFor="skill-display-name" className="text-[0.625rem]">{t("agentCapabilities.skills.displayName")}</Label>
               <Input id="skill-display-name" value={draft.displayName} onChange={(event) => onChange({ ...draft, displayName: event.target.value })} className="h-8 rounded-lg text-xs" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="skill-short-description" className="text-[10px]">{t("agentCapabilities.skills.shortDescription")}</Label>
-              <Textarea id="skill-short-description" value={draft.shortDescription} onChange={(event) => onChange({ ...draft, shortDescription: event.target.value })} className="min-h-16 rounded-lg text-[11px]" />
+              <Label htmlFor="skill-short-description" className="text-[0.625rem]">{t("agentCapabilities.skills.shortDescription")}</Label>
+              <Textarea id="skill-short-description" value={draft.shortDescription} onChange={(event) => onChange({ ...draft, shortDescription: event.target.value })} className="min-h-16 rounded-lg text-[0.6875rem]" />
             </div>
             <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-2">
               <div className="space-y-1.5">
-                <Label htmlFor="skill-brand" className="text-[10px]">{t("agentCapabilities.skills.color")}</Label>
+                <Label htmlFor="skill-brand" className="text-[0.625rem]">{t("agentCapabilities.skills.color")}</Label>
                 <Input id="skill-brand" type="color" value={/^#[0-9a-f]{6}$/iu.test(draft.brandColor) ? draft.brandColor : "#10A37F"} onChange={(event) => onChange({ ...draft, brandColor: event.target.value })} className="h-8 rounded-lg p-1" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="skill-default-prompt" className="text-[10px]">{t("agentCapabilities.skills.defaultPrompt")}</Label>
-                <Input id="skill-default-prompt" value={draft.defaultPrompt} onChange={(event) => onChange({ ...draft, defaultPrompt: event.target.value })} className="h-8 rounded-lg text-[11px]" />
+                <Label htmlFor="skill-default-prompt" className="text-[0.625rem]">{t("agentCapabilities.skills.defaultPrompt")}</Label>
+                <Input id="skill-default-prompt" value={draft.defaultPrompt} onChange={(event) => onChange({ ...draft, defaultPrompt: event.target.value })} className="h-8 rounded-lg text-[0.6875rem]" />
               </div>
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="skill-icon-small" className="text-[10px]">{t("agentCapabilities.skills.iconSmall")}</Label>
-                <Input id="skill-icon-small" value={draft.iconSmall} onChange={(event) => onChange({ ...draft, iconSmall: event.target.value })} placeholder="./assets/icon.svg" className="h-8 rounded-lg font-mono text-[10px]" />
+                <Label htmlFor="skill-icon-small" className="text-[0.625rem]">{t("agentCapabilities.skills.iconSmall")}</Label>
+                <Input id="skill-icon-small" value={draft.iconSmall} onChange={(event) => onChange({ ...draft, iconSmall: event.target.value })} placeholder="./assets/icon.svg" className="h-8 rounded-lg font-mono text-[0.625rem]" />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="skill-icon-large" className="text-[10px]">{t("agentCapabilities.skills.iconLarge")}</Label>
-                <Input id="skill-icon-large" value={draft.iconLarge} onChange={(event) => onChange({ ...draft, iconLarge: event.target.value })} placeholder="./assets/logo.png" className="h-8 rounded-lg font-mono text-[10px]" />
+                <Label htmlFor="skill-icon-large" className="text-[0.625rem]">{t("agentCapabilities.skills.iconLarge")}</Label>
+                <Input id="skill-icon-large" value={draft.iconLarge} onChange={(event) => onChange({ ...draft, iconLarge: event.target.value })} placeholder="./assets/logo.png" className="h-8 rounded-lg font-mono text-[0.625rem]" />
               </div>
             </div>
             <label className="flex items-center justify-between gap-3 rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] px-3 py-2.5">
               <span>
-                <span className="block text-[11px] font-medium">{t("agentCapabilities.skills.implicit")}</span>
-                <span className="mt-0.5 block text-[9px] leading-4 text-muted-foreground">{t("agentCapabilities.skills.implicitHint")}</span>
+                <span className="block text-[0.6875rem] font-medium">{t("agentCapabilities.skills.implicit")}</span>
+                <span className="mt-0.5 block text-[0.5625rem] leading-4 text-muted-foreground">{t("agentCapabilities.skills.implicitHint")}</span>
               </span>
               <Switch checked={draft.allowImplicitInvocation} onCheckedChange={(checked) => onChange({ ...draft, allowImplicitInvocation: checked })} />
             </label>
             <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] px-3 py-2.5">
-              <p className="text-[11px] font-medium">{t("agentCapabilities.skills.products")}</p>
-              <p className="mt-0.5 text-[9px] leading-4 text-muted-foreground">{t("agentCapabilities.skills.productsHint")}</p>
+              <p className="text-[0.6875rem] font-medium">{t("agentCapabilities.skills.products")}</p>
+              <p className="mt-0.5 text-[0.5625rem] leading-4 text-muted-foreground">{t("agentCapabilities.skills.productsHint")}</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {(["CODEX", "CHAT"] as const).map((product) => (
-                  <label key={product} className="flex items-center justify-between rounded-lg bg-foreground/[0.03] px-2 py-1.5 text-[10px] font-medium">
+                  <label key={product} className="flex items-center justify-between rounded-lg bg-foreground/[0.03] px-2 py-1.5 text-[0.625rem] font-medium">
                     {product}
                     <Switch
                       size="sm"
@@ -431,7 +431,7 @@ export function AgentSkillStudio({ query }: { query: string }) {
         list={(
           <div className="p-3.5">
             <div className="mb-2 flex items-center justify-between px-1">
-              <p className="text-[10px] font-medium text-muted-foreground">
+              <p className="text-[0.625rem] font-medium text-muted-foreground">
                 {t("agentCapabilities.itemCount", { count: filtered.length })}
               </p>
               <Button type="button" variant="ghost" size="icon-xs" className="rounded-md" onClick={() => setDraft(emptySkillDraft())} title={t("agentCapabilities.skills.create")}>
@@ -449,7 +449,7 @@ export function AgentSkillStudio({ query }: { query: string }) {
                 renderItem={(skill) => (
                 <CapabilityListButton
                   selected={skill.path === selected?.path}
-                  icon={<span className="text-[11px] font-semibold" style={{ color: skill.interface?.brandColor }}>{skillInitial(skill)}</span>}
+                  icon={<span className="text-[0.6875rem] font-semibold" style={{ color: skill.interface?.brandColor }}>{skillInitial(skill)}</span>}
                   title={skillLabel(skill)}
                   description={skill.description}
                   meta={<CapabilityPill>{skill.scope}</CapabilityPill>}
@@ -508,12 +508,12 @@ export function AgentSkillStudio({ query }: { query: string }) {
                     <h3 className="text-xs font-semibold">{t("agentCapabilities.skills.activation")}</h3>
                   </div>
                   <p className="mt-2 text-xs leading-5 text-muted-foreground">{selected.description}</p>
-                  <p className="mt-4 break-all font-mono text-[9px] leading-4 text-muted-foreground/70">{selected.path}</p>
+                  <p className="mt-4 break-all font-mono text-[0.5625rem] leading-4 text-muted-foreground/70">{selected.path}</p>
                 </div>
                 <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
                   <Sparkles className="size-4" style={{ color: selected.interface?.brandColor }} />
                   <p className="mt-3 text-xs font-medium">${selected.name}</p>
-                  <p className="mt-1 text-[10px] leading-4 text-muted-foreground">{selected.interface?.defaultPrompt || t("agentCapabilities.skills.noDefaultPrompt")}</p>
+                  <p className="mt-1 text-[0.625rem] leading-4 text-muted-foreground">{selected.interface?.defaultPrompt || t("agentCapabilities.skills.noDefaultPrompt")}</p>
                 </div>
               </section>
 
@@ -524,8 +524,8 @@ export function AgentSkillStudio({ query }: { query: string }) {
                     {selected.dependencies.tools.map((dependency) => (
                       <div key={`${dependency.type}:${dependency.value}`} className="flex items-center gap-3 rounded-xl bg-foreground/[0.03] px-3 py-2 ring-1 ring-border/30">
                         <CapabilityPill>{dependency.type}</CapabilityPill>
-                        <code className="min-w-0 flex-1 truncate text-[10px]">{dependency.value}</code>
-                        <span className="text-[10px] text-muted-foreground">{dependency.description}</span>
+                        <code className="min-w-0 flex-1 truncate text-[0.625rem]">{dependency.value}</code>
+                        <span className="text-[0.625rem] text-muted-foreground">{dependency.description}</span>
                       </div>
                     ))}
                   </div>

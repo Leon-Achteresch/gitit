@@ -1,3 +1,4 @@
+import { PanelLoading } from "@/components/ui/panel-loading";
 import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 
@@ -86,7 +87,7 @@ function Home() {
   return (
     <main className="flex h-full min-h-0 flex-col overflow-hidden">
       {mergeEditorPath && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<PanelLoading />}>
           <MergeConflictPage
             path={mergeEditorPath}
             onClose={closeMergeEditor}
@@ -94,7 +95,7 @@ function Home() {
         </Suspense>
       )}
       {blameEditorPath && (
-        <Suspense fallback={null}>
+        <Suspense fallback={<PanelLoading />}>
           <GitBlamePage
             path={blameEditorPath}
             initialFile={blameEditorFile}
@@ -116,7 +117,7 @@ function Home() {
                 {sidebarTab === "commit" ? (
                   <CommitPanel />
                 ) : (
-                  <Suspense fallback={null}>
+                  <Suspense fallback={<PanelLoading />}>
                   <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                     {sidebarTab === "stash" ? (
                       <div className="min-h-0 flex-1 overflow-hidden">

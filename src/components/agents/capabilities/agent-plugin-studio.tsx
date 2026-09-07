@@ -218,7 +218,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
         list={(
           <div className="p-3.5">
             <div className="mb-2 flex items-center justify-between gap-2 px-1">
-              <p className="text-[10px] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
+              <p className="text-[0.625rem] text-muted-foreground">{t("agentCapabilities.itemCount", { count: filtered.length })}</p>
               <div className="flex items-center gap-1">
                 <Button type="button" variant="ghost" size="icon-xs" className="rounded-md" onClick={() => void upgradeMarketplace().then(() => toast.success(t("agentCapabilities.plugins.marketplacesUpgraded"))).catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))} title={t("agentCapabilities.plugins.upgradeAll")}>
                   <SpinIcon icon={RefreshCw} active={busyKey === "marketplace:all"} className={`size-3.5`} />
@@ -238,7 +238,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
                 <section key={marketplace.name} className="mb-3">
                   <div className="mb-1 flex items-center gap-2 px-1.5 py-1">
                     <Store className="size-3 text-muted-foreground" />
-                    <p className="min-w-0 flex-1 truncate text-[9px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{marketplace.displayName || marketplace.name}</p>
+                    <p className="min-w-0 flex-1 truncate text-[0.5625rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{marketplace.displayName || marketplace.name}</p>
                     <Button type="button" variant="ghost" size="icon-xs" onClick={() => setMarketplaceRemoveTarget(marketplace)} className="size-5 text-muted-foreground/60 hover:text-destructive" aria-label={t("agentCapabilities.plugins.removeMarketplace")}><X className="size-3" /></Button>
                   </div>
                   <div className="space-y-0.5">
@@ -246,7 +246,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
                       <CapabilityListButton
                         key={plugin.id}
                         selected={plugin.id === selected?.id}
-                        icon={<span className="text-[11px] font-semibold" style={{ color: plugin.interface?.brandColor ?? undefined }}>{pluginInitial(plugin)}</span>}
+                        icon={<span className="text-[0.6875rem] font-semibold" style={{ color: plugin.interface?.brandColor ?? undefined }}>{pluginInitial(plugin)}</span>}
                         title={pluginTitle(plugin)}
                         description={pluginDescription(plugin)}
                         meta={featuredIds.includes(plugin.id) ? <CapabilityPill tone="warning">Featured</CapabilityPill> : undefined}
@@ -261,7 +261,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
             {filtered.length > listLimit ? (
               <button
                 type="button"
-                className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring mt-2 h-8 w-full justify-center"
+                className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring mt-2 h-8 w-full justify-center"
                 onClick={() => setListPagination({ query: normalizedQuery, limit: listLimit + 100 })}
               >
                 {t("agentCapabilities.showMore", { count: Math.min(100, filtered.length - listLimit) })}
@@ -306,15 +306,15 @@ export function AgentPluginStudio({ query }: { query: string }) {
                 <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
                   <div className="flex items-center gap-2"><Boxes className="size-3.5 text-muted-foreground" /><h3 className="text-xs font-semibold">{t("agentCapabilities.plugins.capabilities")}</h3></div>
                   <div className="mt-3 flex flex-wrap gap-1.5">
-                    {(selected.interface?.capabilities ?? []).length ? selected.interface?.capabilities.map((capability) => <CapabilityPill key={capability}>{capability}</CapabilityPill>) : <span className="text-[10px] text-muted-foreground">{t("agentCapabilities.plugins.noCapabilities")}</span>}
+                    {(selected.interface?.capabilities ?? []).length ? selected.interface?.capabilities.map((capability) => <CapabilityPill key={capability}>{capability}</CapabilityPill>) : <span className="text-[0.625rem] text-muted-foreground">{t("agentCapabilities.plugins.noCapabilities")}</span>}
                   </div>
                   {selected.interface?.longDescription ? <p className="mt-4 text-xs leading-5 text-muted-foreground">{selected.interface.longDescription}</p> : null}
                 </div>
                 <div className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] p-4">
                   <PackageCheck className="size-4 text-muted-foreground" />
                   <p className="mt-3 text-xs font-medium">{selected.interface?.developerName || selected.marketplaceName}</p>
-                  <p className="mt-1 break-all font-mono text-[9px] leading-4 text-muted-foreground">{selected.id}</p>
-                  {selected.interface?.websiteUrl ? <Button type="button" variant="link" size="sm" className="mt-2 h-auto px-0 text-[10px]" onClick={() => void openUrl(selected.interface?.websiteUrl ?? "")}>{t("agentCapabilities.openWebsite")}<ExternalLink className="size-3" /></Button> : null}
+                  <p className="mt-1 break-all font-mono text-[0.5625rem] leading-4 text-muted-foreground">{selected.id}</p>
+                  {selected.interface?.websiteUrl ? <Button type="button" variant="link" size="sm" className="mt-2 h-auto px-0 text-[0.625rem]" onClick={() => void openUrl(selected.interface?.websiteUrl ?? "")}>{t("agentCapabilities.openWebsite")}<ExternalLink className="size-3" /></Button> : null}
                 </div>
               </section>
 
@@ -330,7 +330,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
                     <CapabilityStat label="Hooks" value={detail.hooks.length} />
                   </div>
                   <div className="mt-3 space-y-1.5">
-                    {detail.skills.map((skill) => <div key={skill.name} className="flex items-center gap-2 rounded-xl bg-foreground/[0.03] px-3 py-2 ring-1 ring-border/30"><CapabilityPill>skill</CapabilityPill><span className="text-[11px] font-medium">{skill.name}</span><span className="min-w-0 flex-1 truncate text-[10px] text-muted-foreground">{skill.description}</span></div>)}
+                    {detail.skills.map((skill) => <div key={skill.name} className="flex items-center gap-2 rounded-xl bg-foreground/[0.03] px-3 py-2 ring-1 ring-border/30"><CapabilityPill>skill</CapabilityPill><span className="text-[0.6875rem] font-medium">{skill.name}</span><span className="min-w-0 flex-1 truncate text-[0.625rem] text-muted-foreground">{skill.description}</span></div>)}
                     {detail.mcpServers.map((serverName) => {
                       const serverConfig = pluginMcpConfig(config, selected.id, serverName);
                       const runtime = mcpServers.find((server) => server.name === serverName || server.name.endsWith(`/${serverName}`) || server.name.endsWith(`:${serverName}`));
@@ -339,8 +339,8 @@ export function AgentPluginStudio({ query }: { query: string }) {
                         <div key={serverName} className="rounded-[var(--ag-r-md)] border border-[var(--ag-line)] bg-[var(--ag-surface)] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:border-[var(--ag-line-strong)] overflow-hidden">
                           <div className="flex items-center gap-2 px-3 py-2.5">
                             <CapabilityPill>MCP</CapabilityPill>
-                            <code className="min-w-0 flex-1 truncate text-[10px]">{serverName}</code>
-                            <span className="text-[9px] text-muted-foreground">{runtime ? `${Object.keys(runtime.tools).length} tools` : t("agentCapabilities.plugins.runtimeOffline")}</span>
+                            <code className="min-w-0 flex-1 truncate text-[0.625rem]">{serverName}</code>
+                            <span className="text-[0.5625rem] text-muted-foreground">{runtime ? `${Object.keys(runtime.tools).length} tools` : t("agentCapabilities.plugins.runtimeOffline")}</span>
                             <Switch size="sm" checked={serverEnabled} disabled={busyKey === `plugin:${selected.id}:mcp:${serverName}`} onCheckedChange={(checked) => void setPluginMcpEnabled(selected.id, serverName, checked).catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))} />
                           </div>
                           {runtime && Object.keys(runtime.tools).length ? (
@@ -350,7 +350,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
                                 const toolBusy = busyKey === `plugin:${selected.id}:mcp:${serverName}:${toolName}`;
                                 return (
                                   <div key={toolName} className="grid gap-2 border-b border-border/25 px-3 py-2 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_7rem_2rem]">
-                                    <div className="min-w-0"><p className="truncate font-mono text-[10px] font-medium">{tool.title || toolName}</p><p className="truncate text-[9px] text-muted-foreground">{tool.description}</p></div>
+                                    <div className="min-w-0"><p className="truncate font-mono text-[0.625rem] font-medium">{tool.title || toolName}</p><p className="truncate text-[0.5625rem] text-muted-foreground">{tool.description}</p></div>
                                     <Select value={policy.mode} disabled={toolBusy} onValueChange={(value) => void setPluginMcpToolPolicy(selected.id, serverName, toolName, policy.enabled, value as typeof policy.mode).catch((candidate) => toast.error(candidate instanceof Error ? candidate.message : String(candidate)))}>
                                       <SelectTrigger size="sm" className="w-full">
                                         <SelectValue />
@@ -403,7 +403,7 @@ export function AgentPluginStudio({ query }: { query: string }) {
       <Dialog open={manifestOpen} onOpenChange={setManifestOpen}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader><DialogTitle>{t("agentCapabilities.plugins.editManifest")}</DialogTitle><DialogDescription>{selected ? localManifestPath(selected) : ""}</DialogDescription></DialogHeader>
-          {manifestLoading ? <div className="flex min-h-64 items-center justify-center"><SpinIcon icon={LoaderCircle} className="size-4" /></div> : <Textarea value={manifestText} onChange={(event) => setManifestText(event.target.value)} spellCheck={false} className="min-h-80 resize-y font-mono text-[11px] leading-5" />}
+          {manifestLoading ? <div className="flex min-h-64 items-center justify-center"><SpinIcon icon={LoaderCircle} className="size-4" /></div> : <Textarea value={manifestText} onChange={(event) => setManifestText(event.target.value)} spellCheck={false} className="min-h-80 resize-y font-mono text-[0.6875rem] leading-5" />}
           <DialogFooter><Button type="button" variant="outline" onClick={() => setManifestOpen(false)}>{t("common.cancel")}</Button><Button type="button" disabled={manifestLoading || Boolean(busyKey?.startsWith("file:"))} onClick={() => void saveManifest()}><Save className="size-3.5" />{t("common.save")}</Button></DialogFooter>
         </DialogContent>
       </Dialog>

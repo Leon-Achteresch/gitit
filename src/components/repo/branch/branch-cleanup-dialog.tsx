@@ -48,13 +48,13 @@ function CandidateRow({
         />
         <label
           htmlFor={rowId}
-          className="min-w-0 flex-1 cursor-pointer truncate font-mono text-[12px] text-foreground"
+          className="min-w-0 flex-1 cursor-pointer truncate font-mono text-[0.75rem] text-foreground"
           title={candidate.name}
         >
           {candidate.name}
         </label>
         {candidate.reason === "stale" ? (
-          <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">
+          <span className="shrink-0 text-[0.6875rem] tabular-nums text-muted-foreground">
             {candidate.lastCommitAt
               ? formatRelative(candidate.lastCommitAt)
               : t("branchCleanup.noDate")}
@@ -78,7 +78,7 @@ function CandidateRow({
           <label
             htmlFor={`${rowId}-remote`}
             className={cn(
-              "min-w-0 flex-1 cursor-pointer truncate text-[11px] text-muted-foreground",
+              "min-w-0 flex-1 cursor-pointer truncate text-[0.6875rem] text-muted-foreground",
               !checked && "opacity-60",
             )}
           >
@@ -304,10 +304,10 @@ export function BranchCleanupDialog({
                 section.items.length === 0 ? null : (
                   <section key={section.id}>
                     <header className="mb-1 flex items-center gap-2 px-2">
-                      <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                      <h3 className="text-[0.65625rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                         {section.title}
                       </h3>
-                      <span className="flex h-[18px] min-w-[20px] items-center justify-center rounded-md bg-muted/60 px-1.5 text-[10px] font-medium tabular-nums text-muted-foreground">
+                      <span className="flex h-[18px] min-w-[20px] items-center justify-center rounded-md bg-muted/60 px-1.5 text-[0.625rem] font-medium tabular-nums text-muted-foreground">
                         {section.items.length}
                       </span>
                       <span className="ml-auto flex items-center gap-1">
@@ -331,7 +331,7 @@ export function BranchCleanupDialog({
                         </Button>
                       </span>
                     </header>
-                    <p className="mb-1 px-2 text-[11px] text-muted-foreground/70">{section.hint}</p>
+                    <p className="mb-1 px-2 text-[0.6875rem] text-muted-foreground/70">{section.hint}</p>
                     <ul className="space-y-px">
                       {section.items.map((c) => (
                         <CandidateRow

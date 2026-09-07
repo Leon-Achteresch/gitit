@@ -20,7 +20,7 @@ export function AgentCommandLane({
       <header className="flex items-center gap-2 px-1 pb-2.5">
         <h2
           className={cn(
-            "text-[12px] font-semibold tracking-[-0.02em]",
+            "text-[0.75rem] font-semibold tracking-[-0.02em]",
             tone === "attention" && "text-[var(--git-branch)]",
             tone === "work" && "text-[var(--git-modified)]",
             tone === "quiet" && "text-[var(--ag-text-3)]",
@@ -28,7 +28,7 @@ export function AgentCommandLane({
         >
           {title}
         </h2>
-        <span className="text-[11px] font-medium tabular-nums text-[var(--ag-text-3)]">
+        <span className="text-[0.6875rem] font-medium tabular-nums text-[var(--ag-text-3)]">
           {count}
         </span>
         <span aria-hidden className="ml-1 h-px flex-1 bg-[var(--ag-line)]" />

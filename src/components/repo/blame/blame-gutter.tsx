@@ -70,18 +70,18 @@ export function BlameGutter({
                 style={{ height: LINE_HEIGHT }}
               >
                 <div
-                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white shadow-sm"
+                  className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[0.5625rem] font-bold text-white shadow-sm"
                   style={{ background: color }}
                 >
                   {initials(group.entry.author)}
                 </div>
-                <span className="min-w-0 flex-1 truncate text-[11px] font-semibold text-foreground/80 group-hover:text-foreground">
+                <span className="min-w-0 flex-1 truncate text-[0.6875rem] font-semibold text-foreground/80 group-hover:text-foreground">
                   {group.entry.author}
                 </span>
-                <span className="shrink-0 font-mono text-[10px] text-muted-foreground/60">
+                <span className="shrink-0 font-mono text-[0.625rem] text-muted-foreground/60">
                   {group.entry.short_hash}
                 </span>
-                <span className="shrink-0 text-[10px] text-muted-foreground/50">
+                <span className="shrink-0 text-[0.625rem] text-muted-foreground/50">
                   {formatRelative(group.entry.timestamp)}
                 </span>
               </div>

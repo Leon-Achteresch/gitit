@@ -40,10 +40,10 @@ export function BarcodeCard({
   return (
     <figure className="flex min-w-0 flex-col">
       <div className="flex min-w-0 items-center gap-2">
-        <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-[var(--ag-text)]">
+        <span className="min-w-0 flex-1 truncate text-[0.6875rem] font-medium text-[var(--ag-text)]">
           {item.label ?? format?.label ?? item.format}
         </span>
-        <span className="shrink-0 text-[9px] uppercase tracking-[0.14em] text-[var(--ag-text-3)]">
+        <span className="shrink-0 text-[0.5625rem] uppercase tracking-[0.14em] text-[var(--ag-text-3)]">
           {format?.label ?? item.format}
         </span>
       </div>
@@ -58,11 +58,11 @@ export function BarcodeCard({
             dangerouslySetInnerHTML={{ __html: render.svg }}
           />
         ) : render?.error ? (
-          <p className="px-3 py-6 text-center text-[11px] leading-5 text-destructive">
+          <p className="px-3 py-6 text-center text-[0.6875rem] leading-5 text-destructive">
             {render.error}
           </p>
         ) : (
-          <div className="flex h-24 items-center justify-center gap-2 text-[11px] text-[var(--ag-text-3)]">
+          <div className="flex h-24 items-center justify-center gap-2 text-[0.6875rem] text-[var(--ag-text-3)]">
             <SpinIcon icon={LoaderCircle} className="size-3.5" />
             {t("agentChat.barcodeLoading")}
           </div>
@@ -70,14 +70,14 @@ export function BarcodeCard({
       </div>
       <figcaption className="mt-1.5 flex min-w-0 items-center gap-1.5">
         <code
-          className="min-w-0 flex-1 truncate font-mono text-[10px] text-[var(--ag-text-2)]"
+          className="min-w-0 flex-1 truncate font-mono text-[0.625rem] text-[var(--ag-text-2)]"
           title={item.value}
         >
           {item.value}
         </code>
         <button
           type="button"
-          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring size-6 shrink-0 justify-center p-0"
+          className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring size-6 shrink-0 justify-center p-0"
           title={t("agentChat.barcodeCopy")}
           aria-label={t("agentChat.barcodeCopy")}
           onClick={() =>
@@ -90,7 +90,7 @@ export function BarcodeCard({
           <>
             <button
               type="button"
-              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring size-6 shrink-0 justify-center p-0"
+              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring size-6 shrink-0 justify-center p-0"
               title={t("agentChat.barcodeDownload")}
               aria-label={t("agentChat.barcodeDownload")}
               onClick={() =>
@@ -101,7 +101,7 @@ export function BarcodeCard({
             </button>
             <button
               type="button"
-              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[11px] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring size-6 shrink-0 justify-center p-0"
+              className="inline-flex h-7 max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--ag-line)] bg-[var(--ag-surface)] px-2.5 text-[0.6875rem] font-medium text-[var(--ag-text-2)] outline-none transition-[background-color,border-color,color,transform] duration-200 hover:border-[var(--ag-line-strong)] hover:bg-[var(--ag-hover)] hover:text-[var(--ag-text)] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-ring size-6 shrink-0 justify-center p-0"
               title={t("agentChat.barcodeZoom")}
               aria-label={t("agentChat.barcodeZoom")}
               onClick={() => onZoom(item)}
@@ -112,7 +112,7 @@ export function BarcodeCard({
         ) : null}
       </figcaption>
       {item.caption ? (
-        <p className="text-[var(--ag-text-3)] mt-1 break-words text-[10px] leading-4">
+        <p className="text-[var(--ag-text-3)] mt-1 break-words text-[0.625rem] leading-4">
           {item.caption}
         </p>
       ) : null}

@@ -58,13 +58,13 @@ export function BarcodeZoom({
               dangerouslySetInnerHTML={{ __html: render.svg }}
             />
           ) : (
-            <p className="px-3 py-6 text-center text-[11px] text-destructive">
+            <p className="px-3 py-6 text-center text-[0.6875rem] text-destructive">
               {render?.error}
             </p>
           )}
         </div>
         {item ? (
-          <p className="break-all text-center font-mono text-[11px] text-muted-foreground">
+          <p className="break-all text-center font-mono text-[0.6875rem] text-muted-foreground">
             {item.value}
           </p>
         ) : null}

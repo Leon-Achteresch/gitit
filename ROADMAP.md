@@ -7,7 +7,7 @@ l8git ist und bleibt vollständig Open Source (MIT). Keine Paywall, kein Fair-So
 2. Der erste Git-Client für AI-Agent-Workflows
 3. Der einzige vollwertige davon, der komplett Open Source ist
 
-**Kernthese:** Der Differenzierer (AI-Agents + Worktrees + Terminal) ist bereits gebaut. Es fehlen die Table Stakes (Rebase, Undo, Hunk-Staging in der UI, Side-by-Side-Diff), an denen Nutzer in Woche 1 abspringen. Deshalb: Q1/Q2 Fundament reparieren, Q3 den AI-Vorsprung zementieren, Q4 Reichweite und Community.
+**Kernthese:** Agents, Worktrees, Terminal, Rebase, Undo, Hunk-Staging und Side-by-Side-Diff sind vorhanden. Aktuell haben Verlässlichkeit, vollständige Workflows und die technische sowie visuelle Abnahme Vorrang. Die Monatspakete unten beschreiben die ursprüngliche Planung; offene Kästchen bleiben offene Arbeit.
 
 ---
 
@@ -61,7 +61,7 @@ l8git ist und bleibt vollständig Open Source (MIT). Keine Paywall, kein Fair-So
 ### Monat 6 — Flow & Onboarding
 - [x] Command Palette auf alle Aktionen ausweiten (alles ohne Maus erreichbar)
 - [x] Hotkey-Rebinding, Kontext-Hotkeys pro Panel
-- [x] Onboarding auf den Aha-Moment trimmen: Repo öffnen → Graph + erste AI-Commit-Message ohne Konfiguration, interaktive Mini-Tour
+- [x] Onboarding auf den Aha-Moment trimmen: Repo öffnen → Graph + erste AI-Commit-Message nach BYOK-/Ollama-Setup, interaktive Mini-Tour
 - [ ] Retention-Messung live: Aktivierungsrate, D7/D30-Retention, Feature-Adoption (wartet auf PostHog-Entscheidung)
 - [ ] Flow-Folgearbeiten: Terminal-Toggle und History-Pfeiltasten ins Rebinding-System, Settings-Hash-Navigation, Branch-aus-Commit-Dialog
 
@@ -106,7 +106,7 @@ l8git ist und bleibt vollständig Open Source (MIT). Keine Paywall, kein Fair-So
 - [x] Contributor-Onboarding: CONTRIBUTING.md, Code of Conduct, Issue-/PR-Templates, Good-first-issue-Empfehlungsliste, schnelle PR-Reviews
 
 ### Monat 12 — v1.0 & Nachhaltigkeit
-- [x] Stabilitäts-Sprint: alle „Folgearbeiten“-Punkte aus Q1–Q3 abgearbeitet
+- [ ] Verbleibende „Folgearbeiten“-Punkte aus Q1–Q3 abschließen und separat abnehmen
 - [x] Security-Review durchgeführt und behoben (3 High, 2 Medium, 2 Low; Fixes committet, +9 Sicherheitstests)
 - [x] Sponsor-Link in README + FUNDING.yml (GitHub Sponsors auf github.com noch zu aktivieren)
 - [ ] 1.0-Release: Show HN, Product Hunt (manuell, nach dem Launch-Sprint)
@@ -120,13 +120,6 @@ l8git ist und bleibt vollständig Open Source (MIT). Keine Paywall, kein Fair-So
 
 ## Umsetzungsstand
 
-Die zwölf Monatspakete der Roadmap sind implementiert und auf `development` committet. Die Testabdeckung ist von ~100 auf 259 Rust- und 466 Frontend-Tests gewachsen (plus ein CI-Gate mit Locale-Paritätsprüfung); die App spricht sieben Sprachen.
+Desktop-Version 0.6.0. Das [Audit vom 5. September 2026](docs/audits/2026-09-05/AUDIT.md) dokumentiert die Ausgangsbefunde. Der [Umsetzungsbericht vom 7. September](docs/audits/2026-09-07/IMPLEMENTATION.md) beschreibt die aktuellen Änderungen, ausgeführten Prüfungen und Plattformgrenzen. Diese Roadmap ist kein Nachweis eines veröffentlichten oder vollständig abgenommenen 1.0-Releases.
 
-Offen bleiben ausschließlich Punkte, die außerhalb des Codes liegen oder eine Entscheidung/Umgebung brauchen:
-- **Telemetrie (Monat 1/6):** wartet auf die PostHog-Entscheidung (Instanz + Projekt-Key).
-- **Diff-Benchmark (Monat 4):** manueller Vergleich gegen Fork/GitKraken auf echten Geräten.
-- **Linux-Polish (Monat 11):** braucht ein Linux-Testgerät.
-- **Reichweite (Monat 11/12):** Paket-Kanäle publizieren, GitHub Discussions/Sponsors aktivieren, Screenshots/Videos, Show-HN/Product-Hunt-Launch — alles manuell auf github.com bzw. den Plattformen.
-- **Retention-Messung (Monat 6):** hängt an der Telemetrie-Entscheidung.
-
-Die pro Monat gesammelten „Folgearbeiten“ wurden im Monat-12-Stabilitätssprint abgearbeitet; der Security-Review deckte 3 High-, 2 Medium- und 2 Low-Findings auf, deren Fixes separat einfließen.
+Die offenen Folgearbeiten in den Monatspaketen bleiben gültig. Darüber hinaus benötigen native Windows-/Linux-Oberflächen, echte Provider-Konten, mobile Kernflüsse mit verbundenem Host sowie Installer und veröffentlichte CI-Läufe eine eigene Abnahme. Paket-Veröffentlichungen, Launch und optionale Telemetrie sind weiterhin getrennte Vorhaben.

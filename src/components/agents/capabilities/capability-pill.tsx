@@ -14,7 +14,7 @@ export function CapabilityPill({
     <Badge
       variant="outline"
       className={cn(
-        "h-5 rounded-md px-1.5 text-[9px] font-medium tracking-normal",
+        "h-5 rounded-md px-1.5 text-[0.5625rem] font-medium tracking-normal",
         tone === "good" && "border-emerald-500/25 bg-emerald-500/[0.07] text-emerald-600 dark:text-emerald-400",
         tone === "warning" && "border-amber-500/25 bg-amber-500/[0.07] text-amber-600 dark:text-amber-400",
         tone === "bad" && "border-destructive/25 bg-destructive/[0.06] text-destructive",

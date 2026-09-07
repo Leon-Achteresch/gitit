@@ -29,21 +29,23 @@ import { palette } from '~/lib/theme';
 export default function StashDetailScreen() {
   const router = useRouter();
   const { hostId, repoPath } = useRepoRoute();
-  const params = useLocalSearchParams<{ stashIndex?: string }>();
+  const params = useLocalSearchParams<{ stashIndex?: string; hash?: string }>();
   const index = Number.parseInt(decodeRouteValue(params.stashIndex) || '0', 10);
   const scope = useRepoScope(hostId, repoPath);
   const toast = useGitToast();
 
-  const inspect = useStashInspect(scope, index);
   const stashes = useStashes(scope);
   const [selected, setSelected] = React.useState<string | null>(null);
-  const fileDiff = useStashFileDiff(scope, index, selected);
   const [actionsOpen, setActionsOpen] = React.useState(false);
 
   const entry = React.useMemo(
     () => (stashes.data ?? []).find((item) => item.index === index) ?? null,
     [index, stashes.data]
   );
+  const expectedHash = decodeRouteValue(params.hash) || entry?.hash;
+  const inspect = useStashInspect(scope, index, expectedHash);
+  const fileDiff = useStashFileDiff(scope, index, selected, expectedHash);
+  const matchingEntry = entry?.hash === expectedHash ? entry : null;
   const header = React.useMemo(() => parseCommitHeader(inspect.data?.header), [inspect.data]);
 
   return (
@@ -55,7 +57,7 @@ export default function StashDetailScreen() {
           <GlassCircle
             icon={MoreVertical}
             label="Stash actions"
-            onPress={entry ? () => setActionsOpen(true) : undefined}
+            onPress={matchingEntry ? () => setActionsOpen(true) : undefined}
             style={{ opacity: entry ? 1 : 0.45 }}
           />
         }

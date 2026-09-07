@@ -3,7 +3,7 @@ use std::path::{Path, PathBuf};
 pub fn resolve_in_root(root: &Path, rel: &str) -> Result<PathBuf, String> {
     let root_canon = root
         .canonicalize()
-        .map_err(|e| format!("Ungültiges Repo-Verzeichnis: {e}"))?;
+        .map_err(|e| format!("__INVALID_REPO_PATH__| {e}"))?;
     let joined = root_canon.join(rel);
     verify_within(&root_canon, joined)
 }
@@ -11,7 +11,7 @@ pub fn resolve_in_root(root: &Path, rel: &str) -> Result<PathBuf, String> {
 pub fn contained(root: &Path, candidate: &Path) -> Result<PathBuf, String> {
     let root_canon = root
         .canonicalize()
-        .map_err(|e| format!("Ungültiges Repo-Verzeichnis: {e}"))?;
+        .map_err(|e| format!("__INVALID_REPO_PATH__| {e}"))?;
     verify_within(&root_canon, candidate.to_path_buf())
 }
 
@@ -21,18 +21,18 @@ fn verify_within(root_canon: &Path, joined: PathBuf) -> Result<PathBuf, String> 
         Err(_) => {
             let parent = joined
                 .parent()
-                .ok_or_else(|| "Ungültiger Zielpfad.".to_string())?;
+                .ok_or_else(|| "__INVALID_TARGET_PATH__".to_string())?;
             let parent_canon = parent
                 .canonicalize()
-                .map_err(|e| format!("Ungültiger Zielpfad: {e}"))?;
+                .map_err(|e| format!("__INVALID_TARGET_PATH__| {e}"))?;
             let name = joined
                 .file_name()
-                .ok_or_else(|| "Ungültiger Zielpfad.".to_string())?;
+                .ok_or_else(|| "__INVALID_TARGET_PATH__".to_string())?;
             parent_canon.join(name)
         }
     };
     if !resolved.starts_with(root_canon) {
-        return Err("Pfad liegt außerhalb des Repositories.".into());
+        return Err("__PATH_OUTSIDE_REPO__".into());
     }
     Ok(resolved)
 }

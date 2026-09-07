@@ -38,6 +38,10 @@ pub async fn dispatch(
             crate::git::git_init_repo(path).await
         }
 
+        "repo_history_page" (path: String, filter: crate::git::HistoryFilter, skip: usize, limit: usize) => {
+            crate::git::repo_history_page(path, filter, skip, limit).await
+        }
+
         "repo_log_page" (
             path: String,
             skip: usize,
@@ -316,6 +320,10 @@ pub async fn dispatch(
             crate::git::repo_commit_file_diff(path, commit, file).await
         }
 
+        "add_to_gitignore" (path: String, patterns: Vec<String>) => {
+            crate::git::add_to_gitignore(path, patterns).await
+        }
+
         "list_stashes" (path: String) => {
             crate::git::list_stashes(path).await
         }
@@ -329,28 +337,28 @@ pub async fn dispatch(
             crate::git::git_stash_push(path, message, include_untracked, keep_index).await
         }
 
-        "git_stash_pop" (path: String, index: u32) => {
-            crate::git::git_stash_pop(path, index).await
+        "git_stash_pop" (path: String, index: u32, expected_hash: String) => {
+            crate::git::git_stash_pop(path, index, expected_hash).await
         }
 
-        "git_stash_apply" (path: String, index: u32) => {
-            crate::git::git_stash_apply(path, index).await
+        "git_stash_apply" (path: String, index: u32, expected_hash: String) => {
+            crate::git::git_stash_apply(path, index, expected_hash).await
         }
 
-        "git_stash_drop" (path: String, index: u32) => {
-            crate::git::git_stash_drop(path, index).await
+        "git_stash_drop" (path: String, index: u32, expected_hash: String) => {
+            crate::git::git_stash_drop(path, index, expected_hash).await
         }
 
-        "git_stash_show" (path: String, index: u32) => {
-            crate::git::git_stash_show(path, index).await
+        "git_stash_show" (path: String, index: u32, expected_hash: Option<String>) => {
+            crate::git::git_stash_show(path, index, expected_hash).await
         }
 
-        "git_stash_file_diff" (path: String, index: u32, file: String) => {
-            crate::git::git_stash_file_diff(path, index, file).await
+        "git_stash_file_diff" (path: String, index: u32, file: String, expected_hash: Option<String>) => {
+            crate::git::git_stash_file_diff(path, index, file, expected_hash).await
         }
 
-        "git_stash_branch" (path: String, index: u32, name: String) => {
-            crate::git::git_stash_branch(path, index, name).await
+        "git_stash_branch" (path: String, index: u32, name: String, expected_hash: String) => {
+            crate::git::git_stash_branch(path, index, name, expected_hash).await
         }
 
         "repo_branch_activity" (path: String) => {
