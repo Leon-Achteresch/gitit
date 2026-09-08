@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { AppLogo } from "@/components/brand/app-logo";
 import { AppReleaseNotes } from "@/components/app/app-release-notes";
 import {
   Card,
@@ -30,10 +31,15 @@ function About() {
     <main className="mx-auto max-w-3xl space-y-6 px-6 py-8">
       <Card>
         <CardHeader>
-          <CardTitle>{t("about.title")}</CardTitle>
-          {version ? (
-            <CardDescription>{t("about.version", { version })}</CardDescription>
-          ) : null}
+          <div className="flex items-center gap-3">
+            <AppLogo className="size-11" />
+            <div className="min-w-0">
+              <CardTitle>{t("about.title")}</CardTitle>
+              {version ? (
+                <CardDescription>{t("about.version", { version })}</CardDescription>
+              ) : null}
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground">{t("about.body")}</CardContent>
       </Card>
