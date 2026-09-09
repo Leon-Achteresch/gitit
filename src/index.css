@@ -386,21 +386,6 @@
     overflow: hidden;
   }
 
-  /* The detached Dynamic Island lives in a transparent, borderless window —
-     nothing but the island itself may paint a background. */
-  html.island-window,
-  html.island-window body {
-    background: transparent;
-    overflow: hidden;
-    }
-  html.island-window body {
-    user-select: none;
-    }
-  html.island-window input,
-  html.island-window textarea {
-    user-select: text;
-    }
-
   /* hashes, refs, code-ish spans get mono automatically */
   code, kbd, samp, pre {
     font-family: var(--font-mono);
@@ -654,3 +639,19 @@ html[data-animations="off"] *::after {
 :root[data-density="compact"] { --row-density: .8; }
 [data-density="compact"] [data-agent-overview-row] { padding-block: .625rem; }
 [hidden] { display: none !important; }
+
+@keyframes l8-commit-pulse {
+  0%, 100% {
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.08);
+  }
+  18%, 58% {
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  36% {
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.08);
+  }
+}
+
+.l8-commit-pulse {
+  animation: l8-commit-pulse 0.85s ease-in-out;
+}
