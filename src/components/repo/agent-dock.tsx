@@ -54,7 +54,7 @@ export function AgentDock({ path }: { path: string }) {
   };
 
   return (
-    <m.div layout
+    <m.div
       initial={{ y: 16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 420, damping: 34, mass: 0.6 }}
