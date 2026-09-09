@@ -241,7 +241,6 @@ export const WorkflowRunRow = memo(function WorkflowRunRow({
 
   return (
     <m.div
-      layout
       className={`group flex flex-col rounded-xl border-l-2 bg-muted/10 transition-all hover:bg-muted/30 ${statusBg}`}
     >
       {/* ── Main row ── */}

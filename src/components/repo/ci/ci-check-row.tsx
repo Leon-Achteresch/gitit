@@ -74,7 +74,7 @@ export function CiCheckRow({
   }
 
   return (
-    <m.div layout className="group flex flex-col rounded-xl p-2 transition-all hover:bg-muted/40">
+    <m.div className="group flex flex-col rounded-xl p-2 transition-all hover:bg-muted/40">
       <div
         className="flex cursor-pointer items-center gap-4"
         onClick={() => setExpanded(!expanded)}
