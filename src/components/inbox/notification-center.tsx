@@ -148,7 +148,6 @@ function NotificationCard({
   return (
     <StaggerItem index={index}>
       <m.article
-        layout
         role="button"
         tabIndex={0}
         title={item.tooltip}
@@ -333,7 +332,7 @@ export function NotificationCenter({
 
       {errorBanner}
 
-      <m.div layout
+      <m.div
         key={activeTab}
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}

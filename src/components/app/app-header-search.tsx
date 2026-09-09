@@ -85,6 +85,7 @@ import { useCommitPrefs } from "@/lib/commit-prefs";
 import { useHotkeyBindings } from "@/lib/hotkey-prefs";
 import i18n from "@/lib/i18n";
 import { useRepoStore } from "@/lib/repo-store";
+import { useRecentRepos } from "@/lib/recent-repos";
 import { useRepoToolsStore } from "@/lib/repo-tools-store";
 import { useHistorySelection } from "@/lib/use-history-hotkeys";
 import { startOnboardingTour } from "@/lib/onboarding-prefs";
@@ -131,7 +132,6 @@ const IS_MAC =
 const MOD_KEY = IS_MAC ? "⌘" : "Ctrl";
 
 const MERGE_SUGGESTION_LIMIT = 8;
-const REPO_SWITCH_LIMIT = 8;
 const PREVIEW_ACTIONS_PER_GROUP = 4;
 
 function reportRemoteError(error: unknown) {
@@ -147,7 +147,7 @@ function repoLabel(path: string): string {
   return parts[parts.length - 1] ?? path;
 }
 
-type ActionGroupId = "git" | "views" | "repo" | "prci";
+type ActionGroupId = "repos" | "git" | "views" | "repo" | "prci";
 
 type ActionItem = {
   id: string;
@@ -185,6 +185,8 @@ export function AppHeaderSearch() {
     })),
   );
   const openPaths = useRepoStore((s) => s.paths);
+  const recentPaths = useRecentRepos((s) => s.paths);
+  const addRepo = useRepoStore((s) => s.addRepo);
   const setActiveRepo = useRepoStore((s) => s.setActive);
   const checkoutBranch = useRepoStore((s) => s.checkoutBranch);
   const stashes = useRepoStore((s) =>
@@ -763,7 +765,7 @@ export function AppHeaderSearch() {
     const globalActions: ActionItem[] = [
       {
         id: "action:open-repo",
-        group: "repo",
+        group: "repos",
         label: t("appSearch.actionOpenRepo"),
         icon: <FolderGit2 className="size-3.5" />,
         keywords: "open repository folder hinzufuegen hinzufügen oeffnen öffnen add",
@@ -774,7 +776,7 @@ export function AppHeaderSearch() {
       },
       {
         id: "action:clone-repo",
-        group: "repo",
+        group: "repos",
         label: t("appSearch.actionCloneRepo"),
         icon: <Download className="size-3.5" />,
         keywords: "clone klonen git url remote herunterladen",
@@ -785,7 +787,7 @@ export function AppHeaderSearch() {
       },
       {
         id: "action:init-repo",
-        group: "repo",
+        group: "repos",
         label: t("appSearch.actionInitRepo"),
         icon: <FolderPlus className="size-3.5" />,
         keywords: "init initialisieren neues repository anlegen create new",
@@ -794,18 +796,18 @@ export function AppHeaderSearch() {
           setInitOpen(true);
         },
       },
-      ...openPaths
+      ...[...openPaths, ...recentPaths.filter((p) => !openPaths.includes(p))]
         .filter((p) => p !== activePath)
-        .slice(0, REPO_SWITCH_LIMIT)
         .map((p) => ({
           id: `action:switch-repo:${p}`,
-          group: "repo" as const,
+          group: "repos" as const,
           label: t("appSearch.actionSwitchRepo", { name: repoLabel(p) }),
           icon: <FolderGit2 className="size-3.5" />,
-          keywords: `repo switch wechseln open ${repoLabel(p)} ${p}`,
+          keywords: `repo switch wechseln open ${repoLabel(p).toLowerCase()} ${p.toLowerCase()}`,
           onSelect: () => {
             setOpen(false);
-            setActiveRepo(p);
+            if (openPaths.includes(p)) setActiveRepo(p);
+            else void addRepo(p);
           },
         })),
       {
@@ -868,6 +870,7 @@ export function AppHeaderSearch() {
     return [...repoActions, ...globalActions];
   }, [
     activePath,
+    addRepo,
     branches,
     checkoutBranch,
     currentBranch,
@@ -876,6 +879,7 @@ export function AppHeaderSearch() {
     openBlameEditor,
     openCommandLog,
     openPaths,
+    recentPaths,
     openReflogView,
     openTerminalTab,
     pickRepo,
@@ -903,8 +907,9 @@ export function AppHeaderSearch() {
   }, [allActions, query]);
 
   const actionGroups = useMemo(() => {
-    const order: ActionGroupId[] = ["git", "views", "repo", "prci"];
+    const order: ActionGroupId[] = ["repos", "git", "views", "repo", "prci"];
     const headings: Record<ActionGroupId, string> = {
+      repos: t("appSearch.groupRepos"),
       git: t("appSearch.groupGit"),
       views: t("appSearch.groupViews"),
       repo: t("appSearch.groupRepo"),
@@ -917,7 +922,7 @@ export function AppHeaderSearch() {
         return {
           id,
           heading: headings[id],
-          items: previewOnly ? items.slice(0, PREVIEW_ACTIONS_PER_GROUP) : items,
+          items: previewOnly && id !== "repos" ? items.slice(0, PREVIEW_ACTIONS_PER_GROUP) : items,
         };
       })
       .filter((g) => g.items.length > 0);
@@ -1037,6 +1042,7 @@ export function AppHeaderSearch() {
         onOpenChange={handleOpenChange}
         title={t("appSearch.dialogTitle")}
         description={t("appSearch.dialogDescription")}
+        className="top-[12%] sm:max-w-3xl"
       >
         <Command
           shouldFilter={false}
@@ -1050,7 +1056,7 @@ export function AppHeaderSearch() {
             value={query}
             onValueChange={setQuery}
           />
-          <CommandList>
+          <CommandList className="max-h-[65vh]">
             {!hasResults && (
               <CommandEmpty>{t("appSearch.empty")}</CommandEmpty>
             )}

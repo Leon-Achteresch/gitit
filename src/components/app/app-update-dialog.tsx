@@ -189,7 +189,7 @@ export function AppUpdateDialog() {
   return (
     <AnimatePresence>
       {visible && (
-        <m.div layout
+        <m.div
           role="region"
           aria-label={dialogTitle}
           initial={{ opacity: 0, scale: 0.94, y: 16 }}
